@@ -1,0 +1,21 @@
+{
+  "name": "fern-next",
+  "private": "true",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "fern-build": "cd ./fernutil && pnpm build && cd ../fernutil-react && pnpm build && cd ../fernui-react && pnpm build && cd ..",
+    "fern-dev": "pnpm fern-build && next dev",
+    "push": "git add . && git commit -m 'Fix' && git push"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "axios": "^0.27.2",
+    "next": "^12.3.0",
+    "postcss": "^8.4.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.1.8"
+  }
+}

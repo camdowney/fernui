@@ -1,0 +1,30 @@
+{
+  "name": "fernui-react",
+  "author": "@camdowney",
+  "version": "1.0.0",
+  "description": "A library of unopinionated, extendable UI components for React.",
+  "keywords": [
+    "react",
+    "components",
+    "ui"
+  ],
+  "main": "./build/index.js",
+  "scripts": {
+    "push": "git add . && git commit -m 'Update' && git push",
+    "build": "rollup -c"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/preset-react": "^7.18.6",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "babel-loader": "^8.2.5",
+    "rollup": "^2.77.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}
