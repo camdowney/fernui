@@ -1,6 +1,7 @@
 import React from 'react'
 import Media from './Media'
 import Icon from './Icon'
+import { profile } from './_icons'
 
 export default function Avatar({ title, src, className }) {
   const firstLetter = title?.substring(0, 1).toUpperCase()
@@ -17,7 +18,7 @@ export default function Avatar({ title, src, className }) {
     </div>
   ) : (
     <Icon
-      i='profile'
+      i={profile}
       className={className}
       style={{ aspectRatio: '1' }}
     />

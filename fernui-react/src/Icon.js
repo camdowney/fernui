@@ -1,18 +1,11 @@
 import React from 'react'
-import { defaultIcons } from './_icons'
 
-export default function Icon({ i, ...props }) {
-  const icon = typeof i !== 'string' ? i : (defaultIcons[i] || defaultIcons['angle'])
-
+export default function Icon({ i, style, ...props }) {
   return (
     <svg
-      viewBox={icon.viewBox}
-      preserveAspectRatio={icon?.preserveAspectRatio}
-      style={iconStyles}
+      style={{ iconStyles, ...style }}
       {...props}
-    >
-      {icon.path}
-    </svg>
+    />
   )
 }
 

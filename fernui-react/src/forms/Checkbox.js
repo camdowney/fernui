@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Error from './Error'
 import Icon from '../Icon'
 import { cn } from '../_util'
+import { check } from '../_util'
 
 export default function Checkbox({
   fieldRef,
@@ -39,7 +40,7 @@ export default function Checkbox({
           style={inputStyles}
         />
         <div className='fui-check-box' style={boxStyles}>
-          <Icon i='check' className='fui-check-icon' style={iconStyles} />
+          <Icon i={check} className='fui-check-icon' style={iconStyles} />
         </div>
         <Cond hide={!label} className='fui-label'>
           {label}

@@ -5,6 +5,7 @@ import Modal from '../Modal'
 import Cond from '../Cond'
 import Icon from '../Icon'
 import { openModal } from '../_util'
+import { warning } from '../_icons'
 
 const defaultMessages = {
   '2': 'Submitting...',
@@ -71,7 +72,7 @@ export default function Form({
           style={{ zIndex: '30 !important' }}
         >
           <span ref={errorRef} onClick={openModal} />
-          <Icon i='warning' />
+          <Icon i={warning} />
           {messages[formState] || defaultMessages[formState]}
         </Modal>
       </>}

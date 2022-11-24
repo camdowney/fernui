@@ -1,0 +1,20 @@
+{
+  "name": "fernicons",
+  "author": "@camdowney",
+  "version": "1.0.0",
+  "description": "A library of icons for web development.",
+  "keywords": [
+    "utility",
+    "ui",
+    "javascript"
+  ],
+  "main": "./build/index.js",
+  "scripts": {
+    "push": "git add . && git commit -m 'Update' && git push",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "rollup": "^2.77.2",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}

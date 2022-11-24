@@ -1,5 +1,5 @@
-export const sst = () =>
-  selector => document.querySelector(selector).scrollIntoView({ behavior: 'smooth' })
+export const sst = selector => () =>
+  document.querySelector(selector).scrollIntoView({ behavior: 'smooth' })
 
 export const cn = (...classes) =>
   classes.filter(Boolean).join(' ')

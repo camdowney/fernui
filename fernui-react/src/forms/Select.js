@@ -3,6 +3,7 @@ import Error from './Error'
 import Icon from '../Icon'
 import Cond from '../Cond'
 import { cn } from '../_util'
+import { angle } from '../_icons'
 
 export default function Select({ 
   fieldRef,
@@ -53,7 +54,7 @@ export default function Select({
           )}
         </select>
         <div style={wrapperStyles}>
-          <Icon i='angle' className='fui-dropdown-icon' />
+          <Icon i={angle} className='fui-dropdown-icon' />
         </div>
       </div>
       <Error visible={showErrors}>

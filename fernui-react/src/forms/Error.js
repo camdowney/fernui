@@ -1,6 +1,7 @@
 import React from 'react'
 import Cond from '../Cond'
 import Icon from '../Icon'
+import { warning } from '../_icons'
 
 export default function Error({ visible, children }) {
   return (
@@ -9,7 +10,7 @@ export default function Error({ visible, children }) {
       className='fui-error'
       style={errorStyles}
     >
-      <Icon i='warning' />
+      <Icon i={warning} />
       {children}
     </Cond>
   )
