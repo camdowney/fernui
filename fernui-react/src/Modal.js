@@ -49,7 +49,7 @@ export default function Modal({
 
   useCustomListener(ref, 'FernModalAction', e => {
     const action = e.detail.action
-    setActive(action < 2 ? action : !active)
+    setModalActive(action < 2 ? action : !active)
   })
 
   return (
