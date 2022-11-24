@@ -70,20 +70,22 @@ export const formToValues = submitEvent => {
 export const closeAllMenus = () =>
 	document.querySelectorAll('.fui-menu-close').forEach(c => c.click())
 
-export const signalModal = (selector, value) => {
-  typeof selector === 'string' 
-    ? document.querySelector(selector)?.querySelector(`.fui-modal-${value}`).click()
-    : selector.currentTarget.closest('.fui-modal').querySelector(`.fui-modal-${value}`).click()
+const signalModal = (selector, action) => {
+  const target = typeof selector === 'string' 
+    ? document.querySelector(selector)
+    : selector.currentTarget.closest('.fui-modal')
+      
+  target?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action } }))
 }
-
-export const toggleModal = selector =>
-  signalModal(selector, 'toggle')
+  
+export const closeModal = selector =>
+  signalModal(selector, 0)
 
 export const openModal = selector =>
-  signalModal(selector, 'open')
+  signalModal(selector, 1)
 
-export const closeModal = selector =>
-  signalModal(selector, 'close')
+export const toggleModal = selector =>
+  signalModal(selector, 2)
 
 export const useIntersect = (selector, callback, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(target => {

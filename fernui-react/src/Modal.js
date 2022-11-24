@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Cond from './Cond'
-import { cn, onLoad, onKeydown } from './_util'
+import { cn, useCustomListener, onLoad, onKeydown } from './_util'
 
 export default function Modal({
   id,
@@ -19,6 +19,8 @@ export default function Modal({
 }) {
   const [active, setActive] = useState(null)
   const [timer, setTimer] = useState(null)
+
+  const ref = useRef()
 
   const f = `#${id} > menu`
   const focusable = `${f} a, ${f} button, ${f} input, ${f} select, ${f} textarea`
@@ -41,14 +43,18 @@ export default function Modal({
   })
 
   onKeydown(e => {
-    if (!active || e.repeat)
-      return
-    if (e?.key?.toLowerCase() === 'escape' && !persist)
+    if (active && !e.repeat && !persist && e?.key?.toLowerCase() === 'escape')
       setModalActive(false)
+  })
+
+  useCustomListener(ref, 'FernModalAction', e => {
+    const action = e.detail.action
+    setActive(action < 2 ? action : !active)
   })
 
   return (
     <span
+      ref={ref}
       id={id}
       className={cn('fui-modal', active ? 'fui-modal-active' : 'fui-modal-inactive', outerClass)}
       style={wrapperStyles(relative)}

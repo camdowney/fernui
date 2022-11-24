@@ -8,6 +8,7 @@ export {
 } from '../../fernutil/src'
 
 export {
+  useCustomListener,
   onLoad,
   onClick,
   onResize,
