@@ -5,12 +5,12 @@
   "description": "A library of unopinionated, extendable UI components for React.",
   "keywords": [
     "react",
+    "javascript",
     "components",
     "ui"
   ],
   "main": "./build/index.js",
   "scripts": {
-    "push": "git add . && git commit -m 'Update' && git push",
     "build": "rollup -c"
   },
   "peerDependencies": {

@@ -11,7 +11,6 @@
   ],
   "main": "./build/index.js",
   "scripts": {
-    "push": "git add . && git commit -m 'Update' && git push",
     "build": "rollup -c"
   },
   "peerDependencies": {
