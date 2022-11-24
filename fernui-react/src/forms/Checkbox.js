@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Error from './Error'
 import Icon from '../Icon'
 import { cn } from '../_util'
-import { check } from '../_util'
+import { check } from '../_icons'
 
 export default function Checkbox({
   fieldRef,

@@ -1,11 +1,14 @@
 import React from 'react'
 
-export default function Icon({ i, style, ...props }) {
+export default function Icon({ i, ...props }) {
+  console.log(i)
+
   return (
     <svg
-      style={{ iconStyles, ...style }}
-      {...props}
-    />
+      style={{ ...iconStyles }}
+    >
+      {i.children}
+    </svg>
   )
 }
 
