@@ -20,13 +20,38 @@ export const escapeHtml = str =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
-export const purifyString = str =>
+export const removeHtml = str =>
   (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+
+export const cleanHtml = (str, allowedTags = []) => {
+  if (!str || typeof str !== 'string') return ''
+
+  const dangerousTags = 'comment,embed,link,meta,noscript,object,script,style'
+  const doc = (new DOMParser()).parseFromString(str, 'text/html')
+  const body = doc.body
+
+  if (allowedTags)
+    body.querySelectorAll('*').forEach(e => !allowedTags.includes(e.tagName) && e.remove())
+  else
+    body.querySelectorAll(dangerousTags).forEach(e => e.remove())
+
+  body.querySelectorAll('*').forEach(element => {
+    element.attributes.forEach(att => {
+      const name = att.name
+      const value = att.value.replace(/\s+/g, '').toLowerCase()
+
+      if (name.startsWith('on') || value.includes('javascript:') || value.includes('data:'))
+        element.removeAttribute(name)
+    })
+  })
+  
+  return body.innerHTML
+}
 
 export const composeExcerpt = (str, charLimit, useEllipsis = true) => {
   if (!str) return ''
   if (!charLimit || str.length <= charLimit) return str
-  return purifyString(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
+  return removeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
 }
 
 export const composeFacebookShareLink = url =>
@@ -43,8 +68,8 @@ export const formToHtml = (heading = 'Form Submission', submitEvent) => {
   let html = `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> <ul style='padding: 0 0 0 24px; margin: 0;'>`
 
   purifySubmitFields(submitEvent).forEach(field => {
-    const fieldTitle = purifyString(field.name.replace(/\*/g, ''))
-    const fieldValue = field.type !== 'checkbox' ? purifyString(field.value) : (field.checked ? 'Yes' : 'No')
+    const fieldTitle = removeHtml(field.name.replace(/\*/g, ''))
+    const fieldValue = field.type !== 'checkbox' ? removeHtml(field.value) : (field.checked ? 'Yes' : 'No')
 
     html += `<li style='margin: 0 0 12px 0;'>
       <span style='font-weight: bold;'>${fieldTitle}:</span> <br>${fieldValue}
@@ -58,7 +83,7 @@ export const formToValues = submitEvent => {
   const concat = (obj = {}, [key, value]) => {
     const keys = key.split('.')
     const values = keys.length === 1 
-      ? purifyString(value)
+      ? removeHtml(value)
       : concat(obj[keys[0]], [keys.slice(1).join('.'), value])
       
     return { ...obj, [keys[0]]: values }
