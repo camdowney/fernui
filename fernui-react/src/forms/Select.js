@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Error from './Error'
 import Icon from '../Icon'
 import Cond from '../Cond'
-import { cn } from '../_util'
+import { cn, useCustomListener } from '../_util'
 import { angle } from '../_icons'
 
 export default function Select({ 
@@ -14,22 +14,31 @@ export default function Select({
   className,
   options,
   required,
-  formState,
   onChange,
   errorMessage
 }) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
+  const [formState, setFormState] = useState(0)
+
+  const ref = useRef()
+
+  const showErrors = invalid && (modified || formState < 0)
 
   const update = e => {
     setInvalid(required && e.target.selectedIndex < 1)
     setModified(true)
   }
 
-  const showErrors = invalid && (modified || formState < 0)
+  useCustomListener(ref, 'FernFieldAction', e => {
+    setFormState(e.detail.state)
+  })
 
   return (
-    <label className={cn('fui-field', showErrors && 'fui-field-invalid', className)}>
+    <label
+      ref={ref}
+      className={cn('fui-field', showErrors && 'fui-field-invalid', className)}
+    >
       <Cond hide={!label} className='fui-label'>
         {label}
       </Cond>

@@ -5,7 +5,7 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "fern-build": "cd ./fernutil && pnpm build && cd ../fernutil-react && pnpm build && cd ../fernui-react && pnpm build && cd ..",
+    "fern-build": "cd ./fernicons && pnpm build && cd ../fernutil && pnpm build && cd ../fernutil-react && pnpm build && cd ../fernui-react && pnpm build && cd ..",
     "fern-dev": "pnpm fern-build && next dev",
     "push": "git add . && git commit -m 'Fix' && git push"
   },

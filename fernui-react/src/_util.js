@@ -2,7 +2,6 @@ export {
   cn,
   isEmail,
   composeExcerpt,
-  closeAllMenus,
   openModal,
   closeModal,
 } from '../../fernutil/src'

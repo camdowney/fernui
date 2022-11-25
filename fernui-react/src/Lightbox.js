@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from './Modal'
 import Media from './Media'
 import Link from './Link'
@@ -7,14 +7,14 @@ import { cn, closeModal, onKeydown } from './_util'
 export default function Lightbox({
   id,
   sources,
-  current,
-  setCurrent,
   className,
   bgClass,
   overlayClass,
   controlClass,
   iconClass
 }) {
+  const [current, setCurrent] = useState(0)
+
   const cyclePrevious = () =>
     setCurrent(curr => curr > 0 ? curr - 1 : sources.length - 1)
 
@@ -27,9 +27,7 @@ export default function Lightbox({
 
     const key = e?.key?.toLowerCase()
 
-    if (key === 'escape')
-      closeModal(`#${id}`)
-    else if (key === 'arrowleft' || key === 'a')
+    if (key === 'arrowleft' || key === 'a')
       cyclePrevious()
     else if (key === 'arrowright' || key === 'd')
       cycleNext()
@@ -39,8 +37,9 @@ export default function Lightbox({
     <Modal
       id={id}
       className={cn('fui-lightbox', className)}
-      bgClass={cn('fui-lightbox-bg', bgClass)}
       style={modalStyles}
+      onAction={e => setCurrent(e.detail?.index ?? 0)}
+      bgClass={cn('fui-lightbox-bg', bgClass)}
       lock
       focus
     >

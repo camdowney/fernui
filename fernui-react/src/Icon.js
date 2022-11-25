@@ -1,14 +1,15 @@
 import React from 'react'
 
 export default function Icon({ i, ...props }) {
-  console.log(i)
+  const { children, ...rest } = i
 
   return (
     <svg
       style={{ ...iconStyles }}
-    >
-      {i.children}
-    </svg>
+      dangerouslySetInnerHTML={{ __html: children }}
+      {...rest}
+      {...props}
+    />
   )
 }
 

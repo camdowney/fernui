@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Honeypot from './Honeypot'
-import Link from '../Link'
 import Modal from '../Modal'
-import Cond from '../Cond'
 import Icon from '../Icon'
-import { openModal } from '../_util'
+import { cn, openModal } from '../_util'
 import { warning } from '../_icons'
 
 const defaultMessages = {
@@ -20,10 +18,17 @@ export default function Form({
   children,
   onSubmit,
   messages = [],
-  btn = { text: 'Submit' }
 }) {
   const [formState, setFormState] = useState(0)
+
+  const ref = useRef()
   const errorRef = useRef()
+
+  const updateState = state => {
+    setFormState(state)
+    ref.current.querySelectorAll('*').forEach(e => 
+      e.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } })))
+  }
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -33,42 +38,38 @@ export default function Form({
 
     for (const field of e.target.elements) {
       if (field.hasAttribute('data-field-valid') && field.getAttribute('data-field-valid') !== 'true') {
-        setFormState(-1)
+        updateState(-1)
         errorRef.current.click()
         return
       }
     }
 
-    setFormState(2)
+    updateState(2)
 
     onSubmit && onSubmit(e)
-      .then(() => setFormState(1))
-      .catch(() => { setFormState(-2), errorRef.current.click() })
+      .then(() => updateState(1))
+      .catch(() => { updateState(-2), errorRef.current.click() })
   }
 
   return (
     <form
+      ref={ref}
       method='post'
       onSubmit={handleSubmit}
-      className='fui-form'
+      className={cn('fui-form', className)}
       noValidate
     >
-      <Cond
-        className={className}
-        children={children}
-        formState={formState}
-      />
+      {children}
       {formState > 0 ? (
         <p style={{ fontStyle: 'italic' }}>
           {messages[formState] || defaultMessages[formState]}
         </p>
       ) : <>
         <Honeypot />
-        <Link disabled={formState > 0} {...btn} />
         <Modal
           className='fui-error-modal'
           closeDelay='2000'
-          relative
+          dropdown
           style={{ zIndex: '30 !important' }}
         >
           <span ref={errorRef} onClick={openModal} />

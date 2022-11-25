@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Error from './Error'
 import Icon from '../Icon'
-import { cn } from '../_util'
+import { cn, useCustomListener } from '../_util'
 import { check } from '../_icons'
 
 export default function Checkbox({
@@ -11,22 +11,31 @@ export default function Checkbox({
   label,
   className,
   required,
-  formState,
   onChange,
   errorMessage
 }) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
+  const [formState, setFormState] = useState(0)
+
+  const ref = useRef()
+
+  const showErrors = invalid && (modified || formState < 0)
 
   const update = e => {
     setInvalid(required && !e.target.checked)
     setModified(true)
   }
 
-  const showErrors = invalid && (modified || formState < 0)
+  useCustomListener(ref, 'FernFieldAction', e => {
+    setFormState(e.detail.state)
+  })
 
   return (
-    <div className={cn('fui-field', showErrors && 'fui-field-invalid', className)}>
+    <div
+      ref={ref}
+      className={cn('fui-field', showErrors && 'fui-field-invalid', className)}
+    >
       <label style={wrapperStyles}>
         <input
           ref={fieldRef}

@@ -23,35 +23,35 @@ export const escapeHtml = str =>
 export const removeHtml = str =>
   (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-export const cleanHtml = (str, allowedTags = []) => {
-  if (!str || typeof str !== 'string') return ''
+// export const cleanHtml = (str, allowedTags = []) => {
+//   if (!str || typeof str !== 'string') return ''
 
-  const dangerousTags = 'comment,embed,link,meta,noscript,object,script,style'
-  const doc = (new DOMParser()).parseFromString(str, 'text/html')
-  const body = doc.body
+//   const dangerousTags = 'comment,embed,link,meta,noscript,object,script,style'
+//   const dom = document.createElement('span')
+//   dom.innerHTML = str
 
-  if (allowedTags)
-    body.querySelectorAll('*').forEach(e => !allowedTags.includes(e.tagName) && e.remove())
-  else
-    body.querySelectorAll(dangerousTags).forEach(e => e.remove())
+//   if (allowedTags)
+//     dom.querySelectorAll('*').forEach(e => !allowedTags.includes(e.tagName) && e.remove())
+//   else
+//     dom.querySelectorAll(dangerousTags).forEach(e => e.remove())
 
-  body.querySelectorAll('*').forEach(element => {
-    element.attributes.forEach(att => {
-      const name = att.name
-      const value = att.value.replace(/\s+/g, '').toLowerCase()
+//   dom.querySelectorAll('*').forEach(element => {
+//     element.attributes.forEach(att => {
+//       const name = att.name
+//       const value = att.value.replace(/\s+/g, '').toLowerCase()
 
-      if (name.startsWith('on') || value.includes('javascript:') || value.includes('data:'))
-        element.removeAttribute(name)
-    })
-  })
+//       if (name.startsWith('on') || value.includes('javascript:') || value.includes('data:'))
+//         element.removeAttribute(name)
+//     })
+//   })
   
-  return body.innerHTML
-}
+//   return dom.innerHTML
+// }
 
 export const composeExcerpt = (str, charLimit, useEllipsis = true) => {
   if (!str) return ''
   if (!charLimit || str.length <= charLimit) return str
-  return removeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
+  return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
 }
 
 export const composeFacebookShareLink = url =>
@@ -68,8 +68,8 @@ export const formToHtml = (heading = 'Form Submission', submitEvent) => {
   let html = `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> <ul style='padding: 0 0 0 24px; margin: 0;'>`
 
   purifySubmitFields(submitEvent).forEach(field => {
-    const fieldTitle = removeHtml(field.name.replace(/\*/g, ''))
-    const fieldValue = field.type !== 'checkbox' ? removeHtml(field.value) : (field.checked ? 'Yes' : 'No')
+    const fieldTitle = escapeHtml(field.name.replace(/\*/g, ''))
+    const fieldValue = field.type !== 'checkbox' ? escapeHtml(field.value) : (field.checked ? 'Yes' : 'No')
 
     html += `<li style='margin: 0 0 12px 0;'>
       <span style='font-weight: bold;'>${fieldTitle}:</span> <br>${fieldValue}
@@ -83,7 +83,7 @@ export const formToValues = submitEvent => {
   const concat = (obj = {}, [key, value]) => {
     const keys = key.split('.')
     const values = keys.length === 1 
-      ? removeHtml(value)
+      ? escapeHtml(value)
       : concat(obj[keys[0]], [keys.slice(1).join('.'), value])
       
     return { ...obj, [keys[0]]: values }
@@ -92,22 +92,19 @@ export const formToValues = submitEvent => {
   return [...(new FormData(submitEvent.target)).entries()].reduce(concat, {})
 }
 
-export const closeAllMenus = () =>
-	document.querySelectorAll('.fui-menu-close').forEach(c => c.click())
-
-const signalModal = (selector, action) => {
+const signalModal = (selector, action, index) => {
   const target = typeof selector === 'string' 
     ? document.querySelector(selector)
     : selector.currentTarget.closest('.fui-modal')
       
-  target?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action } }))
+  target?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action, index } }))
 }
   
 export const closeModal = selector =>
   signalModal(selector, 0)
 
-export const openModal = selector =>
-  signalModal(selector, 1)
+export const openModal = (selector, index) =>
+  signalModal(selector, 1, index)
 
 export const toggleModal = selector =>
   signalModal(selector, 2)
