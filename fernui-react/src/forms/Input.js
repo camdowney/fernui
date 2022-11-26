@@ -19,8 +19,7 @@ export default function Input({
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState(0)
-
-  const ref = useRef()
+  const outerRef = useRef()
 
   const showErrors = invalid && (modified || formState < 0)
 
@@ -29,13 +28,13 @@ export default function Input({
     setModified(true)
   }
 
-  useCustomListener(ref, 'FernFieldAction', e => {
+  useCustomListener(outerRef.current, 'FernFieldAction', e => {
     setFormState(e.detail.state)
   })
 
   return (
     <label
-      ref={ref}
+      ref={outerRef}
       className={cn('fui-field', showErrors && 'fui-field-invalid', className)}
     >
       <Cond hide={!label} className='fui-label'>

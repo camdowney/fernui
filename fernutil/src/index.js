@@ -102,7 +102,7 @@ export const formToValues = submitEvent => {
 const signalModal = (selector, action, index) => {
   const target = typeof selector === 'string' 
     ? document.querySelector(selector)
-    : selector.currentTarget.closest('.fui-modal')
+    : selector.currentTarget.closest('.fui-modal-wrapper')
       
   target?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action, index } }))
 }

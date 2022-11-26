@@ -13,7 +13,6 @@ export default function Drawer({
 }) {
   const [visible, setVisible] = useState(false)
   const [contentHeight, setContentHeight] = useState(0)
-
   const drawerRef = useRef()
   const contentRef = useRef()
 

@@ -28,13 +28,14 @@ export default function Form({
   const attempts = useRef(0)
   const submissions = useRef(0)
 
-  const ref = useRef()
+  const formRef = useRef()
   const errorRef = useRef()
 
   const updateState = state => {
     setFormState(state)
-    ref.current.querySelectorAll('*').forEach(e => 
-      e.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } })))
+    formRef.current.querySelectorAll('*').forEach(e => {
+      e.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } }))
+    })
   }
 
   const handleSubmit = async e => {
@@ -57,10 +58,7 @@ export default function Form({
 
     onSubmit && onSubmit(e)
       .then(() => {
-        if (++submissions.current >= maxSubmissions)
-          updateState(1)
-        else
-          updateState(0)
+        updateState(++submissions.current >= maxSubmissions ? 1 : 0)
       })
       .catch(() => {
         updateState(-2)
@@ -69,34 +67,6 @@ export default function Form({
   }
 
   return (
-    <form
-      ref={ref}
-      method='post'
-      onSubmit={handleSubmit}
-      className={cn('fui-form', className)}
-      noValidate
-    >
-      {children}
-      <Honeypot />
-      {formState > 0 ? (
-        <p style={{ fontStyle: 'italic' }}>
-          {messages[formState] || defaultMessages[formState]}
-        </p>
-      ) : <>
-        {btn}
-        <Cond
-          as={Modal}
-          hide={messages === false}
-          className='fui-error-modal'
-          closeDelay='2000'
-          dropdown
-          style={{ zIndex: '30 !important' }}
-        >
-          <span ref={errorRef} onClick={openModal} />
-          <Icon i={warning} />
-          {messages[formState] || defaultMessages[formState]}
-        </Cond>
-      </>}
-    </form>
+   <div />
   )
 }

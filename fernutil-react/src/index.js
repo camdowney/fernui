@@ -2,12 +2,11 @@ import { useEffect } from 'react'
 
 export * from '../../fernutil'
 
-export const useCustomListener = (ref, event, callback, passive) => {
+export const useCustomListener = (element, event, callback, passive) => {
   useEffect(() => {
-    const current = ref.current
-    current.addEventListener(event, callback, { passive })
-    return () => current.removeEventListener(event, callback, { passive })
-  }, [ref, event, callback])
+    element.addEventListener(event, callback, { passive })
+    return () => element.removeEventListener(event, callback, { passive })
+  }, [event, callback])
 }
 
 export const useWindowListener = (event, callback, passive) => {

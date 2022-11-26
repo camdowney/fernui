@@ -19,12 +19,8 @@ export default function Modal({
   focus = false
 }) {
   const [active, setActive] = useState(null)
-  const [timer, setTimer] = useState(null)
-
-  const ref = useRef()
-
-  const f = `#${id} > menu`
-  const focusable = `${f} a, ${f} button, ${f} input, ${f} select, ${f} textarea`
+  const outerRef = useRef()
+  const timer = useRef()
 
   const setModalTimer = (newActive, delay) =>
     setTimer(setTimeout(() => setModalActive(newActive), delay))
@@ -37,7 +33,7 @@ export default function Modal({
       document.body.style.overflow = newActive ? 'hidden' : 'auto'
 
     if (newActive && focus)
-      setTimeout(() => document.querySelector(focusable)?.focus(), 50)
+      setTimeout(() => outerRef.current.querySelector('menu [tabindex=0], menu [tabindex=1]')?.focus(), 50)
       
     if (newActive && closeDelay > 0)
       setModalTimer(false, closeDelay)
@@ -53,7 +49,7 @@ export default function Modal({
       setModalActive(false)
   })
 
-  useCustomListener(ref, 'FernModalAction', e => {
+  useCustomListener(outerRef.current, 'FernModalAction', e => {
     const action = e.detail.action
     setModalActive(action < 2 ? action : !active)
     onAction && onAction(e)
@@ -61,9 +57,9 @@ export default function Modal({
 
   return (
     <span
-      ref={ref}
+      ref={outerRef}
       id={id}
-      className={cn('fui-modal', active ? 'fui-modal-active' : 'fui-modal-inactive', outerClass)}
+      className={cn('fui-modal-wrapper', active ? 'fui-modal-active' : 'fui-modal-inactive', outerClass)}
       style={wrapperStyles(dropdown)}
     >
       <Cond
@@ -74,7 +70,7 @@ export default function Modal({
       />
 
       <menu
-        className={cn(transition + '-' + (active ? 'open' : 'close'), className)}
+        className={cn('fui-modal', transition + '-' + (active ? 'open' : 'close'), className)}
         aria-hidden={!active}
         style={{ ...menuStyles(dropdown, active), ...style }}
       >
