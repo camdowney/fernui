@@ -9,12 +9,8 @@ export const useCustomListener = (element, event, callback, passive) => {
   }, [event, callback])
 }
 
-export const useWindowListener = (event, callback, passive) => {
-  useEffect(() => {
-    window.addEventListener(event, callback, { passive })
-    return () => window.removeEventListener(event, callback, { passive })
-  }, [event, callback])
-}
+export const useWindowListener = (...props) =>
+  useCustomListener(window, ...props)
 
 export const onLoad = callback =>
 	useEffect(callback, [])
