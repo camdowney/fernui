@@ -65,7 +65,9 @@ export const purifySubmitFields = submitEvent =>
     && (field.type !== 'radio' || field.checked))
   
 export const formToHtml = (heading = 'Form Submission', submitEvent) => {
-  let html = `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> <ul style='padding: 0 0 0 24px; margin: 0;'>`
+  let html = heading 
+    ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> <ul style='padding: 0 0 0 24px; margin: 0;'>`
+    : ''
 
   purifySubmitFields(submitEvent).forEach(field => {
     const fieldTitle = escapeHtml(field.name.replace(/\*/g, ''))
@@ -80,16 +82,21 @@ export const formToHtml = (heading = 'Form Submission', submitEvent) => {
 }
 
 export const formToValues = submitEvent => {
-  const concat = (obj = {}, [key, value]) => {
+  const concat = (acc, [key, value]) => {
     const keys = key.split('.')
     const values = keys.length === 1 
       ? escapeHtml(value)
-      : concat(obj[keys[0]], [keys.slice(1).join('.'), value])
-      
-    return { ...obj, [keys[0]]: values }
+      : concat(acc ? acc[keys[0]] : null, [keys.slice(1).join('.'), value])
+
+    if (!(+keys[0] >= 0))
+      return { ...acc, [keys[0]]: values }
+
+    const arr = acc || []
+    arr[keys[0]] = values
+    return arr
   }
 
-  return [...(new FormData(submitEvent.target)).entries()].reduce(concat, {})
+  return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null)
 }
 
 const signalModal = (selector, action, index) => {

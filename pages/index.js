@@ -1,16 +1,10 @@
 import { Section, Content, Media, Link } from 'fernui-react'
-import { Meta, ContactForm } from 'components/ui'
+import { TestForm } from 'components/ui'
 
 export default function Home() {
   return <>
-    <Meta
-      title='Home'
-      desc=''
-      image=''
-    />
-
     <Section>
-      <ContactForm />
+      <TestForm />
     </Section>
 
     <Section className='bg-gray-200'>

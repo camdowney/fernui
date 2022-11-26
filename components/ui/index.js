@@ -1,2 +1,1 @@
-export { default as ContactForm } from './ContactForm'
-export { default as Meta } from './Meta'
+export { default as TestForm } from './TestForm'

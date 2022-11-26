@@ -14,19 +14,45 @@ const composeMail = e => ({
   html: formToHtml(subject, e),
 })
 
-export default function ContactForm() {
+export default function TestForm() {
   const sendEmail = async e =>
-    console.log(composeMail(e))
+    console.log(formToValues(e))
     // await axios.post('/api/mail', composeMail(e))
 
   return (
     <Form onSubmit={sendEmail}>
       <div className='grid gap-5 mb-6 md:mb-7'>
         <Input
+          name='test0'
           label='Full name *'
           required
         />
         <Input
+          name='test1.0'
+          label='Full name *'
+          required
+        />
+        <Input
+          name='test1.1'
+          label='Full name *'
+          required
+        />
+        <Input
+          name='test1.2.a'
+          label='Full name *'
+          required
+        />
+        <Input
+          name='test2'
+          label='Full name *'
+          required
+        />
+        <Input
+          name='test1.2.b.0'
+          label='Full name *'
+          required
+        />
+        {/* <Input
           type='email'
           label='Email *'
           required
@@ -35,7 +61,7 @@ export default function ContactForm() {
           type='area'
           label='How can we help you? *'
           required
-        />
+        /> */}
       </div>
       <Link
         type='submit'

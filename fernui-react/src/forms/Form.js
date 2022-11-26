@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Honeypot from './Honeypot'
+import Cond from '../Cond'
 import Modal from '../Modal'
 import Icon from '../Icon'
 import { cn, openModal } from '../_util'
@@ -16,10 +17,16 @@ const defaultMessages = {
 export default function Form({
   className,
   children,
+  btn,
   onSubmit,
   messages = [],
+  maxAttempts = Infinity,
+  maxSubmissions = Infinity,
 }) {
   const [formState, setFormState] = useState(0)
+
+  const attempts = useRef(0)
+  const submissions = useRef(0)
 
   const ref = useRef()
   const errorRef = useRef()
@@ -33,8 +40,10 @@ export default function Form({
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (formState === 1)
+    if (attempts >= maxAttempts || submissions >= maxSubmissions)
       return
+
+    attempts.current++
 
     for (const field of e.target.elements) {
       if (field.hasAttribute('data-field-valid') && field.getAttribute('data-field-valid') !== 'true') {
@@ -47,8 +56,16 @@ export default function Form({
     updateState(2)
 
     onSubmit && onSubmit(e)
-      .then(() => updateState(1))
-      .catch(() => { updateState(-2), errorRef.current.click() })
+      .then(() => {
+        if (++submissions.current >= maxSubmissions)
+          updateState(1)
+        else
+          updateState(0)
+      })
+      .catch(() => {
+        updateState(-2)
+        errorRef.current.click()
+      })
   }
 
   return (
@@ -60,13 +77,16 @@ export default function Form({
       noValidate
     >
       {children}
+      <Honeypot />
       {formState > 0 ? (
         <p style={{ fontStyle: 'italic' }}>
           {messages[formState] || defaultMessages[formState]}
         </p>
       ) : <>
-        <Honeypot />
-        <Modal
+        {btn}
+        <Cond
+          as={Modal}
+          hide={messages === false}
           className='fui-error-modal'
           closeDelay='2000'
           dropdown
@@ -75,7 +95,7 @@ export default function Form({
           <span ref={errorRef} onClick={openModal} />
           <Icon i={warning} />
           {messages[formState] || defaultMessages[formState]}
-        </Modal>
+        </Cond>
       </>}
     </form>
   )
