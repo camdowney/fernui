@@ -67,6 +67,34 @@ export default function Form({
   }
 
   return (
-   <div />
+    <form
+      ref={formRef}
+      method='post'
+      onSubmit={handleSubmit}
+      className={cn('fui-form', className)}
+      noValidate
+    >
+      {children}
+      <Honeypot />
+      {formState > 0 ? (
+        <p style={{ fontStyle: 'italic' }}>
+          {messages[formState] || defaultMessages[formState]}
+        </p>
+      ) : <>
+        {btn}
+        <Cond
+          as={Modal}
+          hide={messages === false}
+          className='fui-error-modal'
+          closeDelay='2000'
+          dropdown
+          style={{ zIndex: '30 !important' }}
+        >
+          <span ref={errorRef} onClick={openModal} />
+          <Icon i={warning} />
+          {messages[formState] || defaultMessages[formState]}
+        </Cond>
+      </>}
+    </form>
   )
 }
