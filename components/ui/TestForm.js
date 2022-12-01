@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Form, Input, Link } from 'fernui-react'
-import { formToHtml, formToValues } from 'fernutil-react'
+import { formToHtml, formToObject } from 'fernutil-react'
 import { mail } from 'fernicons'
 import { SITE_NAME, ADMIN_EMAIL, SENDER_EMAIL } from 'lib/global'
 
@@ -16,7 +16,7 @@ const composeMail = e => ({
 
 export default function TestForm() {
   const sendEmail = async e =>
-    console.log(formToValues(e))
+    console.log(formToObject(e))
     // await axios.post('/api/mail', composeMail(e))
 
   return (

@@ -4,54 +4,29 @@ export const sst = selector => () =>
 export const cn = (...classes) =>
   classes.filter(Boolean).join(' ')
 
-export const chunk = (arr, size) => {
-  if (!Array.isArray(arr)) return []
-  if (!size || size < 1) return arr
-  return arr.reduce((acc, _, i) => (i % size) ? acc : [...acc, arr.slice(i, i + size)], [])
+export const chunk = (array, size) => {
+  if (!Array.isArray(array)) return []
+  if (!size || size < 1) return array
+  return array.reduce((acc, _, i) => (i % size) ? acc : [...acc, array.slice(i, i + size)], [])
 }
 
-export const isEmail = str =>
-	/^\S+@\S+\.\S+$/.test(str || '')
+export const isEmail = string =>
+	/^\S+@\S+\.\S+$/.test(string || '')
 
-export const composeSlug = str =>
-	(str || '').toLowerCase().replace(/[^\w\s\-/]+/g, '').replace(/[\s\-]+/g, '-')
+export const composeSlug = string =>
+	(string || '').toLowerCase().replace(/[^\w\s\-/]+/g, '').replace(/[\s\-]+/g, '-')
 
-export const escapeHtml = str =>
-  (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+export const escapeHtml = string =>
+  (string || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
-export const removeHtml = str =>
-  (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+export const removeHtml = string =>
+  (string || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-// export const cleanHtml = (str, allowedTags = []) => {
-//   if (!str || typeof str !== 'string') return ''
-
-//   const dangerousTags = 'comment,embed,link,meta,noscript,object,script,style'
-//   const dom = document.createElement('span')
-//   dom.innerHTML = str
-
-//   if (allowedTags)
-//     dom.querySelectorAll('*').forEach(e => !allowedTags.includes(e.tagName) && e.remove())
-//   else
-//     dom.querySelectorAll(dangerousTags).forEach(e => e.remove())
-
-//   dom.querySelectorAll('*').forEach(element => {
-//     element.attributes.forEach(att => {
-//       const name = att.name
-//       const value = att.value.replace(/\s+/g, '').toLowerCase()
-
-//       if (name.startsWith('on') || value.includes('javascript:') || value.includes('data:'))
-//         element.removeAttribute(name)
-//     })
-//   })
-  
-//   return dom.innerHTML
-// }
-
-export const composeExcerpt = (str, charLimit, useEllipsis = true) => {
-  if (!str) return ''
-  if (!charLimit || str.length <= charLimit) return str
-  return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
+export const composeExcerpt = (string, charLimit, useEllipsis = true) => {
+  if (!string) return ''
+  if (!charLimit || string.length <= charLimit) return string
+  return escapeHtml(string).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
 }
 
 export const composeFacebookShareLink = url =>
@@ -70,18 +45,18 @@ export const formToHtml = (heading = 'Form Submission', submitEvent) => {
     : ''
 
   purifySubmitFields(submitEvent).forEach(field => {
-    const fieldTitle = escapeHtml(field.name.replace(/\*/g, ''))
-    const fieldValue = field.type !== 'checkbox' ? escapeHtml(field.value) : (field.checked ? 'Yes' : 'No')
+    const title = escapeHtml(field.name.replace(/\*/g, ''))
+    const value = field.type !== 'checkbox' ? escapeHtml(field.value) : (field.checked ? 'Yes' : 'No')
 
     html += `<li style='margin: 0 0 12px 0;'>
-      <span style='font-weight: bold;'>${fieldTitle}:</span> <br>${fieldValue}
+      <span style='font-weight: bold;'>${title}:</span> <br>${value}
     </li>`
   })
 
   return html + '</ul>'
 }
 
-export const formToValues = submitEvent => {
+export const formToObject = submitEvent => {
   const concat = (acc, [key, value]) => {
     const keys = key.split('.')
     const values = keys.length === 1 
@@ -100,11 +75,11 @@ export const formToValues = submitEvent => {
 }
 
 const signalModal = (selector, action, index) => {
-  const target = typeof selector === 'string' 
+  const modal = typeof selector === 'string' 
     ? document.querySelector(selector)
     : selector.currentTarget.closest('.fui-modal-wrapper')
       
-  target?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action, index } }))
+  modal?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action, index } }))
 }
   
 export const closeModal = selector =>
@@ -116,39 +91,38 @@ export const openModal = (selector, index) =>
 export const toggleModal = selector =>
   signalModal(selector, 2)
 
-export const useIntersect = (selector, callback, offset = '0px 0px 0px 0px', once = true) => {
-  document.querySelectorAll(selector).forEach(target => {
-    const io = new IntersectionObserver((entries, observer) => {
+export const onIntersect = (selector, callback, offset = '0px 0px 0px 0px', once = true) => {
+  document.querySelectorAll(selector).forEach(element => {
+    const observer = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return
         callback(entry.target)
         if (once) observer.disconnect()
       })
     }, { rootMargin: offset })
-    io.observe(target)
+    observer.observe(element)
   })
 }
 
-export const lazyLoad = (offset = '750px') => {
-  useIntersect('[data-lazy-src]', media =>
-    media.setAttribute('src', media.getAttribute('data-lazy-src'))
-  , `${offset} ${offset} ${offset} ${offset}`)
-  useIntersect('[data-lazy-srcset]', media =>
-    media.setAttribute('srcset', media.getAttribute('data-lazy-srcset'))
-  , `${offset} ${offset} ${offset} ${offset}`)
+export const initLazyLoad = (offset = '750px') => {
+  onIntersect('[data-lazy-src]', element => {
+    element.setAttribute('src', element.getAttribute('data-lazy-src')) // change to .src and .dataset.lazy-src ??
+  }, `${offset} ${offset} ${offset} ${offset}`)
+  onIntersect('[data-lazy-srcset]', element => {
+    element.setAttribute('srcset', element.getAttribute('data-lazy-srcset'))
+  }, `${offset} ${offset} ${offset} ${offset}`)
 }
 
-export const scrollView = (offset = '999999px 0px -25% 0px') =>
-  useIntersect('.scroll-view', section => section.classList.replace('scroll-view', 'scroll-view-active'), offset)
+export const initScrollView = (offset = '999999px 0px -25% 0px') =>
+  onIntersect('.scroll-view', element => element.classList.add('scroll-view-active'), offset)
 
-export const animLetters = (selector, start = 0, step = 25) => {
-  document.querySelectorAll(selector).forEach(e => {
-    let index = 0
-    e.classList.add('anim-letters')
+export const initSplitLetters = (selector, delay = 0, step = 25) => {
+  document.querySelectorAll(selector).forEach(element => {
+    let letterIndex = 0
 
-    e.innerHTML = e.innerHTML.split(' ').map(word => '<span style="display: inline-flex;">' +
-      word.split('').map(l => 
-        `<div class="anim-letter" style="display: inline-block; animation-delay: ${index++ * step + start}ms">${l}</div>`
+    element.innerHTML = element.innerHTML.split(' ').map(word => '<span style="display: inline-flex;">' +
+      word.split('').map(letter => 
+        `<div class="split-letter" style="display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms">${letter}</div>`
       ).join('')
     + '</span>').join(' ')
   })
