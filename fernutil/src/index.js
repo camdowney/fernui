@@ -1,4 +1,4 @@
-export const sst = selector => () =>
+export const ss = selector => () =>
   document.querySelector(selector).scrollIntoView({ behavior: 'smooth' })
 
 export const cn = (...classes) =>
