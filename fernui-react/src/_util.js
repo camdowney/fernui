@@ -7,9 +7,5 @@ export {
 } from '../../fernutil/src'
 
 export {
-  useCustomListener,
-  onLoad,
-  onClick,
-  onResize,
-  onKeydown,
+  useListener,
 } from '../../fernutil-react/src'

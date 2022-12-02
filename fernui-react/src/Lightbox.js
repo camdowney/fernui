@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Modal from './Modal'
 import Media from './Media'
 import Link from './Link'
-import { cn, closeModal, onKeydown } from './_util'
+import { cn, closeModal, useListener } from './_util'
 
 export default function Lightbox({
   id,
@@ -21,7 +21,7 @@ export default function Lightbox({
   const cycleNext = () =>
     setCurrent(curr => curr < sources.length - 1 ? curr + 1 : 0)
 
-  onKeydown(e => {
+  useListener('keydown', e => {
     if (e.repeat)
       return
 

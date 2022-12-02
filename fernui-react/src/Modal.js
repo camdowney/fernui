@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Cond from './Cond'
-import { cn, useCustomListener, onLoad, onKeydown } from './_util'
+import { cn, useListener } from './_util'
 
 export default function Modal({
   id,
@@ -23,10 +23,10 @@ export default function Modal({
   const timer = useRef()
 
   const setModalTimer = (newActive, delay) =>
-    setTimer(setTimeout(() => setModalActive(newActive), delay))
+    timer.current = setTimeout(() => setModalActive(newActive), delay)
 
   const setModalActive = newActive => {
-    clearTimeout(timer)
+    clearTimeout(timer.current)
     setActive(newActive)
 
     if (scrollLock)
@@ -39,21 +39,21 @@ export default function Modal({
       setModalTimer(false, closeDelay)
   }
 
-  onLoad(() => {
+  useEffect(() => {
     if (openDelay > 0)
       setModalTimer(true, openDelay)
-  })
+  }, [])
 
-  onKeydown(e => {
+  useListener('keydown', e => {
     if (active && !e.repeat && !persist && e?.key?.toLowerCase() === 'escape')
       setModalActive(false)
   })
 
-  useCustomListener(outerRef.current, 'FernModalAction', e => {
+  useListener('FernModalAction', e => {
     const action = e.detail.action
     setModalActive(action < 2 ? action : !active)
     onAction && onAction(e)
-  })
+  }, outerRef.current)
 
   return (
     <span

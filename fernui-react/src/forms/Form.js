@@ -20,8 +20,8 @@ export default function Form({
   btn,
   onSubmit,
   messages = [],
-  maxAttempts = Infinity,
-  maxSubmissions = Infinity,
+  maxAttempts = 99,
+  maxSubmissions = 1,
 }) {
   const [formState, setFormState] = useState(0)
 
@@ -32,16 +32,16 @@ export default function Form({
   const errorRef = useRef()
 
   const updateState = state => {
-    setFormState(state)
-    formRef.current.querySelectorAll('*').forEach(e => {
-      e.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } }))
+    formRef.current.querySelectorAll('*').forEach(element => {
+      element.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } }))
     })
+    setFormState(state)
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (attempts >= maxAttempts || submissions >= maxSubmissions)
+    if (attempts.current >= maxAttempts || submissions.current >= maxSubmissions)
       return
 
     attempts.current++

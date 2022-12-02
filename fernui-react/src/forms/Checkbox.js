@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Error from './Error'
 import Icon from '../Icon'
-import { cn, useCustomListener } from '../_util'
+import { cn, useListener } from '../_util'
 import { check } from '../_icons'
 
 export default function Checkbox({
@@ -26,9 +26,9 @@ export default function Checkbox({
     setModified(true)
   }
 
-  useCustomListener(outerRef.current, 'FernFieldAction', e => {
+  useListener('FernFieldAction', e => {
     setFormState(e.detail.state)
-  })
+  }, outerRef.current)
 
   return (
     <div

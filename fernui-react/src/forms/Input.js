@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Error from './Error'
 import Cond from '../Cond'
-import { cn, isEmail, useCustomListener } from '../_util'
+import { cn, isEmail, useListener } from '../_util'
 
 export default function Input({ 
   fieldRef,
@@ -28,9 +28,10 @@ export default function Input({
     setModified(true)
   }
 
-  useCustomListener(outerRef.current, 'FernFieldAction', e => {
+  useListener('FernFieldAction', e => {
+    console.log(e)
     setFormState(e.detail.state)
-  })
+  }, outerRef.current)
 
   return (
     <label

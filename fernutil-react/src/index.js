@@ -1,28 +1,11 @@
 import { useEffect } from 'react'
 
-export * from '../../fernutil'
+export * from '../../fernutil/src'
 
-export const useCustomListener = (element, event, callback, passive) => {
+export const useListener = (event, callback, element, passive) => {
   useEffect(() => {
-    element.addEventListener(event, callback, { passive })
-    return () => element.removeEventListener(event, callback, { passive })
+    const current = element || window
+    current.addEventListener(event, callback, { passive })
+    return () => current.removeEventListener(event, callback, { passive })
   }, [event, callback])
 }
-
-export const useWindowListener = (...props) =>
-  useCustomListener(window, ...props)
-
-export const onLoad = callback =>
-	useEffect(callback, [])
-
-export const onScroll = callback => 
-	useWindowListener('scroll', callback, true)
-
-export const onClick = callback =>
-	useWindowListener('mousedown', callback)
-
-export const onResize = callback =>
-	useWindowListener('resize', callback)
-
-export const onKeydown = callback =>
-	useWindowListener('keydown', callback)

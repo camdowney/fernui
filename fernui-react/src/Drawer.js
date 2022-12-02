@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react'
-import { onLoad, onResize, onClick } from './_util'
+import React, { useState, useEffect, useRef } from 'react'
+import { useListener } from './_util'
 
 export default function Drawer({
   id,
@@ -16,10 +16,12 @@ export default function Drawer({
   const drawerRef = useRef()
   const contentRef = useRef()
 
-  onLoad(() => setContentHeight(contentRef.current.clientHeight))
-  onResize(() => setContentHeight(contentRef.current.clientHeight))
+  const setDrawerHeight = () =>
+    setContentHeight(contentRef.current.clientHeight)
 
-  onClick(e => {
+  useEffect(setDrawerHeight, [])
+  useListener('resize', setDrawerHeight)
+  useListener('mousedown', e => {
     if (close && !drawerRef.current.contains(e.target))
       setVisible(false)
   })

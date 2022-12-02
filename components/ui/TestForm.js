@@ -20,7 +20,17 @@ export default function TestForm() {
     // await axios.post('/api/mail', composeMail(e))
 
   return (
-    <Form onSubmit={sendEmail}>
+    <Form
+      onSubmit={sendEmail}
+      btn={
+        <Link
+          type='submit'
+          text='Submit'
+          className='btn btn-red'
+          icon={mail}
+        />
+      }
+    >
       <div className='grid gap-5 mb-6 md:mb-7'>
         <Input
           name='test0'
@@ -63,12 +73,6 @@ export default function TestForm() {
           required
         /> */}
       </div>
-      <Link
-        type='submit'
-        text='Submit'
-        className='btn btn-red'
-        icon={mail}
-      />
     </Form>
   )
 }

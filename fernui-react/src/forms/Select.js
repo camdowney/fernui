@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Error from './Error'
 import Icon from '../Icon'
 import Cond from '../Cond'
-import { cn, useCustomListener } from '../_util'
+import { cn, useListener } from '../_util'
 import { angle } from '../_icons'
 
 export default function Select({ 
@@ -29,9 +29,9 @@ export default function Select({
     setModified(true)
   }
 
-  useCustomListener(outerRef.current, 'FernFieldAction', e => {
+  useListener('FernFieldAction', e => {
     setFormState(e.detail.state)
-  })
+  }, outerRef.current)
 
   return (
     <label
