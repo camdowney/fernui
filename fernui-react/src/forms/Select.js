@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import Error from './Error'
+import Info from './Info'
 import Icon from '../Icon'
 import Cond from '../Cond'
 import { cn, useListener } from '../_util'
@@ -15,14 +15,14 @@ export default function Select({
   options,
   required,
   onChange,
-  errorMessage
+  message
 }) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
-  const [formState, setFormState] = useState(0)
+  const [formState, setFormState] = useState({})
   const outerRef = useRef()
 
-  const showErrors = invalid && (modified || formState < 0)
+  const showInfo = invalid && (modified || formState.error)
 
   const update = e => {
     setInvalid(required && e.target.selectedIndex < 1)
@@ -36,7 +36,7 @@ export default function Select({
   return (
     <label
       ref={outerRef}
-      className={cn('fui-field', showErrors && 'fui-field-invalid', className)}
+      className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
     >
       <Cond hide={!label} className='fui-label'>
         {label}
@@ -49,7 +49,7 @@ export default function Select({
           data-field-valid={!invalid}
           onChange={e => { update(e), onChange && onChange(e) }}
           onBlur={update}
-          disabled={formState > 0}
+          disabled={formState.disabled}
           style={{ cursor: 'pointer' }}
         >
           <option>
@@ -65,9 +65,9 @@ export default function Select({
           <Icon i={angle} className='fui-dropdown-icon' />
         </div>
       </div>
-      <Error visible={showErrors}>
-        {errorMessage || 'Please select an option.'}
-      </Error>
+      <Info visible={showInfo}>
+        {message || 'Please select an option.'}
+      </Info>
     </label>
   )
 }

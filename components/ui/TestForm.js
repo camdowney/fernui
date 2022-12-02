@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Form, Input, Link } from 'fernui-react'
+import { InteractForm, Input, Submit } from 'fernui-react'
 import { formToHtml, formToObject } from 'fernutil-react'
 import { mail } from 'fernicons'
 import { SITE_NAME, ADMIN_EMAIL, SENDER_EMAIL } from 'lib/global'
@@ -16,17 +16,17 @@ const composeMail = e => ({
 
 export default function TestForm() {
   const sendEmail = async e =>
+    await axios.post('/api/mail', composeMail(e))
+
+  const testSubmit = async e =>
     console.log(formToObject(e))
-    // await axios.post('/api/mail', composeMail(e))
 
   return (
-    <Form
-      onSubmit={sendEmail}
+    <InteractForm
+      onSubmit={testSubmit}
       btn={
-        <Link
-          type='submit'
-          text='Submit'
-          className='btn btn-red'
+        <Submit
+          className='btn btn-blue'
           icon={mail}
         />
       }
@@ -63,6 +63,6 @@ export default function TestForm() {
           required
         /> */}
       </div>
-    </Form>
+    </InteractForm>
   )
 }

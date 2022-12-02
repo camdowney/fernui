@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import Error from './Error'
+import Info from './Info'
 import Cond from '../Cond'
 import { cn, isEmail, useListener } from '../_util'
 
@@ -14,14 +14,14 @@ export default function Input({
   required,
   charLimit,
   onChange,
-  errorMessage
+  message
 }) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
-  const [formState, setFormState] = useState(0)
+  const [formState, setFormState] = useState({})
   const outerRef = useRef()
 
-  const showErrors = invalid && (modified || formState < 0)
+  const showInfo = invalid && (modified || formState.error)
 
   const update = e => {
     setInvalid(required && (!e?.target.value || (type === 'email' && !isEmail(e.target.value))))
@@ -35,7 +35,7 @@ export default function Input({
   return (
     <label
       ref={outerRef}
-      className={cn('fui-field', showErrors && 'fui-field-invalid', className)}
+      className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
     >
       <Cond hide={!label} className='fui-label'>
         {label}
@@ -50,12 +50,12 @@ export default function Input({
         placeholder={placeholder}
         onChange={e => { update(e), onChange && onChange(e) }}
         onBlur={update}
-        disabled={formState > 0}
+        disabled={formState.disabled}
         maxLength={charLimit ? charLimit : type === 'area' ? 1000 : 100}
       />
-      <Error visible={showErrors}>
-        {errorMessage || type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.'}
-      </Error>
+      <Info visible={showInfo}>
+        {message || type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.'}
+      </Info>
     </label>
   )
 }

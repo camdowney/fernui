@@ -135,10 +135,10 @@
   @apply invisible opacity-0 origin-center duration-[0.4s];
   transform: scale3d(0.85, 0.85, 1);
 }
-.tooltip, .fui-error-modal {
+.tooltip, .fui-error-modal, .fui-info-modal {
   @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 t2 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2;
 }
-.tooltip svg, .fui-error-modal svg {
+.tooltip svg, .fui-error-modal svg, .fui-info-modal svg {
   @apply w-3.5 md:w-4 mr-1.5;
   transform: scale3d(1, 1, 1);
 }
@@ -178,13 +178,16 @@
 .fui-checkbox input:focus ~ .fui-check {
   @apply !outline-none !shadow-[0_0_0_3px_#369df7];
 }
-.fui-error {
+.fui-info {
   @apply t2 leading-xs text-error-500 mt-2;
 }
 .fui-error-modal {
   @apply !text-error-500 md:!mt-2.5;
 }
-.fui-error svg {
+.fui-info-modal {
+  @apply md:!mt-2.5;
+}
+.fui-info svg {
   @apply w-3.5 md:w-4 mr-1.5;
 }
 ::placeholder {
