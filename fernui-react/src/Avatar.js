@@ -13,7 +13,7 @@ export default function Avatar({ title, src, className }) {
       className={className}
     />
   ) : firstLetter ? (
-    <div className={className} style={letterStyles(firstLetter)}>
+    <div className={className} style={letterStyle(firstLetter)}>
       {firstLetter}
     </div>
   ) : (
@@ -25,7 +25,7 @@ export default function Avatar({ title, src, className }) {
   )
 }
 
-const letterStyles = firstLetter => ({
+const letterStyle = firstLetter => ({
   aspectRatio: '1/1',
   display: 'flex',
   justifyContent: 'center',

@@ -37,13 +37,13 @@ export default function Lightbox({
     <Modal
       id={id}
       className={cn('fui-lightbox', className)}
-      style={modalStyles}
+      style={modalStyle}
       onAction={e => setCurrent(e.detail?.index ?? 0)}
       bgClass={cn('fui-lightbox-bg', bgClass)}
       lock
       focus
     >
-      <div style={innerStyles}>
+      <div style={innerStyle}>
         {current >= 0 && sources.map((source, i) => 
           <Media
             src={source}
@@ -58,7 +58,7 @@ export default function Lightbox({
             label='Close image'
             onClick={closeModal}
             className={cn('fui-lightbox-control', controlClass)}
-            style={{ ...controlStyles, ...closeStyles }}
+            style={{ ...controlStyle, ...closeStyle }}
             icon='close'
             iconClass={cn('fui-lightbox-icon', iconClass)}
           />
@@ -66,7 +66,7 @@ export default function Lightbox({
             label='Previous image'
             onClick={cyclePrevious}
             className={cn('fui-lightbox-control', controlClass)}
-            style={{ ...controlStyles, ...previousStyles }}
+            style={{ ...controlStyle, ...previousStyle }}
             icon='angle'
             iconClass={cn('fui-lightbox-icon', iconClass)}
           />
@@ -74,7 +74,7 @@ export default function Lightbox({
             label='Next image'
             onClick={cycleNext}
             className={cn('fui-lightbox-control', controlClass)}
-            style={{ ...controlStyles, ...nextStyles }}
+            style={{ ...controlStyle, ...nextStyle }}
             icon='angle'
             iconClass={cn('fui-lightbox-icon', iconClass)}
           />
@@ -84,7 +84,7 @@ export default function Lightbox({
   )
 }
 
-const modalStyles = {
+const modalStyle = {
   top: '0',
   bottom: '0',
   left: '0',
@@ -92,29 +92,29 @@ const modalStyles = {
   margin: 'auto',
 }
 
-const innerStyles = {
+const innerStyle = {
   position: 'relative',
   width: '100%',
   height: '100%',
 }
 
-const controlStyles = {
+const controlStyle = {
   position: 'absolute',
   zIndex: '20',
 }
 
-const closeStyles = {
+const closeStyle = {
   top: '0',
   right: '0',
 }
 
-const previousStyles = {
+const previousStyle = {
   top: '50%',
   left: '0',
   transform: 'translateY(-50%) rotate(90deg)',
 }
 
-const nextStyles = {
+const nextStyle = {
   top: '50%',
   right: '0',
   transform: 'translateY(-50%) rotate(-90deg)',

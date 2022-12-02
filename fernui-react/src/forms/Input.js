@@ -4,7 +4,7 @@ import Cond from '../Cond'
 import { cn, isEmail, useListener } from '../_util'
 
 export default function Input({ 
-  fieldRef,
+  innerRef,
   id,
   name,
   label,
@@ -41,7 +41,7 @@ export default function Input({
         {label}
       </Cond>
       <Cond
-        condRef={fieldRef}
+        innerRef={innerRef}
         as={type === 'area' ? 'textarea' : 'input'}
         id={id}
         type={type}

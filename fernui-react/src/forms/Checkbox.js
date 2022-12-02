@@ -5,7 +5,7 @@ import { cn, useListener } from '../_util'
 import { check } from '../_icons'
 
 export default function Checkbox({
-  fieldRef,
+  innerRef,
   id,
   name,
   label,
@@ -35,9 +35,9 @@ export default function Checkbox({
       ref={outerRef}
       className={cn('fui-field', showErrors && 'fui-field-invalid', className)}
     >
-      <label style={wrapperStyles}>
+      <label style={wrapperStyle}>
         <input
-          ref={fieldRef}
+          ref={innerRef}
           id={id}
           type='checkbox'
           name={name || label}
@@ -45,10 +45,10 @@ export default function Checkbox({
           onChange={e => { update(e), onChange && onChange(e) }}
           onBlur={update}
           disabled={formState > 0}
-          style={inputStyles}
+          style={inputStyle}
         />
-        <div className='fui-check-box' style={boxStyles}>
-          <Icon i={check} className='fui-check-icon' style={iconStyles} />
+        <div className='fui-check-box' style={boxStyle}>
+          <Icon i={check} className='fui-check-icon' style={iconStyle} />
         </div>
         <Cond hide={!label} className='fui-label'>
           {label}
@@ -61,25 +61,25 @@ export default function Checkbox({
   )
 }
 
-const wrapperStyles = {
+const wrapperStyle = {
   display: 'flex',
   cursor: 'pointer',
 }
 
-const inputStyles = {
+const inputStyle = {
   width: '0',
   height: '0',
   outlineWidth: '0 !important',
 }
 
-const boxStyles = {
+const boxStyle = {
   flexShrink: '0',
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
 }
 
-const iconStyles = {
+const iconStyle = {
   position: 'relative',
   display: 'block',
 }

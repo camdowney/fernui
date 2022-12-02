@@ -80,10 +80,13 @@
 .space-y-lg {
   @apply space-y-7 md:space-y-9;
 }
+.fui-expand {
+  @apply duration-300;
+}
 .fui-section {
   @apply relative py-md;
 }
-.fui-shelf {
+.fui-container {
   @apply relative max-w-9xl w-full px-md mx-auto;
 }
 .fui-content {

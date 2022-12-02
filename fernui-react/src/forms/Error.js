@@ -8,7 +8,7 @@ export default function Error({ visible, children }) {
     <Cond
       hide={!visible}
       className='fui-error'
-      style={errorStyles}
+      style={errorStyle}
     >
       <Icon i={warning} />
       {children}
@@ -16,7 +16,7 @@ export default function Error({ visible, children }) {
   )
 }
 
-const errorStyles = {
+const errorStyle = {
   display: 'inline-flex',
   alignItems: 'center',
 }

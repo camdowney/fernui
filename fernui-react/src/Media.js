@@ -16,8 +16,8 @@ export default function Media({
   const srcset = `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}`
 
   return (
-    <div className={cn('fui-media', outerClass)} style={cover ? coverOuterStyles : defaultOuterStyles}>
-      <div className='fui-placeholder' style={placeholderStyles} />
+    <div className={cn('fui-media', outerClass)} style={cover ? coverOuterStyle : defaultOuterStyle}>
+      <div className='fui-placeholder' style={placeholderStyle} />
       <Cond
         hide={!src}
         as={as}
@@ -29,7 +29,7 @@ export default function Media({
         allowFullScreen={as === 'iframe'}
         title={as === 'iframe' ? alt : undefined}
         alt={alt}
-        style={typeof as === 'string' ? defaultMediaStyles(as) : undefined}
+        style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
         autoPlay={as === 'video' && auto}
         muted={as === 'video' && auto}
         loop={as === 'video' && auto}
@@ -40,14 +40,14 @@ export default function Media({
   )
 }
 
-const defaultOuterStyles = {
+const defaultOuterStyle = {
   overflow: 'hidden',
   position: 'relative',
   display: 'block',
   zIndex: '10',
 }
 
-const coverOuterStyles = {
+const coverOuterStyle = {
   overflow: 'hidden',
   position: 'absolute',
   top: '0',
@@ -56,7 +56,7 @@ const coverOuterStyles = {
   right: '0',
 }
 
-const placeholderStyles = {
+const placeholderStyle = {
   position: 'absolute',
   top: '0',
   bottom: '0',
@@ -65,7 +65,7 @@ const placeholderStyles = {
   backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
 }
 
-const defaultMediaStyles = as => ({
+const defaultMediaStyle = as => ({
   position: 'absolute',
   top: '0',
   left: '0',

@@ -6,7 +6,7 @@ export default function Section({
   as = 'section',
   id,
   className,
-  shelfClass,
+  containerClass,
   bg,
   children
 }) {
@@ -17,7 +17,7 @@ export default function Section({
       className={cn('fui-section', className)}
     >
       {bg}
-      <div className={cn('fui-shelf', shelfClass)}>
+      <div className={cn('fui-container', containerClass)}>
         {children}
       </div>
     </Cond>

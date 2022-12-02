@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Cond({
-  condRef,
+  innerRef,
   as = 'div',
   hide,
   children,
@@ -11,7 +11,7 @@ export default function Cond({
   const Shell = as
 
   return !hide ? (
-    <Shell ref={condRef} {...props}>
+    <Shell ref={innerRef} {...props}>
       {children}
     </Shell>
   ) : (

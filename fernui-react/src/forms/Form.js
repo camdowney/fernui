@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
 import Honeypot from './Honeypot'
-import Cond from '../Cond'
 import Modal from '../Modal'
 import Icon from '../Icon'
 import { cn, openModal } from '../_util'
@@ -32,38 +31,32 @@ export default function Form({
   const errorRef = useRef()
 
   const updateState = state => {
+    setFormState(state)
+
     formRef.current.querySelectorAll('*').forEach(element => {
       element.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } }))
     })
-    setFormState(state)
+    
+    if (state < 0) 
+      openModal(errorRef)
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (attempts.current >= maxAttempts || submissions.current >= maxSubmissions)
+    if (attempts.current++ >= maxAttempts || submissions.current >= maxSubmissions)
       return
 
-    attempts.current++
-
     for (const field of e.target.elements) {
-      if (field.hasAttribute('data-field-valid') && field.getAttribute('data-field-valid') !== 'true') {
-        updateState(-1)
-        errorRef.current.click()
-        return
-      }
+      if (field.hasAttribute('data-field-valid') && field.getAttribute('data-field-valid') !== 'true')
+        return updateState(-1)
     }
 
     updateState(2)
 
     onSubmit && onSubmit(e)
-      .then(() => {
-        updateState(++submissions.current >= maxSubmissions ? 1 : 0)
-      })
-      .catch(() => {
-        updateState(-2)
-        errorRef.current.click()
-      })
+      .then(() => updateState(++submissions.current >= maxSubmissions ? 1 : 0))
+      .catch(() => updateState(-2))
   }
 
   return (
@@ -82,18 +75,18 @@ export default function Form({
         </p>
       ) : <>
         {btn}
-        <Cond
-          as={Modal}
-          hide={messages === false}
-          className='fui-error-modal'
-          closeDelay='2000'
-          dropdown
-          style={{ zIndex: '30 !important' }}
-        >
-          <span ref={errorRef} onClick={openModal} />
-          <Icon i={warning} />
-          {messages[formState] || defaultMessages[formState]}
-        </Cond>
+        {messages !== false &&
+          <Modal
+            innerRef={errorRef}
+            className='fui-error-modal'
+            closeDelay='2000'
+            dropdown
+            style={{ zIndex: '30 !important' }}
+          >
+            <Icon i={warning} />
+            {messages[formState] || defaultMessages[formState]}
+          </Modal>
+        }
       </>}
     </form>
   )

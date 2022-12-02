@@ -74,22 +74,32 @@ export const formToObject = submitEvent => {
   return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null)
 }
 
-const signalModal = (selector, action, index) => {
-  const modal = typeof selector === 'string' 
+const signalEvent = (selector, event, detail) => {
+  const element = typeof selector === 'string' 
     ? document.querySelector(selector)
-    : selector.currentTarget.closest('.fui-modal-wrapper')
+    : selector?.current
+    || selector?.currentTarget?.closest('.fui-listener')
       
-  modal?.dispatchEvent(new CustomEvent('FernModalAction', { detail: { action, index } }))
+  element?.dispatchEvent(new CustomEvent(event, { detail }))
 }
   
 export const closeModal = selector =>
-  signalModal(selector, 0)
+  signalEvent(selector, 'FernModalAction', { action: 0 })
 
 export const openModal = (selector, index) =>
-  signalModal(selector, 1, index)
+  signalEvent(selector, 'FernModalAction', { action: 1, index })
 
 export const toggleModal = selector =>
-  signalModal(selector, 2)
+  signalEvent(selector, 'FernModalAction', { action: 2 })
+
+export const closeExpand = selector =>
+  signalEvent(selector, 'FernExpandAction', { action: 0 })
+
+export const openExpand = selector =>
+  signalEvent(selector, 'FernExpandAction', { action: 1 })
+
+export const toggleExpand = selector =>
+  signalEvent(selector, 'FernExpandAction', { action: 2 })
 
 export const onIntersect = (selector, callback, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {

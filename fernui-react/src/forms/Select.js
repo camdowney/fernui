@@ -6,7 +6,7 @@ import { cn, useListener } from '../_util'
 import { angle } from '../_icons'
 
 export default function Select({ 
-  fieldRef,
+  innerRef,
   id,
   name,
   label,
@@ -43,7 +43,7 @@ export default function Select({
       </Cond>
       <div style={{ position: 'relative' }}>
         <select
-          ref={fieldRef}
+          ref={innerRef}
           id={id}
           name={name || label || placeholder}
           data-field-valid={!invalid}
@@ -61,7 +61,7 @@ export default function Select({
             </option>    
           )}
         </select>
-        <div style={wrapperStyles}>
+        <div style={wrapperStyle}>
           <Icon i={angle} className='fui-dropdown-icon' />
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function Select({
   )
 }
 
-const wrapperStyles = {
+const wrapperStyle = {
   position: 'absolute',
   top: '0',
   right: '0',

@@ -52,16 +52,6 @@ export default function TestForm() {
           label='Full name *'
           required
         />
-        <Input
-          name='test2'
-          label='Full name *'
-          required
-        />
-        <Input
-          name='test1.2.b.0'
-          label='Full name *'
-          required
-        />
         {/* <Input
           type='email'
           label='Email *'

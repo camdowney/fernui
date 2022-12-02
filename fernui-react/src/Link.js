@@ -10,14 +10,12 @@ export default function Link({
   iconClass,
   blank,
   label,
-  linkRef,
   children,
   ...props
 }) {
   return (
     <Cond
       as={as || (to ? 'a' : 'button')}
-      condRef={linkRef}
       href={to}
       target={blank && '_blank'}
       rel={blank && 'noopener noreferrer'}
