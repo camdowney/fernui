@@ -31,7 +31,7 @@ export default function Select({
 
   useListener('FernFieldAction', e => {
     setFormState(e.detail.state)
-  }, outerRef.current)
+  }, outerRef)
 
   return (
     <label

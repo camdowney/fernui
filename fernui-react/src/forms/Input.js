@@ -29,9 +29,8 @@ export default function Input({
   }
 
   useListener('FernFieldAction', e => {
-    console.log(e)
     setFormState(e.detail.state)
-  }, outerRef.current)
+  }, outerRef)
 
   return (
     <label

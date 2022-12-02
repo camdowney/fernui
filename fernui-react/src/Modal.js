@@ -53,7 +53,7 @@ export default function Modal({
     const action = e.detail.action
     setModalActive(action < 2 ? action : !active)
     onAction && onAction(e)
-  }, outerRef.current)
+  }, outerRef)
 
   return (
     <span

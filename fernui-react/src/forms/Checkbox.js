@@ -28,7 +28,7 @@ export default function Checkbox({
 
   useListener('FernFieldAction', e => {
     setFormState(e.detail.state)
-  }, outerRef.current)
+  }, outerRef)
 
   return (
     <div
