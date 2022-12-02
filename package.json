@@ -5,9 +5,9 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
+    "fern-install": "pnpm i && cd ./fernicons && pnpm i && cd ../fernutil && pnpm i && cd ../fernutil-react && pnpm i && cd ../fernui-react && pnpm i && cd ..",
     "fern-build": "cd ./fernicons && pnpm build && cd ../fernutil && pnpm build && cd ../fernutil-react && pnpm build && cd ../fernui-react && pnpm build && cd ..",
-    "fern-dev": "pnpm fern-build && next dev",
-    "push": "git add . && git commit -m 'Fix' && git push"
+    "fern-dev": "pnpm fern-build && next dev"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
