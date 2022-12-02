@@ -26,7 +26,7 @@ export default function Checkbox({
     setModified(true)
   }
 
-  useListener('FernFieldAction', e => {
+  useListener('FernFormAction', e => {
     setFormState(e.detail.state)
   }, outerRef)
 

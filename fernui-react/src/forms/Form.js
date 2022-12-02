@@ -29,7 +29,7 @@ export default function Form({
     const state = states[newState] || defaultStates[newState]
 
     formRef.current.querySelectorAll('*').forEach(element => {
-      element.dispatchEvent(new CustomEvent('FernFieldAction', { detail: { state } }))
+      element.dispatchEvent(new CustomEvent('FernFormAction', { detail: { state } }))
     })
     
     onStateChange && onStateChange(state)

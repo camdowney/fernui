@@ -29,7 +29,7 @@ export default function Select({
     setModified(true)
   }
 
-  useListener('FernFieldAction', e => {
+  useListener('FernFormAction', e => {
     setFormState(e.detail.state)
   }, outerRef)
 
