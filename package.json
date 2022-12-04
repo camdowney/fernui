@@ -1,5 +1,5 @@
 {
-  "name": "fern-next",
+  "name": "fern-monorepo",
   "private": "true",
   "scripts": {
     "build": "next build",
