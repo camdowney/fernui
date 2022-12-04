@@ -4,8 +4,10 @@ import { cn } from './_util'
 
 export default function Media({
   as = 'img',
-  outerClass,
   src,
+  className,
+  style,
+  innerClass,
   alt = '',
   cover,
   auto,
@@ -16,7 +18,11 @@ export default function Media({
   const srcset = `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}`
 
   return (
-    <div className={cn('fui-media', outerClass)} style={cover ? coverOuterStyle : defaultOuterStyle}>
+    <div
+      className={cn('fui-media', className)}
+      style={{ ...style, ...(cover ? coverOuterStyle : defaultOuterStyle) }}
+      {...props}
+    >
       <div className='fui-placeholder' style={placeholderStyle} />
       <Cond
         hide={!src}
@@ -26,6 +32,7 @@ export default function Media({
         srcSet={(responsive && priority) ? srcset : undefined}
         data-lazy-srcset={(responsive && !priority) ? srcset : undefined}
         sizes={responsive ? '100vw' : undefined}
+        className={innerClass}
         allowFullScreen={as === 'iframe'}
         title={as === 'iframe' ? alt : undefined}
         alt={alt}
@@ -34,7 +41,6 @@ export default function Media({
         muted={as === 'video' && auto}
         loop={as === 'video' && auto}
         playsInline={as === 'video' && auto}
-        {...props}
       />
     </div>
   )

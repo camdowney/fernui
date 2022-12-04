@@ -1,6 +1,6 @@
-import { Section, Expand } from 'fernui-react'
+import { Section, Expand, Lightbox } from 'fernui-react'
 import { TestForm } from 'components/ui'
-import { toggleExpand } from 'fernutil-react'
+import { toggleExpand, openModal } from 'fernutil-react'
 
 export default function Home() {
   return <>
@@ -16,7 +16,18 @@ export default function Home() {
     </Section>
 
     <Section>
-
+      <button onClick={() => openModal('#lightbox', { index: 2 })}>Open lightbox</button>
     </Section>
+
+    <Lightbox
+      id='lightbox'
+      sources={[
+        'aurora.webp',
+        'glacier1.webp',
+        'glacier2.webp',
+        'moraine.webp',
+        'yosemite.webp',
+      ]}
+    />
   </>
 }

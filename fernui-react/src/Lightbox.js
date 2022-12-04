@@ -3,12 +3,14 @@ import Modal from './Modal'
 import Media from './Media'
 import Link from './Link'
 import { cn, closeModal, useListener } from './_util'
+import { angle, close } from './_icons'
 
 export default function Lightbox({
   id,
   sources,
   className,
   bgClass,
+  customOverlay,
   overlayClass,
   controlClass,
   iconClass
@@ -38,7 +40,7 @@ export default function Lightbox({
       id={id}
       className={cn('fui-lightbox', className)}
       style={modalStyle}
-      onAction={e => setCurrent(e.detail?.index ?? 0)}
+      onAction={e => e.detail?.index && setCurrent(e.detail?.index)}
       bgClass={cn('fui-lightbox-bg', bgClass)}
       lock
       focus
@@ -47,38 +49,40 @@ export default function Lightbox({
         {current >= 0 && sources.map((source, i) => 
           <Media
             src={source}
-            outerClass={cn('fui-lightbox-item', current === i ? 'fui-lightbox-item-active' : 'fui-lightbox-item-inactive')}
+            className={cn('fui-lightbox-item', current === i ? 'fui-lightbox-item-active' : 'fui-lightbox-item-inactive')}
             cover
             priority
             key={i}
           />
         )}
-        <div className={cn('fui-lightbox-overlay', overlayClass)} style={{ position: 'absolute' }}>
-          <Link
-            label='Close image'
-            onClick={closeModal}
-            className={cn('fui-lightbox-control', controlClass)}
-            style={{ ...controlStyle, ...closeStyle }}
-            icon='close'
-            iconClass={cn('fui-lightbox-icon', iconClass)}
-          />
-          <Link
-            label='Previous image'
-            onClick={cyclePrevious}
-            className={cn('fui-lightbox-control', controlClass)}
-            style={{ ...controlStyle, ...previousStyle }}
-            icon='angle'
-            iconClass={cn('fui-lightbox-icon', iconClass)}
-          />
-          <Link
-            label='Next image'
-            onClick={cycleNext}
-            className={cn('fui-lightbox-control', controlClass)}
-            style={{ ...controlStyle, ...nextStyle }}
-            icon='angle'
-            iconClass={cn('fui-lightbox-icon', iconClass)}
-          />
-        </div>
+        {customOverlay || (
+          <div className={cn('fui-lightbox-overlay', overlayClass)} style={{ position: 'absolute '}}>
+            <Link
+              label='Close image'
+              onClick={closeModal}
+              className={cn('fui-lightbox-control', controlClass)}
+              style={{ ...controlStyle, ...closeStyle }}
+              icon={close}
+              iconClass={cn('fui-lightbox-icon', iconClass)}
+            />
+            <Link
+              label='Previous image'
+              onClick={cyclePrevious}
+              className={cn('fui-lightbox-control', controlClass)}
+              style={{ ...controlStyle, ...previousStyle }}
+              icon={angle}
+              iconClass={cn('fui-lightbox-icon', iconClass)}
+            />
+            <Link
+              label='Next image'
+              onClick={cycleNext}
+              className={cn('fui-lightbox-control', controlClass)}
+              style={{ ...controlStyle, ...nextStyle }}
+              icon={angle}
+              iconClass={cn('fui-lightbox-icon', iconClass)}
+            />
+          </div>
+        )}
       </div>
     </Modal>
   )

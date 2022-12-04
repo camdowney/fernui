@@ -142,6 +142,27 @@
   @apply w-3.5 md:w-4 mr-1.5;
   transform: scale3d(1, 1, 1);
 }
+.fui-lightbox {
+  @apply max-h-[90vh] aspect-[3/2] p-2 sm:p-4 md:p-6;
+}
+.fui-lightbox-item-inactive {
+  @apply invisible;
+}
+.fui-lightbox-overlay {
+  @apply inset-4;
+}
+.fui-lightbox-control {
+  @apply text-gray-100 bg-gray-900/50 hover:bg-gray-900/70 rounded-full p-2 md:p-3 lg:p-4;
+}
+.fui-lightbox-icon {
+  @apply w-5 md:w-6 lg:w-7;
+}
+.btn {
+  @apply relative inline-flex items-center border-b-2;
+}
+.btn-light {
+  @apply text-gray-100 hover:text-gray-300 border-gray-100 hover:border-gray-300;
+}
 
 /*
   UI - Forms

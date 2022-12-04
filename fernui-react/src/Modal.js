@@ -34,7 +34,7 @@ export default function Modal({
       document.body.style.overflow = newActive ? 'hidden' : 'auto'
 
     if (newActive && focus)
-      setTimeout(() => wrapperRef.current.querySelector('menu [tabindex=0], menu [tabindex=1]')?.focus(), 50)
+      setTimeout(() => wrapperRef.current.querySelector('menu [tabindex="0"], menu [tabindex="1"]')?.focus(), 50)
       
     if (newActive && closeDelay > 0)
       setModalTimer(false, closeDelay)

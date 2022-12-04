@@ -6,6 +6,7 @@ export default function Expand({
   id,
   className,
   children,
+  onAction,
   close
 }) {
   const [active, setActive] = useState(false)
@@ -26,6 +27,7 @@ export default function Expand({
   useListener('FernExpandAction', e => {
     const action = e.detail.action
     setActive(action < 2 ? action : !active)
+    onAction && onAction(e)
   }, expandRef)
 
   return (

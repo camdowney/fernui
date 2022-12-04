@@ -3,24 +3,24 @@ import Media from './Media'
 import Icon from './Icon'
 import { profile } from './_icons'
 
-export default function Avatar({ title, src, className }) {
+export default function Avatar({ title, src, ...props }) {
   const firstLetter = title?.substring(0, 1).toUpperCase()
 
   return src ? (
     <Media
       src={src}
       alt={title}
-      className={className}
+      {...props}
     />
   ) : firstLetter ? (
-    <div className={className} style={letterStyle(firstLetter)}>
+    <div style={letterStyle(firstLetter)} {...props}>
       {firstLetter}
     </div>
   ) : (
     <Icon
       i={profile}
-      className={className}
       style={{ aspectRatio: '1' }}
+      {...props}
     />
   )
 }

@@ -28,7 +28,7 @@ export default function Input({
     setModified(true)
   }
 
-  useListener('FernFormAction', e => {
+  useListener('FernFormStateChange', e => {
     setFormState(e.detail.state)
   }, outerRef)
 

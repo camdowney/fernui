@@ -43,12 +43,7 @@ export default function TestForm() {
           required
         />
         <Input
-          name='test1.1'
-          label='Full name *'
-          required
-        />
-        <Input
-          name='test1.2.a'
+          name='test1.1.a'
           label='Full name *'
           required
         />
