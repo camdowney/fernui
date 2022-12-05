@@ -7,7 +7,7 @@ export default function Expand({
   className,
   children,
   onAction,
-  close
+  exitOnClick
 }) {
   const [active, setActive] = useState(false)
   const [contentHeight, setContentHeight] = useState(0)
@@ -19,8 +19,8 @@ export default function Expand({
   useEffect(setExpandHeight, [])
   useListener('resize', setExpandHeight)
 
-  useListener('mousedown', e => {
-    if (close && !expandRef.current.contains(e.target))
+  useListener('mouseup', e => {
+    if (exitOnClick && !expandRef.current.contains(e.target))
       setActive(false)
   })
 

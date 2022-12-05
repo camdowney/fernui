@@ -62,7 +62,7 @@ export default function Select({
           )}
         </select>
         <div style={wrapperStyle}>
-          <Icon i={angle} className='fui-dropdown-icon' />
+          <Icon i={angle} className='fui-select-icon' />
         </div>
       </div>
       <Info visible={showInfo}>

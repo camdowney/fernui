@@ -14,8 +14,8 @@ export default function Modal({
   transition = 'modal',
   openDelay = 0,
   closeDelay = 0,
-  dropdown = false,
-  persist = false,
+  relative = false,
+  exitOn = { bg: true, click: false, escape: true },
   scrollLock = false,
   focus = false
 }) {
@@ -26,17 +26,21 @@ export default function Modal({
   const setModalTimer = (newActive, delay) =>
     timer.current = setTimeout(() => setModalActive(newActive), delay)
 
-  const setModalActive = newActive => {
+  const setModalActive = willBeActive => {
     clearTimeout(timer.current)
-    setActive(newActive)
+
+    if (active === willBeActive)
+      return
+
+    setActive(willBeActive)
 
     if (scrollLock)
-      document.body.style.overflow = newActive ? 'hidden' : 'auto'
+      document.body.style.overflow = willBeActive ? 'hidden' : 'auto'
 
-    if (newActive && focus)
+    if (willBeActive && focus)
       setTimeout(() => wrapperRef.current.querySelector('menu [tabindex="0"], menu [tabindex="1"]')?.focus(), 50)
       
-    if (newActive && closeDelay > 0)
+    if (willBeActive && closeDelay > 0)
       setModalTimer(false, closeDelay)
   }
 
@@ -46,8 +50,13 @@ export default function Modal({
   }, [])
 
   useListener('keydown', e => {
-    if (active && !e.repeat && !persist && e?.key?.toLowerCase() === 'escape')
+    if (active && !e.repeat && exitOn?.escape && e?.key?.toLowerCase() === 'escape')
       setModalActive(false)
+  })
+
+  useListener('mouseup', e => {
+    if (active && exitOn?.click && !wrapperRef.current.lastChild.contains(e.target))
+      setTimeout(() => setModalActive(false), 0)
   })
 
   useListener('FernModalAction', e => {
@@ -61,19 +70,19 @@ export default function Modal({
       ref={wrapperRef}
       id={id}
       className={cn('fui-listener fui-modal-wrapper', wrapperClass)}
-      style={wrapperStyle(dropdown)}
+      style={wrapperStyle(relative)}
     >
       <Cond
         hide={!bgClass || !active}
         className={cn('fui-modal-bg', bgClass)}
-        onClick={() => !persist && setModalActive(false)}
-        style={bgStyle(dropdown)}
+        onClick={() => exitOn?.bg && setModalActive(false)}
+        style={bgStyle(relative)}
       />
 
       <menu
         className={cn('fui-modal', transition + '-' + (active ? 'open' : 'close'), className)}
         aria-hidden={!active}
-        style={{ ...menuStyle(dropdown, active), ...style }}
+        style={{ ...menuStyle(relative, active), ...style }}
       >
         {children}
       </menu>
@@ -81,23 +90,23 @@ export default function Modal({
   )
 }
 
-const wrapperStyle = dropdown => ({
-  position: dropdown ? 'relative' : 'absolute',
-  display: dropdown ? 'block' : 'initial',
+const wrapperStyle = relative => ({
+  position: relative ? 'relative' : 'absolute',
+  display: relative ? 'block' : 'initial',
 })
 
-const bgStyle = dropdown => ({
+const bgStyle = relative => ({
   position: 'fixed',
   top: '-50%',
   bottom: '-50%',
   left: '-50%',
   right: '-50%',
-  zIndex: dropdown ? '30' : '50',
+  zIndex: relative ? '30' : '50',
 })
 
-const menuStyle = (dropdown, active) => ({
+const menuStyle = (relative, active) => ({
   overflowY: 'auto',
-  zIndex: dropdown ? '31' : '51',
-  position: dropdown ? 'absolute' : 'fixed',
+  zIndex: relative ? '31' : '51',
+  position: relative ? 'absolute' : 'fixed',
   visibility: active === null && 'hidden !important',
 })

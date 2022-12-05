@@ -1,6 +1,6 @@
-import { Section, Expand, Lightbox } from 'fernui-react'
+import { Section, Expand, Lightbox, Modal } from 'fernui-react'
 import { TestForm } from 'components/ui'
-import { toggleExpand, openModal } from 'fernutil-react'
+import { toggleExpand, openModal, toggleModal } from 'fernutil-react'
 
 export default function Home() {
   return <>
@@ -16,6 +16,17 @@ export default function Home() {
     </Section>
 
     <Section>
+      <button onClick={() => openModal('#dropdown')}>Open dropdown</button>
+      <Modal
+        id='dropdown'
+        exitOn={{ click: true }}
+        relative
+      >
+        Content
+      </Modal>
+    </Section>
+
+    <Section className='bg-gray-200'>
       <button onClick={() => openModal('#lightbox', { index: 2 })}>Open lightbox</button>
     </Section>
 

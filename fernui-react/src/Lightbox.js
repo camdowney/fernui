@@ -23,6 +23,9 @@ export default function Lightbox({
   const cycleNext = () =>
     setCurrent(curr => curr < sources.length - 1 ? curr + 1 : 0)
 
+  const onOpen = e =>
+    e.detail?.index && setCurrent(e.detail?.index)
+
   useListener('keydown', e => {
     if (e.repeat)
       return
@@ -40,9 +43,9 @@ export default function Lightbox({
       id={id}
       className={cn('fui-lightbox', className)}
       style={modalStyle}
-      onAction={e => e.detail?.index && setCurrent(e.detail?.index)}
+      onAction={onOpen}
       bgClass={cn('fui-lightbox-bg', bgClass)}
-      lock
+      scrollLock
       focus
     >
       <div style={innerStyle}>

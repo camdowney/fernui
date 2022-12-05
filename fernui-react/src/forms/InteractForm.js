@@ -39,7 +39,8 @@ export default function InteractForm({
           innerRef={modalRef}
           className={`fui-${formState.error ? 'error' : 'info'}-modal`}
           closeDelay='2000'
-          dropdown
+          relative
+          exitOn={false}
           style={{ zIndex: '30 !important' }}
         >
           <Icon i={warning} />
