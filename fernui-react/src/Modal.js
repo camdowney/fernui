@@ -28,19 +28,18 @@ export default function Modal({
 
   const setModalActive = willBeActive => {
     clearTimeout(timer.current)
-
-    if (active === willBeActive)
-      return
-
     setActive(willBeActive)
 
     if (scrollLock)
       document.body.style.overflow = willBeActive ? 'hidden' : 'auto'
 
-    if (willBeActive && focus)
+    if (!willBeActive)
+      return
+
+    if (focus)
       setTimeout(() => wrapperRef.current.querySelector('menu [tabindex="0"], menu [tabindex="1"]')?.focus(), 50)
       
-    if (willBeActive && closeDelay > 0)
+    if (closeDelay > 0)
       setModalTimer(false, closeDelay)
   }
 
