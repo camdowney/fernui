@@ -29,11 +29,7 @@ export default function InteractForm({
       {...props}
     >
       {children}
-      {formState.end ? (
-        <p style={{ fontStyle: 'italic' }}>
-          {message}
-        </p>
-      ) : <>
+      {!formState.end ? <>
         {btn}
         <Modal
           innerRef={modalRef}
@@ -44,10 +40,15 @@ export default function InteractForm({
           exitOn={false}
           style={{ zIndex: '30 !important' }}
         >
-          <Icon i={warning} />
+          <Icon i={warning} className='fui-interact-icon' />
           {message}
         </Modal>
-      </>}
+        
+      </> : (
+        <p className='fui-interact-message'>
+          {message}
+        </p>
+      )}
     </Form>
   )
 }

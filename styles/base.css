@@ -193,21 +193,17 @@
 .fui-info {
   @apply t2 leading-[0] text-error-500 mt-2.5;
 }
-.fui-info svg {
+.fui-info-icon, .fui-interact-icon {
   @apply w-3.5 md:w-4 mr-1.5;
 }
 .fui-interact-modal {
-  @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 t2 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2;
-}
-.fui-interact-modal svg {
-  @apply w-3.5 md:w-4 mr-1.5;
-  transform: scale3d(1, 1, 1);
+  @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 t2 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
 }
 .fui-error-modal {
-  @apply !text-error-500 md:!mt-2.5;
+  @apply text-error-500;
 }
-.fui-info-modal {
-  @apply md:!mt-2.5;
+.fui-interact-message {
+  @apply italic;
 }
 ::placeholder {
   @apply text-gray-400 !important;

@@ -36,7 +36,7 @@ export default function Modal({
       return
 
     if (focus)
-      setTimeout(() => wrapperRef.current.querySelector('menu [tabindex="0"], menu [tabindex="1"]')?.focus(), 50)
+      setTimeout(() => wrapperRef.current.querySelector('[tabindex="0"] [tabindex="1"]')?.focus(), 50)
       
     if (closeDelay > 0)
       setModalTimer(false, closeDelay)
@@ -70,7 +70,7 @@ export default function Modal({
       className={cn('fui-listener', wrapperClass)}
       style={wrapperStyle(relative)}
     >
-      <span
+      <div
         className={cn('fui-modal-bg', transition + '-bg-' + (active ? 'open' : 'close'), bgClass)}
         onClick={() => exitOn?.bg && setModalActive(false)}
         aria-hidden={!active}

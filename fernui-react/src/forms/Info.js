@@ -10,7 +10,7 @@ export default function Info({ visible, children }) {
       className='fui-info'
       style={infoStyle}
     >
-      <Icon i={warning} />
+      <Icon i={warning} className='fui-info-icon' />
       {children}
     </Cond>
   )
