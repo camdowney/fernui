@@ -20,6 +20,7 @@ export default function Home() {
       <Modal
         id='dropdown'
         exitOn={{ click: true }}
+        bgClass='hidden'
         relative
       >
         Content

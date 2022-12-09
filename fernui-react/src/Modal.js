@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Cond from './Cond'
 import { cn, useListener } from './_util'
 
 export default function Modal({
@@ -68,23 +67,23 @@ export default function Modal({
     <span
       ref={wrapperRef}
       id={id}
-      className={cn('fui-listener fui-modal-wrapper', wrapperClass)}
+      className={cn('fui-listener', wrapperClass)}
       style={wrapperStyle(relative)}
     >
-      <Cond
-        hide={!bgClass || !active}
-        className={cn('fui-modal-bg', bgClass)}
+      <span
+        className={cn('fui-modal-bg', transition + '-bg-' + (active ? 'open' : 'close'), bgClass)}
         onClick={() => exitOn?.bg && setModalActive(false)}
+        aria-hidden={!active}
         style={bgStyle(relative)}
       />
 
-      <menu
+      <div
         className={cn('fui-modal', transition + '-' + (active ? 'open' : 'close'), className)}
         aria-hidden={!active}
         style={{ ...menuStyle(relative, active), ...style }}
       >
         {children}
-      </menu>
+      </div>
     </span>
   )
 }

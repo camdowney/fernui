@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Form from './Form'
 import Modal from '../Modal'
 import Icon from '../Icon'
-import { openModal } from '../_util'
+import { cn, openModal } from '../_util'
 import { warning } from '../_icons'
 
 export default function InteractForm({
@@ -37,7 +37,8 @@ export default function InteractForm({
         {btn}
         <Modal
           innerRef={modalRef}
-          className={`fui-${formState.error ? 'error' : 'info'}-modal`}
+          className={cn('fui-interact-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
+          bgClass='hidden'
           closeDelay='2000'
           relative
           exitOn={false}

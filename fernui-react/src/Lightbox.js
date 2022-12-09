@@ -52,7 +52,7 @@ export default function Lightbox({
         {current >= 0 && sources.map((source, i) => 
           <Media
             src={source}
-            className={cn('fui-lightbox-item', current === i ? 'fui-lightbox-item-active' : 'fui-lightbox-item-inactive')}
+            className={cn('fui-lightbox-item', 'fui-lightbox-item-' + (current === i ? 'active' : 'inactive'))}
             cover
             priority
             key={i}
