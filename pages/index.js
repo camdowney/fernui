@@ -1,6 +1,6 @@
 import { Section, Expand, Lightbox, Modal } from 'fernui-react'
-import { TestForm } from 'components/ui'
-import { toggleExpand, openModal, toggleModal } from 'fernutil-react'
+import { TestForm } from 'components'
+import { toggleExpand, openModal } from 'fernutil-react'
 
 export default function Home() {
   return <>

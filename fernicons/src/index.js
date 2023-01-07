@@ -42,7 +42,7 @@ export const download = {
 
 export const edge = {
   viewBox: '0 0 100 100',
-  preserveAspectRatio: "none",
+  preserveAspectRatio: 'none',
   children:
     '<path d="m 0,100 h 100 l 0,-90z"></path>'
 }
@@ -127,7 +127,7 @@ export const star = {
 
 export const trapezoid = {
   viewBox: '0 0 512 512',
-  preserveAspectRatio: "none",
+  preserveAspectRatio: 'none',
   children:
     '<path d="M512,512L512,0L0,256L0,512L512,512Z"></path>'
 }
@@ -146,7 +146,7 @@ export const warning = {
 
 export const wave = {
   viewBox: '0 0 1000 40',
-  preserveAspectRatio: "none",
+  preserveAspectRatio: 'none',
   children:
     '<path transform="matrix(1,0,0,1,54.8713,0)" d="M755.18,7.5C654.442,7.6 654.24,32.5 553.112,32.5L552.519,32.5C451.781,32.4 451.579,7.5 350.451,7.5L349.858,7.5C249.12,7.6 248.918,32.5 147.79,32.5L147.197,32.5C46.459,32.4 46.257,7.5 -54.871,7.5L-54.871,0L1566.42,0L1566.42,7.5C1465.09,7.5 1465.09,32.5 1363.76,32.5L1363.16,32.5C1262.42,32.4 1262.22,7.5 1161.1,7.5L1160.5,7.5C1059.76,7.6 1059.56,32.5 958.434,32.5L957.841,32.5C857.103,32.4 856.901,7.5 755.773,7.5L755.18,7.5Z"></path>'
 }

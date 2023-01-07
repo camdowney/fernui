@@ -1,23 +1,8 @@
-import axios from 'axios'
 import { InteractForm, Input, Submit } from 'fernui-react'
-import { formToHtml, formToObject } from 'fernutil-react'
+import { formToObject } from 'fernutil-react'
 import { mail } from 'fernicons'
-import { SITE_NAME, ADMIN_EMAIL, SENDER_EMAIL } from 'lib/global'
-
-const subject = 'Contact Form Submission'
-
-const composeMail = e => ({
-  from: `${SITE_NAME} <${SENDER_EMAIL}>`,
-  to: ADMIN_EMAIL,
-  replyTo: e.target[1].value,
-  subject,
-  html: formToHtml(subject, e),
-})
 
 export default function TestForm() {
-  const sendEmail = async e =>
-    await axios.post('/api/mail', composeMail(e))
-
   const testSubmit = async e =>
     console.log(formToObject(e))
 
@@ -47,16 +32,6 @@ export default function TestForm() {
           label='Full name *'
           required
         />
-        {/* <Input
-          type='email'
-          label='Email *'
-          required
-        />
-        <Input
-          type='area'
-          label='How can we help you? *'
-          required
-        /> */}
       </div>
     </InteractForm>
   )

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
-import { Header, Footer } from 'components/sections'
+import { Header, Footer } from 'components'
 import { initLazyLoad, initScrollView } from 'fernutil-react'
 import 'styles/base.css'
 
