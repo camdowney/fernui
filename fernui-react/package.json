@@ -9,7 +9,7 @@
     "components",
     "ui"
   ],
-  "main": "./build/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "rollup -c"
   },

@@ -9,7 +9,7 @@
     "javascript",
     "react"
   ],
-  "main": "./build/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "rollup -c"
   },

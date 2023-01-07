@@ -5,7 +5,7 @@ export default [
     input: './src/index.js',
     output: [
       {
-        file: './build/index.js',
+        file: './dist/index.js',
         format: 'cjs',
       }
     ],
