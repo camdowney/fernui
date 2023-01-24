@@ -8,7 +8,7 @@ export default function Home() {
       <TestForm />
     </Section>
 
-    <Section className='bg-gray-200'>
+    <Section>
       <button onClick={() => toggleExpand('#expand')}>Expand</button>
       <Expand id='expand'>
         Content
@@ -27,7 +27,7 @@ export default function Home() {
       </Modal>
     </Section>
 
-    <Section className='bg-gray-200'>
+    <Section>
       <button onClick={() => openModal('#lightbox', { index: 2 })}>Open lightbox</button>
     </Section>
 

@@ -11,12 +11,11 @@ export default function TestForm() {
       onSubmit={testSubmit}
       btn={
         <Submit
-          className='btn btn-blue'
           icon={mail}
         />
       }
     >
-      <div className='grid gap-5 mb-6 md:mb-7'>
+      <div>
         <Input
           name='test0'
           label='Full name *'

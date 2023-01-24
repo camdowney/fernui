@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
-import { Header, Footer } from 'components'
 import { initLazyLoad, initScrollView } from 'fernutil-react'
-import 'styles/base.css'
+import 'css/global.css'
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {
@@ -11,11 +10,9 @@ export default function App({ Component, pageProps }) {
   }, [])
   
   return <>
-    <Head></Head>
-    <Header />
+    <Head />
     <main>
       <Component {...pageProps} />
     </main>
-    <Footer />
   </>
 }

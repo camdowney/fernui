@@ -5,15 +5,23 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "fern-install": "pnpm i && cd ./fernicons && pnpm i && cd ../fernutil && pnpm i && cd ../fernutil-react && pnpm i && cd ../fernui-react && pnpm i && cd ..",
-    "fern-build": "cd ./fernicons && pnpm build && cd ../fernutil && pnpm build && cd ../fernutil-react && pnpm build && cd ../fernui-react && pnpm build && cd ..",
-    "fern-dev": "pnpm fern-build && next dev"
+    "ifi": "cd ./fernicons && pnpm i",
+    "ift": "cd ./fernutil && pnpm i",
+    "iftr": "cd ./fernutil-react && pnpm i",
+    "ifur": "cd ./fernui-react && pnpm i",
+    "bfi": "cd ./fernicons && pnpm build",
+    "bft": "cd ./fernutil && pnpm build",
+    "bftr": "cd ./fernutil-react && pnpm build",
+    "bfur": "cd ./fernui-react && pnpm build",
+    "fern-install": "concurrently \"pnpm i\" \"pnpm ifi\" \"pnpm ift\" \"pnpm iftr\" \"pnpm ifur\"",
+    "fern-build": "concurrently \"pnpm i\" \"pnpm bfi\" \"pnpm bft\" \"pnpm bftr\" \"pnpm bfur\""
   },
   "dependencies": {
     "next": "^12.3.0",
-    "postcss": "^8.4.16",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwindcss": "^3.1.8"
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
   }
 }
