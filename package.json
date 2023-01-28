@@ -1,20 +1,15 @@
 {
   "name": "fern-monorepo",
   "private": "true",
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "ifi": "cd ./fernicons && pnpm i",
-    "ift": "cd ./fernutil && pnpm i",
-    "iftr": "cd ./fernutil-react && pnpm i",
-    "ifur": "cd ./fernui-react && pnpm i",
-    "bfi": "cd ./fernicons && pnpm build",
-    "bft": "cd ./fernutil && pnpm build",
-    "bftr": "cd ./fernutil-react && pnpm build",
-    "bfur": "cd ./fernui-react && pnpm build",
-    "fern-install": "concurrently \"pnpm i\" \"pnpm ifi\" \"pnpm ift\" \"pnpm iftr\" \"pnpm ifur\"",
-    "fern-build": "concurrently \"pnpm i\" \"pnpm bfi\" \"pnpm bft\" \"pnpm bftr\" \"pnpm bfur\""
+    "ir": "cd ./packages/react && pnpm i",
+    "iur": "cd ./packages/util-react && pnpm i",
+    "fern-install": "concurrently \"pnpm i\" \"pnpm ir\" \"pnpm iur\"",
+    "fern-build": "rollup -c"
   },
   "dependencies": {
     "next": "^12.3.0",
@@ -22,6 +17,13 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "@babel/core": "^7.20.12",
+    "@babel/preset-react": "^7.18.6",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "concurrently": "^7.6.0",
+    "rollup": "^3.12.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

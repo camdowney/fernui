@@ -4,8 +4,8 @@ export {
   composeExcerpt,
   openModal,
   closeModal,
-} from '../../fernutil/src'
+} from '../../util/src'
 
 export {
   useListener,
-} from '../../fernutil-react/src'
+} from '../../util-react/src'

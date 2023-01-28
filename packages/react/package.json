@@ -1,0 +1,17 @@
+{
+  "name": "@fernui/react",
+  "author": "@camdowney",
+  "version": "1.0.0",
+  "description": "A library of unopinionated, extendable UI components for React.",
+  "keywords": [
+    "react",
+    "javascript",
+    "components",
+    "ui"
+  ],
+  "main": "./dist/index.js",
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

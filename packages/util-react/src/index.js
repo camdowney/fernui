@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export * from '../../fernutil/src'
+export * from '../../util/src'
 
 export const useListener = (event, callback, element, passive = true) => {
   useEffect(() => {

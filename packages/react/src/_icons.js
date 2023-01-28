@@ -4,4 +4,4 @@ export {
   close,
   profile,
   warning,
-} from '../../fernicons/src'
+} from '../../icons/src'

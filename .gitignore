@@ -1,7 +1,5 @@
 node_modules/
-/coverage
 /.next/
-build/
-.env.local
+dist/
 .env
 .vercel
