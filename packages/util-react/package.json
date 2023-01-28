@@ -1,12 +1,12 @@
 {
-  "name": "fernutil-react",
+  "name": "@fernui/util-react",
   "author": "@camdowney",
   "version": "1.0.1",
-  "description": "A library of general-purpose utility functions for web development with React.",
+  "description": "A library of general-purpose utility functions for React.",
   "keywords": [
-    "utility",
     "ui",
     "javascript",
+    "utility",
     "react"
   ],
   "main": "./dist/index.js",

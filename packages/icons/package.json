@@ -1,12 +1,12 @@
 {
-  "name": "fernicons",
+  "name": "@fernui/icons",
   "author": "@camdowney",
   "version": "1.0.0",
   "description": "A library of icons for web development.",
   "keywords": [
-    "icons",
     "ui",
-    "javascript"
+    "javascript",
+    "icons"
   ],
   "main": "./dist/index.js"
 }

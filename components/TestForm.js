@@ -1,6 +1,6 @@
-import { InteractForm, Input, Submit } from 'fernui-react'
-import { formToObject } from 'fernutil-react'
-import { mail } from 'fernicons'
+import { InteractForm, Input, Submit } from 'packages/react'
+import { formToObject } from 'packages/util-react'
+import { mail } from 'packages/icons'
 
 export default function TestForm() {
   const testSubmit = async e =>

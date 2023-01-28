@@ -1,29 +1,25 @@
 {
   "name": "fern-monorepo",
-  "private": "true",
-  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "ir": "cd ./packages/react && pnpm i",
-    "iur": "cd ./packages/util-react && pnpm i",
-    "fern-install": "concurrently \"pnpm i\" \"pnpm ir\" \"pnpm iur\"",
-    "fern-build": "rollup -c"
+    "rollup": "rollup -c"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.13",
     "next": "^12.3.0",
+    "postcss": "^8.4.21",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/preset-react": "^7.18.6",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "concurrently": "^7.6.0",
-    "rollup": "^3.12.0",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-terser": "^7.0.2"
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "rollup": "^3.12.0"
   }
 }

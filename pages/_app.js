@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
-import { initLazyLoad, initScrollView } from 'fernutil-react'
+import { initLazyLoad, initScrollView } from 'packages/util-react'
 import 'css/global.css'
 
 export default function App({ Component, pageProps }) {

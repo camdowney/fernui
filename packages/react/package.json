@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "description": "A library of unopinionated, extendable UI components for React.",
   "keywords": [
-    "react",
+    "ui",
     "javascript",
     "components",
-    "ui"
+    "react"
   ],
   "main": "./dist/index.js",
   "peerDependencies": {
