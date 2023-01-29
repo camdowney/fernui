@@ -7,13 +7,10 @@
     "esModuleInterop": true,
     "module": "esnext",
     "target": "esnext",
-    "noEmit": true,
+    "outDir": "dist",
+    "declaration": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "jsx": "react"
   },
-  "exclude": [
-    "node_modules",
-    "nextjs"
-  ]
+  "include": ["src"]
 }
