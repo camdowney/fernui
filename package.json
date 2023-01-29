@@ -1,12 +1,12 @@
 {
   "name": "fern-monorepo",
   "scripts": {
-    "bi": "cd ./packages/icons && pnpm rmdist && tsc",
-    "br": "cd ./packages/react && pnpm i && pnpm rmdist && tsc",
-    "bu": "cd ./packages/util && pnpm rmdist && tsc",
-    "bur": "cd ./packages/util-react && pnpm i && pnpm rmdist && tsc",
-    "build2": "pnpm bi && pnpm br && pnpm bu && pnpm bur",
-    "build": "rollup -c"
+    "bi": "cd ./packages/icons && pnpm rmt && tsc",
+    "br": "cd ./packages/react && pnpm i && pnpm rmt && tsc",
+    "bu": "cd ./packages/util && pnpm rmt && tsc",
+    "bur": "cd ./packages/util-react && pnpm i && pnpm rmt && tsc",
+    "build": "pnpm bi && pnpm br && pnpm bu && pnpm bur",
+    "build2": "rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -23,6 +23,7 @@
     "@types/react": "^18.0.27",
     "concurrently": "^7.6.0",
     "rollup": "^3.12.0",
+    "rollup-plugin-dts": "^5.1.1",
     "typescript": "^4.9.4"
   }
 }

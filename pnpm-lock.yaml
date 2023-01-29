@@ -12,6 +12,7 @@ specifiers:
   react: ^18.2.0
   react-dom: ^18.2.0
   rollup: ^3.12.0
+  rollup-plugin-dts: ^5.1.1
   tslib: ^2.5.0
   typescript: ^4.9.4
 
@@ -30,6 +31,7 @@ devDependencies:
   '@types/react': 18.0.27
   concurrently: 7.6.0
   rollup: 3.12.0
+  rollup-plugin-dts: 5.1.1_tkwgik6422u3whqaozmypsnvni
   typescript: 4.9.4
 
 packages:
@@ -701,6 +703,13 @@ packages:
       yallist: 3.1.1
     dev: true
 
+  /magic-string/0.27.0:
+    resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.4.14
+    dev: true
+
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
     dev: true
@@ -757,6 +766,20 @@ packages:
       is-core-module: 2.11.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+    dev: true
+
+  /rollup-plugin-dts/5.1.1_tkwgik6422u3whqaozmypsnvni:
+    resolution: {integrity: sha512-zpgo52XmnLg8w4k3MScinFHZK1+ro6r7uVe34fJ0Ee8AM45FvgvTuvfWWaRgIpA4pQ1BHJuu2ospncZhkcJVeA==}
+    engines: {node: '>=v14'}
+    peerDependencies:
+      rollup: ^3.0.0
+      typescript: ^4.1
+    dependencies:
+      magic-string: 0.27.0
+      rollup: 3.12.0
+      typescript: 4.9.4
+    optionalDependencies:
+      '@babel/code-frame': 7.18.6
     dev: true
 
   /rollup/3.12.0:

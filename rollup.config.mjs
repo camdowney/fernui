@@ -1,15 +1,22 @@
 import { babel } from '@rollup/plugin-babel'
 import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
+import dts from 'rollup-plugin-dts'
 
 const baseConfig = path => ({
-  input: `./packages/${path}/src/index.ts`,
-  output: [{ dir: `./packages/${path}/dist`, format: 'es' }],
+  input: [`./packages/${path}/dist/index.js`],
+  output: [{ dir: `./packages/${path}/dist2`, format: 'es' }],
 })
 
 const vanillaConfig = path => ({
   ...baseConfig(path),
   plugins: [terser(), typescript()],
+})
+
+const typeConfig = path => ({
+  input: [`./packages/${path}/dist/index.d.ts`],
+  output: [{ file: `./packages/${path}/dist2/index.d.ts`, format: 'es' }],
+  plugins: [dts()],
 })
 
 const reactConfig = path => ({
@@ -28,6 +35,9 @@ const reactConfig = path => ({
 export default [
   vanillaConfig('icons'),
   vanillaConfig('util'),
+  typeConfig('util'),
   reactConfig('react'),
+  typeConfig('react'),
   reactConfig('util-react'),
+  typeConfig('util-react'),
 ]

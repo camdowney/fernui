@@ -15,7 +15,7 @@
   },
   "main": "./dist/index.js",
   "scripts": {
-    "rmdist": "if exist dist rmdir /S /Q dist"
+    "rmt": "if exist tdist rmdir /S /Q tdist"
   },
   "dependencies": {
     "@fernui/icons": "^1.0.0",
