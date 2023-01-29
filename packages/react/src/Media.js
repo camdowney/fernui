@@ -9,6 +9,7 @@ export default function Media({
   style,
   innerClass,
   alt = '',
+  placeholder,
   cover,
   auto,
   priority,
@@ -23,7 +24,7 @@ export default function Media({
       style={{ ...style, ...(cover ? coverOuterStyle : defaultOuterStyle) }}
       {...props}
     >
-      <div className='fui-placeholder' style={placeholderStyle} />
+      {placeholder ?? <div className='fui-placeholder' style={placeholderStyle} />}
       <Cond
         hide={!src}
         as={as}

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export * from '../../util/src'
+export * from '../../util/src/index.js'
 
 export const useListener = (event, callback, element, passive = true) => {
   useEffect(() => {

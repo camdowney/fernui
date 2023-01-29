@@ -4,4 +4,4 @@ export {
   close,
   profile,
   warning,
-} from '../../icons/src'
+} from '../../icons/src/index.js'

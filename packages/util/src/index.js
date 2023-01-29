@@ -48,9 +48,7 @@ export const formToHtml = (heading = 'Form Submission', submitEvent) => {
     const title = escapeHtml(field.name.replace(/\*/g, ''))
     const value = field.type !== 'checkbox' ? escapeHtml(field.value) : (field.checked ? 'Yes' : 'No')
 
-    html += `<li style='margin: 0 0 12px 0;'>
-      <span style='font-weight: bold;'>${title}:</span> <br>${value}
-    </li>`
+    html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${title}:</span> <br>${value}</li>`
   })
 
   return html + '</ul>'

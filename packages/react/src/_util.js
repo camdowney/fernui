@@ -4,8 +4,8 @@ export {
   composeExcerpt,
   openModal,
   closeModal,
-} from '../../util/src'
+} from '../../util/src/index.js'
 
 export {
   useListener,
-} from '../../util-react/src'
+} from '../../util-react/src/index.js'

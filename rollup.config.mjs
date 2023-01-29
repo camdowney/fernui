@@ -4,12 +4,12 @@ import commonjs from '@rollup/plugin-commonjs'
 
 const baseConfig = path => ({
   input: `./packages/${path}/src/index.js`,
-  output: [{ dir: `./packages/${path}/dist`, format: 'cjs' }],
+  output: [{ dir: `./packages/${path}/dist`, format: 'es' }],
 })
 
 const vanillaConfig = path => ({
   ...baseConfig(path),
-  plugins: [terser(), commonjs()],
+  plugins: [terser()],
 })
 
 const reactConfig = path => ({
@@ -21,7 +21,6 @@ const reactConfig = path => ({
       presets: ['@babel/preset-react']
     }),
     terser(),
-    commonjs(),
   ]
 })
 
