@@ -8,7 +8,7 @@
     "module": "esnext",
     "target": "esnext",
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "tdist",
     "declaration": true,
     "moduleResolution": "node",
     "jsx": "react"

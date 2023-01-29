@@ -4,8 +4,8 @@ import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 
 const baseConfig = path => ({
-  input: [`./packages/${path}/dist/index.js`],
-  output: [{ dir: `./packages/${path}/dist2`, format: 'es' }],
+  input: [`./packages/${path}/tdist/index.js`],
+  output: [{ dir: `./packages/${path}/dist`, format: 'es' }],
 })
 
 const vanillaConfig = path => ({
@@ -14,8 +14,8 @@ const vanillaConfig = path => ({
 })
 
 const typeConfig = path => ({
-  input: [`./packages/${path}/dist/index.d.ts`],
-  output: [{ file: `./packages/${path}/dist2/index.d.ts`, format: 'es' }],
+  input: [`./packages/${path}/tdist/index.d.ts`],
+  output: [{ file: `./packages/${path}/dist/index.d.ts`, format: 'es' }],
   plugins: [dts()],
 })
 
