@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
-import Link from '../Link'
-import { useListener } from '../_util'
+import { Link } from '..'
+import { useListener } from '../util'
 
 interface Props {
   text?: string

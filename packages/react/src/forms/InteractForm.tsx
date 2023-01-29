@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react'
-import Form from './Form'
-import Modal from '../Modal'
-import Icon from '../Icon'
-import { cn, openModal } from '../_util'
-import { warning } from '../_icons'
+import { Icon, Modal, Form } from '..'
+import { cn, openModal } from '../util'
+import { warning } from '../icons'
 
 interface Props {
   children?: any

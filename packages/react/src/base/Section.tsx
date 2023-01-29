@@ -1,6 +1,6 @@
 import React from 'react'
-import Cond from './Cond'
-import { cn } from './_util'
+import { Cond } from '..'
+import { cn } from '../util'
 
 interface Props {
   as?: any

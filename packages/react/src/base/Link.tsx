@@ -1,6 +1,5 @@
 import React from 'react'
-import Cond from './Cond'
-import Icon from './Icon'
+import { Cond, Icon } from '..'
 
 interface Props {
   as?: any

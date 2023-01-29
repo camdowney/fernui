@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react'
-import Info from './Info'
-import Icon from '../Icon'
-import Cond from '../Cond'
-import { cn, useListener } from '../_util'
-import { check } from '../_icons'
+import { Info, Icon, Cond } from '..'
+import { cn, useListener } from '../util'
+import { check } from '../icons'
 
 interface Props {
   innerRef?: any

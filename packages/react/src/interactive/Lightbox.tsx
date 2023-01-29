@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import Modal from './Modal'
-import Media from './Media'
-import Link from './Link'
-import { cn, closeModal, useListener } from './_util'
-import { angle, close } from './_icons'
+import { Modal, Media, Link } from '..'
+import { cn, closeModal, useListener } from '../util'
+import { angle, close } from '../icons'
 
 interface Props {
   id?: string

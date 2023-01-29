@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react'
-import Info from './Info'
-import Cond from '../Cond'
-import { cn, isEmail, useListener } from '../_util'
+import { Cond, Info } from '..'
+import { cn, isEmail, useListener } from '../util'
 
 interface Props {
   innerRef?: any

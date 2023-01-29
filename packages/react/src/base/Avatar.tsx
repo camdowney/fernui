@@ -1,7 +1,6 @@
 import React from 'react'
-import Media from './Media'
-import Icon from './Icon'
-import { profile } from './_icons'
+import { Media, Icon } from '..'
+import { profile } from '../icons'
 
 interface Props {
   title?: any

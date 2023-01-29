@@ -7,7 +7,6 @@
     "esModuleInterop": true,
     "module": "esnext",
     "target": "esnext",
-    "noEmit": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react"

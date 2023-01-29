@@ -1,6 +1,6 @@
 import React from 'react'
-import Cond from './Cond'
-import { composeExcerpt } from './_util'
+import { Cond } from '..'
+import { composeExcerpt } from '../util'
 
 interface Props {
   as?: string

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { cn, useListener } from './_util'
+import { cn, useListener } from '../util'
 
 interface Props {
   innerRef?: any

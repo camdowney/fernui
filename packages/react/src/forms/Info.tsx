@@ -1,7 +1,6 @@
 import React from 'react'
-import Cond from '../Cond'
-import Icon from '../Icon'
-import { warning } from '../_icons'
+import { Cond, Icon } from '..'
+import { warning } from '../icons'
 
 interface Props {
   visible: boolean

@@ -9,9 +9,17 @@
     "components",
     "react"
   ],
-  "main": "./dist/index.js",
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "rmdist": "if exist dist rmdir /S /Q dist"
+  },
+  "dependencies": {
+    "@fernui/icons": "^1.0.0",
+    "@fernui/util": "^2.0.0",
+    "@fernui/util-react": "^1.0.0"
   }
 }

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
-import Honeypot from './Honeypot'
-import { cn } from '../_util'
+import { Honeypot } from '..'
+import { cn } from '../util'
 
 const defaultStates = [
   { id: 0, end: 0, error: 0, disabled: 0, message: 'Default state'                          },
