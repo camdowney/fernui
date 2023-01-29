@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Modal, Media, Link } from '..'
+import Media from '../base/Media'
+import Link from '../base/Link'
+import Modal from '../interactive/Modal'
 import { cn, closeModal, useListener } from '../util'
 import { angle, close } from '../icons'
 

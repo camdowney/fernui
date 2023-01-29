@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
-import { Icon, Modal, Form } from '..'
+import Form from './Form'
+import Icon from '../base/Icon'
+import Modal from '../interactive/Modal'
 import { cn, openModal } from '../util'
 import { warning } from '../icons'
 

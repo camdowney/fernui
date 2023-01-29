@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
-import { Cond, Info } from '..'
+import Info from './Info'
+import Cond from '../base/Cond'
 import { cn, isEmail, useListener } from '../util'
 
 interface Props {

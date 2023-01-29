@@ -1,5 +1,6 @@
 import React from 'react'
-import { Media, Icon } from '..'
+import Media from './Media'
+import Icon from './Icon'
 import { profile } from '../icons'
 
 interface Props {

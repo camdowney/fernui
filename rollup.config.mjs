@@ -3,7 +3,7 @@ import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 
 const baseConfig = path => ({
-  input: `./packages/${path}/src/index.js`,
+  input: `./packages/${path}/src/index.ts`,
   output: [{ dir: `./packages/${path}/dist`, format: 'es' }],
 })
 

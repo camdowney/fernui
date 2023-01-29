@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
-import { Info, Icon, Cond } from '..'
+import Info from './Info'
+import Cond from '../base/Cond'
+import Icon from '../base/Icon'
 import { cn, useListener } from '../util'
 import { angle } from '../icons'
 

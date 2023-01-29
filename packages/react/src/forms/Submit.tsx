@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Link } from '..'
+import Link from '../base/Link'
 import { useListener } from '../util'
 
 interface Props {

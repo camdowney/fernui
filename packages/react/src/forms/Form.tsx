@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Honeypot } from '..'
+import Honeypot from './Honeypot'
 import { cn } from '../util'
 
 const defaultStates = [

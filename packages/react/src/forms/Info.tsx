@@ -1,5 +1,6 @@
 import React from 'react'
-import { Cond, Icon } from '..'
+import Cond from '../base/Cond'
+import Icon from '../base/Icon'
 import { warning } from '../icons'
 
 interface Props {

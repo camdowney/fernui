@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cond } from '..'
+import Cond from './Cond'
 
 interface Props {
   html: string
