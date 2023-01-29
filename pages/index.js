@@ -28,7 +28,7 @@ export default () => {
     </Section>
 
     <Section>
-      <button onClick={() => openModal('#lightbox', { index: 2 })}>Open lightbox</button>
+      <button onClick={() => openModal('#lightbox', { index: 1 })}>Open lightbox</button>
     </Section>
 
     <Lightbox

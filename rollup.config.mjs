@@ -1,7 +1,6 @@
 import { babel } from '@rollup/plugin-babel'
 import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
-// import commonjs from '@rollup/plugin-commonjs'
 
 const baseConfig = path => ({
   input: `./packages/${path}/src/index.ts`,
@@ -10,7 +9,7 @@ const baseConfig = path => ({
 
 const vanillaConfig = path => ({
   ...baseConfig(path),
-  plugins: [terser(), typescript()],
+  plugins: [terser(), typescript({ outputToFilesystem: true })],
 })
 
 const reactConfig = path => ({
@@ -22,7 +21,7 @@ const reactConfig = path => ({
       presets: ['@babel/preset-react']
     }),
     terser(),
-    typescript(),
+    typescript({ outputToFilesystem: true }),
   ]
 })
 
