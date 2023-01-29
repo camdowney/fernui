@@ -1,13 +1,11 @@
 {
   "name": "fern-monorepo",
   "scripts": {
-    "build21": "rollup -c",
     "bi": "cd ./packages/icons && rmdir /S /Q \"dist\" && tsc",
     "br": "cd ./packages/react && rmdir /S /Q \"dist\" && tsc",
-    "bu": "cd ./packages/util && rmdir /S /Q \"dist\" && tsc && rmdir /S /Q \"../util-react/src/util\" && xcopy ./dist ../util-react/src/util",
+    "bu": "cd ./packages/util && rmdir /S /Q dist && tsc && xcopy .\\dist ..\\util-react\\src\\util /i /Y",
     "bur": "cd ./packages/util-react && rmdir /S /Q \"dist\" && tsc",
-    "build": "pnpm bi && pnpm br && pnpm bu && pnpm bur",
-    "build23": "concurrently \"pnpm bi\" \"pnpm br\" \"pnpm bu\" \"pnpm bur\""
+    "build": "pnpm bi && pnpm br && pnpm bu && pnpm bur"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -15,14 +13,8 @@
     "tslib": "^2.5.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/preset-react": "^7.18.6",
-    "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-terser": "^0.4.0",
-    "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "18.11.18",
     "@types/react": "^18.0.27",
-    "concurrently": "^7.6.0",
-    "rollup": "^3.12.0"
+    "concurrently": "^7.6.0"
   }
 }
