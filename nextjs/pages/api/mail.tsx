@@ -1,7 +1,7 @@
 import sg from '@sendgrid/mail'
-sg.setApiKey(process.env.SENDGRID_API_KEY)
+sg.setApiKey(process.env.SENDGRID_API_KEY ?? '')
 
-export default async (req, res) => {
+export default async (req: any, res: any) => {
   const mail = req.body
 
   if (req.method !== 'POST' || !mail)

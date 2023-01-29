@@ -1,5 +1,5 @@
 module.exports = {
-  content: ['components/**/*.{js,jsx}', 'pages/**/*.{js,jsx}'],
+  content: ['{components,pages}**/*.{js,jsx,ts,tsx}'],
   theme: {
     fontFamily: {
       'main': ['Poppins', 'sans-serif'],

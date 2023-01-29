@@ -1,10 +1,10 @@
-import { Section, Expand, Lightbox, Modal } from 'packages/react'
-import { TestForm } from 'components'
-import { toggleExpand, openModal } from 'packages/util-react'
+import { Section, Expand, Lightbox, Modal } from '../../packages/react'
+import { TestForm } from '../components'
+import { toggleExpand, openModal } from '../../packages/util-react'
 
 export default () => {
   return <>
-    <Section>
+    <Section as='' id='' className='' containerClass='' bg=''>
       <TestForm />
     </Section>
 

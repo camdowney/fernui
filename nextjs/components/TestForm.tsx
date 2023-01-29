@@ -1,9 +1,9 @@
-import { InteractForm, Input, Submit } from 'packages/react'
-import { formToObject } from 'packages/util-react'
-import { mail } from 'packages/icons'
+import { InteractForm, Input, Submit } from '../../packages/react'
+import { formToObject } from '../../packages/util-react'
+import { mail } from '../../packages/icons'
 
 export default function TestForm() {
-  const testSubmit = async e =>
+  const testSubmit = async (e: any) =>
     console.log(formToObject(e))
 
   return (
