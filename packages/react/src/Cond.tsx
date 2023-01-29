@@ -17,11 +17,9 @@ export default function Cond({
 }: Props) {
   const Shell = as
 
-  return !hide ? (
+  return hide ? <></> : (
     <Shell ref={innerRef} {...props}>
       {children}
     </Shell>
-  ) : (
-    <></>
   )
 }

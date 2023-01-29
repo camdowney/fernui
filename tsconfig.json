@@ -6,10 +6,19 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "target": "es6",
+    "target": "esnext",
+    "noEmit": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
   },
-  "exclude": ["nextjs"]
+  "exclude": [
+    "node_modules",
+    "nextjs"
+  ]
 }

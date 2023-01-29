@@ -72,6 +72,19 @@ export const formToObject = (submitEvent: any) => {
   return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null)
 }
 
+export async function query(url: string, { method = 'POST', headers, ...body }: any, json = false) {
+  const res = await fetch(url, {
+    method,
+    body: JSON.stringify(body),
+    headers: {
+      'content-type': 'application/json',
+      ...headers
+    },
+  })
+
+  return json ? await res.json() : res
+}
+
 const signalEvent = (selector: any, event: string, detail: Object) => {
   const element = typeof selector === 'string' 
     ? document.querySelector(selector)
