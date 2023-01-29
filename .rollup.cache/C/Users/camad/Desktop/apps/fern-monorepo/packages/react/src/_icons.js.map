@@ -1,0 +1,1 @@
+{"version":3,"file":"_icons.js","sourceRoot":"","sources":["_icons.ts"],"names":[],"mappings":"AAAA,OAAO,EACL,KAAK,EACL,KAAK,EACL,KAAK,EACL,OAAO,EACP,OAAO,GACR,MAAM,0BAA0B,CAAA","sourcesContent":["export {\r\n  angle,\r\n  check,\r\n  close,\r\n  profile,\r\n  warning,\r\n} from '../../icons/src/index.js'"]}
