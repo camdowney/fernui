@@ -1,0 +1,28 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@fernui/icons': ^1.0.0
+  '@fernui/util': ^2.0.0
+  '@fernui/util-react': ^1.0.0
+
+dependencies:
+  '@fernui/icons': 1.0.0
+  '@fernui/util': 2.0.0
+  '@fernui/util-react': 1.0.0
+
+packages:
+
+  /@fernui/icons/1.0.0:
+    resolution: {integrity: sha512-qgOOHoZCGFNAAxKvRD6EEeeG4VO0tQv8qIybncejK93HsYWtazLbp+FmbRzytg2Ddl6U6UUfWWbb1yyHuEacGg==}
+    dev: false
+
+  /@fernui/util-react/1.0.0:
+    resolution: {integrity: sha512-HHTdq1NueQABCrNPmh0rSoSDcYdb/5VkBOEWGSjGfdZE9jgCguu8Igd9f+grcFzuSzNNoDAsaU0JNFpjiXEOpQ==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dev: false
+
+  /@fernui/util/2.0.0:
+    resolution: {integrity: sha512-5Kd1KLVAi+/VNopaJgylp/jYCb6ZPoNUHWLtuCiLWU6JuxCmRTC6e2Yl8fUtbD3RBkanW/Nc0TdPyGke+S1nVA==}
+    dev: false
