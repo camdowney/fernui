@@ -4,7 +4,7 @@
     "build21": "rollup -c",
     "bi": "cd ./packages/icons && rmdir /S /Q \"dist\" && tsc",
     "br": "cd ./packages/react && rmdir /S /Q \"dist\" && tsc",
-    "bu": "cd ./packages/util && rmdir /S /Q \"dist\" && tsc",
+    "bu": "cd ./packages/util && rmdir /S /Q \"dist\" && tsc && rmdir /S /Q \"../util-react/src/util\" && xcopy ./dist ../util-react/src/util",
     "bur": "cd ./packages/util-react && rmdir /S /Q \"dist\" && tsc",
     "build": "pnpm bi && pnpm br && pnpm bu && pnpm bur",
     "build23": "concurrently \"pnpm bi\" \"pnpm br\" \"pnpm bu\" \"pnpm bur\""

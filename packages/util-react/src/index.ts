@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export * from './util/dist'
+export * from './util'
 
 export const useListener = (event: any, callback: Function, element?: any, passive = true) => {
   useEffect(() => {
