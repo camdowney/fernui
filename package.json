@@ -1,12 +1,18 @@
 {
   "name": "fern-monorepo",
   "scripts": {
-    "bi": "cd ./packages/icons && pnpm rmt && tsc",
-    "br": "cd ./packages/react && pnpm i && pnpm rmt && tsc",
-    "bu": "cd ./packages/util && pnpm rmt && tsc",
-    "bur": "cd ./packages/util-react && pnpm i && pnpm rmt && tsc",
-    "build": "pnpm bi && pnpm br && pnpm bu && pnpm bur",
-    "build2": "rollup -c"
+    "ri": "if exist .\\packages\\icons\\tdist rmdir /S /Q .\\packages\\icons\\tdist",
+    "rr": "if exist .\\packages\\react\\tdist rmdir /S /Q .\\packages\\react\\tdist",
+    "ru": "if exist .\\packages\\util\\tdist rmdir /S /Q .\\packages\\util\\tdist",
+    "rur": "if exist .\\packages\\util-react\\tdist rmdir /S /Q .\\packages\\util-react\\tdist",
+    "ra": "concurrently \"pnpm ri\" \"pnpm rr\" \"pnpm ru\" \"pnpm rur\"",
+    "bi": "cd ./packages/icons && tsc",
+    "br": "cd ./packages/react && pnpm i && tsc",
+    "bu": "cd ./packages/util && tsc",
+    "bur": "cd ./packages/util-react && pnpm i && tsc",
+    "b1": "concurrently \"pnpm bi\" \"pnpm br\" \"pnpm bu\" \"pnpm bur\"",
+    "b2": "rollup -c",
+    "build": "pnpm ra && pnpm b1 && pnpm b2 && pnpm ra"
   },
   "dependencies": {
     "react": "^18.2.0",

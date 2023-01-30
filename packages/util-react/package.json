@@ -14,9 +14,6 @@
     "react-dom": "^18.2.0"
   },
   "main": "./dist/index.js",
-  "scripts": {
-    "rmt": "if exist tdist rmdir /S /Q tdist"
-  },
   "dependencies": {
     "@fernui/util": "^2.0.0"
   }

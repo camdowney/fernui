@@ -8,8 +8,5 @@
     "javascript",
     "icons"
   ],
-  "main": "./dist/index.js",
-  "scripts": {
-    "rmt": "if exist tdist rmdir /S /Q tdist"
-  }
+  "main": "./dist/index.js"
 }
