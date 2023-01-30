@@ -40,9 +40,9 @@ const letterStyle = (firstLetter: string) => ({
 })
 
 const colors = (l: string) => (
-  'JWHF'.includes(l) ? 'hsl(34, 82%, 60%)' : // orange
-  'SLEIQM'.includes(l) ? 'hsl(133, 56%, 55%)' : // green
-  'DRVYOP'.includes(l) ? 'hsl(182, 56%, 54%)' : // aqua
-  'CKZXG'.includes(l) ? 'hsl(218, 59%, 56%)' : // blue
-  'BATUN'.includes(l) ? 'hsl(325, 58%, 60%)' : '' // violet
+  'JWHF'.includes(l) ? '#eda445' : // orange
+  'SLEIQM'.includes(l) ? '#4ccd68' : // green
+  'DRVYOP'.includes(l) ? '#48c7cb' : // aqua
+  'CKZXG'.includes(l) ? '#4d7dd1' : // blue
+  'BATUN'.includes(l) ? '	#d45ea3' : '' // violet
 )
