@@ -1,5 +1,5 @@
 {
-  "name": "fern-monorepo",
+  "name": "fernui",
   "scripts": {
     "ri": "if exist .\\packages\\icons\\tdist rmdir /S /Q .\\packages\\icons\\tdist",
     "rr": "if exist .\\packages\\react\\tdist rmdir /S /Q .\\packages\\react\\tdist",
