@@ -4,4 +4,4 @@ export {
   close,
   profile,
   warning,
-} from '@fernui/icons' // ../../icons/src
+} from '@fernui/icons'

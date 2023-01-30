@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export * from '@fernui/util' // ../../util/src
+export * from '@fernui/util'
 
 export const useListener = (event: any, callback: Function, element?: any, passive = true) => {
   useEffect(() => {

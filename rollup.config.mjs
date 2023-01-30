@@ -35,9 +35,10 @@ const reactConfig = path => ({
 export default [
   vanillaConfig('icons'),
   vanillaConfig('util'),
-  typeConfig('util'),
   reactConfig('react'),
-  typeConfig('react'),
   reactConfig('util-react'),
+  typeConfig('icons'),
+  typeConfig('util'),
+  typeConfig('react'),
   typeConfig('util-react'),
 ]

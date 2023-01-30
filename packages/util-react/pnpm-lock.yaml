@@ -1,13 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@fernui/util': ^2.0.0
+  '@fernui/util': ^2.0.2
 
 dependencies:
-  '@fernui/util': 2.0.0
+  '@fernui/util': 2.0.2
 
 packages:
 
-  /@fernui/util/2.0.0:
-    resolution: {integrity: sha512-5Kd1KLVAi+/VNopaJgylp/jYCb6ZPoNUHWLtuCiLWU6JuxCmRTC6e2Yl8fUtbD3RBkanW/Nc0TdPyGke+S1nVA==}
+  /@fernui/util/2.0.2:
+    resolution: {integrity: sha512-zWgZBi+X+l8QtZOvX8qbo/m4FUByYEQMLKmZHdMudJDrWWAQTlj+zwx4BbOnowATP30IJ5wXD9v36hXL2Cjpsw==}
     dev: false

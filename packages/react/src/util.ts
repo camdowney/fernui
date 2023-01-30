@@ -4,8 +4,8 @@ export {
   composeExcerpt,
   openModal,
   closeModal,
-} from '@fernui/util' // ../../util/src
+} from '@fernui/util'
 
 export {
   useListener,
-} from '@fernui/util-react' // ../../util-react/src
+} from '@fernui/util-react'

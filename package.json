@@ -10,9 +10,8 @@
     "br": "cd ./packages/react && pnpm i && tsc",
     "bu": "cd ./packages/util && tsc",
     "bur": "cd ./packages/util-react && pnpm i && tsc",
-    "b1": "concurrently \"pnpm bi\" \"pnpm br\" \"pnpm bu\" \"pnpm bur\"",
-    "b2": "rollup -c",
-    "build": "pnpm ra && pnpm b1 && pnpm b2 && pnpm ra"
+    "btypes": "concurrently \"pnpm bi\" \"pnpm br\" \"pnpm bu\" \"pnpm bur\"",
+    "build": "pnpm ra && pnpm btypes && rollup -c && pnpm ra"
   },
   "dependencies": {
     "react": "^18.2.0",
