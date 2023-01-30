@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { cn, useListener } from '../util'
 
-interface Props {
+interface ExpandProps {
   innerRef?: any
   id?: string
   className?: string
@@ -17,7 +17,7 @@ export default function Expand({
   children,
   onAction,
   exitOnClick
-}: Props) {
+}: ExpandProps) {
   const [active, setActive] = useState(false)
   const [contentHeight, setContentHeight] = useState(0)
   const expandRef = innerRef || useRef()

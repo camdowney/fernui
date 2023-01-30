@@ -5,7 +5,7 @@ import Modal from '../interactive/Modal'
 import { cn, openModal } from '../util'
 import { warning } from '../icons'
 
-interface Props {
+interface InteractFormProps {
   children?: any
   btn?: any
   messages?: string[]
@@ -17,7 +17,7 @@ export default function InteractForm({
   btn,
   messages = [],
   ...props
-}: Props) {
+}: InteractFormProps) {
   const [formState, setFormState] = useState<any>({})
   const modalRef = useRef<any>()
 

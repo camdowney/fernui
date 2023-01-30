@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface Props {
+interface CondProps {
   innerRef?: any
   as?: any
   hide?: boolean
@@ -14,7 +14,7 @@ export default function Cond({
   hide,
   children,
   ...props
-}: Props) {
+}: CondProps) {
   const Shell = as
 
   return hide ? <></> : (

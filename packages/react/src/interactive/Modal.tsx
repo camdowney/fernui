@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { cn, useListener } from '../util'
 
-interface Props {
+interface ModalProps {
   innerRef?: any
   id?: string
   wrapperClass?: string
@@ -35,7 +35,7 @@ export default function Modal({
   exitOn = { bg: true, click: false, escape: true },
   scrollLock = false,
   focus = false
-}: Props) {
+}: ModalProps) {
   const [active, setActive] = useState<boolean | any>(null)
   const wrapperRef = innerRef || useRef()
   const timer = useRef<any>()

@@ -1,12 +1,12 @@
 import React from 'react'
 import Cond from './Cond'
 
-interface Props {
+interface MarkupProps {
   html: string
   [x:string]: any
 }
 
-export default function Markup({ html, ...props }: Props) {
+export default function Markup({ html, ...props }: MarkupProps) {
   return (
     <Cond dangerouslySetInnerHTML={{ __html: html }} {...props} />
   )

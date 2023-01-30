@@ -12,7 +12,7 @@ const defaultStates = [
   { id: 6, end: 0, error: 0, disabled: 0, message: 'Successfully saved!'                    },
 ]
 
-interface Props {
+interface FormProps {
   className?: string
   children?: any
   states?: Object[]
@@ -30,7 +30,7 @@ export default function Form({
   onSubmit,
   maxAttempts = 99,
   maxSubmissions = 1,
-}: Props) {
+}: FormProps) {
   const attempts = useRef(0)
   const submissions = useRef(0)
   const formRef = useRef<any>()

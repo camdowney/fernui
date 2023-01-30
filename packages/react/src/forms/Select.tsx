@@ -5,10 +5,10 @@ import Icon from '../base/Icon'
 import { cn, useListener } from '../util'
 import { angle } from '../icons'
 
-interface Props {
+interface SelectProps {
   innerRef?: any
   id?: string
-  name: string
+  name?: string
   label?: string
   placeholder?: string
   className?: string
@@ -29,7 +29,7 @@ export default function Select({
   required,
   onChange,
   message
-}: Props) {
+}: SelectProps) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<any>({})

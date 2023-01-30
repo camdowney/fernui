@@ -2,12 +2,12 @@ import React, { useState, useRef } from 'react'
 import Link from '../base/Link'
 import { useListener } from '../util'
 
-interface Props {
+interface SubmitProps {
   text?: string
   [x:string]: any
 }
 
-export default function Submit({ text = 'Submit', ...props }: Props) {
+export default function Submit({ text = 'Submit', ...props }: SubmitProps) {
   const [formState, setFormState] = useState<any>({})
   const ref = useRef()
 

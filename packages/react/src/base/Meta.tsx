@@ -2,7 +2,7 @@ import React from 'react'
 import Cond from './Cond'
 import { composeExcerpt } from '../util'
 
-interface Props {
+interface MetaProps {
   as?: string
   title?: string
   desc?: string
@@ -26,7 +26,7 @@ export default function Meta({
   touchIcon,
   themeColor,
   children
-}: Props) {
+}: MetaProps) {
   const description = composeExcerpt(desc ?? '', 155, false)
 
   return (

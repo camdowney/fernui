@@ -5,10 +5,10 @@ import Cond from '../base/Cond'
 import { cn, useListener } from '../util'
 import { check } from '../icons'
 
-interface Props {
+interface CheckboxProps {
   innerRef?: any
   id?: string
-  name: string
+  name?: string
   label?: string
   className?: string
   required?: boolean
@@ -25,7 +25,7 @@ export default function Checkbox({
   required,
   onChange,
   message
-}: Props) {
+}: CheckboxProps) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<any>({})

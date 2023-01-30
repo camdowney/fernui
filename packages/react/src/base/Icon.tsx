@@ -1,11 +1,11 @@
 import React from 'react'
 
-interface Props {
+interface IconProps {
   i: { children: string }
   [x:string]: any
 }
 
-export default function Icon({ i, ...props }: Props) {
+export default function Icon({ i, ...props }: IconProps) {
   const { children, ...rest } = i
 
   return (

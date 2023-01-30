@@ -2,7 +2,7 @@ import React from 'react'
 import Cond from './Cond'
 import { cn } from '../util'
 
-interface Props {
+interface SectionProps {
   as?: any
   id?: string
   className?: string
@@ -18,7 +18,7 @@ export default function Section({
   containerClass,
   bg,
   children
-}: Props) {
+}: SectionProps) {
   return (
     <Cond
       as={as}

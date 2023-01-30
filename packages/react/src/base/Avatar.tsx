@@ -3,13 +3,13 @@ import Media from './Media'
 import Icon from './Icon'
 import { profile } from '../icons'
 
-interface Props {
+interface AvatarProps {
   title?: any
   src?: any
   [x:string]: any
 }
 
-export default function Avatar({ title, src, ...props }: Props) {
+export default function Avatar({ title, src, ...props }: AvatarProps) {
   const firstLetter = title?.substring(0, 1).toUpperCase()
 
   return src ? (

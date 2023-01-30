@@ -2,7 +2,7 @@ import React from 'react'
 import Cond from './Cond'
 import Icon from './Icon'
 
-interface Props {
+interface LinkProps {
   as?: any
   to?: string
   text?: string
@@ -24,7 +24,7 @@ export default function Link({
   label,
   children,
   ...props
-}: Props) {
+}: LinkProps) {
   return (
     <Cond
       as={as || (to ? 'a' : 'button')}

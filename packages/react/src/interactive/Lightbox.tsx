@@ -5,7 +5,7 @@ import Modal from '../interactive/Modal'
 import { cn, closeModal, useListener } from '../util'
 import { angle, close } from '../icons'
 
-interface Props {
+interface LightboxProps {
   id?: string
   sources: string[],
   className?: string
@@ -25,7 +25,7 @@ export default function Lightbox({
   overlayClass,
   controlClass,
   iconClass
-}: Props) {
+}: LightboxProps) {
   const [current, setCurrent] = useState(0)
 
   const cyclePrevious = () =>

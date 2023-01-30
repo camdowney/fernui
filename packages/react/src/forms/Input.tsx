@@ -3,10 +3,10 @@ import Info from './Info'
 import Cond from '../base/Cond'
 import { cn, isEmail, useListener } from '../util'
 
-interface Props {
+interface InputProps {
   innerRef?: any
   id?: string
-  name: string
+  name?: string
   label?: string
   placeholder?: string
   className?: string
@@ -29,7 +29,7 @@ export default function Input({
   charLimit,
   onChange,
   message
-}: Props) {
+}: InputProps) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<any>({})

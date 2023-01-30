@@ -2,7 +2,7 @@ import React from 'react'
 import Cond from './Cond'
 import { cn } from '../util'
 
-interface Props {
+interface ContentProps {
   id?: string
   className?: string
   head?: any
@@ -18,7 +18,7 @@ export default function Content({
   headClass,
   children,
   bodyClass,
-}: Props) {
+}: ContentProps) {
   return (
     <div id={id} className={cn('fui-content', className)}>
       <Cond hide={!head} className={cn('fui-head', headClass)}>

@@ -3,12 +3,12 @@ import Cond from '../base/Cond'
 import Icon from '../base/Icon'
 import { warning } from '../icons'
 
-interface Props {
+interface InfoProps {
   visible: boolean
   children?: any
 }
 
-export default function Info({ visible, children }: Props) {
+export default function Info({ visible, children }: InfoProps) {
   return (
     <Cond
       hide={!visible}

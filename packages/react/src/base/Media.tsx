@@ -2,7 +2,7 @@ import React from 'react'
 import Cond from './Cond'
 import { cn } from '../util'
 
-interface Props {
+interface MediaProps {
   as?: string
   src?: string
   className?: string
@@ -28,7 +28,7 @@ export default function Media({
   auto,
   priority,
   ...props
-}: Props) {
+}: MediaProps) {
   const responsive = as === 'img' && src && src.includes('.webp') && !src.startsWith('http')
   const srcset = `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}`
   const autoVideo = as === 'video' && auto
