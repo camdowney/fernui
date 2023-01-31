@@ -5,11 +5,14 @@ import { cn } from '../util'
 interface MediaProps {
   as?: string
   src: string
+  alt?: string
+  loading?: string
   className?: string
   style?: object
   innerClass?: string
   placeholder?: any
   cover?: boolean
+  responsive?: boolean
   priority?: boolean
   [x:string]: any
 }

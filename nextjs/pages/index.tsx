@@ -1,4 +1,4 @@
-import { Section, Expand, Lightbox, Modal } from '../../packages/react'
+import { Section, Expand, Lightbox, Modal, Media } from '../../packages/react'
 import { TestForm } from '../components'
 import { toggleExpand, openModal } from '../../packages/util-react'
 
@@ -41,5 +41,15 @@ export default () => {
         'yosemite.webp',
       ]}
     />
+
+    <div className='grid grid-cols-2 gap-4'>
+      {[...Array.from(Array(200)).map((_, i) =>
+        <Media
+          src='aurora.webp'
+          className='pb-[50%]'
+          key={i}
+        />
+      )]}
+    </div>
   </>
 }

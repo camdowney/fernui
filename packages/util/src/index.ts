@@ -126,13 +126,15 @@ export const onIntersect = (selector: string, callback: Function, offset = '0px 
 }
 
 export const initLazyLoad = (offset = '750px') => {
+  const offsetStr = `${offset} ${offset} ${offset} ${offset}`
+
   onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
-    element.setAttribute('src', element.getAttribute('data-lazy-src') ?? '')
-    element.src = element.dataset['lazy-src'] ?? ''
-  }, `${offset} ${offset} ${offset} ${offset}`)
+    element.src = element.dataset.lazySrc ?? ''
+  }, offsetStr)
+
   onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
-    element.src = element.dataset['lazy-src'] ?? ''
-  }, `${offset} ${offset} ${offset} ${offset}`)
+    element.srcset = element.dataset.lazySrcset ?? ''
+  }, offsetStr)
 }
 
 export const initScrollView = (offset = '999999px 0px -25% 0px') =>
