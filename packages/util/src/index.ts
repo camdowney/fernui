@@ -72,9 +72,9 @@ export const formToObject = (submitEvent: any) => {
   return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null)
 }
 
-export async function query(url: string, { method = 'POST', headers, ...body }: any, json = false) {
+export const post = async (url: string, { headers, ...body }: any, json = false) => {
   const res = await fetch(url, {
-    method,
+    method: 'POST',
     body: JSON.stringify(body),
     headers: {
       'content-type': 'application/json',
