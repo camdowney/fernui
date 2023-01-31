@@ -1,10 +1,10 @@
 {
   "name": "fernui",
   "scripts": {
-    "ri": "if exist .\\packages\\icons\\tdist rmdir /S /Q .\\packages\\icons\\tdist",
-    "rr": "if exist .\\packages\\react\\tdist rmdir /S /Q .\\packages\\react\\tdist",
-    "ru": "if exist .\\packages\\util\\tdist rmdir /S /Q .\\packages\\util\\tdist",
-    "rur": "if exist .\\packages\\util-react\\tdist rmdir /S /Q .\\packages\\util-react\\tdist",
+    "ri": "if exist .\\packages\\icons\\_dist rmdir /S /Q .\\packages\\icons\\_dist",
+    "rr": "if exist .\\packages\\react\\_dist rmdir /S /Q .\\packages\\react\\_dist",
+    "ru": "if exist .\\packages\\util\\_dist rmdir /S /Q .\\packages\\util\\_dist",
+    "rur": "if exist .\\packages\\util-react\\_dist rmdir /S /Q .\\packages\\util-react\\_dist",
     "ra": "concurrently \"pnpm ri\" \"pnpm rr\" \"pnpm ru\" \"pnpm rur\"",
     "bi": "cd ./packages/icons && tsc",
     "br": "cd ./packages/react && pnpm i && tsc",
