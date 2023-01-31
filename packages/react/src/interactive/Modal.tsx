@@ -14,7 +14,7 @@ interface ModalProps {
   openDelay?: number
   closeDelay?: number
   relative?: boolean
-  exitOn?: { bg?: true, click?: false, escape?: true }
+  exitOn?: { bg?: boolean, click?: boolean, escape?: boolean }
   scrollLock?: boolean
   focus?: boolean
 }
