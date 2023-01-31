@@ -4,7 +4,7 @@ import { toggleExpand, openModal } from '../../packages/util-react'
 
 export default () => {
   return <>
-    <Section as='' id='' className='' containerClass='' bg=''>
+    <Section>
       <TestForm />
     </Section>
 

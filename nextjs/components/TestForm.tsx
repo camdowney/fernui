@@ -1,4 +1,4 @@
-import { InteractForm, Input, Submit } from '../../packages/react'
+import { IForm, Input, Submit } from '../../packages/react'
 import { formToObject } from '../../packages/util-react'
 import { mail } from '../../packages/icons'
 
@@ -7,12 +7,10 @@ export default function TestForm() {
     console.log(formToObject(e))
 
   return (
-    <InteractForm
+    <IForm
       onSubmit={testSubmit}
       btn={
-        <Submit
-          icon={mail}
-        />
+        <Submit icon={mail} />
       }
     >
       <div>
@@ -32,6 +30,6 @@ export default function TestForm() {
           required
         />
       </div>
-    </InteractForm>
+    </IForm>
   )
 }

@@ -5,19 +5,19 @@ import Modal from '../interactive/Modal'
 import { cn, openModal } from '../util'
 import { warning } from '../icons'
 
-interface InteractFormProps {
+interface IFormProps {
   children?: any
   btn?: any
   messages?: string[]
   [x:string]: any
 }
 
-export default function InteractForm({
+export default function IForm({
   children,
   btn,
   messages = [],
   ...props
-}: InteractFormProps) {
+}: IFormProps) {
   const [formState, setFormState] = useState<any>({})
   const modalRef = useRef<any>()
 
@@ -40,19 +40,19 @@ export default function InteractForm({
         {btn}
         <Modal
           innerRef={modalRef}
-          className={cn('fui-interact-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
+          className={cn('fui-iform-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
           bgClass='hidden'
           closeDelay={2000}
           relative
           exitOn={{}}
           style={{ zIndex: '30 !important' }}
         >
-          <Icon i={warning} className='fui-interact-icon' />
+          <Icon i={warning} className='fui-iform-icon' />
           {message}
         </Modal>
         
       </> : (
-        <p className='fui-interact-message'>
+        <p className='fui-iform-message'>
           {message}
         </p>
       )}
