@@ -20,23 +20,25 @@ interface FormProps {
   onSubmit?: Function
   maxAttempts?: number
   maxSubmissions?: number
+  [x:string]: any
 }
 
 export default function Form({
   className,
   children,
-  states = [],
+  states = defaultStates,
   onStateChange,
   onSubmit,
   maxAttempts = 99,
   maxSubmissions = 1,
+  ...props
 }: FormProps) {
   const attempts = useRef(0)
   const submissions = useRef(0)
   const formRef = useRef<any>()
 
   const updateState = (newState: number) => {
-    const state = states[newState] || defaultStates[newState]
+    const state = states[newState]
 
     formRef.current.querySelectorAll('*').forEach((element: HTMLElement) => {
       element.dispatchEvent(new CustomEvent('FernFormStateChange', { detail: { state } }))
@@ -70,6 +72,7 @@ export default function Form({
       onSubmit={handleSubmit}
       className={cn('fui-form', className)}
       noValidate
+      {...props}
     >
       <Honeypot />
       {children}

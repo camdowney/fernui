@@ -4,14 +4,12 @@ import { cn } from '../util'
 
 interface MediaProps {
   as?: string
-  src?: string
+  src: string
   className?: string
   style?: object
   innerClass?: string
-  alt?: string
   placeholder?: any
   cover?: boolean
-  auto?: boolean
   priority?: boolean
   [x:string]: any
 }
@@ -19,19 +17,19 @@ interface MediaProps {
 export default function Media({
   as = 'img',
   src,
+  alt,
+  loading,
   className,
   style,
   innerClass,
-  alt = '',
   placeholder,
   cover,
-  auto,
+  responsive = true,
   priority,
   ...props
 }: MediaProps) {
-  const responsive = as === 'img' && src && src.includes('.webp') && !src.startsWith('http')
+  const resp = responsive && as === 'img' && !src.startsWith('http')
   const srcset = `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}`
-  const autoVideo = as === 'video' && auto
 
   return (
     <div
@@ -43,20 +41,15 @@ export default function Media({
       <Cond
         hide={!src}
         as={as}
-        src={(!responsive && priority) ? src : undefined}
-        data-lazy-src={(!responsive && !priority) ? src : undefined}
-        srcSet={(responsive && priority) ? srcset : undefined}
-        data-lazy-srcset={(responsive && !priority) ? srcset : undefined}
-        sizes={responsive ? '100vw' : undefined}
-        className={innerClass}
-        allowFullScreen={as === 'iframe'}
-        title={as === 'iframe' ? alt : undefined}
+        src={(!resp && priority) ? src : undefined}
+        data-lazy-src={(!resp && !priority) ? src : undefined}
+        srcSet={(resp && priority) ? srcset : undefined}
+        data-lazy-srcset={(resp && !priority) ? srcset : undefined}
+        sizes={resp ? '100vw' : undefined}
         alt={alt}
+        loading={loading}
+        className={innerClass}
         style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
-        autoPlay={autoVideo}
-        muted={autoVideo}
-        loop={autoVideo}
-        playsInline={autoVideo}
       />
     </div>
   )
