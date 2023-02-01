@@ -72,17 +72,42 @@ export const formToObject = (submitEvent: any) => {
   return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null)
 }
 
-export const ping = async (url: string, { headers, ...body }: any, json = false) => {
-  const res = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'content-type': 'application/json',
-      ...headers
-    },
-  })
+interface PingRequestData {
+  headers?: object
+  abortController?: AbortController
+  [x:string]: any
+}
 
-  return json ? await res.json() : res
+type PingResponse = {
+  res: Response | null
+  data: Object
+}
+
+export const ping = async (
+  url: string,
+  { headers, abortController, ...body }: PingRequestData
+): Promise<PingResponse> => {
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      signal: abortController?.signal,
+      headers: {
+        'content-type': 'application/json',
+        ...headers,
+      },
+    })
+
+    return {
+      res,
+      data: res.headers.get('content-type')?.includes('application/json') ? await res.json() : {},
+    }
+  }
+  catch (err) {
+    console.error('Fetch error: ', err)
+
+    return { res: null, data: {} }
+  }
 }
 
 const signalEvent = (selector: any, event: string, detail: Object) => {
