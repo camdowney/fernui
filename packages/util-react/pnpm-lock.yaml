@@ -1,12 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@fernui/util': ^2.0.7
+  '@fernui/util': ^2.0.8
   '@types/react': ^18.0.27
   react: ^18.2.0
 
 dependencies:
-  '@fernui/util': 2.0.7
+  '@fernui/util': 2.0.8
   react: 18.2.0
 
 devDependencies:
@@ -14,8 +14,8 @@ devDependencies:
 
 packages:
 
-  /@fernui/util/2.0.7:
-    resolution: {integrity: sha512-pV13dxzPRacis54Ew5Ctiuv1gdZr8bHOVqmZKHeo15+lZQE1fKPE2cwSJy+g7wuG9gGLt3bXfMRuNU/Dv0dClQ==}
+  /@fernui/util/2.0.8:
+    resolution: {integrity: sha512-XTrtI8BClWdBIb1dP6pgP/T+bgk03ZkHB6HjtMDlNMe4Q+0ArW5oekR4kNVuSHicuGersaVDbC3fmXIGNBDiog==}
     dev: false
 
   /@types/prop-types/15.7.5:
