@@ -1,5 +1,5 @@
 import { IForm, Input, Submit } from '../../packages/react'
-import { formToObject } from '../../packages/util-react'
+import { formToObject } from '../../packages/util'
 import { mail } from '../../packages/icons'
 
 export default function TestForm() {
@@ -9,23 +9,21 @@ export default function TestForm() {
   return (
     <IForm
       onSubmit={testSubmit}
-      btn={
-        <Submit icon={mail} />
-      }
+      btn={<Submit icon={mail} />}
     >
       <div>
         <Input
-          name='test0'
+          name='key0'
           label='Full name *'
           required
         />
         <Input
-          name='test1.0'
+          name='<h1>.0'
           label='Full name *'
           required
         />
         <Input
-          name='test1.1.a'
+          name='<h1>.1.a'
           label='Full name *'
           required
         />

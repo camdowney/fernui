@@ -4,7 +4,7 @@ export const ss = (selector: string) => () =>
 export const cn = (...classes: any[]) =>
   classes.filter(Boolean).join(' ')
 
-export const chunk = (arr: any[], size: number) => {
+export const chunk = (arr: any[], size: number): any[] => {
   if (!Array.isArray(arr)) return []
   if (!size || size < 1) return arr
   return arr.reduce((acc, _, i) => (i % size) ? acc : [...acc, arr.slice(i, i + size)], [])
@@ -54,22 +54,27 @@ export const formToHtml = (heading = 'Form Submission', submitEvent: any) => {
   return html + '</ul>'
 }
 
-export const formToObject = (submitEvent: any) => {
-  const concat: any = (acc: any[], [key, value]: any) => {
-    const keys = key.split('.')
-    const values = keys.length === 1 
-      ? escapeHtml(value)
-      : concat(acc ? acc[keys[0]] : null, [keys.slice(1).join('.'), value])
+type FormObject = Object | any[]
 
-    if (!(+keys[0] >= 0))
-      return { ...acc, [keys[0]]: values }
+export const formToObject = (submitEvent: any): FormObject => {
+  const concat = (acc: any, [_key, _value]: any): FormObject => {
+    const keys = Array.isArray(_key) ? _key : _key.split('.')
+    const [key, ...subKeys] = keys
 
-    const arr = acc || []
-    arr[keys[0]] = values
-    return arr
+    const value = keys.length === 1 
+      ? escapeHtml(_value)
+      : concat(acc ? acc[escapeHtml(key)] : null, [subKeys, _value])
+
+    if (+key >= 0) {
+      const arr = acc || []
+      arr[key] = value
+      return arr
+    }
+
+    return { ...acc, [escapeHtml(key)]: value }
   }
 
-  return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null)
+  return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null) ?? {}
 }
 
 interface PingRequestData {
