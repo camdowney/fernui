@@ -3,18 +3,21 @@ import Media from './Media'
 import Icon from './Icon'
 import { profile } from '../icons'
 
-const defaultColors = (l: string) => (
-  'JWHF'.includes(l) ? '#eda445' : // orange
-  'SLEIQM'.includes(l) ? '#4ccd68' : // green
-  'DRVYOP'.includes(l) ? '#48c7cb' : // aqua
-  'CKZXG'.includes(l) ? '#4d7dd1' : // blue
-  'BATUN'.includes(l) ? '	#d45ea3' : '' // violet
+type Color = string
+type ColorMap = (letter: string) => Color
+
+const defaultColors: ColorMap = letter => (
+  'JWHF'.includes(letter) ? '#eda445' :   // orange
+  'SLEIQM'.includes(letter) ? '#4ccd68' : // green
+  'DRVYOP'.includes(letter) ? '#48c7cb' : // aqua
+  'CKZXG'.includes(letter) ? '#4d7dd1' :  // blue
+  '#d45ea3' // 'BATUN'               // violet
 )
 
 interface AvatarProps {
   title?: any
   src?: any
-  colors?: Function
+  colors?: ColorMap
   [x:string]: any
 }
 
@@ -34,14 +37,12 @@ export default function Avatar({ title, src, colors = defaultColors, ...props }:
   ) : (
     <Icon
       i={profile}
-      style={{ aspectRatio: '1' }}
       {...props}
     />
   )
 }
 
-const letterStyle = (firstLetter: string, colors: Function) => ({
-  aspectRatio: '1/1',
+const letterStyle = (firstLetter: string, colors: ColorMap) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

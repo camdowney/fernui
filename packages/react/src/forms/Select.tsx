@@ -87,8 +87,8 @@ export default function Select({
 
 const wrapperStyle: any = {
   position: 'absolute',
-  top: '0',
-  right: '0',
+  top: 0,
+  right: 0,
   display: 'flex',
   height: '100%',
   alignItems: 'center',

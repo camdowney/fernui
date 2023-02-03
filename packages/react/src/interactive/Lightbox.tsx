@@ -103,10 +103,10 @@ export default function Lightbox({
 }
 
 const modalStyle = {
-  top: '0',
-  bottom: '0',
-  left: '0',
-  right: '0',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
   margin: 'auto',
 }
 
@@ -122,18 +122,18 @@ const controlStyle = {
 }
 
 const closeStyle = {
-  top: '0',
-  right: '0',
+  top: 0,
+  right: 0,
 }
 
 const previousStyle = {
   top: '50%',
-  left: '0',
+  left: 0,
   transform: 'translateY(-50%) rotate(90deg)',
 }
 
 const nextStyle = {
   top: '50%',
-  right: '0',
+  right: 0,
   transform: 'translateY(-50%) rotate(-90deg)',
 }

@@ -1,10 +1,14 @@
-import { Section, Expand, Lightbox, Modal, Media } from '../../packages/react'
+import { Section, Expand, Modal, Media, Lightbox, Avatar } from '../../packages/react'
 import { TestForm } from '../components'
 import { toggleExpand, openModal } from '../../packages/util-react'
 
 export default () => {
   return <>
     <Section>
+      <Avatar
+        title='Test'
+        className='w-12 h-12 rounded-full text-gray-100'
+      />
       <TestForm />
     </Section>
 
@@ -42,14 +46,11 @@ export default () => {
       ]}
     />
 
-    <div className='grid grid-cols-2 gap-4'>
-      {[...Array.from(Array(200)).map((_, i) =>
-        <Media
-          src='aurora.webp'
-          className='pb-[50%]'
-          key={i}
-        />
-      )]}
-    </div>
+    <Section>
+      <Media
+        src='aurora.webp'
+        className='pb-[65%]'
+      />
+    </Section>
   </>
 }

@@ -62,31 +62,31 @@ const defaultOuterStyle = {
   overflow: 'hidden',
   position: 'relative',
   display: 'block',
-  zIndex: '10',
+  zIndex: 10,
 }
 
 const coverOuterStyle = {
   overflow: 'hidden',
   position: 'absolute',
-  top: '0',
-  bottom: '0',
-  left: '0',
-  right: '0',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
 }
 
 const placeholderStyle = {
   position: 'absolute',
-  top: '0',
-  bottom: '0',
-  left: '0',
-  right: '0',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
   backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
 }
 
 const defaultMediaStyle = (as: any) => ({
   position: 'absolute',
-  top: '0',
-  left: '0',
+  top: 0,
+  left: 0,
   width: '100%',
   height: '100%',
   objectFit: as !== 'iframe' ? 'cover' : 'initial',

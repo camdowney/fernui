@@ -19,6 +19,6 @@ export default function Icon({ i, ...props }: IconProps) {
 }
 
 const iconStyle = {
-  flexShrink: '0',
+  flexShrink: 0,
   fill: 'currentcolor',
 }

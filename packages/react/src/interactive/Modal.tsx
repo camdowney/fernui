@@ -98,7 +98,7 @@ export default function Modal({
       <div
         className={cn('fui-modal', transition + '-' + (active ? 'open' : 'close'), className)}
         aria-hidden={!active}
-        style={{ ...menuStyle(relative, active), ...style } as Object}
+        style={{ ...modalStyle(relative, active), ...style } as Object}
       >
         {children}
       </div>
@@ -117,12 +117,12 @@ const bgStyle = (relative: boolean) => ({
   bottom: '-50%',
   left: '-50%',
   right: '-50%',
-  zIndex: relative ? '30' : '50',
+  zIndex: relative ? 30 : 50,
 })
 
-const menuStyle = (relative: boolean, active: boolean | null) => ({
+const modalStyle = (relative: boolean, active: boolean | null) => ({
   overflowY: 'auto',
-  zIndex: relative ? '31' : '51',
+  zIndex: relative ? 31 : 51,
   position: relative ? 'absolute' : 'fixed',
   visibility: active === null && 'hidden !important',
 })

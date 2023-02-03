@@ -79,13 +79,13 @@ const wrapperStyle = {
 }
 
 const inputStyle = {
-  width: '0',
-  height: '0',
+  width: 0,
+  height: 0,
   outlineWidth: '0 !important',
 }
 
 const boxStyle = {
-  flexShrink: '0',
+  flexShrink: 0,
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
