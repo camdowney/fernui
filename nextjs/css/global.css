@@ -104,18 +104,18 @@
 .fui-cta {
   @apply flex flex-wrap items-center gap-2 md:gap-3 mt-5 md:mt-6 lg:mt-8;
 }
-.modal-open {
+.fui-modal-active {
   @apply visible opacity-100 origin-center duration-[0.4s];
   transform: scale3d(1, 1, 1);
 }
-.modal-close {
+.fui-modal-inactive {
   @apply invisible opacity-0 origin-center duration-[0.4s];
   transform: scale3d(0.85, 0.85, 1);
 }
 .fui-modal-bg {
   @apply bg-gray-900/50;
 }
-.modal-bg-close {
+.fui-modal-bg-inactive {
   @apply invisible;
 }
 .fui-lightbox {

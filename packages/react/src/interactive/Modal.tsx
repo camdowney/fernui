@@ -7,10 +7,14 @@ interface ModalProps {
   wrapperClass?: string
   children?: any
   className?: string
-  style?: object
+  activeClass?: string
+  inactiveClass?: string
+  style?: Object
   onAction?: Function
   bgClass?: string
-  bgStyle?: object,
+  bgActiveClass?: string
+  bgInactiveClass?: string
+  bgStyle?: Object,
   transition?: string
   openDelay?: number
   closeDelay?: number
@@ -28,11 +32,14 @@ export default function Modal({
   wrapperClass,
   children,
   className,
+  activeClass = 'fui-modal-active',
+  inactiveClass = 'fui-modal-inactive',
   style,
   onAction,
   bgClass,
+  bgActiveClass = 'fui-modal-bg-active',
+  bgInactiveClass = 'fui-modal-bg-inactive',
   bgStyle,
-  transition = 'modal',
   openDelay = 0,
   closeDelay = 0,
   relative = false,
@@ -95,14 +102,14 @@ export default function Modal({
       style={wrapperStyle(relative) as Object}
     >
       <div
-        className={cn('fui-modal-bg', transition + '-bg-' + (active ? 'open' : 'close'), bgClass)}
+        className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}
         onClick={() => exitOnBgClick && setModalActive(false)}
         aria-hidden={!active}
         style={{ ...modalBgStyle(relative), ...bgStyle } as Object}
       />
 
       <div
-        className={cn('fui-modal', transition + '-' + (active ? 'open' : 'close'), className)}
+        className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
         aria-hidden={!active}
         style={{ ...modalStyle(relative, active), ...style } as Object}
       >

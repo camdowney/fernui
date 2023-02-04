@@ -8,7 +8,7 @@ interface MediaProps {
   alt?: string
   loading?: string
   className?: string
-  style?: object
+  style?: Object
   innerClass?: string
   placeholder?: any
   cover?: boolean

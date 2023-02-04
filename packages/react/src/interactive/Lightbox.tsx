@@ -10,6 +10,8 @@ interface LightboxProps {
   sources: string[],
   className?: string
   bgClass?: string
+  activeClass?: string
+  inactiveClass?: string
   customOverlay?: any
   overlayClass?: string
   controlClass?: string
@@ -21,6 +23,8 @@ export default function Lightbox({
   sources,
   className,
   bgClass,
+  activeClass = 'fui-lightbox-item-active',
+  inactiveClass = 'fui-lightbox-item-inactive',
   customOverlay,
   overlayClass,
   controlClass,
@@ -60,10 +64,10 @@ export default function Lightbox({
       focus
     >
       <div style={innerStyle as Object}>
-        {current >= 0 && sources.map((source, i) => 
+        {current >= 0 && sources.map((src, i) => 
           <Media
-            src={source}
-            className={cn('fui-lightbox-item', 'fui-lightbox-item-' + (current === i ? 'active' : 'inactive'))}
+            src={src}
+            className={cn('fui-lightbox-item', current === i ? activeClass : inactiveClass)}
             cover
             priority
             key={i}
