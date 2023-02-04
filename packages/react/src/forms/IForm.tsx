@@ -41,10 +41,12 @@ export default function IForm({
         <Modal
           innerRef={modalRef}
           className={cn('fui-iform-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
-          bgClass='hidden'
+          bgStyle={{ display: 'none' }}
           closeDelay={2000}
           relative
-          exitOn={{}}
+          exitOnBgClick={false}
+          exitOnOutsideClick={false}
+          exitOnEscape={false}
           style={{ zIndex: '30 !important' }}
         >
           <Icon i={warning} className='fui-iform-icon' />

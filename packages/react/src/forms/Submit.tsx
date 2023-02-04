@@ -11,7 +11,7 @@ export default function Submit({ text = 'Submit', ...props }: SubmitProps) {
   const [formState, setFormState] = useState<any>({})
   const ref = useRef()
 
-  useListener('FernFormStateChange', (e: any) => {
+  useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state)
   }, ref)
 

@@ -36,9 +36,7 @@ export default [
   vanillaConfig('icons'),
   vanillaConfig('util'),
   reactConfig('react'),
-  reactConfig('util-react'),
   typeConfig('icons'),
   typeConfig('util'),
   typeConfig('react'),
-  typeConfig('util-react'),
 ]

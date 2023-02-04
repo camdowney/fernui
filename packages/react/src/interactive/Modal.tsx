@@ -10,11 +10,14 @@ interface ModalProps {
   style?: object
   onAction?: Function
   bgClass?: string
+  bgStyle?: object,
   transition?: string
   openDelay?: number
   closeDelay?: number
   relative?: boolean
-  exitOn?: { bg?: boolean, click?: boolean, escape?: boolean }
+  exitOnBgClick?: boolean,
+  exitOnOutsideClick?: boolean,
+  exitOnEscape?: boolean,
   scrollLock?: boolean
   focus?: boolean
 }
@@ -28,11 +31,14 @@ export default function Modal({
   style,
   onAction,
   bgClass,
+  bgStyle,
   transition = 'modal',
   openDelay = 0,
   closeDelay = 0,
   relative = false,
-  exitOn = { bg: true, click: false, escape: true },
+  exitOnBgClick = true,
+  exitOnOutsideClick = true,
+  exitOnEscape = true,
   scrollLock = false,
   focus = false
 }: ModalProps) {
@@ -66,16 +72,16 @@ export default function Modal({
   }, [])
 
   useListener('keydown', (e: any) => {
-    if (active && !e.repeat && exitOn?.escape && e?.key?.toLowerCase() === 'escape')
+    if (active && !e.repeat && exitOnEscape && e?.key?.toLowerCase() === 'escape')
       setModalActive(false)
   })
 
   useListener('mouseup', (e: any) => {
-    if (active && exitOn?.click && !wrapperRef.current.lastChild.contains(e.target))
+    if (active && exitOnOutsideClick && !wrapperRef.current.lastChild.contains(e.target))
       setTimeout(() => setModalActive(false), 0)
   })
 
-  useListener('FernModalAction', (e: any) => {
+  useListener('FUIModalAction', (e: any) => {
     const action = e.detail.action
     setModalActive(action < 2 ? action : !active)
     onAction && onAction(e)
@@ -90,9 +96,9 @@ export default function Modal({
     >
       <div
         className={cn('fui-modal-bg', transition + '-bg-' + (active ? 'open' : 'close'), bgClass)}
-        onClick={() => exitOn?.bg && setModalActive(false)}
+        onClick={() => exitOnBgClick && setModalActive(false)}
         aria-hidden={!active}
-        style={bgStyle(relative) as Object}
+        style={{ ...modalBgStyle(relative), ...bgStyle } as Object}
       />
 
       <div
@@ -111,7 +117,7 @@ const wrapperStyle = (relative: boolean) => ({
   display: relative ? 'block' : 'initial',
 })
 
-const bgStyle = (relative: boolean) => ({
+const modalBgStyle = (relative: boolean) => ({
   position: 'fixed',
   top: '-50%',
   bottom: '-50%',

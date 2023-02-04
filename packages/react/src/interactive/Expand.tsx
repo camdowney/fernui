@@ -7,7 +7,6 @@ interface ExpandProps {
   className?: string
   children?: any
   onAction?: Function
-  exitOnClick?: Function
 }
 
 export default function Expand({
@@ -15,8 +14,7 @@ export default function Expand({
   id,
   className,
   children,
-  onAction,
-  exitOnClick
+  onAction
 }: ExpandProps) {
   const [active, setActive] = useState(false)
   const [contentHeight, setContentHeight] = useState(0)
@@ -28,12 +26,7 @@ export default function Expand({
   useEffect(setExpandHeight, [])
   useListener('resize', setExpandHeight)
 
-  useListener('mouseup', (e: any) => {
-    if (exitOnClick && !expandRef.current.contains(e.target))
-      setActive(false)
-  })
-
-  useListener('FernExpandAction', (e: any) => {
+  useListener('FUIExpandAction', (e: any) => {
     const action = e.detail.action
     setActive(action < 2 ? action : !active)
     onAction && onAction(e)

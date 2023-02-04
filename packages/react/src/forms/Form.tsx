@@ -41,7 +41,7 @@ export default function Form({
     const state = states[newState]
 
     formRef.current.querySelectorAll('*').forEach((element: HTMLElement) => {
-      element.dispatchEvent(new CustomEvent('FernFormStateChange', { detail: { state } }))
+      element.dispatchEvent(new CustomEvent('FUIFormStateChange', { detail: { state } }))
     })
     
     onStateChange && onStateChange(state)

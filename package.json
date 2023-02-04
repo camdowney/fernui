@@ -4,13 +4,11 @@
     "r-icons": "if exist .\\packages\\icons\\_dist rmdir /S /Q .\\packages\\icons\\_dist",
     "r-react": "if exist .\\packages\\react\\_dist rmdir /S /Q .\\packages\\react\\_dist",
     "r-util": "if exist .\\packages\\util\\_dist rmdir /S /Q .\\packages\\util\\_dist",
-    "r-util-react": "if exist .\\packages\\util-react\\_dist rmdir /S /Q .\\packages\\util-react\\_dist",
-    "r-all": "concurrently \"pnpm r-icons\" \"pnpm r-react\" \"pnpm r-util\" \"pnpm r-util-react\"",
+    "r-all": "concurrently \"pnpm r-icons\" \"pnpm r-react\" \"pnpm r-util\"",
     "b-icons": "cd ./packages/icons && tsc",
     "b-react": "cd ./packages/react && pnpm i && tsc",
     "b-util": "cd ./packages/util && tsc",
-    "b-util-react": "cd ./packages/util-react && pnpm i && tsc",
-    "b-ts": "concurrently \"pnpm b-icons\" \"pnpm b-react\" \"pnpm b-util\" \"pnpm b-util-react\"",
+    "b-ts": "concurrently \"pnpm b-icons\" \"pnpm b-react\" \"pnpm b-util\"",
     "build": "pnpm r-all && pnpm b-ts && rollup -c && pnpm r-all"
   },
   "dependencies": {

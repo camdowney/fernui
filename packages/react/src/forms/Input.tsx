@@ -42,7 +42,7 @@ export default function Input({
     setModified(true)
   }
 
-  useListener('FernFormStateChange', (e: any) => {
+  useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state)
   }, outerRef)
 

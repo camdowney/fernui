@@ -19,3 +19,5 @@ export { default as Submit } from './forms/Submit'
 export { default as Expand } from './interactive/Expand'
 export { default as Lightbox } from './interactive/Lightbox'
 export { default as Modal } from './interactive/Modal'
+
+export { useListener } from './util'

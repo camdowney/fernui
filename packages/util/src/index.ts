@@ -125,22 +125,22 @@ const signalEvent = (selector: any, event: string, detail: Object) => {
 }
   
 export const closeModal = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FernModalAction', { action: 0, ...(data ?? {}) })
+  signalEvent(selector, 'FUIModalAction', { action: 0, ...(data ?? {}) })
 
 export const openModal = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FernModalAction', { action: 1, ...(data ?? {}) })
+  signalEvent(selector, 'FUIModalAction', { action: 1, ...(data ?? {}) })
 
 export const toggleModal = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FernModalAction', { action: 2, ...(data ?? {}) })
+  signalEvent(selector, 'FUIModalAction', { action: 2, ...(data ?? {}) })
 
 export const closeExpand = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FernExpandAction', { action: 0, ...(data ?? {}) })
+  signalEvent(selector, 'FUIExpandAction', { action: 0, ...(data ?? {}) })
 
 export const openExpand = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FernExpandAction', { action: 1, ...(data ?? {}) })
+  signalEvent(selector, 'FUIExpandAction', { action: 1, ...(data ?? {}) })
 
 export const toggleExpand = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FernExpandAction', { action: 2, ...(data ?? {}) })
+  signalEvent(selector, 'FUIExpandAction', { action: 2, ...(data ?? {}) })
 
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {
