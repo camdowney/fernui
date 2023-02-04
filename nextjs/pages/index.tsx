@@ -1,6 +1,6 @@
 import { Section, Expand, Modal, Media, Lightbox, Avatar } from '../../packages/react'
 import { TestForm } from '../components'
-import { toggleExpand, openModal } from '../../packages/util-react'
+import { toggleExpand, openModal } from '../../packages/util'
 
 export default () => {
   return <>
@@ -23,7 +23,6 @@ export default () => {
       <button onClick={() => openModal('#dropdown')}>Open dropdown</button>
       <Modal
         id='dropdown'
-        exitOn={{ click: true }}
         bgClass='hidden'
         relative
       >
