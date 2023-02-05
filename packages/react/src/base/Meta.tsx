@@ -1,6 +1,5 @@
 import React from 'react'
-import Cond from './Cond'
-import { composeExcerpt } from '../util'
+import { composeExcerpt } from '@fernui/util'
 
 interface MetaProps {
   as: any
@@ -28,9 +27,10 @@ export default function Meta({
   children
 }: MetaProps) {
   const description = composeExcerpt(desc ?? '', 155, false)
+  const Shell = as
 
   return (
-    <Cond as={as}>
+    <Shell>
       <title>{title}</title>
       {icon && <link rel='icon' href={icon} />}
       {touchIcon && <link rel='apple-touch-icon' href={touchIcon} />}
@@ -50,6 +50,6 @@ export default function Meta({
       {image && <meta name='twitter:image' content={image} />}
 
       {children}
-    </Cond>
+    </Shell>
   )
 }

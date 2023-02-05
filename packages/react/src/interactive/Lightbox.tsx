@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import Media from '../base/Media'
 import Link from '../base/Link'
 import Modal from '../interactive/Modal'
-import { cn, closeModal, useListener } from '../util'
+import { cn, closeModal } from '@fernui/util'
+import { useListener } from '../util'
 import { angle, close } from '../icons'
 
 interface LightboxProps {
@@ -60,7 +61,7 @@ export default function Lightbox({
       style={modalStyle}
       onAction={onOpen}
       bgClass={cn('fui-lightbox-bg', bgClass)}
-      scrollLock
+      preventScroll
       focus
     >
       <div style={innerStyle as Object}>

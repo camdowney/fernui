@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Info from './Info'
-import Cond from '../base/Cond'
 import Icon from '../base/Icon'
-import { cn, useListener } from '../util'
+import { cn } from '@fernui/util'
+import { useListener } from '../util'
 import { angle } from '../icons'
 
 interface SelectProps {
@@ -51,16 +51,14 @@ export default function Select({
       ref={outerRef}
       className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
     >
-      <Cond hide={!label} className='fui-label'>
-        {label}
-      </Cond>
+      {label && <div className='fui-label'>{label}</div>}
       <div style={{ position: 'relative' }}>
         <select
           ref={innerRef}
           id={id}
           name={name || label || placeholder}
           data-field-valid={!invalid}
-          onChange={e => { update(e), onChange && onChange(e) }}
+          onChange={e => { update(e), onChange?.(e) }}
           onBlur={update}
           disabled={formState.disabled}
           style={{ cursor: 'pointer' }}

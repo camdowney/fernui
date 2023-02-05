@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Info from './Info'
 import Icon from '../base/Icon'
-import Cond from '../base/Cond'
-import { cn, useListener } from '../util'
+import { cn } from '@fernui/util'
+import { useListener } from '../util'
 import { check } from '../icons'
 
 interface CheckboxProps {
@@ -54,7 +54,7 @@ export default function Checkbox({
           type='checkbox'
           name={name || label}
           data-field-valid={!invalid}
-          onChange={e => { update(e), onChange && onChange(e) }}
+          onChange={e => { update(e), onChange?.(e) }}
           onBlur={update}
           disabled={formState.disabled}
           style={inputStyle}
@@ -62,9 +62,7 @@ export default function Checkbox({
         <div className='fui-check-box' style={boxStyle}>
           <Icon i={check} className='fui-check-icon' style={iconStyle} />
         </div>
-        <Cond hide={!label} className='fui-label'>
-          {label}
-        </Cond>
+        {label && <div className='fui-label'>{label}</div>}
       </label>
       <Info visible={showInfo}>
         {message || 'Please check this box to proceed.'}

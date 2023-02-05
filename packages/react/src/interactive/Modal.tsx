@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { cn, useListener } from '../util'
+import { cn } from '@fernui/util'
+import { useListener } from '../util'
 
 interface ModalProps {
   innerRef?: any
@@ -18,11 +19,11 @@ interface ModalProps {
   transition?: string
   openDelay?: number
   closeDelay?: number
-  relative?: boolean
+  anchor?: boolean
   exitOnBgClick?: boolean,
   exitOnOutsideClick?: boolean,
   exitOnEscape?: boolean,
-  scrollLock?: boolean
+  preventScroll?: boolean
   focus?: boolean
 }
 
@@ -42,11 +43,11 @@ export default function Modal({
   bgStyle,
   openDelay = 0,
   closeDelay = 0,
-  relative = false,
+  anchor = false,
   exitOnBgClick = true,
   exitOnOutsideClick = true,
   exitOnEscape = true,
-  scrollLock = false,
+  preventScroll = false,
   focus = false
 }: ModalProps) {
   const [active, setActive] = useState<boolean | any>(null)
@@ -60,7 +61,7 @@ export default function Modal({
     clearTimeout(timer.current)
     setActive(willBeActive)
 
-    if (scrollLock)
+    if (preventScroll)
       document.body.style.overflow = willBeActive ? 'hidden' : 'auto'
 
     if (!willBeActive)
@@ -91,7 +92,7 @@ export default function Modal({
   useListener('FUIModalAction', (e: any) => {
     const action = e.detail.action
     setModalActive(action < 2 ? action : !active)
-    onAction && onAction(e)
+    onAction?.(e)
   }, wrapperRef)
 
   return (
@@ -99,19 +100,19 @@ export default function Modal({
       ref={wrapperRef}
       id={id}
       className={cn('fui-listener', wrapperClass)}
-      style={wrapperStyle(relative) as Object}
+      style={wrapperStyle(anchor) as Object}
     >
       <div
         className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}
         onClick={() => exitOnBgClick && setModalActive(false)}
         aria-hidden={!active}
-        style={{ ...modalBgStyle(relative), ...bgStyle } as Object}
+        style={{ ...modalBgStyle(anchor), ...bgStyle } as Object}
       />
 
       <div
         className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
         aria-hidden={!active}
-        style={{ ...modalStyle(relative, active), ...style } as Object}
+        style={{ ...modalStyle(anchor, active), ...style } as Object}
       >
         {children}
       </div>
@@ -119,23 +120,23 @@ export default function Modal({
   )
 }
 
-const wrapperStyle = (relative: boolean) => ({
-  position: relative ? 'relative' : 'absolute',
-  display: relative ? 'block' : 'initial',
+const wrapperStyle = (anchor: boolean) => ({
+  position: anchor ? 'relative' : 'absolute',
+  display: anchor ? 'block' : 'initial',
 })
 
-const modalBgStyle = (relative: boolean) => ({
+const modalBgStyle = (anchor: boolean) => ({
   position: 'fixed',
   top: '-50%',
   bottom: '-50%',
   left: '-50%',
   right: '-50%',
-  zIndex: relative ? 30 : 50,
+  zIndex: anchor ? 30 : 50,
 })
 
-const modalStyle = (relative: boolean, active: boolean | null) => ({
+const modalStyle = (anchor: boolean, active: boolean | null) => ({
   overflowY: 'auto',
-  zIndex: relative ? 31 : 51,
-  position: relative ? 'absolute' : 'fixed',
+  zIndex: anchor ? 31 : 51,
+  position: anchor ? 'absolute' : 'fixed',
   visibility: active === null && 'hidden !important',
 })

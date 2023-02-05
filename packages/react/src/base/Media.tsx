@@ -1,9 +1,8 @@
 import React from 'react'
-import Cond from './Cond'
-import { cn } from '../util'
+import { cn } from '@fernui/util'
 
 interface MediaProps {
-  as?: string
+  as?: any
   src: string
   alt?: string
   loading?: string
@@ -33,6 +32,7 @@ export default function Media({
 }: MediaProps) {
   const resp = responsive && as === 'img' && !src.startsWith('http')
   const srcset = `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}`
+  const Shell = as
 
   return (
     <div
@@ -41,19 +41,19 @@ export default function Media({
       {...props}
     >
       {placeholder ?? <div className='fui-placeholder' style={placeholderStyle as Object} />}
-      <Cond
-        hide={!src}
-        as={as}
-        src={(!resp && priority) ? src : undefined}
-        data-lazy-src={(!resp && !priority) ? src : undefined}
-        srcSet={(resp && priority) ? srcset : undefined}
-        data-lazy-srcset={(resp && !priority) ? srcset : undefined}
-        sizes={resp ? '100vw' : undefined}
-        alt={alt}
-        loading={loading}
-        className={innerClass}
-        style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
-      />
+      {src &&
+        <Shell
+          src={(!resp && priority) ? src : undefined}
+          data-lazy-src={(!resp && !priority) ? src : undefined}
+          srcSet={(resp && priority) ? srcset : undefined}
+          data-lazy-srcset={(resp && !priority) ? srcset : undefined}
+          sizes={resp ? '100vw' : undefined}
+          alt={alt}
+          loading={loading}
+          className={innerClass}
+          style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
+        />
+      }
     </div>
   )
 }

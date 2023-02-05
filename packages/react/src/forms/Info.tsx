@@ -1,5 +1,4 @@
 import React from 'react'
-import Cond from '../base/Cond'
 import Icon from '../base/Icon'
 import { warning } from '../icons'
 
@@ -9,15 +8,11 @@ interface InfoProps {
 }
 
 export default function Info({ visible, children }: InfoProps) {
-  return (
-    <Cond
-      hide={!visible}
-      className='fui-info'
-      style={infoStyle}
-    >
+  return !visible ? <></> : (
+    <div className='fui-info' style={infoStyle}>
       <Icon i={warning} className='fui-info-icon' />
       {children}
-    </Cond>
+    </div>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import Honeypot from './Honeypot'
-import { cn } from '../util'
+import { cn } from '@fernui/util'
 
 const defaultStates = [
   { id: 0, end: 0, error: 0, disabled: 0, message: 'Default state'                          },
@@ -44,7 +44,7 @@ export default function Form({
       element.dispatchEvent(new CustomEvent('FUIFormStateChange', { detail: { state } }))
     })
     
-    onStateChange && onStateChange(state)
+    onStateChange?.(state)
   }
 
   const handleSubmit = async (e: any) => {
@@ -60,7 +60,7 @@ export default function Form({
 
     updateState(1)
 
-    onSubmit && onSubmit(e)
+    onSubmit?.(e)
       .then(() => updateState(++submissions.current >= maxSubmissions ? 5 : 6))
       .catch(() => updateState(4))
   }

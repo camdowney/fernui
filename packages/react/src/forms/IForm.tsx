@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Form from './Form'
 import Icon from '../base/Icon'
 import Modal from '../interactive/Modal'
-import { cn, openModal } from '../util'
+import { cn, openModal } from '@fernui/util'
 import { warning } from '../icons'
 
 interface IFormProps {
@@ -43,8 +43,7 @@ export default function IForm({
           className={cn('fui-iform-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
           bgStyle={{ display: 'none' }}
           closeDelay={2000}
-          relative
-          exitOnBgClick={false}
+          anchor
           exitOnOutsideClick={false}
           exitOnEscape={false}
           style={{ zIndex: '30 !important' }}

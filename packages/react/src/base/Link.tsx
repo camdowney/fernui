@@ -1,5 +1,4 @@
 import React from 'react'
-import Cond from './Cond'
 import Icon from './Icon'
 
 interface LinkProps {
@@ -25,20 +24,19 @@ export default function Link({
   children,
   ...props
 }: LinkProps) {
+  const Shell = as || (to ? 'a' : 'button')
+
   return (
-    <Cond
-      as={as || (to ? 'a' : 'button')}
+    <Shell
       href={to}
       target={blank && '_blank'}
       rel={blank && 'noopener noreferrer'}
       aria-label={label || text}
       {...props}
     >
-      <Cond hide={!text} as='span'>
-        {text}
-      </Cond>
+      {text && <span>{text}</span>}
       {children}
       {icon && <Icon i={icon} className={iconClass} />}
-    </Cond>
+    </Shell>
   )
 }

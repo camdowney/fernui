@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { cn, useListener } from '../util'
+import { cn } from '@fernui/util'
+import { useListener } from '../util'
 
 interface ExpandProps {
   innerRef?: any
@@ -29,7 +30,7 @@ export default function Expand({
   useListener('FUIExpandAction', (e: any) => {
     const action = e.detail.action
     setActive(action < 2 ? action : !active)
-    onAction && onAction(e)
+    onAction?.(e)
   }, expandRef)
 
   return (
