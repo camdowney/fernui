@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Link from '../base/Link'
 import { useListener } from '../util'
 
-interface SubmitProps {
+export interface SubmitProps {
   text?: string
   [x:string]: any
 }

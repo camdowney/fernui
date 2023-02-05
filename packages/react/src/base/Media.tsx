@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '@fernui/util'
 
-interface MediaProps {
+export interface MediaProps {
   as?: any
   src: string
   alt?: string

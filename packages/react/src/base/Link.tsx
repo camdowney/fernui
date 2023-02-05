@@ -1,7 +1,7 @@
 import React from 'react'
 import Icon from './Icon'
 
-interface LinkProps {
+export interface LinkProps {
   innerRef?: any
   as?: any
   to?: string

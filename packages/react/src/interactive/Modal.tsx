@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useListener } from '../util'
 
-interface ModalProps {
+export interface ModalProps {
   innerRef?: any
   id?: string
   wrapperClass?: string

@@ -5,7 +5,7 @@ import { cn } from '@fernui/util'
 import { useListener } from '../util'
 import { angle } from '../icons'
 
-interface SelectProps {
+export interface SelectProps {
   innerRef?: any
   id?: string
   name?: string

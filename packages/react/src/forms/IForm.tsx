@@ -5,7 +5,7 @@ import Modal from '../interactive/Modal'
 import { cn, openModal } from '@fernui/util'
 import { warning } from '../icons'
 
-interface IFormProps {
+export interface IFormProps {
   children?: any
   btn?: any
   messages?: string[]

@@ -6,7 +6,7 @@ import { cn, closeModal } from '@fernui/util'
 import { useListener } from '../util'
 import { angle, close } from '../icons'
 
-interface LightboxProps {
+export interface LightboxProps {
   id?: string
   sources: string[],
   className?: string

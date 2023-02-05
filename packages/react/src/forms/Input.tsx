@@ -3,7 +3,7 @@ import Info from './Info'
 import { cn, isEmail } from '@fernui/util'
 import { useListener } from '../util'
 
-interface InputProps {
+export interface InputProps {
   innerRef?: any
   id?: string
   name?: string

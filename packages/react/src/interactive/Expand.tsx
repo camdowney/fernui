@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useListener } from '../util'
 
-interface ExpandProps {
+export interface ExpandProps {
   innerRef?: any
   id?: string
   className?: string

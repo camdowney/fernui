@@ -3,8 +3,8 @@ import Media from './Media'
 import Icon from './Icon'
 import { profile } from '../icons'
 
-type Color = string
-type ColorMap = (letter: string) => Color
+export type Color = string
+export type ColorMap = (letter: string) => Color
 
 const defaultColors: ColorMap = letter => (
   'JWHF'.includes(letter) ? '#eda445' :   // orange
@@ -14,7 +14,7 @@ const defaultColors: ColorMap = letter => (
   '#d45ea3' // 'BATUN'               // violet
 )
 
-interface AvatarProps {
+export interface AvatarProps {
   title?: any
   src?: any
   colors?: ColorMap

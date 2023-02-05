@@ -1,7 +1,7 @@
 import React from 'react'
 import { composeExcerpt } from '@fernui/util'
 
-interface MetaProps {
+export interface MetaProps {
   as: any
   title: string
   desc?: string

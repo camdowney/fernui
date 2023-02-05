@@ -5,7 +5,7 @@ import { cn } from '@fernui/util'
 import { useListener } from '../util'
 import { check } from '../icons'
 
-interface CheckboxProps {
+export interface CheckboxProps {
   innerRef?: any
   id?: string
   name?: string

@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface IconProps {
+export interface IconProps {
   i: { children: string }
   [x:string]: any
 }
