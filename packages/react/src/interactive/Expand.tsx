@@ -19,10 +19,10 @@ export default function Expand({
 }: ExpandProps) {
   const [active, setActive] = useState(false)
   const [contentHeight, setContentHeight] = useState(0)
-  const expandRef = innerRef || useRef()
+  const ref = innerRef || useRef()
 
   const setExpandHeight = () =>
-    setContentHeight(expandRef.current.querySelector('div').clientHeight)
+    setContentHeight(ref.current.querySelector('div').clientHeight)
 
   useEffect(setExpandHeight, [])
   useListener('resize', setExpandHeight)
@@ -31,11 +31,11 @@ export default function Expand({
     const action = e.detail.action
     setActive(action < 2 ? action : !active)
     onAction?.(e)
-  }, expandRef)
+  }, ref)
 
   return (
     <div
-      ref={expandRef}
+      ref={ref}
       id={id}
       className={cn('fui-listener fui-expand', className)}
       style={expandStyle(active, contentHeight)}

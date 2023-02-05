@@ -60,7 +60,7 @@ export default function Input({
         onBlur={update}
         disabled={formState.disabled}
         maxLength={charLimit ? charLimit : type === 'area' ? 1000 : 100}
-        {...{ innerRef, id, type, placeholder }}
+        {...{ ref: innerRef, id, type, placeholder }}
       />
       <Info visible={showInfo}>
         {message || type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.'}

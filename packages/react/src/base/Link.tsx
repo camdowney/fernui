@@ -2,6 +2,7 @@ import React from 'react'
 import Icon from './Icon'
 
 interface LinkProps {
+  innerRef?: any
   as?: any
   to?: string
   text?: string
@@ -14,6 +15,7 @@ interface LinkProps {
 }
 
 export default function Link({
+  innerRef,
   as,
   to,
   text,
@@ -28,6 +30,7 @@ export default function Link({
 
   return (
     <Shell
+      ref={innerRef}
       href={to}
       target={blank && '_blank'}
       rel={blank && 'noopener noreferrer'}

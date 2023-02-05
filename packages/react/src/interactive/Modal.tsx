@@ -51,7 +51,7 @@ export default function Modal({
   focus = false
 }: ModalProps) {
   const [active, setActive] = useState<boolean | any>(null)
-  const wrapperRef = innerRef || useRef()
+  const ref = innerRef || useRef()
   const timer = useRef<any>()
 
   const setModalTimer = (willBeActive: boolean, delay: number) =>
@@ -68,7 +68,7 @@ export default function Modal({
       return
 
     if (focus)
-      setTimeout(() => wrapperRef.current.querySelector('[tabindex="0"] [tabindex="1"]')?.focus(), 50)
+      setTimeout(() => ref.current.querySelector('[tabindex="0"] [tabindex="1"]')?.focus(), 50)
       
     if (closeDelay > 0)
       setModalTimer(false, closeDelay)
@@ -85,7 +85,7 @@ export default function Modal({
   })
 
   useListener('mouseup', (e: any) => {
-    if (active && exitOnOutsideClick && !wrapperRef.current.lastChild.contains(e.target))
+    if (active && exitOnOutsideClick && !ref.current.lastChild.contains(e.target))
       setTimeout(() => setModalActive(false), 0)
   })
 
@@ -93,11 +93,11 @@ export default function Modal({
     const action = e.detail.action
     setModalActive(action < 2 ? action : !active)
     onAction?.(e)
-  }, wrapperRef)
+  }, ref)
 
   return (
     <span
-      ref={wrapperRef}
+      ref={ref}
       id={id}
       className={cn('fui-listener', wrapperClass)}
       style={wrapperStyle(anchor) as Object}

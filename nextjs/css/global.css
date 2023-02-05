@@ -68,38 +68,11 @@
 .fui-expand {
   @apply duration-300;
 }
-.fui-section {
+section {
   @apply relative py-md;
 }
-.fui-container {
+.container {
   @apply relative w-full px-md mx-auto;
-}
-.fui-content {
-  @apply relative space-y-3 md:space-y-4 lg:space-y-5;
-}
-.content-md {
-  @apply max-w-2xl;
-}
-.content-split {
-  @apply md:grid md:grid-cols-5 gap-6 md:gap-10 md:!space-y-0;
-}
-.content-split > :first-child {
-  @apply md:col-span-2;
-}
-.content-split > :last-child {
-  @apply md:col-span-3;
-}
-.content-offset > :last-child {
-  @apply md:ml-12 lg:ml-16;
-}
-.fui-subheading {
-  @apply font-main font-bold text-gray-400 mt-1.5 md:mt-2;
-}
-.fui-body {
-  @apply space-y-4 md:space-y-6 gap-x-6 md:gap-x-10;
-}
-.body-light > p {
-  @apply text-gray-100
 }
 .fui-cta {
   @apply flex flex-wrap items-center gap-2 md:gap-3 mt-5 md:mt-6 lg:mt-8;
