@@ -13,6 +13,7 @@ export type FormState = {
 export const initialState: FormState = { id: 0, end: false, error: false, disabled: false, message: 'Initial state' }
 
 const defaultStates: FormState[] = [
+  initialState,
   { id: 1, end: false, error: false, disabled: true,  message: 'Submitting...'                          },
   { id: 2, end: false, error: true,  disabled: false, message: 'Please correct the highlighted fields.' },
   { id: 3, end: true,  error: true,  disabled: true,  message: 'Maximum number of attempts reached.'    },
@@ -69,9 +70,16 @@ export default function Form({
 
     updateState(1)
 
-    onSubmit?.(e)
-      .then(() => updateState(++submissions.current >= maxSubmissions ? 5 : 6))
-      .catch(() => updateState(4))
+    if (!onSubmit)
+      return
+
+    try {
+      await onSubmit(e)
+      updateState((++submissions.current >= maxSubmissions) ? 5 : 6)
+    }
+    catch {
+      updateState(4)
+    }
   }
 
   return (
