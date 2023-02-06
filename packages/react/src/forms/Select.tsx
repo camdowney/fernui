@@ -64,7 +64,7 @@ export default function Select({
           disabled={formState.disabled}
           style={{ cursor: 'pointer' }}
         >
-          <option>
+          <option value=''>
             {placeholder || 'Select an option'}
           </option>
           {options.map(o => 

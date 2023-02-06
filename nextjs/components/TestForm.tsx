@@ -1,4 +1,4 @@
-import { IForm, Input, FormButton } from '../../packages/react'
+import { IForm, Input, Select, FormButton } from '../../packages/react'
 import { formToObject } from '../../packages/util'
 import { mail } from '../../packages/icons'
 
@@ -32,6 +32,14 @@ export default function TestForm() {
           name='<h1>.1.a'
           label='Full name *'
           required
+        />
+        <Select
+          name='select1'
+          options={[
+            'Option 1',
+            'Option 2',
+            'Option 3',
+          ]}
         />
       </div>
     </IForm>
