@@ -5,21 +5,37 @@ import { cn } from '@fernui/util'
 export type FormState = {
   id: number
   end: boolean
+  success: boolean
   error: boolean
   disabled: boolean
   message: string
 }
 
-export const initialState: FormState = { id: 0, end: false, error: false, disabled: false, message: 'Initial state' }
+export const initialState: FormState = { 
+  id: 0, end: false, success: false, error: false, disabled: false, 
+  message: 'Initial state'
+}
 
 const defaultStates: FormState[] = [
   initialState,
-  { id: 1, end: false, error: false, disabled: true,  message: 'Submitting...'                          },
-  { id: 2, end: false, error: true,  disabled: false, message: 'Please correct the highlighted fields.' },
-  { id: 3, end: true,  error: true,  disabled: true,  message: 'Maximum number of attempts reached.'    },
-  { id: 4, end: false, error: true,  disabled: false, message: 'Server error; please retry shortly.'    },
-  { id: 5, end: true,  error: false, disabled: true,  message: 'Successfully submitted. Thank you!'     },
-  { id: 6, end: false, error: false, disabled: false, message: 'Successfully saved!'                    },
+  { id: 1, end: false, success: false, error: false, disabled: true,
+    message: 'Submitting...'
+  },
+  { id: 2, end: false, success: false, error: true, disabled: false,
+    message: 'Please correct the highlighted fields.'
+  },
+  { id: 3, end: true, success: false, error: true, disabled: true,
+    message: 'Maximum number of attempts reached.'
+  },
+  { id: 4, end: false, success: false, error: true, disabled: false,
+    message: 'Server error; please retry shortly.'
+  },
+  { id: 5, end: true, success: true, error: false, disabled: true,
+    message: 'Successfully submitted. Thank you!'
+  },
+  { id: 6, end: false, success: true, error: false, disabled: false,
+    message: 'Successfully saved!'
+  },
 ]
 
 export interface FormProps {
