@@ -39,7 +39,7 @@ export default function Select({
   const showInfo = invalid && (modified || formState.error)
 
   const update = (e: any) => {
-    setInvalid(required && e.target.selectedIndex < 1)
+    setInvalid(required && e.target.selectedIndex < (placeholder ? 1 : 0))
     setModified(true)
   }
 

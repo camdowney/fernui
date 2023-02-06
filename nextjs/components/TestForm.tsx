@@ -34,12 +34,13 @@ export default function TestForm() {
           required
         />
         <Select
-          name='select1'
+          label='Select *'
           options={[
             'Option 1',
             'Option 2',
             'Option 3',
           ]}
+          required
         />
       </div>
     </IForm>
