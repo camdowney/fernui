@@ -54,7 +54,7 @@ export const formToHtml = (heading = 'Form Submission', submitEvent: any) => {
   return html + '</ul>'
 }
 
-type FormObject = Object | any[]
+type FormObject = { [key:string]: any } | any[]
 
 export const formDataToObject = (formData: FormData): FormObject => {
   const concat = (acc: any, [_key, _value]: any): FormObject => {
