@@ -56,7 +56,7 @@ export const formToHtml = (heading = 'Form Submission', submitEvent: any) => {
 
 type FormObject = Object | any[]
 
-export const formToObject = (submitEvent: any): FormObject => {
+export const formDataToObject = (formData: FormData): FormObject => {
   const concat = (acc: any, [_key, _value]: any): FormObject => {
     const keys = Array.isArray(_key) ? _key : _key.split('.')
     const [key, ...subKeys] = keys
@@ -74,8 +74,11 @@ export const formToObject = (submitEvent: any): FormObject => {
     return { ...acc, [escapeHtml(key)]: value }
   }
 
-  return [...(new FormData(submitEvent.target)).entries()].reduce(concat, null) ?? {}
+  return [...formData.entries()].reduce(concat, null) ?? {}
 }
+
+export const formToObject = (submitEvent: any): FormObject =>
+  formDataToObject(new FormData(submitEvent.target))
 
 interface PingRequestData {
   headers?: object
