@@ -12,6 +12,7 @@ export interface SelectProps {
   name?: string
   label?: string
   placeholder?: string
+  defaultValue?: any
   className?: string
   options: string[]
   required?: boolean
@@ -25,6 +26,7 @@ export default function Select({
   name,
   label,
   placeholder = 'Select an option',
+  defaultValue,
   className,
   options,
   required,
@@ -58,6 +60,7 @@ export default function Select({
           ref={innerRef}
           id={id}
           name={name || label || placeholder}
+          defaultValue={defaultValue}
           data-field-valid={!invalid}
           onChange={e => { update(e), onChange?.(e) }}
           onBlur={update}

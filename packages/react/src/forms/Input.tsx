@@ -10,6 +10,7 @@ export interface InputProps {
   name?: string
   label?: string
   placeholder?: string
+  defaultValue?: any
   className?: string
   type?: string
   required?: boolean
@@ -24,6 +25,7 @@ export default function Input({
   name,
   label,
   placeholder,
+  defaultValue,
   className,
   type = 'text',
   required,
@@ -61,7 +63,7 @@ export default function Input({
         onBlur={update}
         disabled={formState.disabled}
         maxLength={charLimit ? charLimit : type === 'area' ? 1000 : 100}
-        {...{ ref: innerRef, id, type, placeholder }}
+        {...{ ref: innerRef, id, type, placeholder, defaultValue }}
       />
       <Info visible={showInfo}>
         {message || type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.'}

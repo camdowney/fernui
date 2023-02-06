@@ -11,6 +11,7 @@ export interface CheckboxProps {
   id?: string
   name?: string
   label?: string
+  defaultValue?: boolean
   className?: string
   required?: boolean
   onChange?: Function
@@ -22,6 +23,7 @@ export default function Checkbox({
   id,
   name,
   label,
+  defaultValue,
   className,
   required,
   onChange,
@@ -54,6 +56,7 @@ export default function Checkbox({
           id={id}
           type='checkbox'
           name={name || label}
+          defaultChecked={defaultValue}
           data-field-valid={!invalid}
           onChange={e => { update(e), onChange?.(e) }}
           onBlur={update}

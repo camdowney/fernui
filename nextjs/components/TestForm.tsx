@@ -21,6 +21,7 @@ export default function TestForm() {
         <Input
           name='key0'
           label='Full name *'
+          defaultValue='awd'
           required
         />
         <Input
@@ -40,6 +41,7 @@ export default function TestForm() {
             'Option 2',
             'Option 3',
           ]}
+          defaultValue='Option 3'
           required
         />
       </div>
