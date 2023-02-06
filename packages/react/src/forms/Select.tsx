@@ -14,7 +14,7 @@ export interface SelectProps {
   placeholder?: string
   defaultValue?: any
   className?: string
-  options: string[]
+  options: { label: string, value?: any }[]
   required?: boolean
   onChange?: Function
   message?: string
@@ -33,7 +33,7 @@ export default function Select({
   onChange,
   message
 }: SelectProps) {
-  const [invalid, setInvalid] = useState(required)
+  const [invalid, setInvalid] = useState(required && !defaultValue && !!placeholder)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
   const outerRef = useRef() as any
@@ -70,9 +70,9 @@ export default function Select({
           {placeholder && 
             <option value=''>{placeholder}</option>
           }
-          {options.map(o => 
-            <option value={o} key={o}>
-              {o}
+          {options.map(option => 
+            <option value={option.value ?? option.label} key={option.label}>
+              {option.label}
             </option>    
           )}
         </select>

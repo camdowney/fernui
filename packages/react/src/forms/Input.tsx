@@ -33,7 +33,7 @@ export default function Input({
   onChange,
   message
 }: InputProps) {
-  const [invalid, setInvalid] = useState(required)
+  const [invalid, setInvalid] = useState(required && (!defaultValue || (type === 'email' && !isEmail(defaultValue))))
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
   const outerRef = useRef() as any

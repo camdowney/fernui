@@ -29,7 +29,7 @@ export default function Checkbox({
   onChange,
   message
 }: CheckboxProps) {
-  const [invalid, setInvalid] = useState(required)
+  const [invalid, setInvalid] = useState(required && !defaultValue)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
   const outerRef = useRef() as any
