@@ -1,4 +1,4 @@
-import { IForm, Input, Submit } from '../../packages/react'
+import { IForm, Input, FormButton } from '../../packages/react'
 import { formToObject } from '../../packages/util'
 import { mail } from '../../packages/icons'
 
@@ -9,7 +9,13 @@ export default function TestForm() {
   return (
     <IForm
       onSubmit={testSubmit}
-      btn={<Submit icon={{ i: mail }} />}
+      btn={
+        <FormButton
+          type='submit'
+          text='Submit'
+          icon={{ i: mail }}
+        />
+      }
     >
       <div>
         <Input

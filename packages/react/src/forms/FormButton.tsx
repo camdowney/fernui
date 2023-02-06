@@ -3,7 +3,7 @@ import { FormState, initialState } from './Form'
 import Link, { LinkProps } from '../base/Link'
 import { useListener } from '../util'
 
-export default function Submit({ text = 'Submit', ...props }: LinkProps) {
+export default function FormButton({ type='button', to, ...props }: LinkProps) {
   const [formState, setFormState] = useState<FormState>(initialState)
   const ref = useRef()
 
@@ -14,8 +14,7 @@ export default function Submit({ text = 'Submit', ...props }: LinkProps) {
   return (
     <Link
       innerRef={ref}
-      text={text}
-      type='submit'
+      type='button'
       disabled={formState.disabled}
       {...props}
     />

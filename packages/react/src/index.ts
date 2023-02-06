@@ -6,11 +6,11 @@ export { default as Meta, MetaProps } from './base/Meta'
 
 export { default as Checkbox, CheckboxProps } from './forms/Checkbox'
 export { default as Form, FormProps, FormState, initialState } from './forms/Form'
+export { default as FormButton } from './forms/FormButton'
 export { default as Honeypot } from './forms/Honeypot'
 export { default as IForm, IFormProps } from './forms/IForm'
 export { default as Input, InputProps } from './forms/Input'
 export { default as Select, SelectProps } from './forms/Select'
-export { default as Submit } from './forms/Submit'
 
 export { default as Expand, ExpandProps } from './interactive/Expand'
 export { default as Lightbox, LightboxProps } from './interactive/Lightbox'

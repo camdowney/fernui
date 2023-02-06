@@ -63,7 +63,6 @@ export default function IForm({
           <Icon i={warning} className='fui-iform-icon' />
           {message}
         </Modal>
-        
       </> : (
         <p className='fui-iform-message'>
           {message}
