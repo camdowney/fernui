@@ -24,7 +24,7 @@ export default function Select({
   id,
   name,
   label,
-  placeholder,
+  placeholder = 'Select an option',
   className,
   options,
   required,
@@ -64,9 +64,9 @@ export default function Select({
           disabled={formState.disabled}
           style={{ cursor: 'pointer' }}
         >
-          <option value=''>
-            {placeholder || 'Select an option'}
-          </option>
+          {placeholder && 
+            <option value=''>{placeholder}</option>
+          }
           {options.map(o => 
             <option value={o} key={o}>
               {o}
