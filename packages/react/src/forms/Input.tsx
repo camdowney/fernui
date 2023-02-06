@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { FormState, initialState } from './Form'
 import Info from './Info'
 import { cn, isEmail } from '@fernui/util'
 import { useListener } from '../util'
@@ -32,8 +33,8 @@ export default function Input({
 }: InputProps) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
-  const [formState, setFormState] = useState<any>({})
-  const outerRef = useRef<any>()
+  const [formState, setFormState] = useState<FormState>(initialState)
+  const outerRef = useRef() as any
   const Shell = (type === 'area' ? 'textarea' : 'input') as any
 
   const showInfo = invalid && (modified || formState.error)
@@ -44,7 +45,7 @@ export default function Input({
   }
 
   useListener('FUIFormStateChange', (e: any) => {
-    setFormState(e.detail.state)
+    setFormState(e.detail.state as FormState)
   }, outerRef)
 
   return (

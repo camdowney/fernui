@@ -1,11 +1,13 @@
 import React from 'react'
+import Icon, { IconProps } from './Icon'
 
 export interface LinkProps {
   innerRef?: any
   as?: any
   to?: string
-  text?: string
   children?: any
+  text?: string
+  icon?: IconProps
   blank?: boolean
   label?: string
   [x:string]: any
@@ -15,8 +17,9 @@ export default function Link({
   innerRef,
   as,
   to,
-  text,
   children,
+  text,
+  icon,
   blank,
   label,
   ...props
@@ -32,7 +35,9 @@ export default function Link({
       aria-label={label || text}
       {...props}
     >
-      {text ?? children}
+      {children}
+      {text && <span>{text}</span>}
+      {icon && <Icon {...icon} />}
     </Shell>
   )
 }

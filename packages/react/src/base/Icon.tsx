@@ -12,8 +12,7 @@ export default function Icon({ i, ...props }: IconProps) {
     <svg
       style={{ ...iconStyle }}
       dangerouslySetInnerHTML={{ __html: children }}
-      {...rest}
-      {...props}
+      {...{ ...rest, ...props}}
     />
   )
 }

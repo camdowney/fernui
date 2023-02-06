@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { FormState, initialState } from './Form'
 import Info from './Info'
 import Icon from '../base/Icon'
 import { cn } from '@fernui/util'
@@ -32,8 +33,8 @@ export default function Select({
 }: SelectProps) {
   const [invalid, setInvalid] = useState(required)
   const [modified, setModified] = useState(false)
-  const [formState, setFormState] = useState<any>({})
-  const outerRef = useRef<any>()
+  const [formState, setFormState] = useState<FormState>(initialState)
+  const outerRef = useRef() as any
 
   const showInfo = invalid && (modified || formState.error)
 
@@ -43,7 +44,7 @@ export default function Select({
   }
 
   useListener('FUIFormStateChange', (e: any) => {
-    setFormState(e.detail.state)
+    setFormState(e.detail.state as FormState)
   }, outerRef)
 
   return (
@@ -83,7 +84,7 @@ export default function Select({
   )
 }
 
-const wrapperStyle: any = {
+const wrapperStyle = {
   position: 'absolute',
   top: 0,
   right: 0,

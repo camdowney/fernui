@@ -3,7 +3,7 @@ import Icon from '../base/Icon'
 import { warning } from '../icons'
 
 interface InfoProps {
-  visible: boolean
+  visible: boolean | undefined
   children?: any
 }
 

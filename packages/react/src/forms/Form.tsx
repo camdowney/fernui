@@ -2,20 +2,29 @@ import React, { useRef } from 'react'
 import Honeypot from './Honeypot'
 import { cn } from '@fernui/util'
 
-const defaultStates = [
-  { id: 0, end: 0, error: 0, disabled: 0, message: 'Default state'                          },
-  { id: 1, end: 0, error: 0, disabled: 1, message: 'Submitting...'                          },
-  { id: 2, end: 0, error: 1, disabled: 0, message: 'Please correct the highlighted fields.' },
-  { id: 3, end: 1, error: 1, disabled: 1, message: 'Maximum number of attempts reached.'    },
-  { id: 4, end: 0, error: 1, disabled: 0, message: 'Server error; please retry shortly.'    },
-  { id: 5, end: 1, error: 0, disabled: 1, message: 'Successfully submitted. Thank you!'     },
-  { id: 6, end: 0, error: 0, disabled: 0, message: 'Successfully saved!'                    },
+export type FormState = {
+  id: number
+  end: boolean
+  error: boolean
+  disabled: boolean
+  message: string
+}
+
+export const initialState: FormState = { id: 0, end: false, error: false, disabled: false, message: 'Initial state' }
+
+const defaultStates: FormState[] = [
+  { id: 1, end: false, error: false, disabled: true,  message: 'Submitting...'                          },
+  { id: 2, end: false, error: true,  disabled: false, message: 'Please correct the highlighted fields.' },
+  { id: 3, end: true,  error: true,  disabled: true,  message: 'Maximum number of attempts reached.'    },
+  { id: 4, end: false, error: true,  disabled: false, message: 'Server error; please retry shortly.'    },
+  { id: 5, end: true,  error: false, disabled: true,  message: 'Successfully submitted. Thank you!'     },
+  { id: 6, end: false, error: false, disabled: false, message: 'Successfully saved!'                    },
 ]
 
 export interface FormProps {
   className?: string
   children?: any
-  states?: Object[]
+  states?: FormState[]
   onStateChange?: Function
   onSubmit?: Function
   maxAttempts?: number
@@ -35,7 +44,7 @@ export default function Form({
 }: FormProps) {
   const attempts = useRef(0)
   const submissions = useRef(0)
-  const formRef = useRef<any>()
+  const formRef = useRef() as any
 
   const updateState = (newState: number) => {
     const state = states[newState]

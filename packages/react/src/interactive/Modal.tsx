@@ -52,7 +52,7 @@ export default function Modal({
 }: ModalProps) {
   const [active, setActive] = useState<boolean | any>(null)
   const ref = innerRef || useRef()
-  const timer = useRef<any>()
+  const timer = useRef() as any
 
   const setModalTimer = (willBeActive: boolean, delay: number) =>
     timer.current = setTimeout(() => setModalActive(willBeActive), delay)

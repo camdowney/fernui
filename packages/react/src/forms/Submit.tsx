@@ -1,18 +1,14 @@
 import React, { useState, useRef } from 'react'
-import Link from '../base/Link'
+import { FormState, initialState } from './Form'
+import Link, { LinkProps } from '../base/Link'
 import { useListener } from '../util'
 
-export interface SubmitProps {
-  text?: string
-  [x:string]: any
-}
-
-export default function Submit({ text = 'Submit', ...props }: SubmitProps) {
-  const [formState, setFormState] = useState<any>({})
+export default function Submit({ text = 'Submit', ...props }: LinkProps) {
+  const [formState, setFormState] = useState<FormState>(initialState)
   const ref = useRef()
 
   useListener('FUIFormStateChange', (e: any) => {
-    setFormState(e.detail.state)
+    setFormState(e.detail.state as FormState)
   }, ref)
 
   return (

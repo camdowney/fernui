@@ -9,7 +9,7 @@ export default function TestForm() {
   return (
     <IForm
       onSubmit={testSubmit}
-      btn={<Submit icon={mail} />}
+      btn={<Submit icon={{ i: mail }} />}
     >
       <div>
         <Input

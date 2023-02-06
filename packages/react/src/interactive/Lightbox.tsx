@@ -81,7 +81,7 @@ export default function Lightbox({
               onClick={closeModal}
               className={cn('fui-lightbox-control', controlClass)}
               style={{ ...controlStyle, ...closeStyle }}
-              icon={close}
+              icon={{ i: close }}
               iconClass={cn('fui-lightbox-icon', iconClass)}
             />
             <Link
@@ -89,7 +89,7 @@ export default function Lightbox({
               onClick={cyclePrevious}
               className={cn('fui-lightbox-control', controlClass)}
               style={{ ...controlStyle, ...previousStyle }}
-              icon={angle}
+              icon={{ i: angle }}
               iconClass={cn('fui-lightbox-icon', iconClass)}
             />
             <Link
@@ -97,7 +97,7 @@ export default function Lightbox({
               onClick={cycleNext}
               className={cn('fui-lightbox-control', controlClass)}
               style={{ ...controlStyle, ...nextStyle }}
-              icon={angle}
+              icon={{ i: angle }}
               iconClass={cn('fui-lightbox-icon', iconClass)}
             />
           </div>
