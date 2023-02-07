@@ -1,15 +1,16 @@
 import { Expand, Modal, Media, Lightbox, Avatar } from '../../packages/react'
 import { TestForm } from '../components'
-import { toggleExpand, openModal, insertRepeaterItem } from '../../packages/util'
+import { toggleExpand, openModal, getRepeaterMethods } from '../../packages/util'
 import { Repeater } from '../../packages/react'
-import { getRepeaterItems, setRepeaterItems, removeRepeaterItem, updateRepeaterItem } from '../../packages/util'
 
 export default () => {
+  const { update: updateItem, insert: insertItem, remove: removeItem, set: setItems, get: getItems } = getRepeaterMethods('#repeater')
+
   return <>
     <section>
-      <div className='container'>
-        <Repeater id='repeater' items={[]}>
-          {(item: any, index, key) =>
+      <div className='container space-y-4'>
+        <Repeater id='repeater' items={[]} className='space-y-2'>
+          {(item, _, key) =>
             <div key={key}>
               {item.title}
               <br />
@@ -17,21 +18,23 @@ export default () => {
             </div>
           }
         </Repeater>
-        <button onClick={() => insertRepeaterItem('#repeater', { title: 't', content: 'c'})}>
-          Add item
-        </button>
-        <button onClick={() => removeRepeaterItem('#repeater', 0)}>
-          Remove item
-        </button>
-        <button onClick={() => updateRepeaterItem('#repeater', { title: 't2', content: 'c2' }, 0)}>
-          Update item
-        </button>
-        <button onClick={() => console.log(getRepeaterItems('#repeater'))}>
-          Get items
-        </button>
-        <button onClick={() => setRepeaterItems('#repeater', [])}>
-          Clear items
-        </button>
+        <div>
+          <button onClick={() => insertItem({ title: 't', content: 'c'})}>
+            Add item
+          </button>
+          <button onClick={() => removeItem(0)}>
+            Remove item
+          </button>
+          <button onClick={() => updateItem({ title: 't2' }, 0)}>
+            Update item
+          </button>
+          <button onClick={() => console.log(getItems())}>
+            Get items
+          </button>
+          <button onClick={() => setItems([])}>
+            Clear items
+          </button>
+        </div>
       </div>
     </section>
 

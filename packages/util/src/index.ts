@@ -23,10 +23,10 @@ export const escapeHtml = (str: string) =>
 export const removeHtml = (str: string) =>
   (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-export const composeExcerpt = (str: string, charLimit: number, useEllipsis = true) => {
+export const composeExcerpt = (str: string, charLimit: number, appendEllipsis = true) => {
   if (!str) return ''
   if (!charLimit || str.length <= charLimit) return str
-  return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (useEllipsis ? '...' : '')
+  return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
 }
 
 export const composeFacebookShareLink = (url: string) =>
@@ -161,6 +161,14 @@ export const getRepeaterItems = (selector: any): any[] => {
   signalEvent(selector, 'FUIRepeaterAction', { action: 4, selector, data })
   return data.items
 }
+
+export const getRepeaterMethods = (selector: any) => ({
+  insert: (item: any, index?: number) => insertRepeaterItem(selector, item, index),
+  remove: (index?: number) => removeRepeaterItem(selector, index),
+  update: (item: any, index: number) => updateRepeaterItem(selector, item, index),
+  set: (items: any[]) => setRepeaterItems(selector, items),
+  get: () => getRepeaterItems(selector),
+})
 
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {

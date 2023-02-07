@@ -1,19 +1,23 @@
 import React, { useState, useRef } from 'react'
+import { cn } from '@fernui/util'
 import { useListener } from '../util'
+
+const isObject = (x: any) => 
+  typeof x === 'object' && !Array.isArray(x)
 
 export interface RepeaterProps {
   innerRef?: any
-  as?: any,
-  id?: string
+  as?: any
+  className?: string
   items?: any[]
-  children: (item: any, index: number, key: number, allItems: any[]) => any
+  children: (item: any, index: number, key: number) => any
   [x:string]: any
 }
 
 export default function Repeater({
   innerRef,
   as = 'span',
-  id,
+  className,
   items: _items,
   children,
   ...props
@@ -25,25 +29,30 @@ export default function Repeater({
   const ref = innerRef || useRef()
 
   const insertItem = (item: any, index?: number) => {
-    if (index !== undefined && index >= 0)
-      items.splice(index, 0, item)
-    else
+    if (index === undefined || index < 0 || index >= items.length)
       items.push(item)
+    else
+      items.splice(index, 0, item)
 
     setItems(items.slice())
   }
 
   const removeItem = (index?: number) => {
-    if (index !== undefined && index >= 0)
-      items.splice(index, 1)
-    else
+    if (index === undefined || index < 0 || index >= items.length)
       items.pop()
+    else
+      items.splice(index, 1)
 
     setItems(items.slice())
   }
 
   const updateItem = (item: any, index: number) => {
-    if (index >= 0)
+    if (index < 0 || index >= items.length)
+      return
+
+    if (isObject(item) && isObject(items[index]))
+      items[index] = { ...items[index], ...item }
+    else
       items[index] = item
 
     setItems(items.slice())
@@ -67,11 +76,11 @@ export default function Repeater({
   return (
     <Shell
       ref={ref}
-      id={id}
+      className={cn('fui-listener fui-repeater', className)}
       {...props}
     >
       {items.map((item, index) =>
-        children(item, index, baseKey + index, items)
+        children(item, index, baseKey + index)
       )}
     </Shell>
   )

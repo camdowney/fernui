@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import Honeypot from './Honeypot'
 import { cn } from '@fernui/util'
+import { useListener } from '../util'
 
 export type FormState = {
   id: number
@@ -36,6 +37,9 @@ const defaultStates: FormState[] = [
   { id: 6, end: false, success: true, error: false, disabled: false,
     message: 'Successfully saved!'
   },
+  { id: 7, end: false, success: false, error: false, disabled: false,
+    message: 'No changes to be saved.'
+  },
 ]
 
 export interface FormProps {
@@ -43,9 +47,11 @@ export interface FormProps {
   children?: any
   states?: FormState[]
   onStateChange?: Function
+  onChange?: Function
   onSubmit?: Function
   maxAttempts?: number
   maxSubmissions?: number
+  requireChanges?: boolean,
   [x:string]: any
 }
 
@@ -54,24 +60,34 @@ export default function Form({
   children,
   states = defaultStates,
   onStateChange,
+  onChange,
   onSubmit,
   maxAttempts = 99,
   maxSubmissions = 1,
+  requireChanges = true,
   ...props
 }: FormProps) {
   const attempts = useRef(0)
   const submissions = useRef(0)
-  const formRef = useRef() as any
+  const ref = useRef() as any
+  const saved = useRef(-1) as any
 
   const updateState = (newState: number) => {
     const state = states[newState]
 
-    formRef.current.querySelectorAll('*').forEach((element: HTMLElement) => {
+    ref.current.querySelectorAll('*').forEach((element: HTMLElement) => {
       element.dispatchEvent(new CustomEvent('FUIFormStateChange', { detail: { state } }))
     })
     
     onStateChange?.(state)
   }
+
+  useListener('input', (e: any) => {
+    if (saved.current === -1)
+      saved.current = 0
+
+    onChange?.(e)
+  }, ref)
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -84,6 +100,12 @@ export default function Form({
         return updateState(2)
     }
 
+    const formData = JSON.stringify(Array.from(new FormData(e.target)))
+
+    if (requireChanges && (saved.current === -1 || saved.current === formData))
+      return updateState(7)
+
+    saved.current = formData
     updateState(1)
 
     if (!onSubmit)
@@ -100,7 +122,7 @@ export default function Form({
 
   return (
     <form
-      ref={formRef}
+      ref={ref}
       method='post'
       onSubmit={handleSubmit}
       className={cn('fui-form', className)}

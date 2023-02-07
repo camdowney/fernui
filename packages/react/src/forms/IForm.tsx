@@ -12,9 +12,11 @@ export interface IFormProps {
   className?: string
   states?: FormState[]
   onStateChange?: Function
+  onChange?: Function
   onSubmit?: Function
   maxAttempts?: number
   maxSubmissions?: number
+  requireChanges?: boolean,
   [x:string]: any
 }
 
@@ -25,9 +27,11 @@ export default function IForm({
   className,
   states,
   onStateChange,
+  onChange,
   onSubmit,
   maxAttempts,
   maxSubmissions,
+  requireChanges,
   ...props
 }: IFormProps) {
   const [formState, setFormState] = useState<FormState>(initialState)
@@ -38,14 +42,14 @@ export default function IForm({
   const handleState = (state: FormState) => {
     setFormState(state)
 
-    if (state.error || state.id === 6) 
+    if (state.error || state.id === 6 || state.id === 7) 
       openModal(modalRef)
   }
 
   return (
     <Form
       onStateChange={handleState}
-      {...{ className, states, onSubmit, maxAttempts, maxSubmissions, ...props }}
+      {...{ className, states, onChange, onSubmit, maxAttempts, maxSubmissions, requireChanges, ...props }}
     >
       {children}
       {!formState.end ? <>

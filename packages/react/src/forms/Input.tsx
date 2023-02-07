@@ -37,7 +37,7 @@ export default function Input({
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
   const outerRef = useRef() as any
-  const Shell = (type === 'area' ? 'textarea' : 'input') as any
+  const Shell = (type === 'area' ? 'textarea' : 'input')
 
   const showInfo = invalid && (modified || formState.error)
 
