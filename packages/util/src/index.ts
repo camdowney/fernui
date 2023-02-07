@@ -117,7 +117,7 @@ export const ping = async (
   }
 }
 
-const signalEvent = (selector: any, event: string, detail: Object) => {
+export const signalEvent = (selector: any, event: string, detail: Object) => {
   const element = typeof selector === 'string' 
     ? document.querySelector(selector)
     : selector?.current
@@ -143,6 +143,15 @@ export const openExpand = (selector: any, data?: Object) =>
 
 export const toggleExpand = (selector: any, data?: Object) =>
   signalEvent(selector, 'FUIExpandAction', { action: 2, ...(data ?? {}) })
+
+export const insertRepeaterItem = (selector: any, item: any, index?: number) =>
+  signalEvent(selector, 'FUIRepeaterAction', { action: 0, index, item })
+
+export const removeRepeaterItem = (selector: any, index?: number) =>
+  signalEvent(selector, 'FUIRepeaterAction', { action: 1, index, })
+
+export const updateRepeaterItem = (selector: any, item: any, index: number) =>
+  signalEvent(selector, 'FUIRepeaterAction', { action: 2, index, item })
 
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {
