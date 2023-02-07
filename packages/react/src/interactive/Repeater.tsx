@@ -4,7 +4,7 @@ import { useListener } from '../util'
 export interface RepeaterProps {
   innerRef?: any
   as?: any,
-  id: string
+  id?: string
   items?: any[]
   children: (item: any, index: number, key: number) => any
   [x:string]: any
@@ -61,7 +61,11 @@ export default function Repeater({
   }, ref)
 
   return (
-    <Shell ref={ref} id={id} {...props}>
+    <Shell
+      ref={ref}
+      id={id}
+      {...props}
+    >
       {items.map((item, index) =>
         children(item, index, baseKey + index)
       )}
