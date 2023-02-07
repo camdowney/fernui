@@ -6,7 +6,7 @@ export interface RepeaterProps {
   as?: any,
   id?: string
   items?: any[]
-  children: (item: any, index: number, key: number) => any
+  children: (item: any, index: number, key: number, allItems: any[]) => any
   [x:string]: any
 }
 
@@ -67,7 +67,7 @@ export default function Repeater({
       {...props}
     >
       {items.map((item, index) =>
-        children(item, index, baseKey + index)
+        children(item, index, baseKey + index, items)
       )}
     </Shell>
   )
