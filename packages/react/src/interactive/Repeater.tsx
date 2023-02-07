@@ -50,7 +50,7 @@ export default function Repeater({
   }
 
   useListener('FUIRepeaterAction', (e: any) => {
-    const { action, item, index } = e.detail
+    const { action, item, index, data } = e.detail
 
     if (action === 0)
       insertItem(item, index)
@@ -58,6 +58,10 @@ export default function Repeater({
       removeItem(index)
     else if (action === 2)
       updateItem(item, index)
+    else if (action === 3)
+      setItems(data.items)
+    else if (action === 4)
+      data.items = items
   }, ref)
 
   return (

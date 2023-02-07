@@ -1,8 +1,8 @@
 import { Expand, Modal, Media, Lightbox, Avatar } from '../../packages/react'
 import { TestForm } from '../components'
-import { toggleExpand, openModal } from '../../packages/util'
+import { toggleExpand, openModal, insertRepeaterItem } from '../../packages/util'
 import { Repeater } from '../../packages/react'
-import { insertRepeaterItem, removeRepeaterItem, updateRepeaterItem } from '../../packages/util'
+import { getRepeaterItems, setRepeaterItems, removeRepeaterItem, updateRepeaterItem } from '../../packages/util'
 
 export default () => {
   return <>
@@ -25,6 +25,12 @@ export default () => {
         </button>
         <button onClick={() => updateRepeaterItem('#repeater', { title: 't2', content: 'c2' }, 0)}>
           Update item
+        </button>
+        <button onClick={() => console.log(getRepeaterItems('#repeater'))}>
+          Get items
+        </button>
+        <button onClick={() => setRepeaterItems('#repeater', [])}>
+          Clear items
         </button>
       </div>
     </section>

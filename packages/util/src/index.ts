@@ -153,6 +153,15 @@ export const removeRepeaterItem = (selector: any, index?: number) =>
 export const updateRepeaterItem = (selector: any, item: any, index: number) =>
   signalEvent(selector, 'FUIRepeaterAction', { action: 2, index, item })
 
+export const setRepeaterItems = (selector: any, items: any[]) =>
+  signalEvent(selector, 'FUIRepeaterAction', { action: 3, data: { items } })
+
+export const getRepeaterItems = (selector: any) => {
+  let data = { items: null }
+  signalEvent(selector, 'FUIRepeaterAction', { action: 4, selector, data })
+  return data.items
+}
+
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {
     const observer = new IntersectionObserver((entries, observer) => {
