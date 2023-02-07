@@ -156,8 +156,8 @@ export const updateRepeaterItem = (selector: any, item: any, index: number) =>
 export const setRepeaterItems = (selector: any, items: any[]) =>
   signalEvent(selector, 'FUIRepeaterAction', { action: 3, data: { items } })
 
-export const getRepeaterItems = (selector: any) => {
-  let data = { items: null }
+export const getRepeaterItems = (selector: any): any[] => {
+  let data = { items: [] }
   signalEvent(selector, 'FUIRepeaterAction', { action: 4, selector, data })
   return data.items
 }
