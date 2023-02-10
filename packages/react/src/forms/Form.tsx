@@ -71,7 +71,7 @@ export default function Form({
 
   useEffect(() => {
     if (requireChanges)
-      saved.current = JSON.stringify(Array.from(new FormData(ref.currentTarget)))
+      saved.current = JSON.stringify(Array.from(new FormData(ref.current)))
   }, [])
 
   const updateState = (newState: number) => {

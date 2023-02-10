@@ -28,11 +28,13 @@ export default function TestForm() {
         <Input
           name='<h1>.0'
           label='Full name *'
+          defaultValue='awd'
           required
         />
         <Input
           name='<h1>.1.a'
           label='Full name *'
+          defaultValue='awd'
           required
         />
         <Select
