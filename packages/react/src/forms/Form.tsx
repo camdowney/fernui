@@ -1,7 +1,6 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Honeypot from './Honeypot'
 import { cn } from '@fernui/util'
-import { useListener } from '../util'
 
 export type FormState = {
   id: number
@@ -47,7 +46,6 @@ export interface FormProps {
   children?: any
   states?: FormState[]
   onStateChange?: Function
-  onChange?: Function
   onSubmit?: Function
   maxAttempts?: number
   maxSubmissions?: number
@@ -60,7 +58,6 @@ export default function Form({
   children,
   states = defaultStates,
   onStateChange,
-  onChange,
   onSubmit,
   maxAttempts = 99,
   maxSubmissions = 1,
@@ -72,6 +69,11 @@ export default function Form({
   const ref = useRef() as any
   const saved = useRef(-1) as any
 
+  useEffect(() => {
+    if (requireChanges)
+      saved.current = JSON.stringify(Array.from(new FormData(ref.currentTarget)))
+  }, [])
+
   const updateState = (newState: number) => {
     const state = states[newState]
 
@@ -81,13 +83,6 @@ export default function Form({
     
     onStateChange?.(state)
   }
-
-  useListener('input', (e: any) => {
-    if (saved.current === -1)
-      saved.current = 0
-
-    onChange?.(e)
-  }, ref)
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -100,12 +95,15 @@ export default function Form({
         return updateState(2)
     }
 
-    const formData = JSON.stringify(Array.from(new FormData(e.target)))
+    if (requireChanges) {
+      const formData = JSON.stringify(Array.from(new FormData(e.target)))
 
-    if (requireChanges && (saved.current === -1 || saved.current === formData))
-      return updateState(7)
+      if (saved.current === formData)
+        return updateState(7)
 
-    saved.current = formData
+      saved.current = formData
+    }
+
     updateState(1)
 
     if (!onSubmit)

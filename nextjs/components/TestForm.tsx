@@ -9,6 +9,7 @@ export default function TestForm() {
   return (
     <IForm
       onSubmit={testSubmit}
+      maxSubmissions={10}
       btn={
         <FormButton
           type='submit'

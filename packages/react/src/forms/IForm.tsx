@@ -12,7 +12,6 @@ export interface IFormProps {
   className?: string
   states?: FormState[]
   onStateChange?: Function
-  onChange?: Function
   onSubmit?: Function
   maxAttempts?: number
   maxSubmissions?: number
@@ -27,7 +26,6 @@ export default function IForm({
   className,
   states,
   onStateChange,
-  onChange,
   onSubmit,
   maxAttempts,
   maxSubmissions,
@@ -49,7 +47,7 @@ export default function IForm({
   return (
     <Form
       onStateChange={handleState}
-      {...{ className, states, onChange, onSubmit, maxAttempts, maxSubmissions, requireChanges, ...props }}
+      {...{ className, states, onSubmit, maxAttempts, maxSubmissions, requireChanges, ...props }}
     >
       {children}
       {!formState.end ? <>

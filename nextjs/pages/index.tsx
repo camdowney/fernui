@@ -4,7 +4,13 @@ import { toggleExpand, openModal, getRepeaterMethods } from '../../packages/util
 import { Repeater } from '../../packages/react'
 
 export default () => {
-  const { update: updateItem, insert: insertItem, remove: removeItem, set: setItems, get: getItems } = getRepeaterMethods('#repeater')
+  const {
+    update: updateItem,
+    insert: insertItem,
+    remove: removeItem,
+    set: setItems,
+    get: getItems,
+  } = getRepeaterMethods('#repeater')
 
   return <>
     <section>
