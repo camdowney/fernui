@@ -67,7 +67,7 @@ export default function Form({
   const attempts = useRef(0)
   const submissions = useRef(0)
   const ref = useRef() as any
-  const saved = useRef(-1) as any
+  const saved = useRef(null) as any
 
   useEffect(() => {
     if (requireChanges)
@@ -95,14 +95,10 @@ export default function Form({
         return updateState(2)
     }
 
-    if (requireChanges) {
-      const formData = JSON.stringify(Array.from(new FormData(e.target)))
+    const formData = JSON.stringify(Array.from(new FormData(e.target)))
 
-      if (saved.current === formData)
-        return updateState(7)
-
-      saved.current = formData
-    }
+    if (requireChanges && (!saved.current || saved.current === formData))
+      return updateState(7)
 
     updateState(1)
 
@@ -111,6 +107,10 @@ export default function Form({
 
     try {
       await onSubmit(e)
+
+      if (requireChanges)
+        saved.current = formData
+
       updateState((++submissions.current >= maxSubmissions) ? 5 : 6)
     }
     catch {
