@@ -8,7 +8,8 @@ import { angle, close } from '../icons'
 
 export interface LightboxProps {
   id?: string
-  sources: string[],
+  sources: string[]
+  defaultSrcSet?: boolean
   className?: string
   bgClass?: string
   activeClass?: string
@@ -22,6 +23,7 @@ export interface LightboxProps {
 export default function Lightbox({
   id,
   sources,
+  defaultSrcSet,
   className,
   bgClass,
   activeClass = 'fui-lightbox-item-active',
@@ -70,6 +72,7 @@ export default function Lightbox({
             src={src}
             className={cn('fui-lightbox-item', current === i ? activeClass : inactiveClass)}
             cover
+            defaultSrcSet={defaultSrcSet}
             lazy={false}
             key={i}
           />

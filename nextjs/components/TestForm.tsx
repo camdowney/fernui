@@ -4,7 +4,7 @@ import { mail } from '../../packages/icons'
 
 export default function TestForm() {
   const testSubmit = async (e: any) => {
-    await new Promise(res => setTimeout(res, 1000))
+    await new Promise(res => setTimeout(res, 500))
     console.log(formToObject(e))
   }
 

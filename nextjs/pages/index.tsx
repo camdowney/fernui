@@ -46,10 +46,26 @@ export default () => {
 
     <section>
       <div className='container flex gap-2'>
-        <Avatar src='aurora.webp' className='w-12 h-12 rounded-full text-gray-100' />
-        <Avatar src='empty.webp' title='Empty' className='w-12 h-12 rounded-full text-gray-100' />
-        <Avatar title='c' className='w-12 h-12 rounded-full text-gray-100' />
-        <Avatar className='w-12 h-12 rounded-full text-gray-100 bg-blue-500' />
+        <Avatar
+          src='aurora.webp'
+          className='w-12 h-12 rounded-full text-gray-100'
+          defaultSrcSet
+          lazy
+        />
+        <Avatar
+          src='empty.webp'
+          title='Empty'
+          className='w-12 h-12 rounded-full text-gray-100'
+          defaultSrcSet
+          lazy
+        />
+        <Avatar
+          title='c'
+          className='w-12 h-12 rounded-full text-gray-100'
+        />
+        <Avatar
+          className='w-12 h-12 rounded-full text-gray-100 bg-blue-500'
+        />
       </div>
     </section>
     
@@ -96,6 +112,7 @@ export default () => {
         'moraine.webp',
         'yosemite.webp',
       ]}
+      defaultSrcSet
     />
 
     <section>
@@ -103,6 +120,9 @@ export default () => {
         <Media
           src='aurora.webp'
           className='pb-[65%]'
+          defaultSrcSet
+          lazy={false}
+          alt=''
         />
       </div>
     </section>

@@ -3,57 +3,54 @@ import { cn } from '@fernui/util'
 
 export interface MediaProps {
   as?: any
-  src: string
-  srcSet?: string[] | string
+  src?: string
+  srcSet?: string
   sizes?: string
   alt?: string
-  loading?: string
   className?: string
   style?: Object
   innerClass?: string
   placeholder?: any
   cover?: boolean
   lazy?: boolean
+  defaultSrcSet?: boolean
   [x:string]: any
 }
 
 export default function Media({
   as = 'img',
   src,
-  srcSet = ['sm', '640w', 'md', '1024w', 'lg'],
-  sizes = '100vw',
+  srcSet,
+  sizes,
   alt,
-  loading,
   className,
   style,
   innerClass,
   placeholder,
   cover,
-  lazy = true,
+  lazy,
+  defaultSrcSet,
   ...props
 }: MediaProps) {
   const Shell = as
-  const sources = typeof srcSet === 'string'
-    ? srcSet
-    : srcSet.map((s, i) => i % 2 === 0 ? `/${s}/${src}` : `${s},`).join(' ')
+  const sources = srcSet ?? defaultSrcSet ? `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}` : null
 
   return (
     <div
       className={cn('fui-media', className)}
       style={{ ...style, ...(cover ? coverOuterStyle : defaultOuterStyle) } as Object}
-      {...props}
     >
       {placeholder ?? <div className='fui-placeholder' style={placeholderStyle as Object} />}
       <Shell
-        src={(!sources && !lazy) ? src : undefined}
-        data-lazy-src={(!sources && lazy) ? src : undefined}
+        src={(src && !lazy) ? src : undefined}
+        data-lazy-src={(src && lazy) ? src : undefined}
         srcSet={(sources && !lazy) ? sources : undefined}
         data-lazy-srcset={(sources && lazy) ? sources : undefined}
-        sizes={sizes}
+        sizes={sizes ?? defaultSrcSet ? '100vw' : undefined}
         alt={alt ?? cover ? '' : undefined}
-        loading={loading}
         className={innerClass}
         style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
+        {...props}
       />
     </div>
   )

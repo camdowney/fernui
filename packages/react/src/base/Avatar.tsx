@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Media from './Media'
+import Media, { MediaProps } from './Media'
 import Icon from './Icon'
 import { profile } from '../icons'
 
@@ -11,10 +11,10 @@ const defaultColors: ColorMap = letter => (
   'SLEIQM'.includes(letter) ? '#4ccd68' : // green
   'DRVYOP'.includes(letter) ? '#48c7cb' : // aqua
   'CKZXG'.includes(letter) ? '#4d7dd1' :  // blue
-  '#d45ea3' // 'BATUN'               // violet
+  '#d45ea3'                               // violet
 )
 
-export interface AvatarProps {
+export interface AvatarProps extends MediaProps {
   title?: any
   src?: any
   colors?: ColorMap
@@ -29,6 +29,7 @@ export default function Avatar({
 }: AvatarProps) {
   const firstLetter = title?.substring(0, 1).toUpperCase()
   const [validSrc, setValidSrc] = useState(!!src)
+  const { as, innerClass, placeholder, cover, lazy, defaultSrcSet, ...nonMediaProps } = props
 
   return validSrc ? (
     <Media
@@ -38,13 +39,13 @@ export default function Avatar({
       {...props}
     />
   ) : firstLetter ? (
-    <div style={letterStyle(firstLetter, colors)} {...props}>
+    <div style={letterStyle(firstLetter, colors)} {...nonMediaProps}>
       {firstLetter}
     </div>
   ) : (
     <Icon
       i={profile}
-      {...props}
+      {...nonMediaProps}
     />
   )
 }
