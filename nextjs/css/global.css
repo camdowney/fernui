@@ -77,6 +77,9 @@ section {
 .fui-cta {
   @apply flex flex-wrap items-center gap-2 md:gap-3 mt-5 md:mt-6 lg:mt-8;
 }
+.fui-modal {
+  @apply z-30;
+}
 .fui-modal-active {
   @apply visible opacity-100 origin-center duration-[0.4s];
   transform: scale3d(1, 1, 1);
@@ -145,13 +148,13 @@ section {
 .fui-checkbox input:focus ~ .fui-check {
   @apply !outline-none !shadow-[0_0_0_3px_#369df7];
 }
-.fui-info-icon, .fui-iform-icon {
+.fui-info-icon, .fui-mform-icon {
   @apply w-3.5 md:w-4 mr-1.5;
 }
-.fui-iform-modal {
+.fui-mform-modal {
   @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
 }
-.fui-iform-message {
+.fui-mform-message {
   @apply italic;
 }
 ::placeholder {

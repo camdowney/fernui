@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Media from './Media'
 import Icon from './Icon'
 import { profile } from '../icons'
@@ -21,13 +21,20 @@ export interface AvatarProps {
   [x:string]: any
 }
 
-export default function Avatar({ title, src, colors = defaultColors, ...props }: AvatarProps) {
+export default function Avatar({
+  title,
+  src,
+  colors = defaultColors,
+  ...props
+}: AvatarProps) {
   const firstLetter = title?.substring(0, 1).toUpperCase()
+  const [validSrc, setValidSrc] = useState(!!src)
 
-  return src ? (
+  return validSrc ? (
     <Media
       src={src}
       alt={title}
+      onError={() => setValidSrc(false)}
       {...props}
     />
   ) : firstLetter ? (

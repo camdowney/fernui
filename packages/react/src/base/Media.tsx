@@ -4,6 +4,8 @@ import { cn } from '@fernui/util'
 export interface MediaProps {
   as?: any
   src: string
+  srcSet?: string[] | string
+  sizes?: string
   alt?: string
   loading?: string
   className?: string
@@ -11,14 +13,15 @@ export interface MediaProps {
   innerClass?: string
   placeholder?: any
   cover?: boolean
-  responsive?: boolean
-  priority?: boolean
+  lazy?: boolean
   [x:string]: any
 }
 
 export default function Media({
   as = 'img',
   src,
+  srcSet = ['sm', '640w', 'md', '1024w', 'lg'],
+  sizes = '100vw',
   alt,
   loading,
   className,
@@ -26,13 +29,13 @@ export default function Media({
   innerClass,
   placeholder,
   cover,
-  responsive = true,
-  priority,
+  lazy = true,
   ...props
 }: MediaProps) {
-  const resp = responsive && as === 'img' && !src.startsWith('http')
-  const srcset = `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}`
   const Shell = as
+  const sources = typeof srcSet === 'string'
+    ? srcSet
+    : srcSet.map((s, i) => i % 2 === 0 ? `/${s}/${src}` : `${s},`).join(' ')
 
   return (
     <div
@@ -41,19 +44,17 @@ export default function Media({
       {...props}
     >
       {placeholder ?? <div className='fui-placeholder' style={placeholderStyle as Object} />}
-      {src &&
-        <Shell
-          src={(!resp && priority) ? src : undefined}
-          data-lazy-src={(!resp && !priority) ? src : undefined}
-          srcSet={(resp && priority) ? srcset : undefined}
-          data-lazy-srcset={(resp && !priority) ? srcset : undefined}
-          sizes={resp ? '100vw' : undefined}
-          alt={alt}
-          loading={loading}
-          className={innerClass}
-          style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
-        />
-      }
+      <Shell
+        src={(!sources && !lazy) ? src : undefined}
+        data-lazy-src={(!sources && lazy) ? src : undefined}
+        srcSet={(sources && !lazy) ? sources : undefined}
+        data-lazy-srcset={(sources && lazy) ? sources : undefined}
+        sizes={sizes}
+        alt={alt ?? cover ? '' : undefined}
+        loading={loading}
+        className={innerClass}
+        style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
+      />
     </div>
   )
 }
@@ -62,7 +63,6 @@ const defaultOuterStyle = {
   overflow: 'hidden',
   position: 'relative',
   display: 'block',
-  zIndex: 10,
 }
 
 const coverOuterStyle = {

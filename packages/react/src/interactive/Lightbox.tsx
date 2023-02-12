@@ -70,31 +70,31 @@ export default function Lightbox({
             src={src}
             className={cn('fui-lightbox-item', current === i ? activeClass : inactiveClass)}
             cover
-            priority
+            lazy={false}
             key={i}
           />
         )}
         {customOverlay || (
-          <div className={cn('fui-lightbox-overlay', overlayClass)} style={{ position: 'absolute '} as Object}>
+          <div className={cn('fui-lightbox-overlay', overlayClass)} style={{ position: 'absolute' } as Object}>
             <Link
               label='Close image'
               onClick={closeModal}
               className={cn('fui-lightbox-control', controlClass)}
-              style={{ ...controlStyle, ...closeStyle }}
+              style={closeStyle}
               icon={{ i: close, className: cn('fui-lightbox-icon', iconClass) }}
             />
             <Link
               label='Previous image'
               onClick={cyclePrevious}
               className={cn('fui-lightbox-control', controlClass)}
-              style={{ ...controlStyle, ...previousStyle }}
+              style={previousStyle}
               icon={{ i: angle, className: cn('fui-lightbox-icon', iconClass) }}
             />
             <Link
               label='Next image'
               onClick={cycleNext}
               className={cn('fui-lightbox-control', controlClass)}
-              style={{ ...controlStyle, ...nextStyle }}
+              style={nextStyle}
               icon={{ i: angle, className: cn('fui-lightbox-icon', iconClass) }}
             />
           </div>
@@ -118,23 +118,21 @@ const innerStyle = {
   height: '100%',
 }
 
-const controlStyle = {
-  position: 'absolute',
-  zIndex: '20',
-}
-
 const closeStyle = {
+  position: 'absolute',
   top: 0,
   right: 0,
 }
 
 const previousStyle = {
+  position: 'absolute',
   top: '50%',
   left: 0,
   transform: 'translateY(-50%) rotate(90deg)',
 }
 
 const nextStyle = {
+  position: 'absolute',
   top: '50%',
   right: 0,
   transform: 'translateY(-50%) rotate(-90deg)',

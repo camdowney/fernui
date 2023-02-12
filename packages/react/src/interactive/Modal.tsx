@@ -106,11 +106,11 @@ export default function Modal({
         className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}
         onClick={() => exitOnBgClick && setModalActive(false)}
         aria-hidden={!active}
-        style={{ ...modalBgStyle(anchor), ...bgStyle } as Object}
+        style={{ ...modalBgStyle, ...bgStyle } as Object}
       />
 
       <div
-        className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
+        className={cn('fui-modal', anchor && 'fui-modal-anchor', active ? activeClass : inactiveClass, className)}
         aria-hidden={!active}
         style={{ ...modalStyle(anchor, active), ...style } as Object}
       >
@@ -125,18 +125,16 @@ const wrapperStyle = (anchor: boolean) => ({
   display: anchor ? 'block' : 'initial',
 })
 
-const modalBgStyle = (anchor: boolean) => ({
+const modalBgStyle = {
   position: 'fixed',
   top: '-50%',
   bottom: '-50%',
   left: '-50%',
   right: '-50%',
-  zIndex: anchor ? 30 : 50,
-})
+}
 
 const modalStyle = (anchor: boolean, active: boolean | null) => ({
   overflowY: 'auto',
-  zIndex: anchor ? 31 : 51,
   position: anchor ? 'absolute' : 'fixed',
   visibility: active === null && 'hidden !important',
 })

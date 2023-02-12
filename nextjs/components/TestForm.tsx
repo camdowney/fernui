@@ -1,13 +1,15 @@
-import { IForm, Input, Select, FormButton } from '../../packages/react'
+import { ModalForm, Input, Select, FormButton } from '../../packages/react'
 import { formToObject } from '../../packages/util'
 import { mail } from '../../packages/icons'
 
 export default function TestForm() {
-  const testSubmit = async (e: any) =>
+  const testSubmit = async (e: any) => {
+    await new Promise(res => setTimeout(res, 1000))
     console.log(formToObject(e))
+  }
 
   return (
-    <IForm
+    <ModalForm
       onSubmit={testSubmit}
       maxSubmissions={10}
       btn={
@@ -48,6 +50,6 @@ export default function TestForm() {
           required
         />
       </div>
-    </IForm>
+    </ModalForm>
   )
 }

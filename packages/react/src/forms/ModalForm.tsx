@@ -1,37 +1,23 @@
 import React, { useState, useRef } from 'react'
-import Form, { FormState, initialState } from './Form'
+import Form, { FormProps, FormState, initialState } from './Form'
 import Icon from '../base/Icon'
 import Modal from '../interactive/Modal'
 import { cn, openModal } from '@fernui/util'
 import { warning } from '../icons'
 
-export interface IFormProps {
-  children?: any
+export interface ModalFormProps extends FormProps {
   btn?: any
   messages?: string[]
-  className?: string
-  states?: FormState[]
-  onStateChange?: Function
-  onSubmit?: Function
-  maxAttempts?: number
-  maxSubmissions?: number
-  requireChanges?: boolean,
   [x:string]: any
 }
 
-export default function IForm({
-  children,
+export default function ModalForm({
   btn,
   messages = [],
-  className,
-  states,
+  children,
   onStateChange,
-  onSubmit,
-  maxAttempts,
-  maxSubmissions,
-  requireChanges,
   ...props
-}: IFormProps) {
+}: ModalFormProps) {
   const [formState, setFormState] = useState<FormState>(initialState)
   const modalRef = useRef()
 
@@ -40,36 +26,37 @@ export default function IForm({
   const handleState = (state: FormState) => {
     setFormState(state)
 
-    if (state.error || state.id === 6 || state.id === 7) 
+    if (state.error || (!state.end && state.id !== 0)) 
       openModal(modalRef)
+
+    onStateChange?.(state)
   }
 
   return (
     <Form
       onStateChange={handleState}
-      {...{ className, states, onSubmit, maxAttempts, maxSubmissions, requireChanges, ...props }}
+      {...props}
     >
       {children}
-      {!formState.end ? <>
+      {formState.end ? (
+        <p className='fui-mform-message'>
+          {message}
+        </p>
+      ) : <>
         {btn}
         <Modal
           innerRef={modalRef}
-          className={cn('fui-iform-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
+          className={cn('fui-mform-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
           bgStyle={{ display: 'none' }}
           closeDelay={2000}
           anchor
           exitOnOutsideClick={false}
           exitOnEscape={false}
-          style={{ zIndex: '30 !important' }}
         >
-          <Icon i={warning} className='fui-iform-icon' />
+          <Icon i={warning} className='fui-mform-icon' />
           {message}
         </Modal>
-      </> : (
-        <p className='fui-iform-message'>
-          {message}
-        </p>
-      )}
+      </>}
     </Form>
   )
 }
