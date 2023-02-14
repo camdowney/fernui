@@ -78,7 +78,6 @@ export const formDataEntriesToObject = (formDataEntries: Array<[string, any]>): 
 export const formToObject = (submitEvent: any): any =>
   formDataEntriesToObject(Array.from(new FormData(submitEvent.target)))
 
-
 interface PingRequestData {
   headers?: object
   abortController?: AbortController
@@ -117,6 +116,7 @@ export const ping = async (
   }
 }
 
+/* Begin signals */
 export const signalEvent = (selector: any, event: string, detail: Object) => {
   const element = typeof selector === 'string' 
     ? document.querySelector(selector)
@@ -125,40 +125,52 @@ export const signalEvent = (selector: any, event: string, detail: Object) => {
       
   element?.dispatchEvent(new CustomEvent(event, { detail }))
 }
-  
+
+/* Modals */
+export const signalModal = (selector: any, detail: Object) =>
+  signalEvent(selector, 'FUIModalAction', detail)
+
 export const closeModal = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FUIModalAction', { action: 0, ...(data ?? {}) })
+  signalModal(selector, { action: 0, ...(data ?? {}) })
 
 export const openModal = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FUIModalAction', { action: 1, ...(data ?? {}) })
+  signalModal(selector, { action: 1, ...(data ?? {}) })
 
 export const toggleModal = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FUIModalAction', { action: 2, ...(data ?? {}) })
+  signalModal(selector, { action: 2, ...(data ?? {}) })
+
+/* Expands */
+export const signalExpand = (selector: any, detail: Object) =>
+  signalEvent(selector, 'FUIExpandAction', detail)
 
 export const closeExpand = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FUIExpandAction', { action: 0, ...(data ?? {}) })
+  signalExpand(selector, { action: 0, ...(data ?? {}) })
 
 export const openExpand = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FUIExpandAction', { action: 1, ...(data ?? {}) })
+  signalExpand(selector, { action: 1, ...(data ?? {}) })
 
 export const toggleExpand = (selector: any, data?: Object) =>
-  signalEvent(selector, 'FUIExpandAction', { action: 2, ...(data ?? {}) })
+  signalExpand(selector, { action: 2, ...(data ?? {}) })
+
+/* Repeaters */
+export const signalRepeater = (selector: any, detail: Object) =>
+  signalEvent(selector, 'FUIRepeaterAction', detail)
 
 export const insertRepeaterItem = (selector: any, item: any, index?: number) =>
-  signalEvent(selector, 'FUIRepeaterAction', { action: 0, index, item })
+  signalRepeater(selector, { action: 0, index, item })
 
 export const removeRepeaterItem = (selector: any, index?: number) =>
-  signalEvent(selector, 'FUIRepeaterAction', { action: 1, index, })
+  signalRepeater(selector, { action: 1, index, })
 
 export const updateRepeaterItem = (selector: any, item: any, index: number) =>
-  signalEvent(selector, 'FUIRepeaterAction', { action: 2, index, item })
+  signalRepeater(selector, { action: 2, index, item })
 
 export const setRepeaterItems = (selector: any, items: any[]) =>
-  signalEvent(selector, 'FUIRepeaterAction', { action: 3, data: { items } })
+  signalRepeater(selector, { action: 3, data: { items } })
 
 export const getRepeaterItems = (selector: any): any[] => {
   let data = { items: [] }
-  signalEvent(selector, 'FUIRepeaterAction', { action: 4, selector, data })
+  signalRepeater(selector, { action: 4, selector, data })
   return data.items
 }
 
@@ -169,6 +181,7 @@ export const getRepeaterMethods = (selector: any) => ({
   set: (items: any[]) => setRepeaterItems(selector, items),
   get: () => getRepeaterItems(selector),
 })
+/* End signals */
 
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {

@@ -20,16 +20,16 @@ export default function Repeater({
   innerRef,
   as = 'span',
   className,
-  items: _items,
+  items: _items = [],
   children,
   ...props
 }: RepeaterProps) {
   const Shell = as
   const ref = innerRef || useRef()
 
-  const [items, setItems] = useState<any[]>(_items ?? [])
+  const [items, setItems] = useState<any[]>(_items)
   const baseKey = id || new Date().getTime()
-  const keys = useRef([...Array(items.length).keys()])
+  const keys = useRef([...Array(_items.length).keys()])
   const nextIndex = useRef(items.length)
 
   const insertItem = (item: any, index?: number) => {
@@ -62,11 +62,13 @@ export default function Repeater({
     if (index < 0 || index >= items.length)
       return
 
+    keys.current[index] = nextIndex.current++
+
     if (isObject(item) && isObject(items[index]))
       items[index] = { ...items[index], ...item }
     else
       items[index] = item
-
+    
     setItems(items.slice())
   }
 
@@ -94,6 +96,7 @@ export default function Repeater({
   return (
     <Shell
       ref={ref}
+      id={id}
       className={cn('fui-listener fui-repeater', className)}
       {...props}
     >

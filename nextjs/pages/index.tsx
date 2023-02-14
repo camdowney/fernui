@@ -1,7 +1,10 @@
-import { Expand, Modal, Media, Lightbox, Avatar } from '../../packages/react'
-import { TestForm } from '../components'
-import { toggleExpand, openModal, getRepeaterMethods } from '../../packages/util'
-import { Repeater } from '../../packages/react'
+import {
+  Media, Avatar,
+  Expand, Modal, Lightbox, Repeater,
+  ModalForm, Input, Select, FormButton
+} from '../../packages/react'
+import { formToObject, toggleExpand, openModal, getRepeaterMethods } from '../../packages/util'
+import { mail } from '../../packages/icons'
 
 export default () => {
   const {
@@ -12,26 +15,62 @@ export default () => {
     get: getItems,
   } = getRepeaterMethods('#repeater')
 
+  const testSubmit = async (e: any) => {
+    await new Promise(res => setTimeout(res, 500))
+    console.log(formToObject(e))
+  }
+
   return <>
     <section>
       <div className='container space-y-4'>
-        <Repeater id='repeater' items={[]} className='space-y-2'>
-          {(item, _, key) =>
-            <div key={key}>
-              {item.title}
-              <br />
-              {item.content}
-            </div>
+        <ModalForm
+          onSubmit={testSubmit}
+          maxSubmissions={10}
+          btn={
+            <FormButton
+              type='submit'
+              text='Submit'
+              icon={{ i: mail }}
+            />
           }
-        </Repeater>
-        <div>
-          <button onClick={() => insertItem({ title: 't', content: 'c'})}>
+        >
+          <div className='grid gap-4'>
+            <Input
+              name='field.0.a'
+              label='Full name *'
+              defaultValue='b'
+              required
+            />
+            <Select
+              label='Select *'
+              options={[
+                { label: 'Option 1' },
+                { label: 'Option 2' },
+                { label: 'Option 3' },
+              ]}
+              placeholder=''
+              required
+            />
+            <Repeater id='repeater' className='space-y-2'>
+              {(item, index, key) =>
+                <Input
+                  name={`array.${index}`}
+                  label='Label'
+                  defaultValue={item}
+                  key={key}
+                />
+              }
+            </Repeater>
+          </div>
+        </ModalForm>
+        <div className='space-x-3'>
+          <button onClick={() => insertItem('Added field')}>
             Add item
           </button>
           <button onClick={() => removeItem(0)}>
             Remove item
           </button>
-          <button onClick={() => updateItem({ title: 't2' }, 0)}>
+          <button onClick={() => updateItem('Updated field', 0)}>
             Update item
           </button>
           <button onClick={() => console.log(getItems())}>
@@ -66,12 +105,6 @@ export default () => {
         <Avatar
           className='w-12 h-12 rounded-full text-gray-100 bg-blue-500'
         />
-      </div>
-    </section>
-    
-    <section>
-      <div className='container'>
-        <TestForm />
       </div>
     </section>
 
