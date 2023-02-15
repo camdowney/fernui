@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import Honeypot from './Honeypot'
 import { cn } from '@fernui/util'
 
+const stringifyForm = (target: any) =>
+  JSON.stringify(Array.from(new FormData(target)))
+
 export type FormState = {
   id: number
   end: boolean
@@ -49,7 +52,8 @@ export interface FormProps {
   onSubmit?: Function
   maxAttempts?: number
   maxSubmissions?: number
-  requireChanges?: boolean,
+  requireChanges?: boolean
+  requireInitialChanges?: boolean
   [x:string]: any
 }
 
@@ -62,6 +66,7 @@ export default function Form({
   maxAttempts = -1,
   maxSubmissions = 1,
   requireChanges = true,
+  requireInitialChanges = true,
   ...props
 }: FormProps) {
   const attempts = useRef(0)
@@ -71,7 +76,7 @@ export default function Form({
 
   useEffect(() => {
     if (requireChanges)
-      saved.current = JSON.stringify(Array.from(new FormData(ref.current)))
+      saved.current = requireInitialChanges ? stringifyForm(ref.current) : 1
   }, [])
 
   const updateState = (newState: number) => {
@@ -95,7 +100,7 @@ export default function Form({
         return updateState(2)
     }
 
-    const formData = JSON.stringify(Array.from(new FormData(e.target)))
+    const formData = stringifyForm(e.target)
 
     if (requireChanges && (!saved.current || saved.current === formData))
       return updateState(7)

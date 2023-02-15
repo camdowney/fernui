@@ -26,6 +26,7 @@ export default () => {
         <ModalForm
           onSubmit={testSubmit}
           maxSubmissions={10}
+          requireInitialChanges={false}
           btn={
             <FormButton
               type='submit'
