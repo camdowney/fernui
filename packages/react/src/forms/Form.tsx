@@ -87,7 +87,7 @@ export default function Form({
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    if (attempts.current++ >= maxAttempts)
+    if (maxAttempts > 0 && attempts.current++ >= maxAttempts)
       return updateState(3)
 
     for (const field of e.target.elements) {
@@ -111,7 +111,7 @@ export default function Form({
       if (requireChanges)
         saved.current = formData
 
-      updateState((++submissions.current >= maxSubmissions) ? 5 : 6)
+      updateState((maxSubmissions > 0 && ++submissions.current >= maxSubmissions) ? 5 : 6)
     }
     catch {
       updateState(4)
