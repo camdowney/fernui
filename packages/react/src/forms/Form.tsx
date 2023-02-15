@@ -59,7 +59,7 @@ export default function Form({
   states = defaultStates,
   onStateChange,
   onSubmit,
-  maxAttempts = 99,
+  maxAttempts = -1,
   maxSubmissions = 1,
   requireChanges = true,
   ...props
