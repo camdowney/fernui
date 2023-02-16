@@ -52,7 +52,11 @@ export default () => {
               placeholder=''
               required
             />
-            <Repeater id='repeater' className='space-y-2'>
+            <Repeater
+              id='repeater'
+              className='space-y-2'
+              onChange={newItems => console.log(newItems)}
+            >
               {(item, index, key) =>
                 <Input
                   name={`array.${index}`}

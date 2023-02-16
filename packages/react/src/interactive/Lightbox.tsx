@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Media from '../base/Media'
 import Link from '../base/Link'
 import Modal from '../interactive/Modal'
@@ -34,18 +34,22 @@ export default function Lightbox({
   iconClass
 }: LightboxProps) {
   const [current, setCurrent] = useState(0)
+  const active = useRef(null) as any
 
   const cyclePrevious = () =>
     setCurrent(curr => curr > 0 ? curr - 1 : sources.length - 1)
 
   const cycleNext = () =>
     setCurrent(curr => curr < sources.length - 1 ? curr + 1 : 0)
+    
+  const onChange = (newActive: boolean) =>
+    active.current = newActive
 
-  const onOpen = (e: any) =>
+  const onAction = (e: any) =>
     e.detail?.index && setCurrent(e.detail?.index)
 
   useListener('keydown', (e: any) => {
-    if (e.repeat)
+    if (e.repeat || !active.current)
       return
 
     const key = e?.key?.toLowerCase()
@@ -61,7 +65,8 @@ export default function Lightbox({
       id={id}
       className={cn('fui-lightbox', className)}
       style={modalStyle}
-      onAction={onOpen}
+      onChange={onChange}
+      onAction={onAction}
       bgClass={cn('fui-lightbox-bg', bgClass)}
       preventScroll
       focus

@@ -11,7 +11,8 @@ export interface ModalProps {
   activeClass?: string
   inactiveClass?: string
   style?: Object
-  onAction?: Function
+  onChange?: (newActive: boolean) => void
+  onAction?: (e: any) => void
   bgClass?: string
   bgActiveClass?: string
   bgInactiveClass?: string
@@ -36,6 +37,7 @@ export default function Modal({
   activeClass = 'fui-modal-active',
   inactiveClass = 'fui-modal-inactive',
   style,
+  onChange,
   onAction,
   bgClass,
   bgActiveClass = 'fui-modal-bg-active',
@@ -54,17 +56,18 @@ export default function Modal({
   const ref = innerRef || useRef()
   const timer = useRef() as any
 
-  const setModalTimer = (willBeActive: boolean, delay: number) =>
-    timer.current = setTimeout(() => setModalActive(willBeActive), delay)
+  const setModalTimer = (newActive: boolean, delay: number) =>
+    timer.current = setTimeout(() => setModalActive(newActive), delay)
 
-  const setModalActive = (willBeActive: boolean) => {
+  const setModalActive = (newActive: boolean) => {
     clearTimeout(timer.current)
-    setActive(willBeActive)
+    setActive(newActive)
+    onChange?.(newActive)
 
     if (preventScroll)
-      document.body.style.overflow = willBeActive ? 'hidden' : 'auto'
+      document.body.style.overflow = newActive ? 'hidden' : 'auto'
 
-    if (!willBeActive)
+    if (!newActive)
       return
 
     if (focus)

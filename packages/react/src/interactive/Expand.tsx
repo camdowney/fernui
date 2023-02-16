@@ -7,7 +7,8 @@ export interface ExpandProps {
   id?: string
   className?: string
   children?: any
-  onAction?: Function
+  onChange?: (newActive: boolean) => void
+  onAction?: (e: any) => void
 }
 
 export default function Expand({
@@ -15,6 +16,7 @@ export default function Expand({
   id,
   className,
   children,
+  onChange,
   onAction
 }: ExpandProps) {
   const [active, setActive] = useState(false)
@@ -29,7 +31,10 @@ export default function Expand({
 
   useListener('FUIExpandAction', (e: any) => {
     const action = e.detail.action
-    setActive(action < 2 ? action : !active)
+    const newActive = action < 2 ? action : !active
+
+    setActive(newActive)
+    onChange?.(newActive)
     onAction?.(e)
   }, ref)
 

@@ -11,6 +11,8 @@ export interface RepeaterProps {
   as?: any
   className?: string
   items?: any[]
+  onChange?: (newItems: any[]) => void
+  onAction?: (e: any) => void
   children: (item: any, index: number, key: string) => any
   [x:string]: any
 }
@@ -21,6 +23,8 @@ export default function Repeater({
   as = 'span',
   className,
   items: _items = [],
+  onChange,
+  onAction,
   children,
   ...props
 }: RepeaterProps) {
@@ -42,7 +46,9 @@ export default function Repeater({
       items.splice(index, 0, item)
     }
 
-    setItems(items.slice())
+    const newItems = items.slice()
+    setItems(newItems)
+    onChange?.(newItems)
   }
 
   const removeItem = (index?: number) => {
@@ -55,7 +61,9 @@ export default function Repeater({
       items.splice(index, 1)
     }
     
-    setItems(items.slice())
+    const newItems = items.slice()
+    setItems(newItems)
+    onChange?.(newItems)
   }
 
   const updateItem = (item: any, index: number) => {
@@ -69,13 +77,17 @@ export default function Repeater({
     else
       items[index] = item
     
-    setItems(items.slice())
+      const newItems = items.slice()
+      setItems(newItems)
+      onChange?.(newItems)
   }
 
-  const updateAll = (items: any[]) => {
-    keys.current = [...Array(items.length).keys()].map(i => i + nextIndex.current)
-    nextIndex.current += items.length
-    setItems(items)
+  const updateAll = (newItems: any[]) => {
+    keys.current = [...Array(newItems.length).keys()].map(i => i + nextIndex.current)
+    nextIndex.current += newItems.length
+
+    setItems(newItems)
+    onChange?.(newItems)
   }
 
   useListener('FUIRepeaterAction', (e: any) => {
@@ -91,6 +103,8 @@ export default function Repeater({
       updateAll(data.items)
     else if (action === 4)
       data.items = items
+
+    onAction?.(e)
   }, ref)
 
   return (
