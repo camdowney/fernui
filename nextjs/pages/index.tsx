@@ -100,7 +100,23 @@ export default () => {
           lazy
         />
         <Avatar
+          title='j'
+          className='w-12 h-12 rounded-full text-gray-100'
+        />
+        <Avatar
+          title='s'
+          className='w-12 h-12 rounded-full text-gray-100'
+        />
+        <Avatar
+          title='d'
+          className='w-12 h-12 rounded-full text-gray-100'
+        />
+        <Avatar
           title='c'
+          className='w-12 h-12 rounded-full text-gray-100'
+        />
+        <Avatar
+          title='b'
           className='w-12 h-12 rounded-full text-gray-100'
         />
         <Avatar

@@ -7,11 +7,11 @@ export type Color = string
 export type ColorMap = (letter: string) => Color
 
 const defaultColors: ColorMap = letter => (
-  'JWHF'.includes(letter) ? '#eda445' :   // orange
-  'SLEIQM'.includes(letter) ? '#4ccd68' : // green
-  'DRVYOP'.includes(letter) ? '#48c7cb' : // aqua
-  'CKZXG'.includes(letter) ? '#4d7dd1' :  // blue
-  '#d45ea3'                               // violet
+  'JWHF'.includes(letter) ? '#bb2e94' :   // red
+  'SLEIQM'.includes(letter) ? '#7d2b9c' : // purple
+  'DRVYOP'.includes(letter) ? '#2d4baf' : // blue
+  'CKZXG'.includes(letter) ? '#1c7963' :  // aqua
+  '#469310'                               // green 
 )
 
 export interface AvatarProps extends MediaProps {
