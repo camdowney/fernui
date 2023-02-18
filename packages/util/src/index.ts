@@ -99,7 +99,7 @@ export const ping = async (
       body: JSON.stringify(body),
       signal: abortController?.signal,
       headers: {
-        'content-type': 'application/json',
+        ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
         ...headers,
       },
     })
