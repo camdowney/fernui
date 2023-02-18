@@ -54,7 +54,7 @@ export const formToHtml = (heading = 'Form Submission', submitEvent: any) => {
   return html + '</ul>'
 }
 
-export const formDataEntriesToObject = (formDataEntries: Array<[string, any]>): any => {
+export const formToObject = (form: HTMLFormElement): any => {
   const concat = (acc: any, [_key, _value]: any): any => {
     const keys = Array.isArray(_key) ? _key : _key.split('.')
     const [key, ...subKeys] = keys
@@ -72,11 +72,8 @@ export const formDataEntriesToObject = (formDataEntries: Array<[string, any]>): 
     return { ...acc, [key]: value }
   }
 
-  return formDataEntries.reduce(concat, null) ?? {}
+  return Array.from(new FormData(form)).reduce(concat, null) ?? {}
 }
-
-export const formToObject = (submitEvent: any): any =>
-  formDataEntriesToObject(Array.from(new FormData(submitEvent.target)))
 
 interface PingRequestData {
   headers?: object
