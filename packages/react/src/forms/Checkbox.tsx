@@ -14,7 +14,7 @@ export interface CheckboxProps {
   defaultValue?: boolean
   className?: string
   required?: boolean
-  onChange?: Function
+  onChange?: (e: any) => void
   message?: string
 }
 

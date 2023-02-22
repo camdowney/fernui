@@ -15,7 +15,7 @@ export interface InputProps {
   type?: string
   required?: boolean
   charLimit?: number
-  onChange?: Function
+  onChange?: (e: any) => void
   message?: string
 }
 

@@ -16,7 +16,7 @@ export interface SelectProps {
   className?: string
   options: { label: string, value?: any }[]
   required?: boolean
-  onChange?: Function
+  onChange?: (e: any) => void
   message?: string
 }
 
