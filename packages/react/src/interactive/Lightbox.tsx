@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Media from '../base/Media'
 import Link from '../base/Link'
 import Modal from '../interactive/Modal'
-import { cn, closeModal } from '@fernui/util'
+import { cn, closeUI } from '@fernui/util'
 import { useListener } from '../util'
 import { angle, close } from '../icons'
 
@@ -64,14 +64,13 @@ export default function Lightbox({
     <Modal
       id={id}
       className={cn('fui-lightbox', className)}
-      style={modalStyle}
+      style={_style}
       onChange={onChange}
       onAction={onAction}
       bgClass={cn('fui-lightbox-bg', bgClass)}
       preventScroll
-      focus
     >
-      <div style={innerStyle as Object}>
+      <div style={_innerStyle as Object}>
         {current >= 0 && sources.map((src, i) => 
           <Media
             src={src}
@@ -86,23 +85,23 @@ export default function Lightbox({
           <div className={cn('fui-lightbox-overlay', overlayClass)} style={{ position: 'absolute' } as Object}>
             <Link
               label='Close image'
-              onClick={closeModal}
+              onClick={closeUI}
               className={cn('fui-lightbox-control', controlClass)}
-              style={closeStyle}
+              style={_closeStyle}
               icon={{ i: close, className: cn('fui-lightbox-icon', iconClass) }}
             />
             <Link
               label='Previous image'
               onClick={cyclePrevious}
               className={cn('fui-lightbox-control', controlClass)}
-              style={previousStyle}
+              style={_previousStyle}
               icon={{ i: angle, className: cn('fui-lightbox-icon', iconClass) }}
             />
             <Link
               label='Next image'
               onClick={cycleNext}
               className={cn('fui-lightbox-control', controlClass)}
-              style={nextStyle}
+              style={_nextStyle}
               icon={{ i: angle, className: cn('fui-lightbox-icon', iconClass) }}
             />
           </div>
@@ -112,7 +111,7 @@ export default function Lightbox({
   )
 }
 
-const modalStyle = {
+const _style = {
   top: 0,
   bottom: 0,
   left: 0,
@@ -120,26 +119,26 @@ const modalStyle = {
   margin: 'auto',
 }
 
-const innerStyle = {
+const _innerStyle = {
   position: 'relative',
   width: '100%',
   height: '100%',
 }
 
-const closeStyle = {
+const _closeStyle = {
   position: 'absolute',
   top: 0,
   right: 0,
 }
 
-const previousStyle = {
+const _previousStyle = {
   position: 'absolute',
   top: '50%',
   left: 0,
   transform: 'translateY(-50%) rotate(90deg)',
 }
 
-const nextStyle = {
+const _nextStyle = {
   position: 'absolute',
   top: '50%',
   right: 0,

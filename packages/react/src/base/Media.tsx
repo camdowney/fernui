@@ -38,9 +38,9 @@ export default function Media({
   return (
     <div
       className={cn('fui-media', className)}
-      style={{ ...style, ...(cover ? coverOuterStyle : defaultOuterStyle) } as Object}
+      style={{ ...style, ...(cover ? _coverStyle : _defaultStyle) } as Object}
     >
-      {placeholder ?? <div className='fui-placeholder' style={placeholderStyle as Object} />}
+      {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}
       <Shell
         src={(src && !lazy) ? src : undefined}
         data-lazy-src={(src && lazy) ? src : undefined}
@@ -49,20 +49,20 @@ export default function Media({
         sizes={sizes ?? defaultSrcSet ? '100vw' : undefined}
         alt={alt ?? cover ? '' : undefined}
         className={innerClass}
-        style={typeof as === 'string' ? defaultMediaStyle(as) : undefined}
+        style={typeof as === 'string' ? _innerStyle(as) : undefined}
         {...props}
       />
     </div>
   )
 }
 
-const defaultOuterStyle = {
+const _defaultStyle = {
   overflow: 'hidden',
   position: 'relative',
   display: 'block',
 }
 
-const coverOuterStyle = {
+const _coverStyle = {
   overflow: 'hidden',
   position: 'absolute',
   top: 0,
@@ -71,7 +71,7 @@ const coverOuterStyle = {
   right: 0,
 }
 
-const placeholderStyle = {
+const _placeholderStyle = {
   position: 'absolute',
   top: 0,
   bottom: 0,
@@ -80,7 +80,7 @@ const placeholderStyle = {
   backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
 }
 
-const defaultMediaStyle = (as: any) => ({
+const _innerStyle = (as: any) => ({
   position: 'absolute',
   top: 0,
   left: 0,

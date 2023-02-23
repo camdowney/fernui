@@ -62,7 +62,7 @@ export default function Form({
   children,
   states = defaultStates,
   onStateChange,
-  onSubmit,
+  onSubmit: _onSubmit,
   maxAttempts = -1,
   maxSubmissions = 1,
   requireChanges = true,
@@ -89,7 +89,7 @@ export default function Form({
     onStateChange?.(state)
   }
 
-  const handleSubmit = async (e: any) => {
+  const onSubmit = async (e: any) => {
     e.preventDefault()
 
     if (maxAttempts > 0 && attempts.current++ >= maxAttempts)
@@ -107,18 +107,19 @@ export default function Form({
 
     updateState(1)
 
-    if (!onSubmit)
+    if (!_onSubmit)
       return
 
     try {
-      await onSubmit(e)
+      await _onSubmit(e)
 
       if (requireChanges)
         saved.current = formData
 
       updateState((maxSubmissions > 0 && ++submissions.current >= maxSubmissions) ? 5 : 6)
     }
-    catch {
+    catch (err) {
+      console.error(err)
       updateState(4)
     }
   }
@@ -127,7 +128,7 @@ export default function Form({
     <form
       ref={ref}
       method='post'
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       className={cn('fui-form', className)}
       noValidate
       {...props}

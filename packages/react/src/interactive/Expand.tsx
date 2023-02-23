@@ -20,16 +20,16 @@ export default function Expand({
   onAction
 }: ExpandProps) {
   const [active, setActive] = useState(false)
-  const [contentHeight, setContentHeight] = useState(0)
+  const [height, _setHeight] = useState(0)
   const ref = innerRef || useRef()
 
-  const setExpandHeight = () =>
-    setContentHeight(ref.current.querySelector('div').clientHeight)
+  const setHeight = () =>
+    _setHeight(ref.current.firstChild.clientHeight)
 
-  useEffect(setExpandHeight, [])
-  useListener('resize', setExpandHeight)
+  useEffect(setHeight, [])
+  useListener('resize', setHeight)
 
-  useListener('FUIExpandAction', (e: any) => {
+  useListener('FUIAction', (e: any) => {
     const action = e.detail.action
     const newActive = action < 2 ? action : !active
 
@@ -43,7 +43,7 @@ export default function Expand({
       ref={ref}
       id={id}
       className={cn('fui-listener fui-expand', className)}
-      style={expandStyle(active, contentHeight)}
+      style={_style(active, height)}
       tabIndex={active ? undefined : -1}
     >
       <div>
@@ -53,8 +53,8 @@ export default function Expand({
   )
 }
 
-const expandStyle = (active: boolean, contentHeight: number) => ({
+const _style = (active: boolean, height: number) => ({
   overflow: 'hidden',
-  maxHeight: active ? contentHeight + 'px' : 0,
+  maxHeight: active ? height + 'px' : 0,
   transitionProperty: 'max-height',
 })

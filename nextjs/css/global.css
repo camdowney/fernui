@@ -78,7 +78,13 @@ section {
   @apply flex flex-wrap items-center gap-2 md:gap-3 mt-5 md:mt-6 lg:mt-8;
 }
 .fui-modal {
-  @apply z-30;
+  @apply z-50;
+}
+.fui-modal-bg {
+  @apply z-40 bg-gray-900/50;
+}
+.fui-modal-bg-inactive {
+  @apply invisible;
 }
 .fui-modal-active {
   @apply visible opacity-100 origin-center duration-[0.4s];
@@ -88,11 +94,16 @@ section {
   @apply invisible opacity-0 origin-center duration-[0.4s];
   transform: scale3d(0.85, 0.85, 1);
 }
-.fui-modal-bg {
-  @apply bg-gray-900/50;
+.fui-dropdown {
+  @apply z-30 bg-gray-100 shadow-md rounded-xl p-4;
 }
-.fui-modal-bg-inactive {
-  @apply invisible;
+.fui-dropdown-active {
+  @apply visible opacity-100 origin-center duration-[0.4s];
+  transform: scale3d(1, 1, 1);
+}
+.fui-dropdown-inactive {
+  @apply invisible opacity-0 origin-center duration-[0.4s];
+  transform: scale3d(0.85, 0.85, 1);
 }
 .fui-lightbox {
   @apply max-h-[90vh] aspect-[3/2] p-2 sm:p-4 md:p-6;
@@ -148,13 +159,13 @@ section {
 .fui-checkbox input:focus ~ .fui-check {
   @apply !outline-none !shadow-[0_0_0_3px_#369df7];
 }
-.fui-info-icon, .fui-mform-icon {
+.fui-info-icon, .fui-info-form-icon {
   @apply w-3.5 md:w-4 mr-1.5;
 }
-.fui-mform-modal {
+.fui-modal-form-modal {
   @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
 }
-.fui-mform-message {
+.fui-modal-form-message {
   @apply italic;
 }
 ::placeholder {

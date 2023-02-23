@@ -1,9 +1,9 @@
 import {
   Media, Avatar,
-  Expand, Modal, Lightbox, Repeater,
-  ModalForm, Input, Select, FormButton
+  Expand, Dropdown, Lightbox, Repeater,
+  InfoForm, Input, Select, FormButton,
 } from '../../packages/react'
-import { formToObject, toggleExpand, openModal, getRepeaterMethods } from '../../packages/util'
+import { formToObject, toggleUI, getRepeaterMethods } from '../../packages/util'
 import { mail } from '../../packages/icons'
 
 export default () => {
@@ -17,13 +17,13 @@ export default () => {
 
   const testSubmit = async (e: any) => {
     await new Promise(res => setTimeout(res, 500))
-    console.log(formToObject(e))
+    console.log(formToObject(e.target))
   }
 
   return <>
     <section>
       <div className='container space-y-4'>
-        <ModalForm
+        <InfoForm
           onSubmit={testSubmit}
           maxSubmissions={10}
           requireInitialChanges={false}
@@ -62,12 +62,13 @@ export default () => {
                   name={`array.${index}`}
                   label='Label'
                   defaultValue={item}
+                  required
                   key={key}
                 />
               }
             </Repeater>
           </div>
-        </ModalForm>
+        </InfoForm>
         <div className='space-x-3'>
           <button onClick={() => insertItem('Added field')}>
             Add item
@@ -131,7 +132,7 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => toggleExpand('#expand')}>Expand</button>
+        <button onClick={() => toggleUI('#expand')}>Expand</button>
         <Expand id='expand'>
           Content
         </Expand>
@@ -140,20 +141,18 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => openModal('#dropdown')}>Open dropdown</button>
-        <Modal
+        <button onClick={() => toggleUI('#dropdown')}>Dropdown</button>
+        <Dropdown
           id='dropdown'
-          bgClass='hidden'
-          anchor
         >
           Content
-        </Modal>
+        </Dropdown>
       </div>
     </section>
 
     <section>
       <div className='container'>
-        <button onClick={() => openModal('#lightbox', { index: 1 })}>Open lightbox</button>
+        <button onClick={() => toggleUI('#lightbox', { index: 1 })}>Lightbox</button>
       </div>
     </section>
 

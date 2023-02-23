@@ -36,7 +36,7 @@ export default function Input({
   const [invalid, setInvalid] = useState(required && (!defaultValue || (type === 'email' && !isEmail(defaultValue))))
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
-  const outerRef = useRef() as any
+  const ref = useRef() as any
   const Shell = (type === 'area' ? 'textarea' : 'input')
 
   const showInfo = invalid && (modified || formState.error)
@@ -48,11 +48,11 @@ export default function Input({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, outerRef)
+  }, ref)
 
   return (
     <label
-      ref={outerRef}
+      ref={ref}
       className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
     >
       {label && <div className='fui-label'>{label}</div>}

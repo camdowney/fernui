@@ -10,14 +10,14 @@ export default function Icon({ i, ...props }: IconProps) {
 
   return (
     <svg
-      style={{ ...iconStyle }}
+      style={_style}
       dangerouslySetInnerHTML={{ __html: children }}
       {...{ ...rest, ...props}}
     />
   )
 }
 
-const iconStyle = {
+const _style = {
   flexShrink: 0,
   fill: 'currentcolor',
 }

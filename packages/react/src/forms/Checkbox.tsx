@@ -32,7 +32,7 @@ export default function Checkbox({
   const [invalid, setInvalid] = useState(required && !defaultValue)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
-  const outerRef = useRef() as any
+  const ref = useRef() as any
 
   const showInfo = invalid && (modified || formState.error)
 
@@ -43,14 +43,14 @@ export default function Checkbox({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, outerRef)
+  }, ref)
 
   return (
     <div
-      ref={outerRef}
+      ref={ref}
       className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
     >
-      <label style={wrapperStyle}>
+      <label style={_outerStyle}>
         <input
           ref={innerRef}
           id={id}
@@ -61,10 +61,10 @@ export default function Checkbox({
           onChange={e => { update(e), onChange?.(e) }}
           onBlur={update}
           disabled={formState.disabled}
-          style={inputStyle}
+          style={_style}
         />
-        <div className='fui-check-box' style={boxStyle}>
-          <Icon i={check} className='fui-check-icon' style={iconStyle} />
+        <div className='fui-check-box' style={_iconOuterStyle}>
+          <Icon i={check} className='fui-check-icon' style={_iconStyle} />
         </div>
         {label && <div className='fui-label'>{label}</div>}
       </label>
@@ -75,25 +75,25 @@ export default function Checkbox({
   )
 }
 
-const wrapperStyle = {
+const _outerStyle = {
   display: 'flex',
   cursor: 'pointer',
 }
 
-const inputStyle = {
+const _style = {
   width: 0,
   height: 0,
   outlineWidth: '0 !important',
 }
 
-const boxStyle = {
+const _iconOuterStyle = {
   flexShrink: 0,
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
 }
 
-const iconStyle = {
+const _iconStyle = {
   position: 'relative',
   display: 'block',
 }

@@ -1,61 +1,59 @@
 import React, { useState, useRef } from 'react'
 import Form, { FormProps, FormState, initialState } from './Form'
 import Icon from '../base/Icon'
-import Modal from '../interactive/Modal'
-import { cn, openModal } from '@fernui/util'
+import Dropdown from '../interactive/Dropdown'
+import { cn, openUI } from '@fernui/util'
 import { warning } from '../icons'
 
-export interface ModalFormProps extends FormProps {
+export interface InfoFormProps extends FormProps {
   btn?: any
   messages?: string[]
   [x:string]: any
 }
 
-export default function ModalForm({
+export default function InfoForm({
   btn,
   messages = [],
   children,
-  onStateChange,
+  onStateChange: _onStateChange,
   ...props
-}: ModalFormProps) {
+}: InfoFormProps) {
   const [formState, setFormState] = useState<FormState>(initialState)
-  const modalRef = useRef()
+  const dropdownRef = useRef()
 
   const message = messages[formState.id] || formState.message
 
-  const handleState = (state: FormState) => {
+  const onStateChange = (state: FormState) => {
     setFormState(state)
 
     if (state.error || (!state.end && state.id !== 0)) 
-      openModal(modalRef)
+      openUI(dropdownRef)
 
-    onStateChange?.(state)
+    _onStateChange?.(state)
   }
 
   return (
     <Form
-      onStateChange={handleState}
+      onStateChange={onStateChange}
       {...props}
     >
       {children}
       {formState.end ? (
-        <p className='fui-mform-message'>
+        <p className='fui-info-form-message'>
           {message}
         </p>
       ) : <>
         {btn}
-        <Modal
-          innerRef={modalRef}
-          className={cn('fui-mform-modal', `fui-${formState.error ? 'error' : 'info'}-modal`)}
-          bgStyle={{ display: 'none' }}
+        <Dropdown
+          innerRef={dropdownRef}
+          className={cn('fui-info-form-dropdown', `fui-info-form-dropdown-${formState.error ? 'error' : 'info'}`)}
           closeDelay={2000}
-          anchor
           exitOnOutsideClick={false}
           exitOnEscape={false}
         >
-          <Icon i={warning} className='fui-mform-icon' />
+          <Icon i={warning} className='fui-info-form-icon' />
           {message}
-        </Modal>
+        </Dropdown>
       </>}
     </Form>
   )

@@ -18,7 +18,7 @@ export interface RepeaterProps {
 }
 
 export default function Repeater({
-  id,
+  id = String(new Date().getTime()),
   innerRef,
   as = 'span',
   className,
@@ -32,7 +32,6 @@ export default function Repeater({
   const ref = innerRef || useRef()
 
   const [items, setItems] = useState<any[]>(_items)
-  const baseKey = id || new Date().getTime()
   const keys = useRef([...Array(_items.length).keys()])
   const nextIndex = useRef(items.length)
 
@@ -115,7 +114,7 @@ export default function Repeater({
       {...props}
     >
       {items.map((item, i) =>
-        children(item, i, `${baseKey}-${keys.current[i]}`)
+        children(item, i, `${id}-${keys.current[i]}`)
       )}
     </Shell>
   )

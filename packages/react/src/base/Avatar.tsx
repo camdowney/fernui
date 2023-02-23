@@ -39,7 +39,7 @@ export default function Avatar({
       {...props}
     />
   ) : firstLetter ? (
-    <div style={letterStyle(firstLetter, colors)} {...nonMediaProps}>
+    <div style={_letterStyle(firstLetter, colors)} {...nonMediaProps}>
       {firstLetter}
     </div>
   ) : (
@@ -50,7 +50,7 @@ export default function Avatar({
   )
 }
 
-const letterStyle = (firstLetter: string, colors: ColorMap) => ({
+const _letterStyle = (firstLetter: string, colors: ColorMap) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

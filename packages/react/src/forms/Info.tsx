@@ -9,14 +9,14 @@ interface InfoProps {
 
 export default function Info({ visible, children }: InfoProps) {
   return !visible ? <></> : (
-    <div className='fui-info' style={infoStyle}>
+    <div className='fui-info' style={_style}>
       <Icon i={warning} className='fui-info-icon' />
       {children}
     </div>
   )
 }
 
-const infoStyle = {
+const _style = {
   display: 'inline-flex',
   alignItems: 'center',
 }

@@ -113,7 +113,6 @@ export const ping = async (
   }
 }
 
-/* Begin signals */
 export const signalEvent = (selector: any, event: string, detail: Object) => {
   const element = typeof selector === 'string' 
     ? document.querySelector(selector)
@@ -123,33 +122,18 @@ export const signalEvent = (selector: any, event: string, detail: Object) => {
   element?.dispatchEvent(new CustomEvent(event, { detail }))
 }
 
-/* Modals */
-export const signalModal = (selector: any, detail: Object) =>
-  signalEvent(selector, 'FUIModalAction', detail)
+export const signalUI = (selector: any, detail: Object) =>
+  signalEvent(selector, 'FUIAction', detail)
 
-export const closeModal = (selector: any, data?: Object) =>
-  signalModal(selector, { action: 0, ...(data ?? {}) })
+export const closeUI = (selector: any, data?: Object) =>
+  signalUI(selector, { action: 0, ...(data ?? {}) })
 
-export const openModal = (selector: any, data?: Object) =>
-  signalModal(selector, { action: 1, ...(data ?? {}) })
+export const openUI = (selector: any, data?: Object) =>
+  signalUI(selector, { action: 1, ...(data ?? {}) })
 
-export const toggleModal = (selector: any, data?: Object) =>
-  signalModal(selector, { action: 2, ...(data ?? {}) })
+export const toggleUI = (selector: any, data?: Object) =>
+  signalUI(selector, { action: 2, ...(data ?? {}) })
 
-/* Expands */
-export const signalExpand = (selector: any, detail: Object) =>
-  signalEvent(selector, 'FUIExpandAction', detail)
-
-export const closeExpand = (selector: any, data?: Object) =>
-  signalExpand(selector, { action: 0, ...(data ?? {}) })
-
-export const openExpand = (selector: any, data?: Object) =>
-  signalExpand(selector, { action: 1, ...(data ?? {}) })
-
-export const toggleExpand = (selector: any, data?: Object) =>
-  signalExpand(selector, { action: 2, ...(data ?? {}) })
-
-/* Repeaters */
 export const signalRepeater = (selector: any, detail: Object) =>
   signalEvent(selector, 'FUIRepeaterAction', detail)
 
@@ -178,7 +162,6 @@ export const getRepeaterMethods = (selector: any) => ({
   set: (items: any[]) => setRepeaterItems(selector, items),
   get: () => getRepeaterItems(selector),
 })
-/* End signals */
 
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {

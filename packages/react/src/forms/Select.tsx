@@ -36,7 +36,7 @@ export default function Select({
   const [invalid, setInvalid] = useState(required && !defaultValue && !!placeholder)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
-  const outerRef = useRef() as any
+  const ref = useRef() as any
 
   const showInfo = invalid && (modified || formState.error)
 
@@ -47,11 +47,11 @@ export default function Select({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, outerRef)
+  }, ref)
 
   return (
     <label
-      ref={outerRef}
+      ref={ref}
       className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
     >
       {label && <div className='fui-label'>{label}</div>}
@@ -76,7 +76,7 @@ export default function Select({
             </option>    
           )}
         </select>
-        <div style={wrapperStyle as Object}>
+        <div style={_iconOuterStyle as Object}>
           <Icon i={angle} className='fui-select-icon' />
         </div>
       </div>
@@ -87,7 +87,7 @@ export default function Select({
   )
 }
 
-const wrapperStyle = {
+const _iconOuterStyle = {
   position: 'absolute',
   top: 0,
   right: 0,
