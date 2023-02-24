@@ -34,17 +34,25 @@ export const composeFacebookShareLink = (url: string) =>
 
 export const composeTwitterShareLink = (url: string) =>
   'https://twitter.com/intent/tweet?text=' + (url || '')
-  
-export const purifySubmitFields = (submitEvent: any) =>
-  [...submitEvent.target?.elements].filter(field => field.name && field.value && !field.name.startsWith('fui-config') 
-    && (field.type !== 'radio' || field.checked))
-  
-export const formToHtml = (heading = 'Form Submission', submitEvent: any) => {
-  let html = heading 
-    ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> <ul style='padding: 0 0 0 24px; margin: 0;'>`
-    : ''
 
-  purifySubmitFields(submitEvent).forEach(field => {
+export const objectToURI = (object: {}) =>
+  Object.entries(object)
+    .map(([key, value]: any) => `${encodeURIComponent(key)}=${
+      encodeURIComponent(typeof value === 'object' ? JSON.stringify(value) : value)
+    }`)
+    .sort()
+    .join('&')
+  
+export const purifyFormFields = (form: HTMLFormElement) =>
+  [...form?.elements].filter((field: any) => field.name && field.value && !field.name.startsWith('__config') 
+    && (field.type !== 'radio' || field.checked))
+
+export const formToHtml = (form: HTMLFormElement, heading = 'Form Submission') => {
+  let html = heading ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> ` : ''
+
+  html += `<ul style='padding: 0 0 0 24px; margin: 0;'>`
+
+  purifyFormFields(form).forEach((field: any) => {
     const title = escapeHtml(field.name.replace(/\*/g, ''))
     const value = field.type !== 'checkbox' ? escapeHtml(field.value) : (field.checked ? 'Yes' : 'No')
 

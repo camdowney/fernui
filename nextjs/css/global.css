@@ -74,8 +74,8 @@ section {
 .container {
   @apply relative w-full px-md mx-auto;
 }
-.fui-cta {
-  @apply flex flex-wrap items-center gap-2 md:gap-3 mt-5 md:mt-6 lg:mt-8;
+.fui-avatar {
+  @apply w-12 h-12 rounded-full text-gray-100;
 }
 .fui-modal {
   @apply z-50;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { cn } from '@fernui/util'
 import Media, { MediaProps } from './Media'
 import Icon from './Icon'
 import { profile } from '../icons'
@@ -25,6 +26,7 @@ export default function Avatar({
   title,
   src,
   colors = defaultColors,
+  className,
   ...props
 }: AvatarProps) {
   const firstLetter = title?.substring(0, 1).toUpperCase()
@@ -35,16 +37,22 @@ export default function Avatar({
     <Media
       src={src}
       alt={title}
+      className={cn('fui-avatar', className)}
       onError={() => setValidSrc(false)}
       {...props}
     />
   ) : firstLetter ? (
-    <div style={_letterStyle(firstLetter, colors)} {...nonMediaProps}>
+    <div
+      className={cn('fui-avatar', className)}
+      style={_letterStyle(firstLetter, colors)}
+      {...nonMediaProps}
+    >
       {firstLetter}
     </div>
   ) : (
     <Icon
       i={profile}
+      className={cn('fui-avatar', className)}
       {...nonMediaProps}
     />
   )

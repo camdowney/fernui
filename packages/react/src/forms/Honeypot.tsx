@@ -5,7 +5,7 @@ export default function Honeypot() {
 
   return (
     <input
-      name='fui-config-fax'
+      name='__config-fax'
       type='checkbox'
       value={1}
       onChange={e => setIsValid(!e.target.checked)}
