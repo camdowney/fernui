@@ -11,6 +11,7 @@ export interface CheckboxProps {
   id?: string
   name?: string
   label?: string
+  hideLabel?: boolean
   defaultValue?: boolean
   className?: string
   required?: boolean
@@ -23,6 +24,7 @@ export default function Checkbox({
   id,
   name,
   label,
+  hideLabel,
   defaultValue,
   className,
   required,
@@ -32,42 +34,47 @@ export default function Checkbox({
   const [invalid, setInvalid] = useState(required && !defaultValue)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
-  const ref = useRef() as any
 
+  const ref = innerRef || useRef()
   const showInfo = invalid && (modified || formState.error)
 
   const update = (e: any) => {
     setInvalid(required && !e.target.checked)
     setModified(true)
+    onChange?.(e)
   }
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
   }, ref)
 
+  useListener('FUIFieldAction', (e: any) => {
+    const checked = e.detail.value
+    ref.current.checked = checked
+    update({ target: { checked }})
+  }, ref)
+
   return (
-    <div
-      ref={ref}
-      className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
-    >
+    <div className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
       <label style={_outerStyle}>
         <input
-          ref={innerRef}
-          id={id}
           type='checkbox'
           name={name || label}
-          aria-label={label ? undefined : name}
+          aria-label={label || name}
           defaultChecked={defaultValue}
           data-field-valid={!invalid}
-          onChange={e => { update(e), onChange?.(e) }}
+          onChange={update}
           onBlur={update}
           disabled={formState.disabled}
           style={_style}
+          {...{ ref, id }}
         />
         <div className='fui-check-box' style={_iconOuterStyle}>
           <Icon i={check} className='fui-check-icon' style={_iconStyle} />
         </div>
-        {label && <div className='fui-label'>{label}</div>}
+        {(!hideLabel && label) &&
+          <div className='fui-label'>{label}</div>
+        }
       </label>
       {message !== '' && 
         <Info visible={showInfo}>

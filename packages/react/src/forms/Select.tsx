@@ -11,6 +11,7 @@ export interface SelectProps {
   id?: string
   name?: string
   label?: string
+  hideLabel?: boolean
   placeholder?: string
   defaultValue?: any
   className?: string
@@ -25,6 +26,7 @@ export default function Select({
   id,
   name,
   label,
+  hideLabel,
   placeholder = 'Select an option',
   defaultValue,
   className,
@@ -36,37 +38,41 @@ export default function Select({
   const [invalid, setInvalid] = useState(required && !defaultValue && !!placeholder)
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
-  const ref = useRef() as any
 
+  const ref = innerRef || useRef()
   const showInfo = invalid && (modified || formState.error)
 
   const update = (e: any) => {
     setInvalid(required && e.target.selectedIndex < (placeholder ? 1 : 0))
     setModified(true)
+    onChange?.(e)
   }
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
   }, ref)
 
+  useListener('FUIFieldAction', (e: any) => {
+    const value = e.detail.value
+    ref.current.value = value
+    update({ target: { value }})
+  }, ref)
+
   return (
-    <label
-      ref={ref}
-      className={cn('fui-field', showInfo && 'fui-field-invalid', className)}
-    >
-      {label && <div className='fui-label'>{label}</div>}
+    <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
+      {(!hideLabel && label) &&
+        <div className='fui-label'>{label}</div>
+      }
       <div style={{ position: 'relative' }}>
         <select
-          ref={innerRef}
-          id={id}
           name={name || label || placeholder}
-          aria-label={label ? undefined : placeholder || name}
-          defaultValue={defaultValue}
+          aria-label={label || placeholder || name}
           data-field-valid={!invalid}
-          onChange={e => { update(e), onChange?.(e) }}
+          onChange={update}
           onBlur={update}
           disabled={formState.disabled}
           style={{ cursor: 'pointer' }}
+          {...{ ref, id, defaultValue }}
         >
           {placeholder && 
             <option value=''>{placeholder}</option>

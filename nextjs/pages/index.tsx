@@ -3,7 +3,7 @@ import {
   Expand, Dropdown, Lightbox, Repeater,
   InfoForm, Input, Select, FormButton,
 } from '../../packages/react'
-import { formToObject, toggleUI, getRepeaterMethods } from '../../packages/util'
+import { formToObject, toggleUI, getRepeaterMethods, setFieldValue } from '../../packages/util'
 import { mail } from '../../packages/icons'
 
 export default () => {
@@ -16,7 +16,6 @@ export default () => {
   } = getRepeaterMethods('#repeater')
 
   const testSubmit = async (e: any) => {
-    console.log(e.target)
     console.log(formToObject(e.target))
     await new Promise(res => setTimeout(res, 500))
   }
@@ -24,6 +23,11 @@ export default () => {
   return <>
     <section>
       <div className='container space-y-4'>
+        <div>
+          <button onClick={() => setFieldValue('[name="field.0.a"]', '')}>
+            Update value
+          </button>
+        </div>
         <InfoForm
           onSubmit={testSubmit}
           maxSubmissions={10}
@@ -41,6 +45,7 @@ export default () => {
               name='field.0.a'
               label='Full name *'
               defaultValue='b'
+              onChange={e => console.log(e)}
               required
             />
             <Select

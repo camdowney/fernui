@@ -2,13 +2,13 @@ lockfileVersion: 5.4
 
 specifiers:
   '@fernui/icons': ^2.0.6
-  '@fernui/util': ^2.2.5
+  '@fernui/util': ^2.2.6
   '@types/react': ^18.0.28
   react: ^18.2.0
 
 dependencies:
   '@fernui/icons': 2.0.6
-  '@fernui/util': 2.2.5
+  '@fernui/util': 2.2.6
   react: 18.2.0
 
 devDependencies:
@@ -20,8 +20,8 @@ packages:
     resolution: {integrity: sha512-ohcNXehGT1NGF+/7ulyLf8d/u1UkB07xvRjI5MM2SF8JPqQ89CEi8Vd+i4Gt7+SERTwGbwQkBQCXy8EwL0pukA==}
     dev: false
 
-  /@fernui/util/2.2.5:
-    resolution: {integrity: sha512-tA/ldXzkHqfv9XbPSThqbUylAe2f8XmxKUWK7054Jsr5KpgNUmm4ghS/gdzRE6KH0ldrfQnjYGm3OcpDONQrsQ==}
+  /@fernui/util/2.2.6:
+    resolution: {integrity: sha512-YNvKkwan9aKuixoc/YCx6Zy61MjVBFKMQOhHToC6mYGx/gwNcFBrOL17AaPyXoUaGnKXCTt34Kl3PoAlISOAJw==}
     dev: false
 
   /@types/prop-types/15.7.5:

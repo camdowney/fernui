@@ -121,7 +121,7 @@ export const ping = async (
   }
 }
 
-export const signalEvent = (selector: any, event: string, detail: Object) => {
+export const signalEvent = (selector: any, event: string, detail: {}) => {
   const element = typeof selector === 'string' 
     ? document.querySelector(selector)
     : selector?.current
@@ -130,29 +130,35 @@ export const signalEvent = (selector: any, event: string, detail: Object) => {
   element?.dispatchEvent(new CustomEvent(event, { detail }))
 }
 
-export const signalUI = (selector: any, detail: Object) =>
+export const signalField = (selector: any, detail: {}) =>
+  signalEvent(selector, 'FUIFieldAction', detail)
+
+export const setFieldValue = (selector: any, value: string) =>
+  signalField(selector, { value })
+
+export const signalUI = (selector: any, detail: {}) =>
   signalEvent(selector, 'FUIAction', detail)
 
-export const closeUI = (selector: any, data?: Object) =>
+export const closeUI = (selector: any, data?: {}) =>
   signalUI(selector, { action: 0, ...(data ?? {}) })
 
-export const openUI = (selector: any, data?: Object) =>
+export const openUI = (selector: any, data?: {}) =>
   signalUI(selector, { action: 1, ...(data ?? {}) })
 
-export const toggleUI = (selector: any, data?: Object) =>
+export const toggleUI = (selector: any, data?: {}) =>
   signalUI(selector, { action: 2, ...(data ?? {}) })
 
-export const signalRepeater = (selector: any, detail: Object) =>
+export const signalRepeater = (selector: any, detail: {}) =>
   signalEvent(selector, 'FUIRepeaterAction', detail)
 
 export const insertRepeaterItem = (selector: any, item: any, index?: number) =>
-  signalRepeater(selector, { action: 0, index, item })
+  signalRepeater(selector, { action: 0, item, index })
 
 export const removeRepeaterItem = (selector: any, index?: number) =>
   signalRepeater(selector, { action: 1, index, })
 
 export const updateRepeaterItem = (selector: any, item: any, index: number) =>
-  signalRepeater(selector, { action: 2, index, item })
+  signalRepeater(selector, { action: 2, item, index })
 
 export const setRepeaterItems = (selector: any, items: any[]) =>
   signalRepeater(selector, { action: 3, data: { items } })
