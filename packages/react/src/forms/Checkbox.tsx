@@ -15,6 +15,7 @@ export interface CheckboxProps {
   defaultValue?: boolean
   className?: string
   required?: boolean
+  disabled?: boolean
   onChange?: (e: any) => void
   message?: string
 }
@@ -28,8 +29,9 @@ export default function Checkbox({
   defaultValue,
   className,
   required,
+  disabled,
   onChange,
-  message
+  message,
 }: CheckboxProps) {
   const [invalid, setInvalid] = useState(required && !defaultValue)
   const [modified, setModified] = useState(false)
@@ -65,7 +67,7 @@ export default function Checkbox({
           data-field-valid={!invalid}
           onChange={update}
           onBlur={update}
-          disabled={formState.disabled}
+          disabled={disabled != null ? disabled : formState.disabled}
           style={_style}
           {...{ ref, id }}
         />

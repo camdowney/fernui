@@ -15,6 +15,7 @@ export interface InputProps {
   className?: string
   type?: string
   required?: boolean
+  disabled?: boolean
   charLimit?: number
   onChange?: (e: any) => void
   message?: string
@@ -31,9 +32,10 @@ export default function Input({
   className,
   type = 'text',
   required,
+  disabled,
   charLimit,
   onChange,
-  message
+  message,
 }: InputProps) {
   const [invalid, setInvalid] = useState(required && (!defaultValue || (type === 'email' && !isEmail(defaultValue))))
   const [modified, setModified] = useState(false)
@@ -70,7 +72,7 @@ export default function Input({
         data-field-valid={!invalid}
         onChange={update}
         onBlur={update}
-        disabled={formState.disabled}
+        disabled={disabled != null ? disabled : formState.disabled}
         maxLength={charLimit ? charLimit : type === 'area' ? 1000 : 100}
         {...{ ref, id, type, placeholder, defaultValue }}
       />

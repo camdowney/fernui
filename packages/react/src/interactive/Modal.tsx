@@ -19,9 +19,9 @@ export interface ModalProps {
   bgStyle?: Object,
   openDelay?: number
   closeDelay?: number
-  exitOnBgClick?: boolean,
-  exitOnOutsideClick?: boolean,
-  exitOnEscape?: boolean,
+  exitOnBgClick?: boolean
+  exitOnOutsideClick?: boolean
+  exitOnEscape?: boolean
   preventScroll?: boolean
   focus?: boolean
 }
@@ -46,7 +46,7 @@ export default function Modal({
   exitOnBgClick = true,
   exitOnOutsideClick = true,
   exitOnEscape = true,
-  preventScroll = false
+  preventScroll = false,
 }: ModalProps) {
   const [active, _setActive] = useState<boolean | any>(null)
   const ref = innerRef || useRef()

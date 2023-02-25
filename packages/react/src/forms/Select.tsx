@@ -17,6 +17,7 @@ export interface SelectProps {
   className?: string
   options: { label: string, value?: any }[]
   required?: boolean
+  disabled?: boolean
   onChange?: (e: any) => void
   message?: string
 }
@@ -32,8 +33,9 @@ export default function Select({
   className,
   options,
   required,
+  disabled,
   onChange,
-  message
+  message,
 }: SelectProps) {
   const [invalid, setInvalid] = useState(required && !defaultValue && !!placeholder)
   const [modified, setModified] = useState(false)
@@ -70,7 +72,7 @@ export default function Select({
           data-field-valid={!invalid}
           onChange={update}
           onBlur={update}
-          disabled={formState.disabled}
+          disabled={disabled != null ? disabled : formState.disabled}
           style={{ cursor: 'pointer' }}
           {...{ ref, id, defaultValue }}
         >

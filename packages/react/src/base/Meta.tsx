@@ -24,7 +24,7 @@ export default function Meta({
   noindex,
   touchIcon,
   themeColor,
-  children
+  children,
 }: MetaProps) {
   const description = composeExcerpt(desc ?? '', 155, false)
   const Shell = as

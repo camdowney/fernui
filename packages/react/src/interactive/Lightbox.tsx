@@ -31,7 +31,7 @@ export default function Lightbox({
   customOverlay,
   overlayClass,
   controlClass,
-  iconClass
+  iconClass,
 }: LightboxProps) {
   const [current, setCurrent] = useState(0)
   const active = useRef(null) as any

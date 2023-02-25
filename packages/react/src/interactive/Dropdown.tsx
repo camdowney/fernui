@@ -15,8 +15,8 @@ export interface DropdownProps {
   onAction?: (e: any) => void
   openDelay?: number
   closeDelay?: number
-  exitOnOutsideClick?: boolean,
-  exitOnEscape?: boolean,
+  exitOnOutsideClick?: boolean
+  exitOnEscape?: boolean
 }
 
 export default function Dropdown({

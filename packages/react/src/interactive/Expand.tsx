@@ -17,7 +17,7 @@ export default function Expand({
   className,
   children,
   onChange,
-  onAction
+  onAction,
 }: ExpandProps) {
   const [active, setActive] = useState(false)
   const [height, _setHeight] = useState(0)
