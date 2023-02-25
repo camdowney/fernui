@@ -60,6 +60,7 @@ export default function Select({
           ref={innerRef}
           id={id}
           name={name || label || placeholder}
+          aria-label={label ? undefined : placeholder || name}
           defaultValue={defaultValue}
           data-field-valid={!invalid}
           onChange={e => { update(e), onChange?.(e) }}
@@ -80,9 +81,11 @@ export default function Select({
           <Icon i={angle} className='fui-select-icon' />
         </div>
       </div>
-      <Info visible={showInfo}>
-        {message || 'Please select an option.'}
-      </Info>
+      {message !== '' &&
+        <Info visible={showInfo}>
+          {message || 'Please select an option.'}
+        </Info>
+      }
     </label>
   )
 }

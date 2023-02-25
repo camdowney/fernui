@@ -56,6 +56,7 @@ export default function Checkbox({
           id={id}
           type='checkbox'
           name={name || label}
+          aria-label={label ? undefined : name}
           defaultChecked={defaultValue}
           data-field-valid={!invalid}
           onChange={e => { update(e), onChange?.(e) }}
@@ -68,9 +69,11 @@ export default function Checkbox({
         </div>
         {label && <div className='fui-label'>{label}</div>}
       </label>
-      <Info visible={showInfo}>
-        {message || 'Please check this box to proceed.'}
-      </Info>
+      {message !== '' && 
+        <Info visible={showInfo}>
+          {message || 'Please check this box to proceed.'}
+        </Info>
+      }
     </div>
   )
 }

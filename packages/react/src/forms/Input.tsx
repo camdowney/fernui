@@ -58,6 +58,7 @@ export default function Input({
       {label && <div className='fui-label'>{label}</div>}
       <Shell
         name={name || label || placeholder}
+        aria-label={label ? undefined : placeholder || name}
         data-field-valid={!invalid}
         onChange={(e: any) => { update(e), onChange?.(e) }}
         onBlur={update}
@@ -65,9 +66,11 @@ export default function Input({
         maxLength={charLimit ? charLimit : type === 'area' ? 1000 : 100}
         {...{ ref: innerRef, id, type, placeholder, defaultValue }}
       />
-      <Info visible={showInfo}>
-        {message || type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.'}
-      </Info>
+      {message !== '' && 
+        <Info visible={showInfo}>
+          {message || (type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.')}
+        </Info>
+      }
     </label>
   )
 }
