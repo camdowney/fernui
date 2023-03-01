@@ -16,6 +16,7 @@ export interface InputProps {
   type?: string
   required?: boolean
   disabled?: boolean
+  readOnly?: boolean
   charLimit?: number
   onChange?: (e: any) => void
   message?: string
@@ -33,6 +34,7 @@ export default function Input({
   type = 'text',
   required,
   disabled,
+  readOnly,
   charLimit,
   onChange,
   message,
@@ -73,6 +75,7 @@ export default function Input({
         onChange={update}
         onBlur={update}
         disabled={disabled != null ? disabled : formState.disabled}
+        readOnly={readOnly != null ? readOnly : formState.disabled}
         maxLength={charLimit ? charLimit : type === 'area' ? 1000 : 100}
         {...{ ref, id, type, placeholder, defaultValue }}
       />
