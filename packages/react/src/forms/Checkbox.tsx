@@ -16,6 +16,7 @@ export interface CheckboxProps {
   className?: string
   required?: boolean
   disabled?: boolean
+  innerClass?: string
   onChange?: (e: any) => void
   message?: string
 }
@@ -30,6 +31,7 @@ export default function Checkbox({
   className,
   required,
   disabled,
+  innerClass,
   onChange,
   message,
 }: CheckboxProps) {
@@ -68,6 +70,7 @@ export default function Checkbox({
           onChange={update}
           onBlur={update}
           disabled={disabled != null ? disabled : formState.disabled}
+          className={innerClass}
           style={_style}
           {...{ ref, id }}
         />

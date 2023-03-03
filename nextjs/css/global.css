@@ -136,9 +136,6 @@ section {
 .fui-field-invalid {
   @apply -mb-3 md:-mb-2;
 }
-.fui-field textarea {
-  @apply h-36 md:h-40 resize-none;
-}
 .fui-field select {
   appearance: none;
   -webkit-appearance: none;

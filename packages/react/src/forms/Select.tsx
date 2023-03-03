@@ -18,6 +18,7 @@ export interface SelectProps {
   options: { label: string, value?: any }[]
   required?: boolean
   disabled?: boolean
+  innerClass?: string
   onChange?: (e: any) => void
   message?: string
 }
@@ -34,6 +35,7 @@ export default function Select({
   options,
   required,
   disabled,
+  innerClass,
   onChange,
   message,
 }: SelectProps) {
@@ -73,6 +75,7 @@ export default function Select({
           onChange={update}
           onBlur={update}
           disabled={disabled != null ? disabled : formState.disabled}
+          className={innerClass}
           style={{ cursor: 'pointer' }}
           {...{ ref, id, defaultValue }}
         >
