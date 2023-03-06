@@ -28,10 +28,12 @@ export interface InputProps {
   charLimit?: number
   textarea?: boolean
   autoResize?: boolean
+  shiftForNewline?: boolean
   rows?: number
   cols?: number
   innerClass?: string
   onChange?: (e: any) => void
+  onKeydown?: (e: any) => void
   message?: string
 }
 
@@ -51,10 +53,12 @@ export default function Input({
   charLimit,
   textarea,
   autoResize,
+  shiftForNewline,
   rows = 0,
   cols,
   innerClass,
   onChange,
+  onKeydown,
   message,
 }: InputProps) {
   const [invalid, setInvalid] = useState(required && (!defaultValue || (type === 'email' && !isEmail(defaultValue))))
@@ -64,6 +68,7 @@ export default function Input({
   const ref = innerRef || useRef()
   const Shell = textarea ? 'textarea' : 'input'
   const showInfo = invalid && (modified || formState.error)
+  const holdingShift = useRef(false)
 
   const update = (e: any) => {
     setInvalid(required && (!e?.target.value || (type === 'email' && !isEmail(e.target.value))))
@@ -87,6 +92,23 @@ export default function Input({
     const value = e.detail.value
     ref.current.value = value
     update({ target: { value }})
+  }, ref)
+
+  useListener('keydown', (e: any) => {
+    if (e.keyCode === 16)
+      holdingShift.current = true
+
+    if (shiftForNewline && !holdingShift.current && e.key === 'Enter') {
+      e.preventDefault()
+      e.target.closest('form').querySelector('[type="submit"]').click()
+    }
+
+    onKeydown?.(e)
+  }, ref)
+
+  useListener('keyup', (e: any) => {
+    if (e.keyCode === 16)
+      holdingShift.current = false
   }, ref)
 
   return (
