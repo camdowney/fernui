@@ -24,7 +24,7 @@ export default () => {
     <section>
       <div className='container space-y-4'>
         <div>
-          <button onClick={() => setFieldValue('[name="field.0.a"]', '')}>
+          <button onClick={() => setFieldValue('[name="field.0.a"]', 'a')}>
             Update value
           </button>
         </div>
@@ -37,6 +37,7 @@ export default () => {
               type='submit'
               text='Submit'
               icon={{ i: mail }}
+              preventDefaultFocus
             />
           }
         >

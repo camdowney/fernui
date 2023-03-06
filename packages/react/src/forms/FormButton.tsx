@@ -3,9 +3,14 @@ import { FormState, initialState } from './Form'
 import Link, { LinkProps } from '../base/Link'
 import { useListener } from '../util'
 
-export default function FormButton({ type = 'button', to, ...props }: LinkProps) {
+export default function FormButton({
+  type = 'button',
+  innerRef,
+  to,
+  ...props
+}: LinkProps) {
   const [formState, setFormState] = useState<FormState>(initialState)
-  const ref = useRef()
+  const ref = innerRef || useRef()
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)

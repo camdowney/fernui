@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Icon, { IconProps } from './Icon'
+import { useListener } from '../util'
 
 export interface LinkProps {
   innerRef?: any
@@ -10,6 +11,7 @@ export interface LinkProps {
   icon?: IconProps
   blank?: boolean
   label?: string
+  preventDefaultFocus?: boolean,
   [x:string]: any
 }
 
@@ -22,13 +24,20 @@ export default function Link({
   icon,
   blank,
   label,
+  preventDefaultFocus,
   ...props
 }: LinkProps) {
   const Shell = as || (to ? 'a' : 'button')
+  const ref = innerRef || useRef()
+
+  useListener('mousedown', (e: any) => {
+    if (preventDefaultFocus)
+      e.preventDefault()
+  }, ref)
 
   return (
     <Shell
-      ref={innerRef}
+      ref={ref}
       href={to}
       target={blank && '_blank'}
       rel={blank && 'noopener noreferrer'}
