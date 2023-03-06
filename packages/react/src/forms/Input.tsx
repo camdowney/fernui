@@ -61,17 +61,21 @@ export default function Input({
   onKeydown,
   message,
 }: InputProps) {
-  const [invalid, setInvalid] = useState(required && (!defaultValue || (type === 'email' && !isEmail(defaultValue))))
+  const isValid = (value: string = '') =>
+    required && (!value?.trim() || (type === 'email' && !isEmail(value)))
+
+  const [invalid, setInvalid] = useState(isValid(defaultValue))
   const [modified, setModified] = useState(false)
   const [formState, setFormState] = useState<FormState>(initialState)
 
   const ref = innerRef || useRef()
-  const Shell = textarea ? 'textarea' : 'input'
-  const showInfo = invalid && (modified || formState.error)
   const holdingShift = useRef(false)
 
+  const Shell = textarea ? 'textarea' : 'input'
+  const showInfo = invalid && (modified || formState.error)
+
   const update = (e: any) => {
-    setInvalid(required && (!e?.target.value || (type === 'email' && !isEmail(e.target.value))))
+    setInvalid(isValid(e?.target.value))
     setModified(true)
     onChange?.(e)
 
@@ -100,7 +104,7 @@ export default function Input({
 
     if (shiftForNewline && !holdingShift.current && e.key === 'Enter') {
       e.preventDefault()
-      e.target.closest('form').querySelector('[type="submit"]').click()
+      e.target.closest('form')?.querySelector('[type="submit"]')?.click()
     }
 
     onKeydown?.(e)
