@@ -78,7 +78,7 @@ export default function Checkbox({
           <Icon i={check} className='fui-check-icon' style={_iconStyle} />
         </div>
         {(!hideLabel && label) &&
-          <div className='fui-label'>{label}</div>
+          <div className='fui-field-label'>{label}</div>
         }
       </label>
       {message !== '' && 

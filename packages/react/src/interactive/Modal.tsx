@@ -46,9 +46,9 @@ export default function Modal({
   exitOnBgClick = true,
   exitOnOutsideClick = true,
   exitOnEscape = true,
-  preventScroll = false,
+  preventScroll,
 }: ModalProps) {
-  const [active, _setActive] = useState<boolean | any>(null)
+  const [active, _setActive] = useState<boolean | null>(null)
   const ref = innerRef || useRef()
   const timer = useRef() as any
 
@@ -93,7 +93,6 @@ export default function Modal({
       ref={ref}
       id={id}
       className={cn('fui-listener fui-modal-outer', outerClass)}
-      style={{ position: 'absolute' }}
     >
       <div
         className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}

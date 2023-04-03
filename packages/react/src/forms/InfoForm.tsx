@@ -46,12 +46,12 @@ export default function InfoForm({
         {btn}
         <Dropdown
           innerRef={dropdownRef}
-          className={cn('fui-info-form-dropdown', `fui-info-form-dropdown-${formState.error ? 'error' : 'info'}`)}
+          className={cn('fui-form-info', formState.error && 'fui-form-info-error')}
           closeDelay={2000}
           exitOnOutsideClick={false}
           exitOnEscape={false}
         >
-          <Icon i={warning} className='fui-info-form-icon' />
+          <Icon i={warning} className='fui-form-info-icon' />
           {message}
         </Dropdown>
       </>}

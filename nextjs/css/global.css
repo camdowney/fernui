@@ -80,10 +80,10 @@ section {
 .fui-modal {
   @apply z-50;
 }
-.fui-modal-bg {
+.fui-modal-bg, .fui-lightbox-bg {
   @apply z-40 bg-gray-900/50;
 }
-.fui-modal-bg-inactive {
+.fui-modal-bg-inactive, .fui-lightbox-bg-inactive {
   @apply invisible;
 }
 .fui-modal-active {
@@ -104,21 +104,6 @@ section {
 .fui-dropdown-inactive {
   @apply invisible opacity-0 origin-center duration-[0.4s];
   transform: scale3d(0.85, 0.85, 1);
-}
-.fui-lightbox {
-  @apply max-h-[90vh] aspect-[3/2] p-2 sm:p-4 md:p-6;
-}
-.fui-lightbox-item-inactive {
-  @apply invisible;
-}
-.fui-lightbox-overlay {
-  @apply inset-4;
-}
-.fui-lightbox-control {
-  @apply text-gray-100 bg-gray-900/50 hover:bg-gray-900/70 rounded-full p-2 md:p-3 lg:p-4;
-}
-.fui-lightbox-icon {
-  @apply w-5 md:w-6 lg:w-7;
 }
 .btn {
   @apply relative inline-flex items-center border-b-2;
@@ -141,7 +126,7 @@ section {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
-.fui-label {
+.fui-field-label {
   @apply block mb-0.5;
 }
 .fui-select-icon {
@@ -156,14 +141,11 @@ section {
 .fui-checkbox input:focus ~ .fui-check {
   @apply !outline-none !shadow-[0_0_0_3px_#369df7];
 }
-.fui-info-icon, .fui-info-form-icon {
+.fui-field-info-icon, .fui-form-info-icon {
   @apply w-3.5 md:w-4 mr-1.5;
 }
-.fui-modal-form-modal {
+.fui-form-info {
   @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
-}
-.fui-modal-form-message {
-  @apply italic;
 }
 ::placeholder {
   @apply text-gray-400 !important;

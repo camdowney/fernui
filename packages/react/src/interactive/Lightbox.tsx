@@ -1,55 +1,58 @@
-import React, { useState, useRef } from 'react'
-import Media from '../base/Media'
-import Link from '../base/Link'
+import React, { useRef, useState } from 'react'
 import Modal from '../interactive/Modal'
-import { cn, closeUI } from '@fernui/util'
+import { cn } from '@fernui/util'
 import { useListener } from '../util'
-import { angle, close } from '../icons'
 
 export interface LightboxProps {
   id?: string
-  sources: string[]
-  defaultSrcSet?: boolean
+  items?: any[]
+  children: (item: any, index: number, isActive: boolean) => any
+  outerClass?: string
   className?: string
   bgClass?: string
-  activeClass?: string
-  inactiveClass?: string
-  customOverlay?: any
+  bgActiveClass?: string
+  bgInactiveClass?: string
+  overlay?: any
   overlayClass?: string
-  controlClass?: string
-  iconClass?: string
+  preventScroll?: boolean
 }
 
 export default function Lightbox({
   id,
-  sources,
-  defaultSrcSet,
+  items = [],
+  children,
+  outerClass,
   className,
   bgClass,
-  activeClass = 'fui-lightbox-item-active',
-  inactiveClass = 'fui-lightbox-item-inactive',
-  customOverlay,
+  bgActiveClass = 'fui-lightbox-bg-active',
+  bgInactiveClass = 'fui-lightbox-bg-inactive',
+  overlay,
   overlayClass,
-  controlClass,
-  iconClass,
+  preventScroll,
 }: LightboxProps) {
-  const [current, setCurrent] = useState(0)
-  const active = useRef(null) as any
+  const ref = useRef() as any
+  const active = useRef<boolean | null>(null)
+  const [index, setIndex] = useState(0)
+
+  const getItems = () =>
+    [...ref.current.lastChild.children].slice(0, -1)
 
   const cyclePrevious = () =>
-    setCurrent(curr => curr > 0 ? curr - 1 : sources.length - 1)
+    setIndex(index > 0 ? index - 1 : getItems().length - 1)
 
   const cycleNext = () =>
-    setCurrent(curr => curr < sources.length - 1 ? curr + 1 : 0)
+    setIndex(index < getItems().length - 1 ? index + 1 : 0)
     
   const onChange = (newActive: boolean) =>
     active.current = newActive
 
-  const onAction = (e: any) =>
-    e.detail?.index && setCurrent(e.detail?.index)
+  const onAction = (e: any) => {
+    if (e.detail?.index == null) return
+    setIndex(e.detail.index)
+  }
 
   useListener('keydown', (e: any) => {
-    if (e.repeat || !active.current)
+    if (e.repeat || !active.current || getItems().length < 2)
       return
 
     const key = e?.key?.toLowerCase()
@@ -60,87 +63,39 @@ export default function Lightbox({
       cycleNext()
   })
 
+  useListener('FUILightboxAction', (e: any) => {
+    if (!active.current || getItems().length < 2)
+      return
+
+    const { action } = e.detail
+
+    if (action === 0)
+      cyclePrevious()
+    else if (action === 1)
+      cycleNext()
+  }, ref)
+
   return (
     <Modal
-      id={id}
+      innerRef={ref}
       className={cn('fui-lightbox', className)}
-      style={_style}
-      onChange={onChange}
-      onAction={onAction}
       bgClass={cn('fui-lightbox-bg', bgClass)}
-      preventScroll
+      {...{ id, outerClass, onChange, onAction, bgActiveClass, bgInactiveClass, preventScroll }}
     >
-      <div style={_innerStyle as Object}>
-        {current >= 0 && sources.map((src, i) => 
-          <Media
-            src={src}
-            className={cn('fui-lightbox-item', current === i ? activeClass : inactiveClass)}
-            cover
-            defaultSrcSet={defaultSrcSet}
-            lazy={false}
-            key={i}
-          />
-        )}
-        {customOverlay || (
-          <div className={cn('fui-lightbox-overlay', overlayClass)} style={{ position: 'absolute' } as Object}>
-            <Link
-              label='Close image'
-              onClick={closeUI}
-              className={cn('fui-lightbox-control', controlClass)}
-              style={_closeStyle}
-              icon={{ i: close, className: cn('fui-lightbox-icon', iconClass) }}
-            />
-            <Link
-              label='Previous image'
-              onClick={cyclePrevious}
-              className={cn('fui-lightbox-control', controlClass)}
-              style={_previousStyle}
-              icon={{ i: angle, className: cn('fui-lightbox-icon', iconClass) }}
-            />
-            <Link
-              label='Next image'
-              onClick={cycleNext}
-              className={cn('fui-lightbox-control', controlClass)}
-              style={_nextStyle}
-              icon={{ i: angle, className: cn('fui-lightbox-icon', iconClass) }}
-            />
-          </div>
-        )}
+      {items.map((item, i) =>
+        children(item, i, i === index)
+      )}
+      <div className={cn('fui-lightbox-overlay', overlayClass)} style={_overlayStyle as Object}>
+        {overlay}
       </div>
     </Modal>
   )
 }
 
-const _style = {
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-  margin: 'auto',
-}
-
-const _innerStyle = {
-  position: 'relative',
+const _overlayStyle = {
+  position: 'absolute',
   width: '100%',
   height: '100%',
-}
-
-const _closeStyle = {
-  position: 'absolute',
   top: 0,
-  right: 0,
-}
-
-const _previousStyle = {
-  position: 'absolute',
-  top: '50%',
   left: 0,
-  transform: 'translateY(-50%) rotate(90deg)',
-}
-
-const _nextStyle = {
-  position: 'absolute',
-  top: '50%',
-  right: 0,
-  transform: 'translateY(-50%) rotate(-90deg)',
 }

@@ -1,34 +1,36 @@
-lockfileVersion: 5.4
-
-specifiers:
-  '@fernui/icons': ^2.0.6
-  '@fernui/util': ^2.2.6
-  '@types/react': ^18.0.28
-  react: ^18.2.0
+lockfileVersion: '6.0'
 
 dependencies:
-  '@fernui/icons': 2.0.6
-  '@fernui/util': 2.2.6
-  react: 18.2.0
+  '@fernui/icons':
+    specifier: ^2.0.6
+    version: 2.0.6
+  '@fernui/util':
+    specifier: ^2.2.6
+    version: 2.2.6
+  react:
+    specifier: ^18.2.0
+    version: 18.2.0
 
 devDependencies:
-  '@types/react': 18.0.28
+  '@types/react':
+    specifier: ^18.0.28
+    version: 18.0.28
 
 packages:
 
-  /@fernui/icons/2.0.6:
+  /@fernui/icons@2.0.6:
     resolution: {integrity: sha512-ohcNXehGT1NGF+/7ulyLf8d/u1UkB07xvRjI5MM2SF8JPqQ89CEi8Vd+i4Gt7+SERTwGbwQkBQCXy8EwL0pukA==}
     dev: false
 
-  /@fernui/util/2.2.6:
+  /@fernui/util@2.2.6:
     resolution: {integrity: sha512-YNvKkwan9aKuixoc/YCx6Zy61MjVBFKMQOhHToC6mYGx/gwNcFBrOL17AaPyXoUaGnKXCTt34Kl3PoAlISOAJw==}
     dev: false
 
-  /@types/prop-types/15.7.5:
+  /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
     dev: true
 
-  /@types/react/18.0.28:
+  /@types/react@18.0.28:
     resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
     dependencies:
       '@types/prop-types': 15.7.5
@@ -36,26 +38,26 @@ packages:
       csstype: 3.1.1
     dev: true
 
-  /@types/scheduler/0.16.2:
+  /@types/scheduler@0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
     dev: true
 
-  /csstype/3.1.1:
+  /csstype@3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
     dev: true
 
-  /js-tokens/4.0.0:
+  /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: false
 
-  /loose-envify/1.4.0:
+  /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
     dev: false
 
-  /react/18.2.0:
+  /react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
     dependencies:

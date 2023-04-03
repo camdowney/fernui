@@ -1,11 +1,10 @@
 import {
-  Media, Avatar,
+  Media, Avatar, Link,
   Expand, Dropdown, Lightbox, Repeater,
   InfoForm, Input, Select, FormButton,
-  useRefresh,
 } from '../../packages/react'
-import { formToObject, toggleUI, getRepeaterMethods, setFieldValue } from '../../packages/util'
-import { mail } from '../../packages/icons'
+import { cn, formToObject, toggleUI, getRepeaterMethods, setFieldValue, cyclePrevious, cycleNext } from '../../packages/util'
+import { angle, mail } from '../../packages/icons'
 
 export default () => {
   const {
@@ -68,6 +67,7 @@ export default () => {
               id='repeater'
               className='space-y-2'
               onChange={newItems => console.log(newItems)}
+              hideWhenEmpty
             >
               {(item, index, key) =>
                 <Input
@@ -103,8 +103,8 @@ export default () => {
 
     <section>
       <div className='container flex gap-2'>
-        <Avatar src='aurora.webp' defaultSrcSet lazy />
-        <Avatar src='empty.webp' title='Empty' defaultSrcSet lazy />
+        <Avatar src='aurora.webp' lazy />
+        <Avatar src='empty.webp' title='Empty' lazy />
         <Avatar title='j' />
         <Avatar title='s' />
         <Avatar title='d' />
@@ -136,28 +136,47 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => toggleUI('#lightbox', { index: 1 })}>Lightbox</button>
+        <button onClick={() => toggleUI('#lightbox')}>Lightbox</button>
       </div>
     </section>
 
     <Lightbox
       id='lightbox'
-      sources={[
+      items={[
         'aurora.webp',
         'glacier1.webp',
         'glacier2.webp',
         'moraine.webp',
-        'yosemite.webp',
       ]}
-      defaultSrcSet
-    />
+      className='m-auto inset-5 max-w-5xl max-h-max'
+      overlay={<>
+        <Link
+          onClick={cyclePrevious}
+          className='absolute top-1/2 -translate-y-1/2 left-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
+          icon={{ i: angle, className: 'w-7 rotate-90' }}
+        />
+        <Link
+          onClick={cycleNext}
+          className='absolute top-1/2 -translate-y-1/2 right-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
+          icon={{ i: angle, className: 'w-7 -rotate-90' }}
+        />
+      </>}
+    >
+      {(src: string, _, active) =>
+        <Media
+          src={src}
+          className={cn('pb-[67%]', !active && '!hidden')}
+          lazy={false}
+          key={src}
+        />
+      }
+    </Lightbox>
 
     <section>
       <div className='container'>
         <Media
           src='aurora.webp'
           className='pb-[65%]'
-          defaultSrcSet
           lazy={false}
           alt=''
         />

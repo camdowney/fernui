@@ -13,7 +13,7 @@ export const chunk = (arr: any[], size: number): any[] => {
 export const isEmail = (str: string) =>
 	/^\S+@\S+\.\S+$/.test(str || '')
 
-export const composeSlug = (str: string) =>
+export const slugify = (str: string) =>
 	(str || '').toLowerCase().replace(/[^\w\s\-/]+/g, '').replace(/[\s\-]+/g, '-')
 
 export const escapeHtml = (str: string) =>
@@ -23,16 +23,16 @@ export const escapeHtml = (str: string) =>
 export const removeHtml = (str: string) =>
   (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-export const composeExcerpt = (str: string, charLimit: number, appendEllipsis = true) => {
+export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true) => {
   if (!str) return ''
   if (!charLimit || str.length <= charLimit) return str
   return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
 }
 
-export const composeFacebookShareLink = (url: string) =>
+export const getFacebookShareLink = (url: string) =>
   'https://www.facebook.com/sharer/sharer.php?u=' + (url || '')
 
-export const composeTwitterShareLink = (url: string) =>
+export const getTwitterShareLink = (url: string) =>
   'https://twitter.com/intent/tweet?text=' + (url || '')
 
 export const objectToURI = (object: {}) =>
@@ -121,6 +121,15 @@ export const ping = async (
   }
 }
 
+export const promisify = async (callback: Function) => {
+  return new Promise((resolve, reject) => {
+    callback()
+      .then((res: any) => resolve(res.result))
+      .catch((err: any) => reject(err.result))
+  })
+}
+
+
 export const signalEvent = (selector: any, event: string, detail: {}) => {
   const element = typeof selector === 'string' 
     ? document.querySelector(selector)
@@ -147,6 +156,15 @@ export const openUI = (selector: any, data?: {}) =>
 
 export const toggleUI = (selector: any, data?: {}) =>
   signalUI(selector, { action: 2, ...(data ?? {}) })
+
+export const signalLightbox = (selector: any, detail: {}) =>
+  signalEvent(selector, 'FUILightboxAction', detail)
+
+export const cyclePrevious = (selector: any) =>
+  signalLightbox(selector, { action: 0 })
+
+export const cycleNext = (selector: any) =>
+  signalLightbox(selector, { action: 1 })
 
 export const signalRepeater = (selector: any, detail: {}) =>
   signalEvent(selector, 'FUIRepeaterAction', detail)

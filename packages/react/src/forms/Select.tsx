@@ -65,7 +65,7 @@ export default function Select({
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
       {(!hideLabel && label) &&
-        <div className='fui-label'>{label}</div>
+        <div className='fui-field-label'>{label}</div>
       }
       <div style={{ position: 'relative' }}>
         <select

@@ -11,9 +11,11 @@ export interface RepeaterProps {
   as?: any
   className?: string
   items?: any[]
+  children: (item: any, index: number, key: string) => any
   onChange?: (newItems: any[]) => void
   onAction?: (e: any) => void
-  children: (item: any, index: number, key: string) => any
+  hideWhenEmpty?: boolean
+  style?: Object
   [x:string]: any
 }
 
@@ -23,9 +25,11 @@ export default function Repeater({
   as = 'span',
   className,
   items: _items = [],
+  children,
   onChange,
   onAction,
-  children,
+  hideWhenEmpty,
+  style,
   ...props
 }: RepeaterProps) {
   const Shell = as
@@ -111,6 +115,7 @@ export default function Repeater({
       ref={ref}
       id={id}
       className={cn('fui-listener fui-repeater', className)}
+      style={{ ...style, display: (hideWhenEmpty && items.length < 1) ? 'none' : undefined }}
       {...props}
     >
       {items.map((item, i) =>

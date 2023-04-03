@@ -13,7 +13,6 @@ export interface MediaProps {
   placeholder?: any
   cover?: boolean
   lazy?: boolean
-  defaultSrcSet?: boolean
   [x:string]: any
 }
 
@@ -29,11 +28,9 @@ export default function Media({
   placeholder,
   cover,
   lazy,
-  defaultSrcSet,
   ...props
 }: MediaProps) {
   const Shell = as
-  const sources = srcSet ?? defaultSrcSet ? `/sm/${src} 640w, /md/${src} 1024w, /lg/${src}` : null
 
   return (
     <div
@@ -44,9 +41,9 @@ export default function Media({
       <Shell
         src={(src && !lazy) ? src : undefined}
         data-lazy-src={(src && lazy) ? src : undefined}
-        srcSet={(sources && !lazy) ? sources : undefined}
-        data-lazy-srcset={(sources && lazy) ? sources : undefined}
-        sizes={sizes ?? defaultSrcSet ? '100vw' : undefined}
+        srcSet={(srcSet && !lazy) ? srcSet : undefined}
+        data-lazy-srcset={(srcSet && lazy) ? srcSet : undefined}
+        sizes={sizes ?? '100vw'}
         alt={alt ?? cover ? '' : undefined}
         className={innerClass}
         style={typeof as === 'string' ? _innerStyle(as) : undefined}
