@@ -5,7 +5,7 @@ import { useListener } from '../util'
 
 export interface LightboxProps {
   id?: string
-  items?: any[]
+  items: any[]
   children: (item: any, index: number, isActive: boolean) => any
   outerClass?: string
   className?: string
@@ -24,13 +24,13 @@ export default function Lightbox({
   outerClass,
   className,
   bgClass,
-  bgActiveClass = 'fui-lightbox-bg-active',
-  bgInactiveClass = 'fui-lightbox-bg-inactive',
+  bgActiveClass,
+  bgInactiveClass,
   overlay,
   overlayClass,
   preventScroll,
 }: LightboxProps) {
-  const ref = useRef() as any
+  const ref = useRef<any>()
   const active = useRef<boolean | null>(null)
   const [index, setIndex] = useState(0)
 

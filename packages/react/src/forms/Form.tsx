@@ -71,8 +71,8 @@ export default function Form({
 }: FormProps) {
   const attempts = useRef(0)
   const submissions = useRef(0)
-  const ref = useRef() as any
-  const saved = useRef(null) as any
+  const ref = useRef<any>()
+  const saved = useRef<any>(null)
 
   useEffect(() => {
     if (requireChanges)
