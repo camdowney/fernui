@@ -2,48 +2,48 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@fernui/icons':
-    specifier: ^2.0.6
-    version: 2.0.6
+    specifier: ^2.0.7
+    version: 2.0.7
   '@fernui/util':
-    specifier: ^2.2.6
-    version: 2.2.6
+    specifier: ^2.2.7
+    version: 2.2.7
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.0.28
-    version: 18.0.28
+    specifier: ^18.0.32
+    version: 18.0.32
 
 packages:
 
-  /@fernui/icons@2.0.6:
-    resolution: {integrity: sha512-ohcNXehGT1NGF+/7ulyLf8d/u1UkB07xvRjI5MM2SF8JPqQ89CEi8Vd+i4Gt7+SERTwGbwQkBQCXy8EwL0pukA==}
+  /@fernui/icons@2.0.7:
+    resolution: {integrity: sha512-1Oucoxy8q0cw3q13BgcIlki7p6aJ5URlTIhmIOhXCnw65WHPVWd+Lft87Oxoh0+MI9xev21UqlOUs2mLwfTwQQ==}
     dev: false
 
-  /@fernui/util@2.2.6:
-    resolution: {integrity: sha512-YNvKkwan9aKuixoc/YCx6Zy61MjVBFKMQOhHToC6mYGx/gwNcFBrOL17AaPyXoUaGnKXCTt34Kl3PoAlISOAJw==}
+  /@fernui/util@2.2.7:
+    resolution: {integrity: sha512-uSXyUM00Kv6nTkP8gVLH8Z98hOKBS/LiK36hNPiwyeF/14+TJG6HgOrMsNK32q3u9VlQiXON1DrUw0l4r9Uq0A==}
     dev: false
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
     dev: true
 
-  /@types/react@18.0.28:
-    resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
+  /@types/react@18.0.32:
+    resolution: {integrity: sha512-gYGXdtPQ9Cj0w2Fwqg5/ak6BcK3Z15YgjSqtyDizWUfx7mQ8drs0NBUzRRsAdoFVTO8kJ8L2TL8Skm7OFPnLUw==}
     dependencies:
       '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.2
-      csstype: 3.1.1
+      '@types/scheduler': 0.16.3
+      csstype: 3.1.2
     dev: true
 
-  /@types/scheduler@0.16.2:
-    resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+  /@types/scheduler@0.16.3:
+    resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
     dev: true
 
-  /csstype@3.1.1:
-    resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
+  /csstype@3.1.2:
+    resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
     dev: true
 
   /js-tokens@4.0.0:

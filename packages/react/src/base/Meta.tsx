@@ -1,5 +1,5 @@
 import React from 'react'
-import { composeExcerpt } from '@fernui/util'
+import { getExcerpt } from '@fernui/util'
 
 export interface MetaProps {
   as: any
@@ -26,7 +26,7 @@ export default function Meta({
   themeColor,
   children,
 }: MetaProps) {
-  const description = composeExcerpt(desc ?? '', 155, false)
+  const description = getExcerpt(desc ?? '', 155, false)
   const Shell = as
 
   return (
