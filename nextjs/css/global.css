@@ -141,11 +141,14 @@ section {
 .fui-checkbox input:focus ~ .fui-check {
   @apply !outline-none !shadow-[0_0_0_3px_#369df7];
 }
-.fui-field-info-icon, .fui-form-info-icon {
-  @apply w-3.5 md:w-4 mr-1.5;
+.fui-field-info {
+  @apply flex items-center space-x-1.5;
 }
 .fui-form-info {
-  @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
+  @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 space-x-1.5 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
+}
+.fui-field-info-icon, .fui-form-info-icon {
+  @apply w-3.5 md:w-4;
 }
 ::placeholder {
   @apply text-gray-400 !important;

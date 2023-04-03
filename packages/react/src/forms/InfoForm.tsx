@@ -52,7 +52,7 @@ export default function InfoForm({
           exitOnEscape={false}
         >
           <Icon i={warning} className='fui-form-info-icon' />
-          {message}
+          <span>{message}</span>
         </Dropdown>
       </>}
     </Form>

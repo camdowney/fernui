@@ -11,7 +11,7 @@ export default function Info({ visible, children }: InfoProps) {
   return visible ? (
     <div className='fui-field-info'>
       <Icon i={warning} className='fui-field-info-icon' />
-      {children}
+      <span>{children}</span>
     </div>
   ) : (
     <></>
