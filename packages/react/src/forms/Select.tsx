@@ -88,9 +88,11 @@ export default function Select({
             </option>    
           )}
         </select>
-        <div style={_iconOuterStyle as Object}>
-          <Icon i={angle} className='fui-select-icon' />
-        </div>
+        <Icon
+          i={angle}
+          className='fui-select-icon'
+          style={_iconStyle}
+        />
       </div>
       {message !== '' &&
         <Info visible={showInfo}>
@@ -101,11 +103,10 @@ export default function Select({
   )
 }
 
-const _iconOuterStyle = {
+const _iconStyle = {
   position: 'absolute',
-  top: 0,
+  top: '50%',
   right: 0,
-  display: 'flex',
-  height: '100%',
-  alignItems: 'center',
+  transform: 'translateY(-50%)',
+  pointerEvents: 'none',
 }
