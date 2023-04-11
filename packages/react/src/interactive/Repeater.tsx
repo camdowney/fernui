@@ -12,8 +12,8 @@ export interface RepeaterProps {
   className?: string
   items?: any[]
   children: (item: any, index: number, key: string) => any
-  onChange?: (newItems: any[]) => void
-  onAction?: (e: any) => void
+  onChange?: (newItems: any[]) => any
+  onAction?: (e: any) => any
   hideWhenEmpty?: boolean
   style?: Object
   [x:string]: any

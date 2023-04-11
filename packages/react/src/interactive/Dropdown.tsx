@@ -11,8 +11,8 @@ export interface DropdownProps {
   activeClass?: string
   inactiveClass?: string
   style?: Object
-  onChange?: (newActive: boolean) => void
-  onAction?: (e: any) => void
+  onChange?: (newActive: boolean) => any
+  onAction?: (e: any) => any
   openDelay?: number
   closeDelay?: number
   exitOnOutsideClick?: boolean

@@ -49,8 +49,8 @@ export interface FormProps {
   className?: string
   children?: any
   states?: FormState[]
-  onStateChange?: (newState: FormState) => void
-  onSubmit?: (e: any) => void | Promise<void>
+  onStateChange?: (newState: FormState) => any
+  onSubmit?: (e: any) => any
   maxAttempts?: number
   maxSubmissions?: number
   requireChanges?: boolean

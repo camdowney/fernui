@@ -32,8 +32,8 @@ export interface InputProps {
   rows?: number
   cols?: number
   innerClass?: string
-  onChange?: (e: any) => void
-  onKeydown?: (e: any) => void
+  onChange?: (e: any) => any
+  onKeydown?: (e: any) => any
   message?: string
 }
 

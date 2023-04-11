@@ -83,19 +83,29 @@ export const formToObject = (form: HTMLFormElement): any => {
   return Array.from(new FormData(form)).reduce(concat, null) ?? {}
 }
 
+interface PingOptions {
+  method?: string
+  headers?: {}
+  [options:string]: any
+}
+
+interface PingResponse {
+  res: Response | null
+  data: Object
+}
+
 export const ping = async (
   url: string,  
   body: any,
-  { method, headers, ...options }: any,
-): Promise<{
-  res: Response | null
-  data: Object
-}> => {
+  options?: PingOptions
+): Promise<PingResponse> => {
+  const { method, headers, ...rest } = options ?? {}
+
   try {
     const res = await fetch(url, {
       method: method || 'POST',
       body: typeof body === 'object' ? JSON.stringify(body) : body,
-      ...options,
+      ...rest,
       headers: {
         ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
         ...headers,
@@ -108,7 +118,7 @@ export const ping = async (
     }
   }
   catch (err) {
-    console.error('Fetch error: ', err)
+    console.error('Ping error: ', err)
 
     return { res: null, data: {} }
   }

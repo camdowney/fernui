@@ -7,8 +7,8 @@ export interface ExpandProps {
   id?: string
   className?: string
   children?: any
-  onChange?: (newActive: boolean) => void
-  onAction?: (e: any) => void
+  onChange?: (newActive: boolean) => any
+  onAction?: (e: any) => any
 }
 
 export default function Expand({

@@ -11,8 +11,8 @@ export const useListener = (event: string, callback: Function, element?: any, op
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
   initialValue?: T
   interval?: number
-  onSuccess?: (newValue: T, oldValue: T) => void
-  onError?: (error: any) => void
+  onSuccess?: (newValue: T, oldValue: T) => any
+  onError?: (error: any) => any
 }): T => {
   const { initialValue = null as T, interval = 60000, onSuccess, onError } = options ?? {}
 

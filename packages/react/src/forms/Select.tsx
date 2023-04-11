@@ -19,7 +19,7 @@ export interface SelectProps {
   required?: boolean
   disabled?: boolean
   innerClass?: string
-  onChange?: (e: any) => void
+  onChange?: (e: any) => any
   message?: string
 }
 
