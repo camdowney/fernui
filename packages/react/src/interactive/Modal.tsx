@@ -16,7 +16,7 @@ export interface ModalProps {
   bgClass?: string
   bgActiveClass?: string
   bgInactiveClass?: string
-  bgStyle?: Object,
+  bgStyle?: Object
   openDelay?: number
   closeDelay?: number
   exitOnBgClick?: boolean
