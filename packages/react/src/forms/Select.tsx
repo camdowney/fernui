@@ -11,7 +11,7 @@ export interface SelectProps {
   id?: string
   name?: string
   label?: string
-  hideLabel?: boolean
+  labelClass?: string
   placeholder?: string
   defaultValue?: any
   className?: string
@@ -28,7 +28,7 @@ export default function Select({
   id,
   name,
   label,
-  hideLabel,
+  labelClass,
   placeholder = 'Select an option',
   defaultValue,
   className,
@@ -64,8 +64,8 @@ export default function Select({
 
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
-      {(!hideLabel && label) &&
-        <div className='fui-field-label'>{label}</div>
+      {label &&
+        <div className={cn('fui-field-label', labelClass)}>{label}</div>
       }
       <div style={{ position: 'relative' }}>
         <select

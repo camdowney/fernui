@@ -11,7 +11,7 @@ export interface CheckboxProps {
   id?: string
   name?: string
   label?: string
-  hideLabel?: boolean
+  labelClass?: string
   defaultValue?: boolean
   className?: string
   required?: boolean
@@ -26,7 +26,7 @@ export default function Checkbox({
   id,
   name,
   label,
-  hideLabel,
+  labelClass,
   defaultValue,
   className,
   required,
@@ -77,8 +77,8 @@ export default function Checkbox({
         <div className='fui-check-box' style={_iconOuterStyle}>
           <Icon i={check} className='fui-check-icon' style={_iconStyle} />
         </div>
-        {(!hideLabel && label) &&
-          <div className='fui-field-label'>{label}</div>
+        {label &&
+          <div className={cn('fui-field-label', labelClass)}>{label}</div>
         }
       </label>
       {message !== '' && 

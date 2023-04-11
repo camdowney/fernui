@@ -17,7 +17,7 @@ export interface InputProps {
   id?: string
   name?: string
   label?: string
-  hideLabel?: boolean
+  labelClass?: string
   placeholder?: string
   defaultValue?: any
   className?: string
@@ -42,7 +42,7 @@ export default function Input({
   id,
   name,
   label,
-  hideLabel,
+  labelClass,
   placeholder,
   defaultValue,
   className,
@@ -117,8 +117,8 @@ export default function Input({
 
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
-      {(!hideLabel && label) && 
-        <div className='fui-field-label'>{label}</div>
+      {label &&
+        <div className={cn('fui-field-label', labelClass)}>{label}</div>
       }
       <Shell
         name={name || label || placeholder}
