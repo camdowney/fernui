@@ -47,6 +47,7 @@ export default () => {
               label='Full name *'
               rows={1}
               innerClass='resize-none break-all overflow-hidden'
+              defaultValue='qwe'
               textarea
               autoResize
               shiftForNewline

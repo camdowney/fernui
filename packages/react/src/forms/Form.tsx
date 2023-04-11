@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import Honeypot from './Honeypot'
 import { cn } from '@fernui/util'
+import { useListener } from '../util'
 
 const stringifyForm = (target: any) =>
   JSON.stringify(Array.from(new FormData(target)))
@@ -49,11 +50,12 @@ export interface FormProps {
   children?: any
   states?: FormState[]
   onStateChange?: (newState: FormState) => void
-  onSubmit?: (e: any) => any
+  onSubmit?: (e: any) => void | Promise<void>
   maxAttempts?: number
   maxSubmissions?: number
   requireChanges?: boolean
   requireInitialChanges?: boolean
+  promptBeforeUnload?: boolean
   [x:string]: any
 }
 
@@ -67,16 +69,18 @@ export default function Form({
   maxSubmissions = 1,
   requireChanges = true,
   requireInitialChanges = true,
+  promptBeforeUnload = true,
   ...props
 }: FormProps) {
+  const ref = useRef<any>()
+  const initial = useRef<string>('')
+  const saved = useRef<string>('')
   const attempts = useRef(0)
   const submissions = useRef(0)
-  const ref = useRef<any>()
-  const saved = useRef<any>(null)
 
   useEffect(() => {
-    if (requireChanges)
-      saved.current = requireInitialChanges ? stringifyForm(ref.current) : 1
+    initial.current = stringifyForm(ref.current)
+    saved.current = requireInitialChanges ? initial.current : ''
   }, [])
 
   const updateState = (newState: number) => {
@@ -88,6 +92,14 @@ export default function Form({
     
     onStateChange?.(state)
   }
+
+  useListener('beforeunload', (e: any) => {
+    if (!promptBeforeUnload || (stringifyForm(ref.current) === (saved.current || initial.current)))
+      return
+
+    e.preventDefault()
+    e.returnValue = ''
+  })
 
   const onSubmit = async (e: any) => {
     e.preventDefault()
@@ -102,7 +114,7 @@ export default function Form({
 
     const formData = stringifyForm(e.target)
 
-    if (requireChanges && (!saved.current || saved.current === formData))
+    if (requireChanges && (saved.current === formData))
       return updateState(7)
 
     updateState(1)
@@ -113,8 +125,7 @@ export default function Form({
     try {
       await _onSubmit(e)
 
-      if (requireChanges)
-        saved.current = formData
+      saved.current = formData
 
       updateState((maxSubmissions > 0 && ++submissions.current >= maxSubmissions) ? 5 : 6)
     }
