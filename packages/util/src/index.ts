@@ -85,7 +85,6 @@ export const formToObject = (form: HTMLFormElement): any => {
 
 interface PingRequestData {
   headers?: object
-  abortController?: AbortController
   [x:string]: any
 }
 
@@ -96,13 +95,14 @@ type PingResponse = {
 
 export const ping = async (
   url: string,
-  { headers, abortController, ...body }: PingRequestData
+  { headers, ...body }: PingRequestData,
+  options?: { [x:string]: any }
 ): Promise<PingResponse> => {
   try {
     const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
-      signal: abortController?.signal,
+      ...options,
       headers: {
         ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
         ...headers,
