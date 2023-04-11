@@ -83,25 +83,18 @@ export const formToObject = (form: HTMLFormElement): any => {
   return Array.from(new FormData(form)).reduce(concat, null) ?? {}
 }
 
-interface PingRequestData {
-  headers?: object
-  [x:string]: any
-}
-
-type PingResponse = {
+export const ping = async (
+  url: string,  
+  body: any,
+  { method, headers, ...options }: any,
+): Promise<{
   res: Response | null
   data: Object
-}
-
-export const ping = async (
-  url: string,
-  { headers, ...body }: PingRequestData,
-  options?: { [x:string]: any }
-): Promise<PingResponse> => {
+}> => {
   try {
     const res = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(body),
+      method: method || 'POST',
+      body: typeof body === 'object' ? JSON.stringify(body) : body,
       ...options,
       headers: {
         ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
