@@ -23,7 +23,6 @@ export interface InputProps {
   className?: string
   type?: string
   required?: boolean
-  disabled?: boolean
   readOnly?: boolean
   charLimit?: number
   textarea?: boolean
@@ -34,7 +33,7 @@ export interface InputProps {
   innerClass?: string
   onChange?: (e: any) => any
   onKeydown?: (e: any) => any
-  message?: string
+  message?: string | false
 }
 
 export default function Input({ 
@@ -48,7 +47,6 @@ export default function Input({
   className,
   type = 'text',
   required,
-  disabled,
   readOnly,
   charLimit,
   textarea,
@@ -69,10 +67,10 @@ export default function Input({
   const [formState, setFormState] = useState<FormState>(initialState)
 
   const ref = innerRef || useRef()
-  const holdingShift = useRef(false)
-
-  const Shell = textarea ? 'textarea' : 'input'
   const showInfo = invalid && (modified || formState.error)
+  
+  const holdingShift = useRef(false)
+  const Shell = textarea ? 'textarea' : 'input'
 
   const update = (e: any) => {
     setInvalid(isValid(e?.target.value))
@@ -118,7 +116,9 @@ export default function Input({
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
       {label &&
-        <div className={cn('fui-field-label', labelClass)}>{label}</div>
+        <div className={cn('fui-field-label', labelClass)}>
+          {label}
+        </div>
       }
       <Shell
         name={name || label || placeholder}
@@ -126,13 +126,12 @@ export default function Input({
         data-field-valid={!invalid}
         onChange={update}
         onBlur={update}
-        disabled={disabled != null ? disabled : formState.disabled}
         readOnly={readOnly != null ? readOnly : formState.disabled}
         maxLength={charLimit ? charLimit : textarea ? 1000 : 100}
         className={innerClass}
         {...{ ref, id, type, placeholder, defaultValue, rows, cols }}
       />
-      {message !== '' && 
+      {message !== false && 
         <Info visible={showInfo}>
           {message || (type === 'email' ? 'Please enter a valid email address.' : 'Please complete this field.')}
         </Info>

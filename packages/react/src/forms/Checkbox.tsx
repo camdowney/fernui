@@ -15,10 +15,10 @@ export interface CheckboxProps {
   defaultValue?: boolean
   className?: string
   required?: boolean
-  disabled?: boolean
+  readOnly?: boolean
   innerClass?: string
   onChange?: (e: any) => any
-  message?: string
+  message?: string | false
 }
 
 export default function Checkbox({
@@ -30,7 +30,7 @@ export default function Checkbox({
   defaultValue,
   className,
   required,
-  disabled,
+  readOnly,
   innerClass,
   onChange,
   message,
@@ -69,7 +69,7 @@ export default function Checkbox({
           data-field-valid={!invalid}
           onChange={update}
           onBlur={update}
-          disabled={disabled != null ? disabled : formState.disabled}
+          readOnly={readOnly != null ? readOnly : formState.disabled}
           className={innerClass}
           style={_style}
           {...{ ref, id }}
@@ -78,10 +78,12 @@ export default function Checkbox({
           <Icon i={check} className='fui-check-icon' style={_iconStyle} />
         </div>
         {label &&
-          <div className={cn('fui-field-label', labelClass)}>{label}</div>
+          <div className={cn('fui-field-label', labelClass)}>
+            {label}
+          </div>
         }
       </label>
-      {message !== '' && 
+      {message !== false && 
         <Info visible={showInfo}>
           {message || 'Please check this box to proceed.'}
         </Info>

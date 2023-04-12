@@ -128,8 +128,8 @@ export default function Form({
       await _onSubmit(e)
 
       if (resetOnSuccess) {
-        ref.current.reset()
-        saved.current = ''
+        e.target.reset()
+        saved.current = stringifyForm(e.target)
       }
       else {
         saved.current = formData

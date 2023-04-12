@@ -45,13 +45,12 @@ export default () => {
             <Input
               name='field.0.a'
               label='Full name *'
+              defaultValue='qwe'
               rows={1}
               innerClass='resize-none break-all overflow-hidden'
-              defaultValue='qwe'
               textarea
               autoResize
               shiftForNewline
-              disabled={false}
               required
             />
             <Select
@@ -61,7 +60,7 @@ export default () => {
                 { label: 'Option 2' },
                 { label: 'Option 3' },
               ]}
-              placeholder=''
+              placeholder={false}
               required
             />
             <Repeater

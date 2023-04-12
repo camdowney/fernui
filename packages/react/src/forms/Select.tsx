@@ -17,10 +17,10 @@ export interface SelectProps {
   className?: string
   options: { label: string, value?: any }[]
   required?: boolean
-  disabled?: boolean
+  readOnly?: boolean
   innerClass?: string
   onChange?: (e: any) => any
-  message?: string
+  message?: string | false
 }
 
 export default function Select({ 
@@ -34,7 +34,7 @@ export default function Select({
   className,
   options,
   required,
-  disabled,
+  readOnly,
   innerClass,
   onChange,
   message,
@@ -45,6 +45,8 @@ export default function Select({
 
   const ref = innerRef || useRef()
   const showInfo = invalid && (modified || formState.error)
+
+  const disabled = readOnly != null ? readOnly : formState.disabled
 
   const update = (e: any) => {
     setInvalid(required && e.target.selectedIndex < (placeholder ? 1 : 0))
@@ -65,7 +67,9 @@ export default function Select({
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
       {label &&
-        <div className={cn('fui-field-label', labelClass)}>{label}</div>
+        <div className={cn('fui-field-label', labelClass)}>
+          {label}
+        </div>
       }
       <div style={{ position: 'relative' }}>
         <select
@@ -74,7 +78,7 @@ export default function Select({
           data-field-valid={!invalid}
           onChange={update}
           onBlur={update}
-          disabled={disabled != null ? disabled : formState.disabled}
+          disabled={disabled}
           className={innerClass}
           style={{ cursor: 'pointer' }}
           {...{ ref, id, defaultValue }}
@@ -94,7 +98,7 @@ export default function Select({
           style={_iconStyle}
         />
       </div>
-      {message !== '' &&
+      {message !== false &&
         <Info visible={showInfo}>
           {message || 'Please select an option.'}
         </Info>
