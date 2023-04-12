@@ -3,7 +3,7 @@ import {
   Expand, Dropdown, Lightbox, Repeater,
   InfoForm, Input, Select, FormButton,
 } from '../../packages/react'
-import { cn, formToObject, toggleUI, getRepeaterMethods, setFieldValue, cyclePrevious, cycleNext, ping } from '../../packages/util'
+import { cn, formToObject, toggleUI, getRepeaterMethods, setFieldValue, cyclePrevious, cycleNext } from '../../packages/util'
 import { angle, mail } from '../../packages/icons'
 
 export default () => {
@@ -18,14 +18,6 @@ export default () => {
   const testSubmit = async (e: any) => {
     console.log(formToObject(e.target))
     await new Promise(res => setTimeout(res, 500))
-
-    await ping('/api/test', {}, {
-      headers: {
-        '1': '2',
-      },
-      method: '3',
-      test: '4',
-    })
   }
 
   return <>

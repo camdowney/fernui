@@ -118,7 +118,7 @@ export const ping = async (
     }
   }
   catch (err) {
-    console.error('Ping error: ', err)
+    console.error('Ping error:', err)
 
     return { res: null, data: {} }
   }

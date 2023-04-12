@@ -12,7 +12,7 @@ export interface SelectProps {
   name?: string
   label?: string
   labelClass?: string
-  placeholder?: string
+  placeholder?: string | false
   defaultValue?: any
   className?: string
   options: { label: string, value?: any }[]
@@ -69,7 +69,7 @@ export default function Select({
       }
       <div style={{ position: 'relative' }}>
         <select
-          name={name || label || placeholder}
+          name={name || label || placeholder || ''}
           aria-label={label || placeholder || name}
           data-field-valid={!invalid}
           onChange={update}

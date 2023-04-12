@@ -56,6 +56,7 @@ export interface FormProps {
   requireChanges?: boolean
   requireInitialChanges?: boolean
   promptBeforeUnload?: boolean
+  resetOnSuccess?: boolean
   [x:string]: any
 }
 
@@ -70,6 +71,7 @@ export default function Form({
   requireChanges = true,
   requireInitialChanges = true,
   promptBeforeUnload = true,
+  resetOnSuccess,
   ...props
 }: FormProps) {
   const ref = useRef<any>()
@@ -125,12 +127,18 @@ export default function Form({
     try {
       await _onSubmit(e)
 
-      saved.current = formData
+      if (resetOnSuccess) {
+        ref.current.reset()
+        saved.current = ''
+      }
+      else {
+        saved.current = formData
+      }
 
       updateState((maxSubmissions > 0 && ++submissions.current >= maxSubmissions) ? 5 : 6)
     }
     catch (err) {
-      console.error(err)
+      console.error('Form error:', err)
       updateState(4)
     }
   }
