@@ -12,6 +12,7 @@ export interface MediaProps {
   innerClass?: string
   placeholder?: any
   cover?: boolean
+  outer?: boolean
   lazy?: boolean
   [x:string]: any
 }
@@ -27,29 +28,36 @@ export default function Media({
   innerClass,
   placeholder,
   cover,
+  outer = true,
   lazy,
   ...props
 }: MediaProps) {
   const Shell = as
 
-  return (
+  const MediaInner = () => (
+    <Shell
+      src={(src && !lazy) ? src : undefined}
+      data-lazy-src={(src && lazy) ? src : undefined}
+      srcSet={(srcSet && !lazy) ? srcSet : undefined}
+      data-lazy-srcset={(srcSet && lazy) ? srcSet : undefined}
+      sizes={sizes ?? '100vw'}
+      alt={alt ?? ''}
+      className={outer ? innerClass : className}
+      style={(outer && typeof as === 'string') ? _innerStyle(as) : undefined}
+      {...props}
+    />
+  )
+
+  return outer ? (
     <div
       className={cn('fui-media', className)}
       style={{ ...style, ...(cover ? _coverStyle : _defaultStyle) } as Object}
     >
       {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}
-      <Shell
-        src={(src && !lazy) ? src : undefined}
-        data-lazy-src={(src && lazy) ? src : undefined}
-        srcSet={(srcSet && !lazy) ? srcSet : undefined}
-        data-lazy-srcset={(srcSet && lazy) ? srcSet : undefined}
-        sizes={sizes ?? '100vw'}
-        alt={alt ?? cover ? '' : undefined}
-        className={innerClass}
-        style={typeof as === 'string' ? _innerStyle(as) : undefined}
-        {...props}
-      />
+      <MediaInner />
     </div>
+  ) : (
+    <MediaInner />
   )
 }
 

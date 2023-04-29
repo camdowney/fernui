@@ -79,7 +79,7 @@ export default function Select({
           onChange={update}
           onBlur={update}
           disabled={disabled}
-          className={innerClass}
+          className={cn('fui-select', innerClass)}
           style={{ cursor: 'pointer' }}
           {...{ ref, id, defaultValue }}
         >

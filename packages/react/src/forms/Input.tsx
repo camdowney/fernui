@@ -128,7 +128,7 @@ export default function Input({
         onBlur={update}
         readOnly={readOnly != null ? readOnly : formState.disabled}
         maxLength={charLimit ? charLimit : textarea ? 1000 : 100}
-        className={innerClass}
+        className={cn(textarea ? 'fui-textarea' : 'fui-input', innerClass)}
         {...{ ref, id, type, placeholder, defaultValue, rows, cols }}
       />
       {message !== false && 

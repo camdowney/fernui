@@ -70,7 +70,7 @@ export default function Checkbox({
           onChange={update}
           onBlur={update}
           readOnly={readOnly != null ? readOnly : formState.disabled}
-          className={innerClass}
+          className={cn('fui-checkbox', innerClass)}
           style={_style}
           {...{ ref, id }}
         />

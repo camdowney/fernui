@@ -230,10 +230,12 @@ export const initSplitLetters = (selector: string, delay = 0, step = 25) => {
   document.querySelectorAll(selector).forEach(element => {
     let letterIndex = 0
 
-    element.innerHTML = element.innerHTML.split(' ').map(word => '<span style="display: inline-flex;">' +
-      word.split('').map(letter => 
+    element.innerHTML = element.innerHTML.split(' ').map(word =>
+      '<span class="split-letter-word" style="display: inline-flex;">'
+      + word.split('').map(letter => 
         `<div class="split-letter" style="display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms">${letter}</div>`
       ).join('')
-    + '</span>').join(' ')
+      + '</span>'
+    ).join(' ')
   })
 }
