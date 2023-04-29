@@ -7,8 +7,9 @@ export interface LinkProps {
   as?: any
   to?: string
   children?: any
-  text?: string
+  text?: any
   icon?: IconProps
+  iconAfter?: IconProps
   blank?: boolean
   label?: string
   preventDefaultFocus?: boolean,
@@ -22,6 +23,7 @@ export default function Link({
   children,
   text,
   icon,
+  iconAfter,
   blank,
   label,
   preventDefaultFocus,
@@ -44,9 +46,10 @@ export default function Link({
       aria-label={label || text}
       {...props}
     >
+      {icon && <Icon {...icon} />}
       {children}
       {text && <span>{text}</span>}
-      {icon && <Icon {...icon} />}
+      {iconAfter && <Icon {...iconAfter} />}
     </Shell>
   )
 }
