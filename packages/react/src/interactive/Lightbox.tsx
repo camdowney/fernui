@@ -13,7 +13,6 @@ export interface LightboxProps {
   bgActiveClass?: string
   bgInactiveClass?: string
   overlay?: any
-  overlayClass?: string
   preventScroll?: boolean
 }
 
@@ -27,7 +26,6 @@ export default function Lightbox({
   bgActiveClass,
   bgInactiveClass,
   overlay,
-  overlayClass,
   preventScroll,
 }: LightboxProps) {
   const ref = useRef<any>()
@@ -85,17 +83,9 @@ export default function Lightbox({
       {items.map((item, i) =>
         children(item, i, i === index)
       )}
-      <div className={cn('fui-lightbox-overlay', overlayClass)} style={_overlayStyle as Object}>
+      <span>
         {overlay}
-      </div>
+      </span>
     </Modal>
   )
-}
-
-const _overlayStyle = {
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  top: 0,
-  left: 0,
 }
