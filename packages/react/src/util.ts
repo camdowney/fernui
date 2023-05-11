@@ -5,13 +5,13 @@ export const useListener = (
   callback: Function,
   options?: {
     element?: any
-    dependencies?: []
+    dependencies?: any[]
     [x:string]: any
   }
 ) => {
   useEffect(() => {
     const current = options?.element?.current || options?.element || window
-
+    
     current.addEventListener(event, callback, options?.rest)
     return () => current.removeEventListener(event, callback, options?.rest)
   }, [event, callback, ...(options?.dependencies ?? [])])
