@@ -18,7 +18,7 @@ export const slugify = (str: string) =>
 
 export const escapeHtml = (str: string) =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim()
 
 export const removeHtml = (str: string) =>
   (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()

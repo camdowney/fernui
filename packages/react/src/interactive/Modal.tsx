@@ -86,7 +86,7 @@ export default function Modal({
     const action = e.detail.action
     setActive(action < 2 ? action : !active)
     onAction?.(e)
-  }, ref)
+  }, { element: ref })
 
   return (
     <span

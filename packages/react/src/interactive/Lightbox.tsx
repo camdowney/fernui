@@ -71,7 +71,7 @@ export default function Lightbox({
       cyclePrevious()
     else if (action === 1)
       cycleNext()
-  }, ref)
+  }, { element: ref })
 
   return (
     <Modal

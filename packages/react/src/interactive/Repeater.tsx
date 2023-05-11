@@ -108,7 +108,7 @@ export default function Repeater({
       data.items = items
 
     onAction?.(e)
-  }, ref)
+  }, { element: ref })
 
   return (
     <Shell

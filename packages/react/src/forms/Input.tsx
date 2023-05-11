@@ -88,13 +88,13 @@ export default function Input({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, ref)
+  }, { element: ref })
 
   useListener('FUIFieldAction', (e: any) => {
     const value = e.detail.value
     ref.current.value = value
     update({ target: { value }})
-  }, ref)
+  }, { element: ref })
 
   useListener('keydown', (e: any) => {
     if (e.keyCode === 16)
@@ -106,12 +106,12 @@ export default function Input({
     }
 
     onKeydown?.(e)
-  }, ref)
+  }, { element: ref })
 
   useListener('keyup', (e: any) => {
     if (e.keyCode === 16)
       holdingShift.current = false
-  }, ref)
+  }, { element: ref })
 
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>

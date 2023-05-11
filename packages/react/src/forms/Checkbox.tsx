@@ -50,13 +50,13 @@ export default function Checkbox({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, ref)
+  }, { element: ref })
 
   useListener('FUIFieldAction', (e: any) => {
     const checked = e.detail.value
     ref.current.checked = checked
     update({ target: { checked }})
-  }, ref)
+  }, { element: ref })
 
   return (
     <div className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>

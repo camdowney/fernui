@@ -35,7 +35,7 @@ export default function Link({
   useListener('mousedown', (e: any) => {
     if (preventDefaultFocus)
       e.preventDefault()
-  }, ref)
+  }, { element: ref })
 
   return (
     <Shell

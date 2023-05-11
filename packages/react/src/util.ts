@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react'
 
-export const useListener = (event: string, callback: Function, element?: any, options?: Object | boolean) => {
+export const useListener = (
+  event: string,
+  callback: Function,
+  options?: {
+    element?: any
+    dependencies?: []
+    [x:string]: any
+  }
+) => {
   useEffect(() => {
-    const current = element?.current || element || window
-    current.addEventListener(event, callback, options)
-    return () => current.removeEventListener(event, callback, options)
-  }, [event, callback])
+    const current = options?.element?.current || options?.element || window
+
+    current.addEventListener(event, callback, options?.rest)
+    return () => current.removeEventListener(event, callback, options?.rest)
+  }, [event, callback, ...(options?.dependencies ?? [])])
 }
 
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {

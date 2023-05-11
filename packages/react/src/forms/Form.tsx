@@ -152,8 +152,8 @@ export default function Form({
       noValidate
       {...props}
     >
-      <Honeypot />
       {children}
+      <Honeypot />
     </form>
   )
 }

@@ -14,7 +14,7 @@ export default function FormButton({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, ref)
+  }, { element: ref })
 
   return (
     <Link

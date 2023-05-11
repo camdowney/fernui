@@ -56,13 +56,13 @@ export default function Select({
 
   useListener('FUIFormStateChange', (e: any) => {
     setFormState(e.detail.state as FormState)
-  }, ref)
+  }, { element: ref })
 
   useListener('FUIFieldAction', (e: any) => {
     const value = e.detail.value
     ref.current.value = value
     update({ target: { value }})
-  }, ref)
+  }, { element: ref })
 
   return (
     <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>

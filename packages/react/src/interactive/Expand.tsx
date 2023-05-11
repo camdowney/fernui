@@ -36,7 +36,7 @@ export default function Expand({
     setActive(newActive)
     onChange?.(newActive)
     onAction?.(e)
-  }, ref)
+  }, { element: ref })
 
   return (
     <div
