@@ -34,6 +34,7 @@ export interface InputProps {
   onChange?: (e: any) => any
   onKeydown?: (e: any) => any
   message?: string | false
+  [x:string]: any
 }
 
 export default function Input({ 
@@ -58,6 +59,7 @@ export default function Input({
   onChange,
   onKeydown,
   message,
+  ...props
 }: InputProps) {
   const isValid = (value: string = '') =>
     required && (!value?.trim() || (type === 'email' && !isEmail(value)))
@@ -129,7 +131,7 @@ export default function Input({
         readOnly={readOnly != null ? readOnly : formState.disabled}
         maxLength={charLimit ? charLimit : textarea ? 1000 : 100}
         className={cn(textarea ? 'fui-textarea' : 'fui-input', innerClass)}
-        {...{ ref, id, type, placeholder, defaultValue, rows, cols }}
+        {...{ ref, id, type, placeholder, defaultValue, rows, cols, ...props }}
       />
       {message !== false && 
         <Info visible={showInfo}>
