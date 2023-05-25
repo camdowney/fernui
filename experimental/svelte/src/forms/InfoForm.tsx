@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useRef } from 'react'
 import Form, { FormProps, FormState, initialState } from './Form'
 import Icon from '../base/Icon'

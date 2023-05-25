@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useRef } from 'react'
 import Icon, { IconProps } from './Icon'
 import { useListener } from '../util'

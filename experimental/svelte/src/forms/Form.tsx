@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useEffect, useRef } from 'react'
 import Honeypot from './Honeypot'
 import { cn } from '@fernui/util'

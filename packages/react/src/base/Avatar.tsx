@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import { cn } from '@fernui/util'
 import Media, { MediaProps } from './Media'

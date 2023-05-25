@@ -1,10 +1,8 @@
-'use client'
-
 import React, { useState, useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useListener } from '../util'
 
-export interface ModalProps {
+export interface DropdownProps {
   innerRef?: any
   id?: string
   outerClass?: string
@@ -15,44 +13,31 @@ export interface ModalProps {
   style?: Object
   onChange?: (newActive: boolean) => any
   onAction?: (e: any) => any
-  bgClass?: string
-  bgActiveClass?: string
-  bgInactiveClass?: string
-  bgStyle?: Object
   openDelay?: number
   closeDelay?: number
-  exitOnBgClick?: boolean
   exitOnOutsideClick?: boolean
   exitOnEscape?: boolean
-  preventScroll?: boolean
-  focus?: boolean
 }
 
-export default function Modal({
+export default function Dropdown({
   innerRef,
   id,
   outerClass,
   children,
   className,
-  activeClass = 'fui-modal-active',
-  inactiveClass = 'fui-modal-inactive',
+  activeClass = 'fui-dropdown-active',
+  inactiveClass = 'fui-dropdown-inactive',
   style,
   onChange,
   onAction,
-  bgClass,
-  bgActiveClass = 'fui-modal-bg-active',
-  bgInactiveClass = 'fui-modal-bg-inactive',
-  bgStyle,
   openDelay = 0,
   closeDelay = 0,
-  exitOnBgClick = true,
   exitOnOutsideClick = true,
   exitOnEscape = true,
-  preventScroll,
-}: ModalProps) {
-  const [active, _setActive] = useState<boolean | null>(null)
+}: DropdownProps) {
+  const [active, _setActive] = useState<boolean | any>(null)
   const ref = innerRef || useRef()
-  const timer = useRef<any>()
+  const timer = useRef<any>() 
 
   const setActiveTimer = (newActive: boolean, delay: number) =>
     timer.current = setTimeout(() => setActive(newActive), delay)
@@ -61,9 +46,6 @@ export default function Modal({
     clearTimeout(timer.current)
     _setActive(newActive)
     onChange?.(newActive)
-
-    if (preventScroll)
-      document.body.style.overflow = newActive ? 'hidden' : 'auto'
       
     if (newActive && closeDelay > 0)
       setActiveTimer(false, closeDelay)
@@ -80,7 +62,7 @@ export default function Modal({
   })
 
   useListener('mouseup', (e: any) => {
-    if (active && exitOnOutsideClick && !ref.current.lastChild.contains(e.target))
+    if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
       setTimeout(() => setActive(false), 0)
   })
 
@@ -94,16 +76,11 @@ export default function Modal({
     <span
       ref={ref}
       id={id}
-      className={cn('fui-listener fui-modal-outer', outerClass)}
+      className={cn('fui-listener fui-dropdown-outer', outerClass)}
+      style={_outerStyle as Object}
     >
       <div
-        className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}
-        onClick={() => exitOnBgClick && setActive(false)}
-        aria-hidden={!active}
-        style={{ ..._bgStyle, ...bgStyle } as Object}
-      />
-      <div
-        className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
+        className={cn('fui-dropdown', active ? activeClass : inactiveClass, className)}
         aria-hidden={!active}
         style={{ ..._style(active), ...style } as Object}
       >
@@ -113,16 +90,13 @@ export default function Modal({
   )
 }
 
-const _bgStyle = {
-  position: 'fixed',
-  top: '-50%',
-  bottom: '-50%',
-  left: '-50%',
-  right: '-50%',
+const _outerStyle = {
+  position: 'relative',
+  display: 'block',
 }
 
 const _style = (active: boolean | null) => ({
   overflowY: 'auto',
-  position: 'fixed',
+  position: 'absolute',
   visibility: active === null && 'hidden !important',
 })

@@ -1,0 +1,21 @@
+{
+  "name": "@fernui/react",
+  "author": "@camdowney",
+  "version": "2.6.1",
+  "description": "A library of unopinionated, extendable UI components for React.",
+  "keywords": [
+    "ui",
+    "javascript",
+    "components",
+    "react"
+  ],
+  "main": "./dist/index.js",
+  "peerDependencies": {
+    "@fernui/icons": "^2.0.7",
+    "@fernui/util": "^2.2.9",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.34"
+  }
+}

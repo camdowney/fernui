@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 
+    Base & Typography
+  */
+  html {
+    @apply font-main bg-gray-100 scroll-smooth scroll-pt-14 md:scroll-pt-16;
+  }
+  h1, .h1 {
+    @apply font-main text-4xl font-bold text-gray-100 uppercase;
+  }
+  h2, .h2 {
+    @apply font-main text-2xl font-bold text-gray-800 uppercase -mt-1.5;
+  }
+  h3, .h3 {
+    @apply font-main text-xl font-bold text-gray-800 uppercase;
+  }
+  p, p > a, ul, ol, label, input {
+    @apply font-normal text-gray-800;
+  }
+  p > a {
+    @apply border-b-2 border-gray-400 hover:border-gray-700;
+  }
+  .quote {
+    @apply border-l-4 md:border-l-[6px] border-gray-400 italic pl-6 md:pl-8;
+  }
+  a, button {
+    @apply duration-150 md:duration-300 transition-colors;
+  }
+  ul, ol {
+    @apply ml-5 md:ml-6 space-y-2 md:space-y-3;
+  }
+  ul {
+    @apply list-disc;
+  }
+  ol {
+    @apply list-decimal;
+  }
+  :focus-visible {
+    @apply !outline-none !shadow-[0_0_0_3px_#369df7];
+  }
+}
+
+/* 
+  UI - Common
+*/
+.px-md {
+  @apply px-6 md:px-14 lg:px-24;
+}
+.py-md {
+  @apply py-14 md:py-20 xl:py-32;
+}
+.gap-md {
+  @apply gap-7 md:gap-9 lg:gap-16 xl:gap-28;
+}
+.gap-y-lg {
+  @apply gap-y-7 md:gap-y-9;
+}
+.space-y-md {
+  @apply space-y-5 md:space-y-6;
+}
+.space-y-lg {
+  @apply space-y-7 md:space-y-9;
+}
+.fui-expand {
+  @apply duration-300;
+}
+section {
+  @apply relative py-md;
+}
+.container {
+  @apply relative w-full px-md mx-auto;
+}
+.fui-avatar {
+  @apply w-12 h-12 rounded-full text-gray-100;
+}
+.fui-modal {
+  @apply z-50;
+}
+.fui-modal-bg, .fui-lightbox-bg {
+  @apply z-40 bg-gray-900/50;
+}
+.fui-modal-bg-inactive, .fui-lightbox-bg-inactive {
+  @apply invisible;
+}
+.fui-modal-active {
+  @apply visible opacity-100 origin-center duration-[0.4s];
+  transform: scale3d(1, 1, 1);
+}
+.fui-modal-inactive {
+  @apply invisible opacity-0 origin-center duration-[0.4s];
+  transform: scale3d(0.85, 0.85, 1);
+}
+.fui-dropdown {
+  @apply z-30 bg-gray-100 shadow-md rounded-xl p-4;
+}
+.fui-dropdown-active {
+  @apply visible opacity-100 origin-center duration-[0.4s];
+  transform: scale3d(1, 1, 1);
+}
+.fui-dropdown-inactive {
+  @apply invisible opacity-0 origin-center duration-[0.4s];
+  transform: scale3d(0.85, 0.85, 1);
+}
+.btn {
+  @apply relative inline-flex items-center border-b-2;
+}
+.btn-light {
+  @apply text-gray-100 hover:text-gray-300 border-gray-100 hover:border-gray-300;
+}
+
+/*
+  UI - Forms
+*/
+.fui-field input, .fui-field textarea, .fui-field select {
+  @apply block w-full bg-transparent border-2 border-gray-400 rounded-xl duration-200 px-5 md:px-6 py-3 md:py-3.5;
+}
+.fui-field-invalid {
+  @apply -mb-3 md:-mb-2;
+}
+.fui-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.fui-field-label {
+  @apply block mb-0.5;
+}
+.fui-select-icon {
+  @apply w-3 md:w-3.5 mt-0.5 mr-4 md:mr-5;
+}
+.fui-check {
+  @apply w-5 h-5 rounded-sm border-2 border-gray-400 text-[rgba(0,0,0,0)] p-0.5 mr-3 mt-[3px] md:mt-1;
+}
+.fui-checkbox input:checked ~ .fui-check {
+  @apply bg-gray-500 text-gray-100;
+}
+.fui-checkbox input:focus ~ .fui-check {
+  @apply !outline-none !shadow-[0_0_0_3px_#369df7];
+}
+.fui-field-info {
+  @apply flex items-center space-x-1.5;
+}
+.fui-form-info {
+  @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 space-x-1.5 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
+}
+.fui-field-info-icon, .fui-form-info-icon {
+  @apply w-3.5 md:w-4;
+}
+::placeholder {
+  @apply text-gray-400 !important;
+}

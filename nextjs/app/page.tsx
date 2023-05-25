@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Media, Avatar, Link,
   Expand, Dropdown, Lightbox, Repeater,
