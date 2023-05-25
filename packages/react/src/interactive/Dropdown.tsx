@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useListener } from '../util'

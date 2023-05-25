@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useRef } from 'react'
 import { FormState, initialState } from './Form'
 import Link, { LinkProps } from '../base/Link'

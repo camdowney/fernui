@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useRef, useState } from 'react'
 import Modal from '../interactive/Modal'
 import { cn } from '@fernui/util'

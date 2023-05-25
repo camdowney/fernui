@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useRef, useEffect } from 'react'
 import { FormState, initialState } from './Form'
 import Info from './Info'
