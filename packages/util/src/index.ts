@@ -14,7 +14,7 @@ export const isEmail = (str: string) =>
 	/^\S+@\S+\.\S+$/.test(str || '')
 
 export const slugify = (str: string) =>
-	(str || '').toLowerCase().replace(/[^\w\s\-/]+/g, '').replace(/[\s\-]+/g, '-')
+  (str || '').toLowerCase().replace(/[^\w\s]+/g, '').trim().replace(/[\s\-]+/g, '-')
 
 export const escapeHtml = (str: string) =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
