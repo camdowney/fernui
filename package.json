@@ -3,12 +3,18 @@
   "scripts": {
     "r-icons": "if exist .\\packages\\icons\\_dist rmdir /S /Q .\\packages\\icons\\_dist",
     "r-react": "if exist .\\packages\\react\\_dist rmdir /S /Q .\\packages\\react\\_dist",
+    "r-rcu": "if exist .\\packages\\react-core-util\\_dist rmdir /S /Q .\\packages\\react-core-util\\_dist",
+    "r-rnu": "if exist .\\packages\\react-native-util\\_dist rmdir /S /Q .\\packages\\react-native-util\\_dist",
+    "r-ru": "if exist .\\packages\\react-util\\_dist rmdir /S /Q .\\packages\\react-util\\_dist",
     "r-util": "if exist .\\packages\\util\\_dist rmdir /S /Q .\\packages\\util\\_dist",
-    "r-all": "concurrently \"pnpm r-icons\" \"pnpm r-react\" \"pnpm r-util\"",
+    "r-all": "concurrently \"pnpm r-icons\" \"pnpm r-react\" \"pnpm r-rcu\" \"pnpm r-rnu\" \"pnpm r-ru\" \"pnpm r-util\"",
     "b-icons": "cd ./packages/icons && tsc",
     "b-react": "cd ./packages/react && pnpm i && tsc",
+    "b-rcu": "cd ./packages/react-core-util && pnpm i && tsc",
+    "b-rnu": "cd ./packages/react-native-util && pnpm i && tsc",
+    "b-ru": "cd ./packages/react-util && pnpm i && tsc",
     "b-util": "cd ./packages/util && tsc",
-    "b-ts": "concurrently \"pnpm b-icons\" \"pnpm b-react\" \"pnpm b-util\"",
+    "b-ts": "concurrently \"pnpm b-icons\" \"pnpm b-react\" \"pnpm b-rcu\" \"pnpm b-rnu\" \"pnpm b-ru\" \"pnpm b-util\"",
     "build": "pnpm r-all && pnpm b-ts && rollup -c && pnpm r-all"
   },
   "dependencies": {

@@ -1,20 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 
-export const useListener = (
-  event: string,
-  callback: Function,
-  options?: {
-    element?: any
-    dependencies?: any[]
-    [x:string]: any
-  }
-) => {
-  useEffect(() => {
-    const current = options?.element?.current || options?.element || window
-    
-    current.addEventListener(event, callback, options?.rest)
-    return () => current.removeEventListener(event, callback, options?.rest)
-  }, [event, callback, ...(options?.dependencies ?? [])])
+export * from '@fernui/util'
+
+export type SetState<T> = Dispatch<SetStateAction<T>>
+export type FormLowerContext = { editable: boolean, error: boolean }
+export type FormValues = { [x:string]: string | undefined }
+export type FormErrors = { [x:string]: boolean | undefined }
+
+export interface FormContext {
+  _context: FormLowerContext
+  setContext: SetState<FormLowerContext>
+  values: FormValues
+  setValues: SetState<FormValues>
+  errors: FormErrors
+  setErrors: SetState<FormErrors>
+}
+
+export const useForm = () => {
+  const [values, setValues] = useState<FormValues>({})
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [_context, setContext] = useState({ editable: true, error: false })
+
+  const context: FormContext = { _context, setContext, values, setValues, errors, setErrors }
+
+  return { context, ...context }
 }
 
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
