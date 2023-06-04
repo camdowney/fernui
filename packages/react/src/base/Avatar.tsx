@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { cn } from '@fernui/util'
+import { cn } from '@fernui/react-util'
+import { profile } from '@fernui/icons'
 import Media, { MediaProps } from './Media'
 import Icon from './Icon'
-import { profile } from '../icons'
 
 export type Color = string
 export type ColorMap = (letter: string) => Color

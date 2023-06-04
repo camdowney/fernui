@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@fernui/util'
+import { cn } from '@fernui/react-util'
 
 export interface MediaProps {
   as?: any

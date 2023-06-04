@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
+import { cn, useListener } from '@fernui/react-util'
 import Modal from '../interactive/Modal'
-import { cn } from '@fernui/util'
-import { useListener } from '../util'
 
 export interface LightboxProps {
   id?: string

@@ -1,6 +1,6 @@
 import React from 'react'
+import { warning } from '@fernui/icons'
 import Icon from '../base/Icon'
-import { warning } from '../icons'
 
 interface InfoProps {
   visible: boolean | undefined

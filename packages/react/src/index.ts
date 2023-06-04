@@ -17,5 +17,3 @@ export { default as Expand, ExpandProps } from './interactive/Expand'
 export { default as Lightbox, LightboxProps } from './interactive/Lightbox'
 export { default as Modal, ModalProps } from './interactive/Modal'
 export { default as Repeater, RepeaterProps } from './interactive/Repeater'
-
-export * from './util'

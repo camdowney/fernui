@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react'
+import { cn, openUI } from '@fernui/react-util'
+import { warning } from '@fernui/icons'
 import Form, { FormProps, FormState, initialState } from './Form'
 import Icon from '../base/Icon'
 import Dropdown from '../interactive/Dropdown'
-import { cn, openUI } from '@fernui/util'
-import { warning } from '../icons'
 
 export interface InfoFormProps extends FormProps {
   btn?: any

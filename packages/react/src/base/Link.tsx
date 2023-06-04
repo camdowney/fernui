@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
+import { useListener } from '@fernui/react-util'
 import Icon, { IconProps } from './Icon'
-import { useListener } from '../util'
 
 export interface LinkProps {
   innerRef?: any

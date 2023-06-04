@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { cn } from '@fernui/util'
-import { useListener } from '../util'
+import { cn, useListener } from '@fernui/react-util'
 
 const isObject = (x: any) => 
   typeof x === 'object' && !Array.isArray(x)

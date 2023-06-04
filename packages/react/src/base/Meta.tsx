@@ -1,5 +1,5 @@
 import React from 'react'
-import { getExcerpt } from '@fernui/util'
+import { getExcerpt } from '@fernui/react-util'
 
 export interface MetaProps {
   as: any
