@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { cn, useListener } from '@fernui/react-util'
-import { check } from '@fernui/icons'
+import { check } from '../icons'
 import { FormState, initialState } from './Form'
 import Info from './Info'
 import Icon from '../base/Icon'

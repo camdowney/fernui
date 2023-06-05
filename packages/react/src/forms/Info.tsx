@@ -1,5 +1,5 @@
 import React from 'react'
-import { warning } from '@fernui/icons'
+import { warning } from '../icons'
 import Icon from '../base/Icon'
 
 interface InfoProps {

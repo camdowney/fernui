@@ -6,19 +6,19 @@ settings:
 
 dependencies:
   '@fernui/react-core-util':
-    specifier: ^1.0.1
-    version: 1.0.1(@fernui/util@2.3.0)(react@18.2.0)
+    specifier: ^1.0.2
+    version: 1.0.2(react@18.2.0)
   '@react-native-async-storage/async-storage':
-    specifier: 1.17.11
-    version: 1.17.11(react-native@0.71.8)
+    specifier: ^1.18.1
+    version: 1.18.1(react-native@0.71.8)
   react-native:
-    specifier: 0.71.8
+    specifier: ^0.71.8
     version: 0.71.8(@babel/core@7.22.1)(@babel/preset-env@7.22.4)(react@18.2.0)
 
 devDependencies:
   '@types/react':
-    specifier: ^18.0.34
-    version: 18.0.34
+    specifier: ^18.2.8
+    version: 18.2.8
 
 packages:
 
@@ -1498,10 +1498,9 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
-  /@fernui/react-core-util@1.0.1(@fernui/util@2.3.0)(react@18.2.0):
-    resolution: {integrity: sha512-nWZ7sbgaM7GHGWoXk8psfp+PhyTp9coeFOfD+9wlSBdCb/JFXuEXRgntZP9LcmOrRv0U4VhpgwyEit9b46kilw==}
+  /@fernui/react-core-util@1.0.2(react@18.2.0):
+    resolution: {integrity: sha512-y5ppqoOPt0aPWRXVtK9D/Jxd+hNaX9xfJK7FjD+pEigRZ6C8qxAJDltUnkyS6+wA0L3Whj4rmk3qLfmD0yvVwA==}
     peerDependencies:
-      '@fernui/util': ^2.3.0
       react: ^18.2.0
     dependencies:
       '@fernui/util': 2.3.0
@@ -1633,10 +1632,10 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: false
 
-  /@react-native-async-storage/async-storage@1.17.11(react-native@0.71.8):
-    resolution: {integrity: sha512-bzs45n5HNcDq6mxXnSsOHysZWn1SbbebNxldBXCQs8dSvF8Aor9KCdpm+TpnnGweK3R6diqsT8lFhX77VX0NFw==}
+  /@react-native-async-storage/async-storage@1.18.1(react-native@0.71.8):
+    resolution: {integrity: sha512-70aFW8fVCKl+oA1AKPFDpE6s4t9pulj2QeLX+MabEmzfT3urd/3cckv45WJvtocdoIH/oXA3Y+YcCRJCcNa8mA==}
     peerDependencies:
-      react-native: ^0.0.0-0 || 0.60 - 0.71 || 1000.0.0
+      react-native: ^0.0.0-0 || 0.60 - 0.72 || 1000.0.0
     dependencies:
       merge-options: 3.0.4
       react-native: 0.71.8(@babel/core@7.22.1)(@babel/preset-env@7.22.4)(react@18.2.0)
@@ -1893,8 +1892,8 @@ packages:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
     dev: true
 
-  /@types/react@18.0.34:
-    resolution: {integrity: sha512-NO1UO8941541CJl1BeOXi8a9dNKFK09Gnru5ZJqkm4Q3/WoQJtHvmwt0VX0SB9YCEwe7TfSSxDuaNmx6H2BAIQ==}
+  /@types/react@18.2.8:
+    resolution: {integrity: sha512-lTyWUNrd8ntVkqycEEplasWy2OxNlShj3zqS0LuB1ENUGis5HodmhM7DtCoUGbxj3VW/WsGA0DUhpG6XrM7gPA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
