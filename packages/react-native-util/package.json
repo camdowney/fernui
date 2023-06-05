@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react-native-util",
   "author": "@camdowney",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A library of general-purpose utility functions for React Native.",
   "keywords": [
     "ui",
@@ -10,12 +10,14 @@
     "react native"
   ],
   "main": "./dist/index.js",
+  "dependencies": {
+    "@fernui/react-core-util": "^1.0.2",
+    "@react-native-async-storage/async-storage": "^1.18.1"
+  },
   "peerDependencies": {
-    "@fernui/react-core-util": "^1.0.1",
-    "@react-native-async-storage/async-storage": "1.17.11",
-    "react-native": "0.71.8"
+    "react-native": "^0.71.8"
   },
   "devDependencies": {
-    "@types/react": "^18.0.34"
+    "@types/react": "^18.2.8"
   }
 }
