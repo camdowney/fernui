@@ -8,9 +8,9 @@ export interface LinkProps {
   to?: string
   children?: any
   text?: any
-  before: any
+  before?: any
   iconBefore?: IconProps
-  after: any
+  after?: any
   iconAfter?: IconProps
   blank?: boolean
   label?: string
