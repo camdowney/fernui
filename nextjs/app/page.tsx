@@ -38,7 +38,7 @@ export default () => {
             <FormButton
               type='submit'
               text='Submit'
-              icon={{ i: mail }}
+              iconBefore={{ i: mail }}
               preventDefaultFocus
             />
           }
@@ -155,12 +155,12 @@ export default () => {
         <Link
           onClick={cyclePrevious}
           className='absolute top-1/2 -translate-y-1/2 left-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
-          icon={{ i: angle, className: 'w-7 rotate-90' }}
+          iconBefore={{ i: angle, className: 'w-7 rotate-90' }}
         />
         <Link
           onClick={cycleNext}
           className='absolute top-1/2 -translate-y-1/2 right-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
-          icon={{ i: angle, className: 'w-7 -rotate-90' }}
+          iconBefore={{ i: angle, className: 'w-7 -rotate-90' }}
         />
       </>}
     >

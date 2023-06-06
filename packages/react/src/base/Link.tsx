@@ -8,7 +8,9 @@ export interface LinkProps {
   to?: string
   children?: any
   text?: any
-  icon?: IconProps
+  before: any
+  iconBefore?: IconProps
+  after: any
   iconAfter?: IconProps
   blank?: boolean
   label?: string
@@ -22,7 +24,9 @@ export default function Link({
   to,
   children,
   text,
-  icon,
+  before,
+  iconBefore,
+  after,
   iconAfter,
   blank,
   label,
@@ -46,9 +50,11 @@ export default function Link({
       aria-label={label || text}
       {...props}
     >
-      {icon && <Icon {...icon} />}
+      {before}
+      {iconBefore && <Icon {...iconBefore} />}
       {children}
       {text && <span>{text}</span>}
+      {after}
       {iconAfter && <Icon {...iconAfter} />}
     </Shell>
   )
