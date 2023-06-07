@@ -3,25 +3,30 @@ import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 export * from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
-export type FormLowerContext = { editable: boolean, error: boolean }
-export type FormValues = { [x:string]: string | undefined }
-export type FormErrors = { [x:string]: boolean | undefined }
+export type FormControl = { editable: boolean, showErrors: boolean }
+export type FieldData = { value: string, valid: boolean, modified: boolean }
+export interface FormData extends Map<string, FieldData> {}
 
 export interface FormContext {
-  _context: FormLowerContext
-  setContext: SetState<FormLowerContext>
-  values: FormValues
-  setValues: SetState<FormValues>
-  errors: FormErrors
-  setErrors: SetState<FormErrors>
+  control: FormControl
+  setControl: SetState<FormControl>
+  fields: FormData
+  setFields: SetState<FormData>
+  getField: (name: string) => FieldData
+  validate: () => boolean 
 }
 
-export const useForm = () => {
-  const [values, setValues] = useState<FormValues>({})
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [_context, setContext] = useState({ editable: true, error: false })
+export const useForm = (initialControl: FormControl = { editable: true, showErrors: false }) => {
+  const [control, setControl] = useState<FormControl>(initialControl)
+  const [fields, setFields] = useState<FormData>(new Map())
 
-  const context: FormContext = { _context, setContext, values, setValues, errors, setErrors }
+  const getField = (name: string): FieldData =>
+    fields.get(name) || { value: 'Field does not exist.', valid: false, modified: false }
+
+  const validate = () =>
+    Array.from(fields.entries()).every(([_, data]) => data.valid)
+
+  const context: FormContext = { control, setControl, fields, setFields, getField, validate }
 
   return { context, ...context }
 }
