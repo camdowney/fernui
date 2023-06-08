@@ -12,7 +12,7 @@ export interface FormContext {
   setControl: SetState<FormControl>
   fields: FormData
   setFields: SetState<FormData>
-  getValue: (name: string) => string
+  getValue: (name: string) => string | undefined
   validate: () => boolean 
 }
 
@@ -20,14 +20,8 @@ export const useForm = (initialControl: FormControl = { editable: true, showErro
   const [control, setControl] = useState<FormControl>(initialControl)
   const [fields, setFields] = useState<FormData>(new Map())
 
-  const getValue = (name: string) => {
-    if (!fields.get(name)) {
-      console.error(`Field '${name}' does not exist.`)
-      return ''
-    }
-
-    return fields.get(name)?.value || ''
-  }
+  const getValue = (name: string) =>
+    fields.get(name)?.value
 
   const validate = () =>
     Array.from(fields.entries()).every(([_, data]) => data.valid)

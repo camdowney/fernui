@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@fernui/react-core-util':
-    specifier: ^1.0.4
-    version: 1.0.4(react@18.2.0)
+    specifier: ^1.0.6
+    version: 1.0.6(react@18.2.0)
   react-native:
     specifier: ^0.71.8
     version: 0.71.10(@babel/core@7.22.5)(@babel/preset-env@7.22.5)(react@18.2.0)
@@ -1489,8 +1489,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
-  /@fernui/react-core-util@1.0.4(react@18.2.0):
-    resolution: {integrity: sha512-E5/e2lpolU4dwCRwZNzaw0CI5w6CPxQlkekJIRh0P2DjW40rTGVIOha0Dht3mWOQzdo3pcnLfdddib2OJel3BA==}
+  /@fernui/react-core-util@1.0.6(react@18.2.0):
+    resolution: {integrity: sha512-THL+t47cPKerlsEkTFJf9ZBpZ1aoSM3qYQDqzPnhb60VtOBvpmMLiiG7h0YLfMhovMiTEcGLUl83B2ovhNj/Sg==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
