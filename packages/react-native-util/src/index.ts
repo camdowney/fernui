@@ -3,14 +3,21 @@ import { Alert, AlertButton, Keyboard, StyleSheet } from 'react-native'
 
 export * from '@fernui/react-core-util'
 
+export const defineStyles = StyleSheet.create
+
+export const margin = (t: number, r?: number, b?: number, l?: number) => ({
+  marginTop: t,
+  marginRight: r ?? t,
+  marginBottom: b ?? t,
+  marginLeft: l ?? r ?? t,
+})
+
 export const padding = (t: number, r?: number, b?: number, l?: number) => ({
   paddingTop: t,
   paddingRight: r ?? t,
   paddingBottom: b ?? t,
   paddingLeft: l ?? r ?? t,
 })
-
-export const defineStyles = StyleSheet.create
 
 export const alert = (
   title: string,
