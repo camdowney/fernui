@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Alert, AlertButton, Keyboard, StyleSheet } from 'react-native'
+import { Alert, AlertButton, Keyboard } from 'react-native'
 
 export * from '@fernui/react-core-util'
-
-export const defineStyles = StyleSheet.create
 
 export const margin = (t: number, r?: number, b?: number, l?: number) => ({
   marginTop: t,
