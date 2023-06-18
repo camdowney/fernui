@@ -29,21 +29,46 @@ export const getFacebookShareLink = (url: string) =>
 export const getTwitterShareLink = (url: string) =>
   'https://twitter.com/intent/tweet?text=' + (url || '')
 
+export const stringifyMap = (map: Map<any, any>) =>
+  JSON.stringify(Array.from(map.entries()))
+
 export const objectToURI = (object: {}) =>
   Object.entries(object)
-    .map(([key, value]: any) => `${encodeURIComponent(key)}=${
-      encodeURIComponent(typeof value === 'object' ? JSON.stringify(value) : value)
-    }`)
+    .map(([key, value]: any) => 
+      `${encodeURIComponent(key)}=${
+        encodeURIComponent(typeof value === 'object' ? JSON.stringify(value) : value)
+      }`
+    )
     .sort()
     .join('&')
 
-export const promisify = async (callback: Function) => {
-  return new Promise((resolve, reject) => {
+export const collapseKeyValues = (values: [any, any][]): any => {
+  const concat = (acc: any, [_key, _value]: any): any => {
+    const keys = Array.isArray(_key) ? _key : _key.split('.')
+    const [key, ...subKeys] = keys
+
+    const value = keys.length === 1 
+      ? _value
+      : concat(acc ? acc[key] : null, [subKeys, _value])
+
+    if (+key >= 0) {
+      const arr = acc || []
+      arr[key] = value
+      return arr
+    }
+
+    return { ...acc, [key]: value }
+  }
+
+  return values.reduce(concat, null) ?? {}
+}
+
+export const promisify = async (callback: Function) =>
+  new Promise((resolve, reject) => {
     callback()
       .then((res: any) => resolve(res.result))
       .catch((err: any) => reject(err.result))
   })
-}
   
 interface PingOptions {
   method?: string

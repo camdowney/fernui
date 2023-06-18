@@ -1,35 +1,75 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
+import { collapseKeyValues, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
-export type FormControl = { editable: boolean, showErrors: boolean }
-export type FieldData = { value: string, valid: boolean, modified: boolean }
-export interface FormData extends Map<string, FieldData> {}
 
-export interface FormContext {
-  control: FormControl
-  setControl: SetState<FormControl>
-  fields: FormData
-  setFields: SetState<FormData>
-  getValue: (name: string) => string | undefined
-  validate: () => boolean 
+export interface FormSharedContext {
+  isEditable: boolean
+  setEditable: SetState<boolean>
+  isExposed: boolean
+  setExposed: SetState<boolean>
+  values: Map<string, any>
+  setValues: SetState<Map<string, any>>
+  modified: Map<string, boolean>
+  setModified: SetState<Map<string, boolean>>
+  errors: Map<string, boolean>
+  setErrors: SetState<Map<string, boolean>>
+  data: any
+  isValid: boolean
+  hasChanges: boolean
+  pushChanges: () => void
 }
 
-export const useForm = (initialControl: FormControl = { editable: true, showErrors: false }) => {
-  const [control, setControl] = useState<FormControl>(initialControl)
-  const [fields, setFields] = useState<FormData>(new Map())
+export const useForm = (initialOptions = { editable: true, isExposed: false }) => {
+  const [isEditable, setEditable] = useState<boolean>(initialOptions.editable ?? true)
+  const [isExposed, setExposed] = useState<boolean>(initialOptions.isExposed ?? false)
 
-  const getValue = (name: string) =>
-    fields.get(name)?.value
+  const [values, setValues] = useState<Map<string, any>>(new Map())
+  const [modified, setModified] = useState<Map<string, boolean>>(new Map())
+  const [errors, setErrors] = useState<Map<string, boolean>>(new Map())
 
-  const validate = () =>
-    Array.from(fields.entries()).every(([_, data]) => data.valid)
+  const [data, setData] = useState<any>(null)
+  const [isValid, setValid] = useState<boolean>(false)
+  const [hasChanges, setHasChanges] = useState<boolean>(false)
 
-  const context: FormContext = { control, setControl, fields, setFields, getValue, validate }
+  const savedData = useRef<string>('')
+
+  useEffect(() => {
+    setData(collapseKeyValues(Array.from(values)))
+
+    // True if user made change; else false for registering default values
+    if (Array.from(modified.values()).some(Boolean))
+      setHasChanges(stringifyMap(values) !== savedData.current)
+    else
+      pushChanges()
+  }, [values])
+
+  useEffect(() => {
+    setValid(Object.values(errors).every(isInvalid => !isInvalid))
+  }, [errors])
+
+  const pushChanges = () => {
+    savedData.current = stringifyMap(values)
+    setHasChanges(false)
+  }
+
+  const context: FormSharedContext = {
+    isEditable, setEditable,
+    isExposed, setExposed,
+    values, setValues,
+    modified, setModified,
+    errors, setErrors,
+    data, isValid, hasChanges, pushChanges
+  }
 
   return { context, ...context }
 }
+
+export const FormContext = createContext<FormSharedContext | null>(null)
+
+export const useFormContext = () => useContext(FormContext) ?? useForm()
 
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
   initialValue?: T
