@@ -47,7 +47,7 @@ export const useForm = (initialOptions = { editable: true, isExposed: false }) =
   }, [values])
 
   useEffect(() => {
-    setValid(Object.values(errors).every(isInvalid => !isInvalid))
+    setValid(!Array.from(errors.values()).some(Boolean))
   }, [errors])
 
   const pushChanges = () => {
