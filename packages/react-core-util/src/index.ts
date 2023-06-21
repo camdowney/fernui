@@ -71,6 +71,64 @@ export const FormContext = createContext<FormSharedContext | null>(null)
 
 export const useFormContext = () => useContext(FormContext) ?? useForm()
 
+export const useField = <T>(
+  name: string,
+  options?: {
+    validate?: (newValue: T) => boolean
+    defaultValue?: T
+    value?: T
+    onChange?: (newValue: T) => void
+  }
+) => {
+  const { validate, defaultValue, value, onChange: _onChange } = options || {}
+
+  const formContext = useFormContext()
+  const { isExposed, values, setValues, modified, setModified, errors, setErrors } = formContext
+
+  const showError = errors.get(name) && (modified.get(name) || isExposed)
+
+  const setField = (newValue?: T, newModified?: boolean) => {
+    if (newValue === undefined || newModified === undefined) return
+
+    values.set(name, newValue)
+    modified.set(name, newModified),
+    errors.set(name, validate ? !validate(newValue) : true)
+
+    setValues(new Map(values))
+    setModified(new Map(modified))
+    setErrors(new Map(errors))
+  }
+
+  const onChange = (newValue: T) => {
+    setField(newValue, true)
+      
+    if (_onChange)
+      _onChange(newValue)
+  }
+
+  // Handle manual value changing
+  useEffect(() => {
+    if (value !== undefined) {
+      onChange(value)
+    }
+  }, [value])
+
+  // Set initial state and cleanup
+  useEffect(() => {
+    setField(defaultValue, false)
+
+    return () => {
+      values.delete(name)
+      modified.delete(name),
+      errors.delete(name)
+
+      setField()
+    }
+  }, [])
+
+  return { ...formContext, setField, onChange, showError }
+}
+
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
   initialValue?: T
   interval?: number
