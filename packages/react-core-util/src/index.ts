@@ -5,7 +5,7 @@ export * from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export interface FormSharedContext {
+export interface FormState {
   isEditable: boolean
   setEditable: SetState<boolean>
   isExposed: boolean
@@ -20,19 +20,26 @@ export interface FormSharedContext {
   isValid: boolean
   hasChanges: boolean
   pushChanges: () => void
+  submitCount: number
+  setSubmitCount: SetState<number>
+  successCount: number
+  setSuccessCount: SetState<number>
 }
 
-export const useForm = (initialOptions = { editable: true, isExposed: false }) => {
-  const [isEditable, setEditable] = useState<boolean>(initialOptions.editable ?? true)
-  const [isExposed, setExposed] = useState<boolean>(initialOptions.isExposed ?? false)
+export const useForm = (initialOptions?: { editable: boolean, isExposed: boolean }) => {
+  const [isEditable, setEditable] = useState(initialOptions?.editable ?? true)
+  const [isExposed, setExposed] = useState(initialOptions?.isExposed ?? false)
 
   const [values, setValues] = useState<Map<string, any>>(new Map())
   const [modified, setModified] = useState<Map<string, boolean>>(new Map())
   const [errors, setErrors] = useState<Map<string, boolean>>(new Map())
 
   const [data, setData] = useState<any>(null)
-  const [isValid, setValid] = useState<boolean>(false)
-  const [hasChanges, setHasChanges] = useState<boolean>(false)
+  const [isValid, setValid] = useState(false)
+  const [hasChanges, setHasChanges] = useState(false)
+
+  const [submitCount, setSubmitCount] = useState(0)
+  const [successCount, setSuccessCount] = useState(0)
 
   const savedData = useRef<string>('')
 
@@ -55,19 +62,22 @@ export const useForm = (initialOptions = { editable: true, isExposed: false }) =
     setHasChanges(false)
   }
 
-  const context: FormSharedContext = {
+  const context: FormState = {
     isEditable, setEditable,
     isExposed, setExposed,
     values, setValues,
     modified, setModified,
     errors, setErrors,
-    data, isValid, hasChanges, pushChanges
+    data, isValid,
+    hasChanges, pushChanges,
+    submitCount, setSubmitCount,
+    successCount, setSuccessCount,
   }
 
   return { context, ...context }
 }
 
-export const FormContext = createContext<FormSharedContext | null>(null)
+export const FormContext = createContext<FormState | null>(null)
 
 export const useFormContext = () => useContext(FormContext) ?? useForm()
 

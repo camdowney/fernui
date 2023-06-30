@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 
+export interface SpinnerProps {
+  duration: number
+  children: any
+}
+
 export default ({
   duration,
   children,
-}: {
-  duration: number
-  children: any
-}) => {
+}: SpinnerProps) => {
   const spinValue = useRef(new Animated.Value(0))
 
   useEffect(() => {

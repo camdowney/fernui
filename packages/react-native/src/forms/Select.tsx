@@ -3,6 +3,7 @@ import { View, Text, Pressable, PressableProps, ViewStyle, TextStyle, TextProps 
 import { useField } from '@fernui/react-native-util'
 
 export interface Option { label: string, value?: string }
+
 export interface DisplayOption extends Option {
   selected: boolean
   onPress: () => void
@@ -59,14 +60,14 @@ export default ({
 
   const selectedValue = values.get(name) ?? defaultValue
   const selectedOption = options.find(o => selectedValue === o.label || selectedValue === o.value)
-    ?? (placeholder ? null : options[0])
+    ?? (placeholder ? { label: undefined } : options[0])
 
   const _openOptions = () => {
     openOptions({
       label: label ?? placeholder ?? name,
       options: options.map(option => ({
         ...option,
-        selected: option.label === selectedOption?.label,
+        selected: option.label === selectedOption.label,
         onPress: () => onChange(option.value ?? option.label),
       })),
     })
