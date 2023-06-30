@@ -1,0 +1,21 @@
+{
+  "name": "@fernui/react-native",
+  "author": "@camdowney",
+  "version": "1.0.0",
+  "description": "A library of unopinionated, extendable UI components for React Native.",
+  "keywords": [
+    "ui",
+    "javascript",
+    "components",
+    "react native"
+  ],
+  "main": "./dist/index.js",
+  "peerDependencies": {
+    "@fernui/react-native-util": "^1.0.1",
+    "react": "^18.2.0",
+    "react-native": "^0.72.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.14"
+  }
+}

@@ -13,12 +13,6 @@ const vanillaConfig = path => ({
   plugins: [terser(), typescript()],
 })
 
-const typeConfig = path => ({
-  input: [`./packages/${path}/_dist/index.d.ts`],
-  output: [{ file: `./packages/${path}/dist/index.d.ts`, format: 'cjs' }],
-  plugins: [dts()],
-})
-
 const reactConfig = path => ({
   ...baseConfig(path),
   external: ['react'],
@@ -32,19 +26,23 @@ const reactConfig = path => ({
   ]
 })
 
+const typeConfig = path => ({
+  input: [`./packages/${path}/_dist/index.d.ts`],
+  output: [{ file: `./packages/${path}/dist/index.d.ts`, format: 'cjs' }],
+  plugins: [dts()],
+})
+
+const config = (path, { flavor }) => [
+  typeConfig(path),
+  flavor === 'react' ? reactConfig(path) : vanillaConfig(path),
+]
+
 export default [
-  vanillaConfig('icons'),
-  vanillaConfig('util'),
-  vanillaConfig('react-core-util'),
-  vanillaConfig('react-native-util'),
-  vanillaConfig('react-util'),
-
-  reactConfig('react'),
-
-  typeConfig('icons'),
-  typeConfig('util'),
-  typeConfig('react-core-util'),
-  typeConfig('react-native-util'),
-  typeConfig('react-util'),
-  typeConfig('react'),
+  // ...config('icons', { flavor: 'vanilla' }),
+  // ...config('util', { flavor: 'vanilla' }),
+  // ...config('react-core-util', { flavor: 'vanilla' }),
+  // ...config('react-util', { flavor: 'vanilla' }),
+  // ...config('react-native-util', { flavor: 'vanilla' }),
+  // ...config('react', { flavor: 'react' }),
+  ...config('react-native', { flavor: 'react' }),
 ]
