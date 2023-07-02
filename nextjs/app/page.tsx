@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  Media, Avatar, Link,
-  Expand, Dropdown, Lightbox, Repeater,
-  InfoForm, Input, Select, FormButton,
-} from '../../packages/react'
+import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Repeater, InfoForm, Input, Select, FormButton } from '../../packages/react'
 import { cn, formToObject, toggleUI, getRepeaterMethods, setFieldValue, cyclePrevious, cycleNext } from '../../packages/util'
 import { angle, mail } from '../../packages/icons'
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { escapeHtml } from '@fernui/react-core-util'
+import { collapseKeyValues, escapeHtml } from '@fernui/react-core-util'
 
 export * from '@fernui/react-core-util'
 
@@ -26,44 +26,21 @@ export const ss = (selector: string) => () =>
 export const cn = (...classes: any[]) =>
   classes.filter(Boolean).join(' ')
 
-export const purifyFormFields = (form: HTMLFormElement) =>
-  [...form?.elements].filter((field: any) => field.name && field.value && !field.name.startsWith('__config') 
-    && (field.type !== 'radio' || field.checked))
-
-export const formToHtml = (form: HTMLFormElement, heading = 'Form Submission') => {
+export const formToHtml = (formValues: [any, any][], heading = 'Form Submission') => {
   let html = heading ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> ` : ''
 
   html += `<ul style='padding: 0 0 0 24px; margin: 0;'>`
 
-  purifyFormFields(form).forEach((field: any) => {
-    const title = escapeHtml(field.name.replace(/\*/g, ''))
-    const value = field.type !== 'checkbox' ? escapeHtml(field.value) : (field.checked ? 'Yes' : 'No')
+  formValues
+    .filter(([_name]) => !_name.startsWith('__config'))
+    .forEach(([_name, _value]) => {
+      const name = escapeHtml(_name.replace(/\*/g, ''))
+      const value = _value === true ? 'Yes' : _value === false ? 'No' : escapeHtml(_value)
 
-    html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${title}:</span> <br>${value}</li>`
-  })
+      html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${name}:</span> <br>${value}</li>`
+    })
 
   return html + '</ul>'
-}
-
-export const formToObject = (form: HTMLFormElement): any => {
-  const concat = (acc: any, [_key, _value]: any): any => {
-    const keys = Array.isArray(_key) ? _key : _key.split('.')
-    const [key, ...subKeys] = keys
-
-    const value = keys.length === 1 
-      ? _value
-      : concat(acc ? acc[key] : null, [subKeys, _value])
-
-    if (+key >= 0) {
-      const arr = acc || []
-      arr[key] = value
-      return arr
-    }
-
-    return { ...acc, [key]: value }
-  }
-
-  return Array.from(new FormData(form)).reduce(concat, null) ?? {}
 }
 
 export const signalEvent = (selector: any, event: string, detail: {}) => {

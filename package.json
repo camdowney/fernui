@@ -1,9 +1,9 @@
 {
   "name": "fernui",
   "scripts": {
-    "clean": "if exist .\\packages\\react-native\\_dist rmdir /S /Q .\\packages\\react-native\\_dist",
-    "type": "cd ./packages/react-native && tsc",
-    "build": "pnpm clean && pnpm type && rollup -c && pnpm clean"
+    "clean": "if exist .\\packages\\react-util\\_dist rmdir /S /Q .\\packages\\react-util\\_dist",
+    "ts": "cd .\\packages\\react-util && tsc",
+    "build": "pnpm clean && pnpm ts && rollup -c && pnpm clean"
   },
   "dependencies": {
     "react": "^18.2.0",
