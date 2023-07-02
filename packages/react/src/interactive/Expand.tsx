@@ -3,22 +3,19 @@ import { cn, useListener } from '@fernui/react-util'
 
 export interface ExpandProps {
   innerRef?: any
-  id?: string
+  active: boolean
   className?: string
   children?: any
-  onChange?: (newActive: boolean) => any
-  onAction?: (e: any) => any
+  [props: string]: any
 }
 
 export default function Expand({
   innerRef,
-  id,
+  active,
   className,
   children,
-  onChange,
-  onAction,
+  ...props
 }: ExpandProps) {
-  const [active, setActive] = useState(false)
   const [height, _setHeight] = useState(0)
   const ref = innerRef || useRef()
 
@@ -28,22 +25,13 @@ export default function Expand({
   useEffect(setHeight, [])
   useListener('resize', setHeight)
 
-  useListener('FUIAction', (e: any) => {
-    const action = e.detail.action
-    const newActive = action < 2 ? action : !active
-
-    setActive(newActive)
-    onChange?.(newActive)
-    onAction?.(e)
-  }, { element: ref })
-
   return (
     <div
       ref={ref}
-      id={id}
       className={cn('fui-listener fui-expand', className)}
       style={_style(active, height)}
       tabIndex={active ? undefined : -1}
+      {...props}
     >
       <div>
         {children}

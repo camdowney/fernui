@@ -15,7 +15,7 @@ export interface LinkProps {
   blank?: boolean
   label?: string
   preventDefaultFocus?: boolean,
-  [x:string]: any
+  [props: string]: any
 }
 
 export default function Link({

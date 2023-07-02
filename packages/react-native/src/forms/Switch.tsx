@@ -1,39 +1,39 @@
 import React from 'react'
-import { Text, View, Switch, SwitchProps as Props, TextStyle, ViewStyle } from 'react-native'
+import { Text, View, Switch as _Switch, SwitchProps as Props, TextStyle, ViewStyle } from 'react-native'
 import { useField } from '@fernui/react-native-util'
 
 export interface SwitchProps extends Props {
   name: string
   value?: boolean 
   onValueChange?: (newValue: boolean) => void
-  style?: ViewStyle
+  validate?: (newValue: boolean) => boolean
+  defaultValue?: boolean
   editable?: boolean
+  style?: ViewStyle
   label?: string
   beforeLabel?: string
   labelStyle?: TextStyle
   inputStyle?: ViewStyle
-  defaultValue?: boolean
   error?: string
   errorStyle?: TextStyle
-  validate?: (newValue: boolean) => boolean
 }
 
-export default ({
+export default function Switch({
   name,
   value,
   onValueChange,
-  style,
+  validate = () => true,
+  defaultValue = false,
   editable,
+  style,
   label,
   beforeLabel,
   labelStyle,
   inputStyle,
-  defaultValue = false,
   error = 'Please complete this field.',
   errorStyle,
-  validate = () => true,
   ...props
-}: SwitchProps) => {
+}: SwitchProps) {
   const { values, isEditable, onChange, showError } = useField(name, {
     defaultValue,
     validate,
@@ -44,10 +44,11 @@ export default ({
   return (
     <View style={style}>
       {beforeLabel && <Text style={labelStyle}>{beforeLabel}</Text>}
-      <Switch
+      <_Switch
         onValueChange={onChange}
         value={values.get(name)}
         disabled={!(editable ?? isEditable)}
+        aria-label={label || name}
         style={inputStyle}
         {...props}
       />

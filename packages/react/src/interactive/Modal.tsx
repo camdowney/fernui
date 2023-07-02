@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { cn, useListener } from '@fernui/react-util'
+import React from 'react'
+import { SetState, cn, useModal } from '@fernui/react-util'
 
 export interface ModalProps {
   innerRef?: any
-  id?: string
+  active: boolean
+  setActive: SetState<boolean>
   outerClass?: string
   children?: any
   className?: string
   activeClass?: string
   inactiveClass?: string
   style?: Object
-  onChange?: (newActive: boolean) => any
-  onAction?: (e: any) => any
   bgClass?: string
   bgActiveClass?: string
   bgInactiveClass?: string
@@ -23,19 +22,19 @@ export interface ModalProps {
   exitOnEscape?: boolean
   preventScroll?: boolean
   focus?: boolean
+  [props: string]: any
 }
 
 export default function Modal({
   innerRef,
-  id,
+  active,
+  setActive,
   outerClass,
   children,
   className,
   activeClass = 'fui-modal-active',
   inactiveClass = 'fui-modal-inactive',
   style,
-  onChange,
-  onAction,
   bgClass,
   bgActiveClass = 'fui-modal-bg-active',
   bgInactiveClass = 'fui-modal-bg-inactive',
@@ -46,51 +45,20 @@ export default function Modal({
   exitOnOutsideClick = true,
   exitOnEscape = true,
   preventScroll,
+  ...props
 }: ModalProps) {
-  const [active, _setActive] = useState<boolean | null>(null)
-  const ref = innerRef || useRef()
-  const timer = useRef<any>()
-
-  const setActiveTimer = (newActive: boolean, delay: number) =>
-    timer.current = setTimeout(() => setActive(newActive), delay)
-
-  const setActive = (newActive: boolean) => {
-    clearTimeout(timer.current)
-    _setActive(newActive)
-    onChange?.(newActive)
-
-    if (preventScroll)
-      document.body.style.overflow = newActive ? 'hidden' : 'auto'
-      
-    if (newActive && closeDelay > 0)
-      setActiveTimer(false, closeDelay)
-  }
-
-  useEffect(() => {
-    if (openDelay > 0)
-      setActiveTimer(true, openDelay)
-  }, [])
-
-  useListener('keydown', (e: any) => {
-    if (active && !e.repeat && exitOnEscape && e?.key?.toLowerCase() === 'escape')
-      setActive(false)
+  const { ref } = useModal(active, setActive, {
+    ref: innerRef,
+    openDelay,
+    closeDelay,
+    exitOnOutsideClick,
+    exitOnEscape,
+    preventScroll,
   })
-
-  useListener('mouseup', (e: any) => {
-    if (active && exitOnOutsideClick && !ref.current.lastChild.contains(e.target))
-      setTimeout(() => setActive(false), 0)
-  })
-
-  useListener('FUIAction', (e: any) => {
-    const action = e.detail.action
-    setActive(action < 2 ? action : !active)
-    onAction?.(e)
-  }, { element: ref })
 
   return (
     <span
       ref={ref}
-      id={id}
       className={cn('fui-listener fui-modal-outer', outerClass)}
     >
       <div
@@ -103,6 +71,7 @@ export default function Modal({
         className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
         aria-hidden={!active}
         style={{ ..._style(active), ...style } as Object}
+        {...props}
       >
         {children}
       </div>

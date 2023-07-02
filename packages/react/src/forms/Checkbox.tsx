@@ -1,77 +1,60 @@
-import React, { useState, useRef } from 'react'
-import { cn, useListener } from '@fernui/react-util'
+import React from 'react'
+import { cn, useField } from '@fernui/react-util'
 import { check } from '../icons'
-import { FormState, initialState } from './Form'
-import Info from './Info'
+import Error from './Error'
 import Icon from '../base/Icon'
 
 export interface CheckboxProps {
-  innerRef?: any
-  id?: string
-  name?: string
+  name: string
+  value?: string
+  onChange?: (e: any) => any
+  validate?: (newValue: string) => boolean
+  defaultValue?: string
+  readOnly?: boolean
+  className?: string
   label?: string
   labelClass?: string
-  defaultValue?: boolean
-  className?: string
-  required?: boolean
-  readOnly?: boolean
-  innerClass?: string
-  onChange?: (e: any) => any
-  message?: string | false
+  fieldClass?: string
+  error?: string
+  errorClass?: string
+  [props: string]: any
 }
 
 export default function Checkbox({
-  innerRef,
-  id,
   name,
+  value,
+  onChange: _onChange,
+  validate = () => true,
+  defaultValue,
+  readOnly,
+  className,
   label,
   labelClass,
-  defaultValue,
-  className,
-  required,
-  readOnly,
-  innerClass,
-  onChange,
-  message,
+  fieldClass,
+  error = 'Please complete this field.',
+  errorClass,
+  ...props
 }: CheckboxProps) {
-  const [invalid, setInvalid] = useState(required && !defaultValue)
-  const [modified, setModified] = useState(false)
-  const [formState, setFormState] = useState<FormState>(initialState)
-
-  const ref = innerRef || useRef()
-  const showInfo = invalid && (modified || formState.error)
-
-  const update = (e: any) => {
-    setInvalid(required && !e.target.checked)
-    setModified(true)
-    onChange?.(e)
-  }
-
-  useListener('FUIFormStateChange', (e: any) => {
-    setFormState(e.detail.state as FormState)
-  }, { element: ref })
-
-  useListener('FUIFieldAction', (e: any) => {
-    const checked = e.detail.value
-    ref.current.checked = checked
-    update({ target: { checked }})
-  }, { element: ref })
+  const { values, isEditable, onChange, showError } = useField(name, {
+    defaultValue,
+    validate,
+    value,
+    onChange: _onChange,
+  })
 
   return (
-    <div className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
+    <div className={cn('fui-field', showError && 'fui-field-invalid', className)}>
       <label style={_outerStyle}>
         <input
           type='checkbox'
           name={name || label}
           aria-label={label || name}
-          defaultChecked={defaultValue}
-          data-field-valid={!invalid}
-          onChange={update}
-          onBlur={update}
-          readOnly={readOnly != null ? readOnly : formState.disabled}
-          className={cn('fui-checkbox', innerClass)}
+          defaultChecked={defaultValue === 'true'}
+          onChange={e => onChange(e.target.value)}
+          readOnly={readOnly ?? !isEditable}
+          className={cn('fui-checkbox', fieldClass)}
           style={_style}
-          {...{ ref, id }}
+          {...props}
         />
         <div className='fui-check-box' style={_iconOuterStyle}>
           <Icon i={check} className='fui-check-icon' style={_iconStyle} />
@@ -82,11 +65,7 @@ export default function Checkbox({
           </div>
         }
       </label>
-      {message !== false && 
-        <Info visible={showInfo}>
-          {message || 'Please check this box to proceed.'}
-        </Info>
-      }
+      {error && showError && <Error text={error} className={errorClass} />}
     </div>
   )
 }

@@ -12,45 +12,45 @@ export interface DisplayOption extends Option {
 export interface SelectProps extends PressableProps {
   name: string
   value?: string
-  onSelect?: (newValue: string) => void
-  style?: ViewStyle
-  editable?: boolean
-  label?: string
-  labelStyle?: TextStyle
-  placeholder?: string
-  placeholderStyle?: TextStyle
   options: Option[]
   openOptions: ({ label, options }: { label: string, options: DisplayOption[] }) => any
+  onSelect?: (newValue: string) => void
+  validate?: (newValue: string) => boolean
+  placeholder?: string
+  placeholderStyle?: TextStyle
+  defaultValue?: string
+  editable?: boolean
+  style?: ViewStyle
+  label?: string
+  labelStyle?: TextStyle
   inputStyle?: ViewStyle
   inputTextStyle?: TextStyle
   inputTextProps?: TextProps
-  defaultValue?: string
   error?: string
   errorStyle?: TextStyle
-  validate?: (newValue: string) => boolean
 }
 
-export default ({
+export default function Select({
   name,
   value,
+  options,
+  openOptions: _openOptions,
   onSelect,
-  style,
-  editable,
-  label,
-  labelStyle,
+  validate = () => true,
   placeholder,
   placeholderStyle,
-  options,
-  openOptions,
+  defaultValue = '',
+  editable,
+  style,
+  label,
+  labelStyle,
   inputStyle,
   inputTextStyle,
   inputTextProps,
-  defaultValue = '',
   error = 'Please complete this field.',
   errorStyle,
-  validate = () => true,
   ...props
-}: SelectProps) => {
+}: SelectProps) {
   const { values, isEditable, onChange, showError } = useField(name, {
     defaultValue,
     validate,
@@ -62,8 +62,8 @@ export default ({
   const selectedOption = options.find(o => selectedValue === o.label || selectedValue === o.value)
     ?? (placeholder ? { label: undefined } : options[0])
 
-  const _openOptions = () => {
-    openOptions({
+  const openOptions = () => {
+    _openOptions({
       label: label ?? placeholder ?? name,
       options: options.map(option => ({
         ...option,
@@ -77,7 +77,7 @@ export default ({
     <View style={style}>
       {label && <Text style={labelStyle}>{label}</Text>}
       <Pressable
-        onPress={_openOptions}
+        onPress={openOptions}
         disabled={!(editable ?? isEditable)}
         style={inputStyle}
         {...props}

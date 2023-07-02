@@ -6,10 +6,10 @@ export interface SpinnerProps {
   children: any
 }
 
-export default ({
+export default function Spinner({
   duration,
   children,
-}: SpinnerProps) => {
+}: SpinnerProps) {
   const spinValue = useRef(new Animated.Value(0))
 
   useEffect(() => {

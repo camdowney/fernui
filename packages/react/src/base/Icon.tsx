@@ -3,7 +3,7 @@ import React from 'react'
 export interface IconProps {
   i: { children: string }
   style?: Object
-  [x:string]: any
+  [props: string]: any
 }
 
 export default function Icon({ i, style, ...props }: IconProps) {

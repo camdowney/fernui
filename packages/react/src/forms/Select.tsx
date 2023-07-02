@@ -1,70 +1,57 @@
-import React, { useState, useRef } from 'react'
-import { cn, useListener } from '@fernui/react-util'
-import { angle } from '../icons'
-import { FormState, initialState } from './Form'
-import Info from './Info'
+import React from 'react'
+import { cn, useField } from '@fernui/react-util'
+import { angle } from 'src/icons'
+import Error from './Error'
 import Icon from '../base/Icon'
 
+export interface Option { label: string, value?: string }
+
 export interface SelectProps {
-  innerRef?: any
-  id?: string
-  name?: string
+  name: string
+  value?: string
+  options: Option[]
+  onChange?: (newValue: string) => void
+  validate?: (newValue: string) => boolean
+  placeholder?: string
+  defaultValue?: string
+  disabled?: boolean
+  className?: string
   label?: string
   labelClass?: string
-  placeholder?: string | false
-  defaultValue?: any
-  className?: string
-  options: { label: string, value?: any }[]
-  required?: boolean
-  readOnly?: boolean
-  innerClass?: string
-  onChange?: (e: any) => any
-  message?: string | false
+  fieldClass?: string
+  error?: string
+  errorClass?: string
+  [props: string]: any
 }
 
-export default function Select({ 
-  innerRef,
-  id,
+export default function Select({
   name,
+  value,
+  options,
+  onChange: _onChange,
+  validate = () => true,
+  placeholder,
+  placeholderStyle,
+  defaultValue = '',
+  disabled,
+  className,
+  style,
   label,
   labelClass,
-  placeholder = 'Select an option',
-  defaultValue,
-  className,
-  options,
-  required,
-  readOnly,
-  innerClass,
-  onChange,
-  message,
+  fieldClass,
+  error = 'Please complete this field.',
+  errorClass,
+  ...props
 }: SelectProps) {
-  const [invalid, setInvalid] = useState(required && !defaultValue && !!placeholder)
-  const [modified, setModified] = useState(false)
-  const [formState, setFormState] = useState<FormState>(initialState)
-
-  const ref = innerRef || useRef()
-  const showInfo = invalid && (modified || formState.error)
-
-  const disabled = readOnly != null ? readOnly : formState.disabled
-
-  const update = (e: any) => {
-    setInvalid(required && e.target.selectedIndex < (placeholder ? 1 : 0))
-    setModified(true)
-    onChange?.(e)
-  }
-
-  useListener('FUIFormStateChange', (e: any) => {
-    setFormState(e.detail.state as FormState)
-  }, { element: ref })
-
-  useListener('FUIFieldAction', (e: any) => {
-    const value = e.detail.value
-    ref.current.value = value
-    update({ target: { value }})
-  }, { element: ref })
+  const { values, isEditable, onChange, showError } = useField(name, {
+    defaultValue,
+    validate,
+    value,
+    onChange: _onChange,
+  })
 
   return (
-    <label className={cn('fui-field', showInfo && 'fui-field-invalid', className)}>
+    <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
       {label &&
         <div className={cn('fui-field-label', labelClass)}>
           {label}
@@ -73,14 +60,13 @@ export default function Select({
       <div style={{ position: 'relative' }}>
         <select
           name={name || label || placeholder || ''}
+          value={values.get(name)}
           aria-label={label || placeholder || name}
-          data-field-valid={!invalid}
-          onChange={update}
-          onBlur={update}
-          disabled={disabled}
-          className={cn('fui-select', innerClass)}
+          onChange={e => onChange(e.target.value)}
+          disabled={disabled ?? !isEditable}
+          className={cn('fui-select', fieldClass)}
           style={{ cursor: 'pointer' }}
-          {...{ ref, id, defaultValue }}
+          {...props}
         >
           {placeholder && 
             <option value=''>{placeholder}</option>
@@ -97,11 +83,7 @@ export default function Select({
           style={_iconStyle}
         />
       </div>
-      {message !== false &&
-        <Info visible={showInfo}>
-          {message || 'Please select an option.'}
-        </Info>
-      }
+      {error && showError && <Error text={error} className={errorClass} />}
     </label>
   )
 }

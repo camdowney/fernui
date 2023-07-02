@@ -15,7 +15,7 @@ export interface RepeaterProps {
   onAction?: (e: any) => any
   hideWhenEmpty?: boolean
   style?: Object
-  [x:string]: any
+  [props: string]: any
 }
 
 export default function Repeater({

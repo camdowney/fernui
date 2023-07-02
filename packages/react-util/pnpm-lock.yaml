@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@fernui/react-core-util':
-    specifier: ^1.0.9
-    version: 1.0.9
+    specifier: ^1.0.10
+    version: 1.0.10(react@18.2.0)
 
 devDependencies:
   '@types/react':
@@ -12,12 +16,13 @@ devDependencies:
 
 packages:
 
-  /@fernui/react-core-util@1.0.9:
-    resolution: {integrity: sha512-iL766twMb3MAx0bA2Nr8tLbCtJWbehOO34SXL+SX9MRZyvD2e8xMIvkOmDtwoW+hL/M/CnsNOSblVK07e6ZHqg==}
+  /@fernui/react-core-util@1.0.10(react@18.2.0):
+    resolution: {integrity: sha512-EP671es21+DtD+bzLIVjiUZwqvsA0cKNCh/medRbhXF74xlxmNrHpUD8B3LWYI/8MSm4Th1/09WDo9CUKUmXSg==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
       '@fernui/util': 2.3.1
+      react: 18.2.0
     dev: false
 
   /@fernui/util@2.3.1:
@@ -44,6 +49,20 @@ packages:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
     dev: true
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+  /js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+    dev: false
+
+  /loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
+    dependencies:
+      js-tokens: 4.0.0
+    dev: false
+
+  /react@18.2.0:
+    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false

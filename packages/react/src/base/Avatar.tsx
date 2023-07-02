@@ -19,7 +19,7 @@ export interface AvatarProps extends MediaProps {
   title?: any
   src?: any
   colors?: ColorMap
-  [x:string]: any
+  [props: string]: any
 }
 
 export default function Avatar({

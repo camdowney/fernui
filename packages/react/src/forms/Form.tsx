@@ -6,7 +6,7 @@ export interface FormProps {
   context: FormState
   className?: string
   children?: any
-  [x:string]: any
+  [props: string]: any
 }
 
 export default function Form({

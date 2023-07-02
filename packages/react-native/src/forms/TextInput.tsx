@@ -1,37 +1,38 @@
 import React from 'react'
-import { View, Text, TextInput, TextInputProps as Props, ViewStyle, TextStyle } from 'react-native'
+import { View, Text, TextInput as _TextInput, TextInputProps as Props, ViewStyle, TextStyle } from 'react-native'
 import { useField } from '@fernui/react-native-util'
 
 export interface TextInputProps extends Props {
   name: string
   value?: string
   onChangeText?: (newValue: string) => void
-  style?: ViewStyle
+  validate?: (newValue: string) => boolean
+  defaultValue?: string
   editable?: boolean
+  style?: ViewStyle
   label?: string
   labelStyle?: TextStyle
   inputStyle?: ViewStyle
-  defaultValue?: string
   error?: string
   errorStyle?: ViewStyle
-  validate?: (newValue: string) => boolean
 }
 
-export default ({
+export default function TextInput({
   name,
   value,
   onChangeText,
-  style,
+  validate = () => true,
+  placeholder,
+  defaultValue = '',
   editable,
+  style,
   label,
   labelStyle,
   inputStyle,
-  defaultValue = '',
   error = 'Please complete this field.',
   errorStyle,
-  validate = () => true,
   ...props
-}: TextInputProps) => {
+}: TextInputProps) {
   const { values, isEditable, onChange, showError } = useField(name, {
     defaultValue,
     validate,
@@ -42,10 +43,11 @@ export default ({
   return (
     <View style={style}>
       {label && <Text style={labelStyle}>{label}</Text>}
-      <TextInput
+      <_TextInput
         onChangeText={onChange}
         value={values.get(name)}
         editable={editable ?? isEditable}
+        aria-label={label || placeholder || name}
         style={inputStyle}
         {...props}
       />

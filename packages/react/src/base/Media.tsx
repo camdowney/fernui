@@ -14,7 +14,7 @@ export interface MediaProps {
   cover?: boolean
   outer?: boolean
   lazy?: boolean
-  [x:string]: any
+  [props: string]: any
 }
 
 export default function Media({

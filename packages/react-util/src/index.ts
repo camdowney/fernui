@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { collapseKeyValues, escapeHtml } from '@fernui/react-core-util'
+import { useEffect, useRef } from 'react'
+import { SetState, escapeHtml } from '@fernui/react-core-util'
 
 export * from '@fernui/react-core-util'
 
@@ -9,7 +9,7 @@ export const useListener = (
   options?: {
     element?: any
     dependencies?: any[]
-    [x:string]: any
+    [props: string]: any
   }
 ) => {
   useEffect(() => {
@@ -18,6 +18,54 @@ export const useListener = (
     current.addEventListener(event, callback, options?.rest)
     return () => current.removeEventListener(event, callback, options?.rest)
   }, [event, callback, ...(options?.dependencies ?? [])])
+}
+
+export const useModal = (
+  active: boolean,
+  setActive: SetState<boolean>,
+  options?: {
+    ref?: any
+    openDelay?: number
+    closeDelay?: number
+    exitOnOutsideClick?: boolean
+    exitOnEscape?: boolean
+    preventScroll?: boolean
+  }
+) => {
+  const { ref: _ref, openDelay, closeDelay, exitOnOutsideClick, exitOnEscape, preventScroll } = options || {}
+
+  const ref = _ref || useRef()
+  const timer = useRef<any>() 
+
+  const setActiveTimer = (newActive: boolean, delay: number) =>
+    timer.current = setTimeout(() => setActive(newActive), delay)
+
+  useEffect(() => {
+    if (openDelay)
+      setActiveTimer(true, openDelay)
+  }, [])
+
+  useEffect(() => {
+    clearTimeout(timer.current)
+
+    if (preventScroll)
+      document.body.style.overflow = active ? 'hidden' : 'auto'
+      
+    if (active && closeDelay)
+      setActiveTimer(false, closeDelay)
+  }, [active])
+
+  useListener('keydown', (e: any) => {
+    if (active && !e.repeat && exitOnEscape && e?.key?.toLowerCase() === 'escape')
+      setActive(false)
+  })
+
+  useListener('mouseup', (e: any) => {
+    if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
+      setTimeout(() => setActive(false), 0)
+  })
+
+  return { ref }
 }
 
 export const ss = (selector: string) => () =>
@@ -42,71 +90,6 @@ export const formToHtml = (formValues: [any, any][], heading = 'Form Submission'
 
   return html + '</ul>'
 }
-
-export const signalEvent = (selector: any, event: string, detail: {}) => {
-  const element = typeof selector === 'string' 
-    ? document.querySelector(selector)
-    : selector?.current
-    || selector?.currentTarget?.closest('.fui-listener')
-      
-  element?.dispatchEvent(new CustomEvent(event, { detail }))
-}
-
-export const signalField = (selector: any, detail: {}) =>
-  signalEvent(selector, 'FUIFieldAction', detail)
-
-export const setFieldValue = (selector: any, value: string) =>
-  signalField(selector, { value })
-
-export const signalUI = (selector: any, detail: {}) =>
-  signalEvent(selector, 'FUIAction', detail)
-
-export const closeUI = (selector: any, data?: {}) =>
-  signalUI(selector, { action: 0, ...(data ?? {}) })
-
-export const openUI = (selector: any, data?: {}) =>
-  signalUI(selector, { action: 1, ...(data ?? {}) })
-
-export const toggleUI = (selector: any, data?: {}) =>
-  signalUI(selector, { action: 2, ...(data ?? {}) })
-
-export const signalLightbox = (selector: any, detail: {}) =>
-  signalEvent(selector, 'FUILightboxAction', detail)
-
-export const cyclePrevious = (selector: any) =>
-  signalLightbox(selector, { action: 0 })
-
-export const cycleNext = (selector: any) =>
-  signalLightbox(selector, { action: 1 })
-
-export const signalRepeater = (selector: any, detail: {}) =>
-  signalEvent(selector, 'FUIRepeaterAction', detail)
-
-export const insertRepeaterItem = (selector: any, item: any, index?: number) =>
-  signalRepeater(selector, { action: 0, item, index })
-
-export const removeRepeaterItem = (selector: any, index?: number) =>
-  signalRepeater(selector, { action: 1, index, })
-
-export const updateRepeaterItem = (selector: any, item: any, index: number) =>
-  signalRepeater(selector, { action: 2, item, index })
-
-export const setRepeaterItems = (selector: any, items: any[]) =>
-  signalRepeater(selector, { action: 3, data: { items } })
-
-export const getRepeaterItems = (selector: any): any[] => {
-  let data = { items: [] }
-  signalRepeater(selector, { action: 4, selector, data })
-  return data.items
-}
-
-export const getRepeaterMethods = (selector: any) => ({
-  insert: (item: any, index?: number) => insertRepeaterItem(selector, item, index),
-  remove: (index?: number) => removeRepeaterItem(selector, index),
-  update: (item: any, index: number) => updateRepeaterItem(selector, item, index),
-  set: (items: any[]) => setRepeaterItems(selector, items),
-  get: () => getRepeaterItems(selector),
-})
 
 export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
   document.querySelectorAll(selector).forEach(element => {
