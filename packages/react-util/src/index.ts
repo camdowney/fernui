@@ -108,10 +108,12 @@ export const initLazyLoad = (offset = '750px') => {
   const offsetStr = `${offset} ${offset} ${offset} ${offset}`
 
   onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
+    console.log('hello1')
     element.src = element.dataset.lazySrc ?? ''
   }, offsetStr)
 
   onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
+    console.log('hello2')
     element.srcset = element.dataset.lazySrcset ?? ''
   }, offsetStr)
 }

@@ -47,10 +47,10 @@ export default function Checkbox({
       <label style={_outerStyle}>
         <input
           type='checkbox'
-          name={name || label}
+          onChange={e => onChange(e.target.value)}
+          value={values.get(name)}
           aria-label={label || name}
           defaultChecked={defaultValue === 'true'}
-          onChange={e => onChange(e.target.value)}
           readOnly={readOnly ?? !isEditable}
           className={cn('fui-checkbox', fieldClass)}
           style={_style}

@@ -68,6 +68,7 @@ export default function TextArea({
         </div>
       }
       <input
+        ref={ref}
         onChange={e => onChange(e.target.value)}
         value={values.get(name)}
         aria-label={label || placeholder || name}

@@ -1,35 +1,57 @@
 'use client'
 
-import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Repeater, InfoForm, Input, Select, FormButton } from '../../packages/react'
-import { cn, formToObject, toggleUI, getRepeaterMethods, setFieldValue, cyclePrevious, cycleNext } from '../../packages/util'
+import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react'
+import { cn, FormState, useForm } from '../../packages/react-util'
 import { angle, mail } from '../../packages/icons'
+import { useEffect, useState } from 'react'
+
+const handleSubmit = (context: FormState, callback: () => any) => async () => {
+  const { setEditable, setExposed, isValid } = context
+  
+  setExposed(true)
+
+  if (!isValid)
+    return alert('Invalid input')
+  
+  try {
+    setEditable(false)
+    await callback()
+  }
+  catch (error: any) {
+    alert('Error')
+  }
+  finally {
+    setEditable(true)
+  }
+}
 
 export default () => {
-  const {
-    update: updateItem,
-    insert: insertItem,
-    remove: removeItem,
-    set: setItems,
-    get: getItems,
-  } = getRepeaterMethods('#repeater')
+  const { context, values, setValues } = useForm()
 
-  const testSubmit = async (e: any) => {
-    console.log(formToObject(e.target))
-    await new Promise(res => setTimeout(res, 500))
-  }
+  const [expandActive, setExpandActive] = useState(false)
+  const [dropdownActive, setDropdownActive] = useState(false)
+  const [repeaterItems, setRepeaterItems] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState(-1)
+
+  const testSubmit = handleSubmit(context, async () => {
+    console.log(values)
+  })
+
+  useEffect(() => {
+    console.log(lightboxIndex)
+  }, [lightboxIndex])
 
   return <>
     <section>
       <div className='container space-y-4'>
         <div>
-          <button onClick={() => setFieldValue('[name="field.0.a"]', 'a')}>
+          <button onClick={() => setValues(curr => curr)}>
             Update value
           </button>
         </div>
-        <InfoForm
+        <Form
+          context={context}
           onSubmit={testSubmit}
-          maxSubmissions={10}
-          requireInitialChanges={false}
           btn={
             <FormButton
               type='submit'
@@ -40,60 +62,42 @@ export default () => {
           }
         >
           <div className='grid gap-4'>
-            <Input
+            <TextArea
               name='field.0.a'
               label='Full name *'
               defaultValue='qwe'
               rows={1}
-              innerClass='resize-none break-all overflow-hidden'
-              textarea
+              fieldClass='resize-none break-all overflow-hidden'
               autoResize
-              shiftForNewline
               required
             />
             <Select
+              name='select'
               label='Select *'
               options={[
                 { label: 'Option 1' },
                 { label: 'Option 2' },
                 { label: 'Option 3' },
               ]}
-              placeholder={false}
               required
             />
-            <Repeater
-              id='repeater'
-              className='space-y-2'
-              onChange={newItems => console.log(newItems)}
-              hideWhenEmpty
-            >
-              {(item, index, key) =>
-                <Input
-                  name={`array.${index}`}
-                  label='Label'
-                  defaultValue={item}
-                  required
-                  key={key}
-                />
-              }
-            </Repeater>
+            {repeaterItems.map((item, index) =>
+              <Input
+                name={`repeater.${index}`}
+                label='Label'
+                defaultValue={item}
+                required
+                key={item}
+              />
+            )}
           </div>
-        </InfoForm>
+        </Form>
         <div className='space-x-3'>
-          <button onClick={() => insertItem('Added field')}>
+          <button onClick={() => setRepeaterItems(curr => ['Added field', ...curr])}>
             Add item
           </button>
-          <button onClick={() => removeItem(0)}>
+          <button onClick={() => setRepeaterItems(curr => curr.slice(0, -1))}>
             Remove item
-          </button>
-          <button onClick={() => updateItem('Updated field', 0)}>
-            Update item
-          </button>
-          <button onClick={() => console.log(getItems())}>
-            Get items
-          </button>
-          <button onClick={() => setItems([])}>
-            Clear items
           </button>
         </div>
       </div>
@@ -114,8 +118,8 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => toggleUI('#expand')}>Expand</button>
-        <Expand id='expand'>
+        <button onClick={() => setExpandActive(curr => !curr)}>Expand</button>
+        <Expand active={expandActive}>
           Content
         </Expand>
       </div>
@@ -123,9 +127,10 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => toggleUI('#dropdown')}>Dropdown</button>
+        <button onClick={() => setDropdownActive(true)}>Dropdown</button>
         <Dropdown
-          id='dropdown'
+          active={dropdownActive}
+          setActive={setDropdownActive}
         >
           Content
         </Dropdown>
@@ -134,12 +139,13 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => toggleUI('#lightbox')}>Lightbox</button>
+        <button onClick={() => setLightboxIndex(0)}>Lightbox</button>
       </div>
     </section>
 
     <Lightbox
-      id='lightbox'
+      index={lightboxIndex}
+      setIndex={setLightboxIndex}
       items={[
         'aurora.webp',
         'glacier1.webp',
@@ -149,23 +155,23 @@ export default () => {
       className='m-auto inset-5 max-w-5xl max-h-max'
       overlay={<>
         <Link
-          onClick={cyclePrevious}
+          onClick={() => setLightboxIndex(-2)}
           className='absolute top-1/2 -translate-y-1/2 left-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
           iconBefore={{ i: angle, className: 'w-7 rotate-90' }}
         />
         <Link
-          onClick={cycleNext}
+          onClick={() => setLightboxIndex(-3)}
           className='absolute top-1/2 -translate-y-1/2 right-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
           iconBefore={{ i: angle, className: 'w-7 -rotate-90' }}
         />
       </>}
     >
-      {(src: string, _, active) =>
+      {({ item, active }) =>
         <Media
-          src={src}
+          src={item}
           className={cn('pb-[67%]', !active && '!hidden')}
           lazy={false}
-          key={src}
+          key={item}
         />
       }
     </Lightbox>

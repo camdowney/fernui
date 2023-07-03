@@ -14,6 +14,5 @@ export { default as TextArea, TextAreaProps } from './forms/TextArea'
 
 export { default as Dropdown, DropdownProps } from './interactive/Dropdown'
 export { default as Expand, ExpandProps } from './interactive/Expand'
-export { default as Lightbox, LightboxProps, LightboxIndex } from './interactive/Lightbox'
+export { default as Lightbox, LightboxProps } from './interactive/Lightbox'
 export { default as Modal, ModalProps } from './interactive/Modal'
-export { default as Repeater, RepeaterProps } from './interactive/Repeater'

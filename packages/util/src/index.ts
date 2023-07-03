@@ -1,3 +1,8 @@
+export const cycle = (items: any[], currentIndex: number, direction: 1 | -1) =>
+  direction === -1
+    ? (currentIndex > 0 ? currentIndex - 1 : items.length - 1)
+    : (currentIndex < items.length - 1 ? currentIndex + 1 : 0)
+
 export const chunk = (arr: any[], size: number): any[] => {
   if (!Array.isArray(arr)) return []
   if (!size || size < 1) return arr

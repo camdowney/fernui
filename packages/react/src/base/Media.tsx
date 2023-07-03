@@ -9,7 +9,7 @@ export interface MediaProps {
   alt?: string
   className?: string
   style?: Object
-  innerClass?: string
+  mediaClass?: string
   placeholder?: any
   cover?: boolean
   outer?: boolean
@@ -25,7 +25,7 @@ export default function Media({
   alt,
   className,
   style,
-  innerClass,
+  mediaClass,
   placeholder,
   cover,
   outer = true,
@@ -42,7 +42,7 @@ export default function Media({
       data-lazy-srcset={(srcSet && lazy) ? srcSet : undefined}
       sizes={sizes ?? '100vw'}
       alt={alt ?? ''}
-      className={outer ? innerClass : className}
+      className={outer ? mediaClass : className}
       style={(outer && typeof as === 'string') ? _innerStyle(as) : undefined}
       {...props}
     />

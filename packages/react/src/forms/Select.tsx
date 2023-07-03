@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn, useField } from '@fernui/react-util'
-import { angle } from 'src/icons'
+import { angle } from '../icons'
 import Error from './Error'
 import Icon from '../base/Icon'
 
