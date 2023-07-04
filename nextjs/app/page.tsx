@@ -1,10 +1,10 @@
 'use client'
 
 import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormState, useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
 import { cn } from '../../packages/react-util/dist'
-import { angle, mail } from '../../packages/icons/dist'
+import { angle } from '../../packages/icons/dist'
 
 const handleSubmit = (context: FormState, callback: () => any) => async (e: any) => {
   e.preventDefault()
@@ -31,8 +31,6 @@ const handleSubmit = (context: FormState, callback: () => any) => async (e: any)
 export default () => {
   const { context, data, setFields } = useForm()
 
-  const { items: repeaterItems, insert: insertRepeaterItem, remove: removeRepeaterItem } = useRepeater<string>()
-
   const [expandActive, setExpandActive] = useState(false)
   const [dropdownActive, setDropdownActive] = useState(false)
 
@@ -43,7 +41,7 @@ export default () => {
     'moraine.webp',
   ]
 
-  const { control: lightboxControl, open, previous, next } = useLightbox(lightboxItems.length)
+  const { control, open, previous, next } = useLightbox(lightboxItems.length)
 
   const testSubmit = handleSubmit(context, async () => {
     console.log(data)
@@ -67,7 +65,7 @@ export default () => {
               label='Full name *'
               defaultValue='qwe'
               rows={1}
-              fieldClass='resize-none break-all overflow-hidden'
+              fieldClass='resize-none' // break-all overflow-hidden
               autoResize
               required
             />
@@ -81,38 +79,20 @@ export default () => {
               ]}
               required
             />
-            {repeaterItems.map(([key, item], index) =>
-              <Input
-                name={`repeater.${index}`}
-                label='Label'
-                defaultValue={item}
-                required
-                key={key}
-              />
-            )}
+            <Repeater />
           </div>
           <FormButton
             type='submit'
             text='Submit'
-            iconBefore={{ i: mail }}
-            preventDefaultFocus
           />
         </Form>
-        <div className='space-x-3'>
-          <button onClick={() => insertRepeaterItem('New field', 0)}>
-            Add item
-          </button>
-          <button onClick={() => removeRepeaterItem()}>
-            Remove item
-          </button>
-        </div>
       </div>
     </section>
 
     <section>
       <div className='container flex gap-2'>
-        <Avatar src='aurora.webp' lazy />
-        <Avatar src='empty.webp' title='Empty' lazy />
+        <Avatar src='aurora.webp' />
+        <Avatar src='empty.webp' title='Empty' />
         <Avatar title='j' />
         <Avatar title='s' />
         <Avatar title='d' />
@@ -150,7 +130,7 @@ export default () => {
     </section>
 
     <Lightbox
-      control={lightboxControl}
+      control={control}
       items={lightboxItems}
       className='m-auto inset-5 max-w-5xl max-h-max'
       overlay={<>
@@ -170,7 +150,6 @@ export default () => {
         <Media
           src={item}
           className={cn('pb-[67%]', !active && '!hidden')}
-          lazy={false}
           key={item}
         />
       }
@@ -181,10 +160,47 @@ export default () => {
         <Media
           src='aurora.webp'
           className='pb-[65%]'
-          lazy={false}
-          alt=''
         />
       </div>
     </section>
   </>
+}
+
+const Repeater = () => {
+  const { items, insert, remove } = useRepeater<string>([
+    '1',
+    '2',
+  ])
+
+  useEffect(() => {
+    console.log(items)
+  }, [items])
+
+  return (
+    <div>
+      <h2>Repeater</h2>
+      <div className='space-x-3'>
+        <FormButton
+          onClick={() => insert('New field')}
+          text='Add item'
+        />
+        <FormButton
+          onClick={() => remove(0)}
+          text='Remove item'
+        />
+      </div>
+      <div>
+        {items.map(([key, item], index) =>
+          <Input
+            name={`repeater.${index}`}
+            label='Label'
+            defaultValue={item}
+            required
+            key={key}
+            className={`key=${key}`}
+          />
+        )}
+      </div>
+    </div>
+  )
 }

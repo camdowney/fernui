@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { initLazyLoad, initScrollView } from '../../packages/react-util'
+// import { useEffect } from 'react'
+// import { initLazyLoad, initScrollView } from '../../packages/react-util'
 import 'css/global.css'
 
 export default ({
@@ -9,10 +9,10 @@ export default ({
 }: {
   children: React.ReactNode
 }) => {
-  useEffect(() => {
-    initLazyLoad()
-    initScrollView()
-  }, [])
+  // useEffect(() => {
+  //   initLazyLoad()
+  //   initScrollView()
+  // }, [])
   
   return (
     <html lang='en'>
