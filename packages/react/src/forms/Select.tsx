@@ -26,14 +26,14 @@ export interface SelectProps {
 
 export default function Select({
   name,
-  value,
+  value: _value,
   options,
   onChange: _onChange,
   validate = () => true,
   placeholder,
   placeholderStyle,
   defaultValue = '',
-  disabled,
+  readOnly,
   className,
   style,
   label,
@@ -43,10 +43,11 @@ export default function Select({
   errorClass,
   ...props
 }: SelectProps) {
-  const { values, isEditable, onChange, showError } = useField(name, {
+  const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
+    value: _value,
+    disabled: readOnly,
     validate,
-    value,
     onChange: _onChange,
   })
 
@@ -60,10 +61,10 @@ export default function Select({
       <div style={{ position: 'relative' }}>
         <select
           name={name || label || placeholder || ''}
-          value={values.get(name)}
+          value={value}
           aria-label={label || placeholder || name}
           onChange={e => onChange(e.target.value)}
-          disabled={disabled ?? !isEditable}
+          disabled={disabled}
           className={cn('fui-select', fieldClass)}
           style={{ cursor: 'pointer' }}
           {...props}

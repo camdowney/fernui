@@ -23,7 +23,7 @@ export interface TextAreaProps {
 export default function TextArea({
   innerRef,
   name,
-  value,
+  value: _value,
   onChange: _onChange,
   validate = () => true,
   placeholder,
@@ -53,11 +53,12 @@ export default function TextArea({
       adjustHeight(ref.current)
   }, [])
 
-  const { values, isEditable, onChange, showError } = useField(name, {
+  const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
+    value: _value,
+    disabled: readOnly,
     validate,
-    value,
-    onChange: __onChange,
+    onChange: _onChange,
   })
 
   return (
@@ -70,9 +71,9 @@ export default function TextArea({
       <input
         ref={ref}
         onChange={e => onChange(e.target.value)}
-        value={values.get(name)}
+        value={value}
         aria-label={label || placeholder || name}
-        readOnly={readOnly ?? !isEditable}
+        readOnly={disabled}
         className={cn('fui-textarea', fieldClass)}
         {...props}
       />

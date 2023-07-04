@@ -10,11 +10,9 @@
     "react native"
   ],
   "main": "./dist/index.js",
-  "dependencies": {
-    "@fernui/react-core-util": "^1.0.8"
-  },
   "peerDependencies": {
-    "react-native": "^0.71.8"
+    "react-native": "^0.71.8",
+    "@fernui/react-core-util": "^1.0.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.12"

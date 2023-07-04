@@ -1,77 +1,60 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { collapseKeyValues, stringifyMap } from '@fernui/util'
+import { collapseKeyValues, cycle, isObject, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
+export type FieldState = { value: any, modified: boolean, error: boolean }
 
 export interface FormState {
-  isEditable: boolean
-  setEditable: SetState<boolean>
-  isExposed: boolean
+  disabled: boolean
+  setDisabled: SetState<boolean>
+  exposed: boolean
   setExposed: SetState<boolean>
-  values: Map<string, any>
-  setValues: SetState<Map<string, any>>
-  modified: Map<string, boolean>
-  setModified: SetState<Map<string, boolean>>
-  errors: Map<string, boolean>
-  setErrors: SetState<Map<string, boolean>>
+  fields: Map<string, FieldState>
+  setFields: SetState<Map<string, FieldState>>
   data: any
   isValid: boolean
   hasChanges: boolean
   pushChanges: () => void
-  submitCount: number
-  setSubmitCount: SetState<number>
-  successCount: number
-  setSuccessCount: SetState<number>
 }
 
-export const useForm = (initialOptions?: { editable: boolean, isExposed: boolean }) => {
-  const [isEditable, setEditable] = useState(initialOptions?.editable ?? true)
-  const [isExposed, setExposed] = useState(initialOptions?.isExposed ?? false)
+export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
+  const { disabled: _disabled, exposed: _exposed } = options || {}
 
-  const [values, setValues] = useState<Map<string, any>>(new Map())
-  const [modified, setModified] = useState<Map<string, boolean>>(new Map())
-  const [errors, setErrors] = useState<Map<string, boolean>>(new Map())
+  const [disabled, setDisabled] = useState(_disabled ?? false)
+  const [exposed, setExposed] = useState(_exposed ?? false)
+
+  const [fields, setFields] = useState<Map<string, FieldState>>(new Map())
 
   const [data, setData] = useState<any>(null)
   const [isValid, setValid] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
-  const [submitCount, setSubmitCount] = useState(0)
-  const [successCount, setSuccessCount] = useState(0)
-
   const savedData = useRef<string>('')
 
   useEffect(() => {
-    setData(collapseKeyValues(Array.from(values)))
+    setData(collapseKeyValues(Array.from(fields).map(([name, state]) => [name, state.value])))
+    setValid(Array.from(fields).every(([_, state]) => !state.error))
 
     // True if user made change; else false for registering default values
-    if (Array.from(modified.values()).some(Boolean))
-      setHasChanges(stringifyMap(values) !== savedData.current)
+    if (Array.from(fields).some(([_, state]) => state.modified))
+      setHasChanges(stringifyMap(fields) !== savedData.current)
     else
       pushChanges()
-  }, [values])
-
-  useEffect(() => {
-    setValid(!Array.from(errors.values()).some(Boolean))
-  }, [errors])
+  }, [fields])
 
   const pushChanges = () => {
-    savedData.current = stringifyMap(values)
+    savedData.current = stringifyMap(fields)
     setHasChanges(false)
   }
 
   const context: FormState = {
-    isEditable, setEditable,
-    isExposed, setExposed,
-    values, setValues,
-    modified, setModified,
-    errors, setErrors,
+    disabled, setDisabled,
+    exposed, setExposed,
+    fields, setFields,
     data, isValid,
     hasChanges, pushChanges,
-    submitCount, setSubmitCount,
-    successCount, setSuccessCount,
   }
 
   return { context, ...context }
@@ -84,29 +67,41 @@ export const useFormContext = () => useContext(FormContext) ?? useForm()
 export const useField = <T>(
   name: string,
   options?: {
-    validate?: (newValue: T) => boolean
     defaultValue?: T
     value?: T
+    disabled?: boolean
+    validate?: (newValue: T) => boolean
     onChange?: (newValue: T) => void
   }
 ) => {
-  const { validate, defaultValue, value, onChange: _onChange } = options || {}
+  const {
+    defaultValue,
+    value: _value,
+    disabled: _disabled,
+    validate,
+    onChange: _onChange,
+  } = options || {}
 
-  const formContext = useFormContext()
-  const { isExposed, values, setValues, modified, setModified, errors, setErrors } = formContext
+  const {
+    disabled: formDisabled,
+    exposed: formExposed,
+    fields, setFields,
+  } = useFormContext()
 
-  const showError = errors.get(name) && (modified.get(name) || isExposed)
+  const value = _value ?? (fields.get(name) ?? {}).value ?? defaultValue
+  const disabled = _disabled ?? formDisabled
+  const showError = (fields.get(name) ?? {}).error && ((fields.get(name) ?? {}).modified || formExposed)
 
   const setField = (newValue?: T, newModified?: boolean) => {
     if (newValue === undefined || newModified === undefined) return
 
-    values.set(name, newValue)
-    modified.set(name, newModified),
-    errors.set(name, validate ? !validate(newValue) : true)
+    fields.set(name, {
+      value: newValue,
+      modified: newModified,
+      error: validate ? !validate(newValue) : true
+    })
 
-    setValues(new Map(values))
-    setModified(new Map(modified))
-    setErrors(new Map(errors))
+    setFields(new Map(fields))
   }
 
   const onChange = (newValue: T) => {
@@ -116,27 +111,107 @@ export const useField = <T>(
       _onChange(newValue)
   }
 
-  // Handle manual value changing
+  // Handle manual value control
   useEffect(() => {
-    if (value !== undefined) {
-      onChange(value)
+    if (_value !== undefined) {
+      onChange(_value)
     }
-  }, [value])
+  }, [_value])
 
   // Set initial state and cleanup
   useEffect(() => {
     setField(defaultValue, false)
 
     return () => {
-      values.delete(name)
-      modified.delete(name),
-      errors.delete(name)
-
-      setField()
+      fields.delete(name)
+      setFields(new Map(fields))
     }
   }, [])
 
-  return { ...formContext, setField, onChange, showError }
+  return { value, disabled, showError, setField, onChange }
+}
+
+export const useRepeater = <T>(initialItems: T[] = []) => {
+  const nextIndex = useRef(initialItems.length)
+
+  const [items, setItems] = useState<[string, T][]>(
+    initialItems.map((item, index) => [String(index), item])
+  )
+
+  const insert = (item: T, index?: number) => {
+    if (index === undefined || index < 0 || index >= items.length)
+      items.push([String(nextIndex.current++), item])
+    else
+      items.splice(index, 0, [String(nextIndex.current++), item])
+
+    setItems(items.slice())
+  }
+
+  const remove = (index?: number) => {
+    if (index === undefined || index < 0 || index >= items.length)
+      items.pop()
+    else
+      items.splice(index, 1)
+    
+    setItems(items.slice())
+  }
+
+  const update = (item: T, index: number) => {
+    if (index < 0 || index >= items.length)
+      return
+
+    // keys.current[index] = nextIndex.current++
+
+    if (isObject(item) && isObject(items[index][1]))
+      items[index][1] = { ...items[index], ...item }
+    else
+      items[index][1] = item
+    
+    setItems(items.slice())
+  }
+
+  const reset = (newItems: T[]) => {
+    setItems(newItems.map((item, index) => [String(nextIndex.current + index), item]))
+    nextIndex.current += newItems.length
+  }
+
+  return { items, insert, remove, update, reset }
+}
+
+export interface LightboxControl {
+  index: number
+  setIndex: SetState<number>
+  active: boolean
+  setActive: SetState<boolean>
+  open: (newIndex?: number) => void
+  previous: () => void
+  next: () => void
+}
+
+export const useLightbox = (numItems: number, options?: { index?: number, active?: boolean }) => {
+  const { index: _index, active: _active } = options || {}
+
+  const [index, setIndex] = useState(_index ?? 0)
+  const [active, setActive] = useState(_active ?? false)
+
+  const open = (newIndex: number = 0) => {
+    setIndex(newIndex)
+    setActive(true)
+  }
+
+  const previous = () => {
+    setIndex(cycle(numItems, index, -1))
+    setActive(true)
+  }
+
+  const next = () => {
+    setIndex(cycle(numItems, index, 1))
+    setActive(true)
+  }
+
+  const control: LightboxControl = { index, setIndex, active, setActive, open, previous, next }
+
+  return { control, ...control }
 }
 
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
@@ -159,10 +234,13 @@ export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, opt
       const oldData = typeof data === 'object' ? structuredClone(data) : data
       const newData = await callback(data)
       setData(newData)
-      onSuccess?.(newData, oldData)
+
+      if (onSuccess)
+        onSuccess(newData, oldData)
     }
     catch (err) {
-      onError?.(err)
+      if (onError)
+        onError(err)
     }
   }
 

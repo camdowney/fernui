@@ -8,12 +8,12 @@ export default function FormButton({
   to,
   ...props
 }: LinkProps) {
-  const { isEditable } = useFormContext()
+  const { disabled } = useFormContext()
 
   return (
     <Link
       type={type}
-      disabled={!isEditable}
+      disabled={disabled}
       {...props}
     />
   )

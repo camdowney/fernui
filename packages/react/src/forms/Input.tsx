@@ -20,7 +20,7 @@ export interface InputProps {
 
 export default function Input({
   name,
-  value,
+  value: _value,
   onChange: _onChange,
   validate = () => true,
   placeholder,
@@ -34,10 +34,11 @@ export default function Input({
   errorClass,
   ...props
 }: InputProps) {
-  const { values, isEditable, onChange, showError } = useField(name, {
+  const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
+    value: _value,
+    disabled: readOnly,
     validate,
-    value,
     onChange: _onChange,
   })
 
@@ -50,9 +51,9 @@ export default function Input({
       }
       <input
         onChange={e => onChange(e.target.value)}
-        value={values.get(name)}
+        value={value}
         aria-label={label || placeholder || name}
-        readOnly={readOnly ?? !isEditable}
+        readOnly={disabled}
         className={cn('fui-input', fieldClass)}
         {...props}
       />

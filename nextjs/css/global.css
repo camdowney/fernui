@@ -72,7 +72,7 @@ section {
   @apply relative py-md;
 }
 .container {
-  @apply relative w-full px-md mx-auto;
+  @apply relative max-w-7xl px-md mx-auto;
 }
 .fui-avatar {
   @apply w-12 h-12 rounded-full text-gray-100;

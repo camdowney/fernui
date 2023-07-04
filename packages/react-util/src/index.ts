@@ -74,12 +74,12 @@ export const ss = (selector: string) => () =>
 export const cn = (...classes: any[]) =>
   classes.filter(Boolean).join(' ')
 
-export const formToHtml = (formValues: [any, any][], heading = 'Form Submission') => {
+export const formKeyValuesToHtml = (formKeyValues: [any, any][], heading = 'Form Submission') => {
   let html = heading ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> ` : ''
 
   html += `<ul style='padding: 0 0 0 24px; margin: 0;'>`
 
-  formValues
+  formKeyValues
     .filter(([_name]) => !_name.startsWith('__config'))
     .forEach(([_name, _value]) => {
       const name = escapeHtml(_name.replace(/\*/g, ''))

@@ -1,12 +1,15 @@
 'use client'
 
-import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react'
-import { cn, FormState, useForm } from '../../packages/react-util'
-import { angle, mail } from '../../packages/icons'
-import { useEffect, useState } from 'react'
+import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
+import { useState } from 'react'
+import { FormState, useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
+import { cn } from '../../packages/react-util/dist'
+import { angle, mail } from '../../packages/icons/dist'
 
-const handleSubmit = (context: FormState, callback: () => any) => async () => {
-  const { setEditable, setExposed, isValid } = context
+const handleSubmit = (context: FormState, callback: () => any) => async (e: any) => {
+  e.preventDefault()
+  
+  const { setDisabled, setExposed, isValid } = context
   
   setExposed(true)
 
@@ -14,52 +17,49 @@ const handleSubmit = (context: FormState, callback: () => any) => async () => {
     return alert('Invalid input')
   
   try {
-    setEditable(false)
+    setDisabled(true)
     await callback()
   }
   catch (error: any) {
     alert('Error')
   }
   finally {
-    setEditable(true)
+    setDisabled(false)
   }
 }
 
 export default () => {
-  const { context, values, setValues } = useForm()
+  const { context, data, setFields } = useForm()
+
+  const { items: repeaterItems, insert: insertRepeaterItem, remove: removeRepeaterItem } = useRepeater<string>()
 
   const [expandActive, setExpandActive] = useState(false)
   const [dropdownActive, setDropdownActive] = useState(false)
-  const [repeaterItems, setRepeaterItems] = useState<string[]>([])
-  const [lightboxIndex, setLightboxIndex] = useState(-1)
+
+  const lightboxItems = [
+    'aurora.webp',
+    'glacier1.webp',
+    'glacier2.webp',
+    'moraine.webp',
+  ]
+
+  const { control: lightboxControl, open, previous, next } = useLightbox(lightboxItems.length)
 
   const testSubmit = handleSubmit(context, async () => {
-    console.log(values)
+    console.log(data)
   })
-
-  useEffect(() => {
-    console.log(lightboxIndex)
-  }, [lightboxIndex])
 
   return <>
     <section>
       <div className='container space-y-4'>
         <div>
-          <button onClick={() => setValues(curr => curr)}>
+          <button onClick={() => setFields(curr => curr)}>
             Update value
           </button>
         </div>
         <Form
           context={context}
           onSubmit={testSubmit}
-          btn={
-            <FormButton
-              type='submit'
-              text='Submit'
-              iconBefore={{ i: mail }}
-              preventDefaultFocus
-            />
-          }
         >
           <div className='grid gap-4'>
             <TextArea
@@ -81,22 +81,28 @@ export default () => {
               ]}
               required
             />
-            {repeaterItems.map((item, index) =>
+            {repeaterItems.map(([key, item], index) =>
               <Input
                 name={`repeater.${index}`}
                 label='Label'
                 defaultValue={item}
                 required
-                key={item}
+                key={key}
               />
             )}
           </div>
+          <FormButton
+            type='submit'
+            text='Submit'
+            iconBefore={{ i: mail }}
+            preventDefaultFocus
+          />
         </Form>
         <div className='space-x-3'>
-          <button onClick={() => setRepeaterItems(curr => ['Added field', ...curr])}>
+          <button onClick={() => insertRepeaterItem('New field', 0)}>
             Add item
           </button>
-          <button onClick={() => setRepeaterItems(curr => curr.slice(0, -1))}>
+          <button onClick={() => removeRepeaterItem()}>
             Remove item
           </button>
         </div>
@@ -139,28 +145,22 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => setLightboxIndex(0)}>Lightbox</button>
+        <button onClick={() => open()}>Lightbox</button>
       </div>
     </section>
 
     <Lightbox
-      index={lightboxIndex}
-      setIndex={setLightboxIndex}
-      items={[
-        'aurora.webp',
-        'glacier1.webp',
-        'glacier2.webp',
-        'moraine.webp',
-      ]}
+      control={lightboxControl}
+      items={lightboxItems}
       className='m-auto inset-5 max-w-5xl max-h-max'
       overlay={<>
         <Link
-          onClick={() => setLightboxIndex(-2)}
+          onClick={previous}
           className='absolute top-1/2 -translate-y-1/2 left-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
           iconBefore={{ i: angle, className: 'w-7 rotate-90' }}
         />
         <Link
-          onClick={() => setLightboxIndex(-3)}
+          onClick={next}
           className='absolute top-1/2 -translate-y-1/2 right-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
           iconBefore={{ i: angle, className: 'w-7 -rotate-90' }}
         />

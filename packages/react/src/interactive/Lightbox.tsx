@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { SetState, cn, cycle, useListener } from '@fernui/react-util'
+import React from 'react'
+import { LightboxControl, cn, useListener } from '@fernui/react-util'
 import Modal, { ModalProps } from '../interactive/Modal'
 
 export interface LightboxProps extends Omit<ModalProps, 'active' | 'setActive'> {
-  index: number
-  setIndex: SetState<number>
+  control: LightboxControl
   items: any[]
   children: ({ item, index, active }: { item: any, index: number, active: boolean }) => any
   className?: string
@@ -12,30 +11,14 @@ export interface LightboxProps extends Omit<ModalProps, 'active' | 'setActive'> 
 }
 
 export default function Lightbox({
-  index = -1,
-  setIndex,
+  control,
   items = [],
   children,
   className,
   overlay,
   ...props
 }: LightboxProps) {
-  const [active, setActive] = useState(false)
-
-  const previous = () => setIndex(cycle(items, index, -1))
-  const next = () => setIndex(cycle(items, index, 1))
-
-  useEffect(() => {
-    if (index === -1 || index < -3 || index > items.length - 1)
-      return setActive(false)
-
-    if (index === -2)
-      previous()
-    else if (index === -3)
-      next()
-
-    setActive(true)
-  }, [index])
+  const { index, active, setActive, previous, next } = control
 
   useListener('keydown', (e: any) => {
     if (e.repeat || !active || items.length < 2)

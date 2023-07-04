@@ -22,10 +22,10 @@ export interface CheckboxProps {
 
 export default function Checkbox({
   name,
-  value,
+  value: _value,
   onChange: _onChange,
   validate = () => true,
-  defaultValue,
+  defaultValue = 'false',
   readOnly,
   className,
   label,
@@ -35,10 +35,11 @@ export default function Checkbox({
   errorClass,
   ...props
 }: CheckboxProps) {
-  const { values, isEditable, onChange, showError } = useField(name, {
+  const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
+    value: _value,
+    disabled: readOnly,
     validate,
-    value,
     onChange: _onChange,
   })
 
@@ -48,10 +49,9 @@ export default function Checkbox({
         <input
           type='checkbox'
           onChange={e => onChange(e.target.value)}
-          value={values.get(name)}
+          checked={value}
           aria-label={label || name}
-          defaultChecked={defaultValue === 'true'}
-          readOnly={readOnly ?? !isEditable}
+          readOnly={disabled}
           className={cn('fui-checkbox', fieldClass)}
           style={_style}
           {...props}

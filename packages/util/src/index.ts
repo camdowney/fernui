@@ -1,13 +1,16 @@
-export const cycle = (items: any[], currentIndex: number, direction: 1 | -1) =>
+export const cycle = (range: number, currentIndex: number, direction: 1 | -1) =>
   direction === -1
-    ? (currentIndex > 0 ? currentIndex - 1 : items.length - 1)
-    : (currentIndex < items.length - 1 ? currentIndex + 1 : 0)
+    ? (currentIndex > 0 ? currentIndex - 1 : range - 1)
+    : (currentIndex < range - 1 ? currentIndex + 1 : 0)
 
 export const chunk = (arr: any[], size: number): any[] => {
   if (!Array.isArray(arr)) return []
   if (!size || size < 1) return arr
   return arr.reduce((acc, _, i) => (i % size) ? acc : [...acc, arr.slice(i, i + size)], [])
 }
+
+export const isObject = (x: any) => 
+  typeof x === 'object' && !Array.isArray(x)
 
 export const isEmail = (str: string) =>
 	/^\S+@\S+\.\S+$/.test(str || '')
