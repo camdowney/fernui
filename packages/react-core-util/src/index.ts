@@ -92,20 +92,18 @@ export const useField = <T>(
   const disabled = _disabled ?? formDisabled
   const showError = (fields.get(name) ?? {}).error && ((fields.get(name) ?? {}).modified || formExposed)
 
-  const setField = (newValue?: T, newModified?: boolean) => {
-    if (newValue === undefined || newModified === undefined) return
-
+  const setField = (newValue: T, newModified = true) => {
     fields.set(name, {
       value: newValue,
       modified: newModified,
-      error: validate ? !validate(newValue) : true
+      error: validate ? !validate(newValue) : false
     })
 
     setFields(new Map(fields))
   }
 
   const onChange = (newValue: T) => {
-    setField(newValue, true)
+    setField(newValue)
       
     if (_onChange)
       _onChange(newValue)
@@ -120,7 +118,8 @@ export const useField = <T>(
 
   // Set initial state and cleanup
   useEffect(() => {
-    setField(defaultValue, false)
+    if (defaultValue)
+      setField(defaultValue)
 
     return () => {
       fields.delete(name)
@@ -132,48 +131,48 @@ export const useField = <T>(
 }
 
 export const useRepeater = <T>(initialItems: T[] = []) => {
-  const nextIndex = useRef(initialItems.length)
+  const index = useRef(0)
 
-  const [items, setItems] = useState<[string, T][]>(
-    initialItems.map((item, index) => [String(index), item])
-  )
+  const mapNewWithKeys = (newItems: T[]) =>
+    newItems.map(item => <[number, T]>[index.current++, item])
 
-  const insert = (item: T, index?: number) => {
-    if (index === undefined || index < 0 || index >= items.length)
-      items.push([String(nextIndex.current++), item])
+  const [items, setItems] = useState<[number, T][]>(mapNewWithKeys(initialItems))
+
+  const setNewWithKeys = () =>
+    setItems(items.map(([_, item]) => [index.current++, item]))
+
+  const insert = (item: T, newIndex?: number) => {
+    if (newIndex === undefined || newIndex < 0 || newIndex >= items.length)
+      items.push([-1, item])
     else
-      items.splice(index, 0, [String(nextIndex.current++), item])
+      items.splice(newIndex, 0, [-1, item])
 
-    setItems(items.slice())
+    setNewWithKeys()
   }
 
   const remove = (index?: number) => {
-    if (index === undefined || index < 0 || index >= items.length)
+    if (index === undefined || index < 0 || index > items.length - 1)
       items.pop()
     else
       items.splice(index, 1)
     
-    setItems(items.slice())
+    setNewWithKeys()
   }
 
   const update = (item: T, index: number) => {
     if (index < 0 || index >= items.length)
       return
 
-    // keys.current[index] = nextIndex.current++
-
     if (isObject(item) && isObject(items[index][1]))
-      items[index][1] = { ...items[index], ...item }
+      items[index][1] = { ...items[index][1], ...item }
     else
       items[index][1] = item
     
-    setItems(items.slice())
+    setNewWithKeys()
   }
 
-  const reset = (newItems: T[]) => {
-    setItems(newItems.map((item, index) => [String(nextIndex.current + index), item]))
-    nextIndex.current += newItems.length
-  }
+  const reset = (newItems: T[]) =>
+    setItems(mapNewWithKeys(newItems))
 
   return { items, insert, remove, update, reset }
 }

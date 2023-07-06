@@ -58,7 +58,7 @@ export default function TextArea({
     value: _value,
     disabled: readOnly,
     validate,
-    onChange: _onChange,
+    onChange: __onChange,
   })
 
   return (
@@ -68,12 +68,13 @@ export default function TextArea({
           {label}
         </div>
       }
-      <input
+      <textarea
         ref={ref}
-        onChange={e => onChange(e.target.value)}
+        name={name}
         value={value}
-        aria-label={label || placeholder || name}
         readOnly={disabled}
+        aria-label={label || placeholder || name}
+        onChange={e => onChange(e.target.value)}
         className={cn('fui-textarea', fieldClass)}
         {...props}
       />

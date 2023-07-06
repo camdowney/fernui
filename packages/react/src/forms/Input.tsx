@@ -50,10 +50,11 @@ export default function Input({
         </div>
       }
       <input
-        onChange={e => onChange(e.target.value)}
+        name={name}
         value={value}
-        aria-label={label || placeholder || name}
         readOnly={disabled}
+        aria-label={label || placeholder || name}
+        onChange={e => onChange(e.target.value)}
         className={cn('fui-input', fieldClass)}
         {...props}
       />

@@ -60,11 +60,11 @@ export default function Select({
       }
       <div style={{ position: 'relative' }}>
         <select
-          name={name || label || placeholder || ''}
+          name={name}
           value={value}
+          disabled={disabled}
           aria-label={label || placeholder || name}
           onChange={e => onChange(e.target.value)}
-          disabled={disabled}
           className={cn('fui-select', fieldClass)}
           style={{ cursor: 'pointer' }}
           {...props}

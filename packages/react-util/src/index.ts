@@ -48,7 +48,7 @@ export const useModal = (
   useEffect(() => {
     clearTimeout(timer.current)
 
-    if (preventScroll)
+    if (preventScroll && document)
       document.body.style.overflow = active ? 'hidden' : 'auto'
       
     if (active && closeDelay)
@@ -91,35 +91,42 @@ export const formKeyValuesToHtml = (formKeyValues: [any, any][], heading = 'Form
   return html + '</ul>'
 }
 
-export const onIntersect = (selector: string, callback: Function, offset = '0px 0px 0px 0px', once = true) => {
+export const onIntersect = (
+  selector: string,
+  callback: (element: any) => any,
+  options?: { offset?: string, once?: boolean }
+) => {
+  const { offset = '0px 0px 0px 0px', once = true } = options || {}
+
   document.querySelectorAll(selector).forEach(element => {
-    const observer = new IntersectionObserver((entries, observer) => {
+    (new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return
+          
         callback(entry.target)
+        
         if (once) observer.disconnect()
       })
-    }, { rootMargin: offset })
-    observer.observe(element)
+    }, { rootMargin: offset })).observe(element)
   })
 }
 
 export const initLazyLoad = (offset = '750px') => {
-  const offsetStr = `${offset} ${offset} ${offset} ${offset}`
+  const _offset = `${offset} ${offset} ${offset} ${offset}`
 
   onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
-    console.log('hello1')
     element.src = element.dataset.lazySrc ?? ''
-  }, offsetStr)
+  }, { offset: _offset })
 
   onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
-    console.log('hello2')
     element.srcset = element.dataset.lazySrcset ?? ''
-  }, offsetStr)
+  }, { offset: _offset })
 }
 
 export const initScrollView = (offset = '999999px 0px -25% 0px') =>
-  onIntersect('.scroll-view', (element: HTMLElement) => element.classList.add('scroll-view-active'), offset)
+  onIntersect('.scroll-view', (element: HTMLElement) => {
+    element.classList.add('scroll-view-active')
+  }, { offset })
 
 export const initSplitLetters = (selector: string, delay = 0, step = 25) => {
   document.querySelectorAll(selector).forEach(element => {
