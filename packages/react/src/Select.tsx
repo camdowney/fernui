@@ -1,8 +1,8 @@
 import React from 'react'
 import { cn, useField } from '@fernui/react-util'
-import { angle } from '../icons'
+import { angle } from './icons'
 import Error from './Error'
-import Icon from '../base/Icon'
+import Icon from './Icon'
 
 export interface Option { label: string, value?: string }
 

@@ -31,6 +31,11 @@ const handleSubmit = (context: FormState, callback: () => any) => async (e: any)
 export default () => {
   const { context, data, setFields } = useForm()
 
+  const { items, insert, remove, update } = useRepeater<string>([
+    '1',
+    '2',
+  ])
+
   const [expandActive, setExpandActive] = useState(false)
   const [dropdownActive, setDropdownActive] = useState(false)
 
@@ -79,7 +84,31 @@ export default () => {
               ]}
               required
             />
-            <Repeater />
+            <div>
+              <h2>Repeater</h2>
+              <div className='space-x-3'>
+                <FormButton
+                  onClick={() => insert('New field')}
+                  text='Add item'
+                />
+                <FormButton
+                  onClick={() => remove(0)}
+                  text='Remove item'
+                />
+              </div>
+              <div>
+                {items.map(([key, item], index) =>
+                  <Input
+                    name={`repeater.${index}`}
+                    label='Label'
+                    defaultValue={item}
+                    onChange={newValue => update(newValue, index)}
+                    required
+                    key={key}
+                  />
+                )}
+              </div>
+            </div>
           </div>
           <FormButton
             type='submit'
@@ -164,43 +193,4 @@ export default () => {
       </div>
     </section>
   </>
-}
-
-const Repeater = () => {
-  const { items, insert, remove } = useRepeater<string>([
-    '1',
-    '2',
-  ])
-
-  useEffect(() => {
-    console.log(items)
-  }, [items])
-
-  return (
-    <div>
-      <h2>Repeater</h2>
-      <div className='space-x-3'>
-        <FormButton
-          onClick={() => insert('New field')}
-          text='Add item'
-        />
-        <FormButton
-          onClick={() => remove(0)}
-          text='Remove item'
-        />
-      </div>
-      <div>
-        {items.map(([key, item], index) =>
-          <Input
-            name={`repeater.${index}`}
-            label='Label'
-            defaultValue={item}
-            required
-            key={key}
-            className={`key=${key}`}
-          />
-        )}
-      </div>
-    </div>
-  )
 }

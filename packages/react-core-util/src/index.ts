@@ -133,21 +133,20 @@ export const useField = <T>(
 export const useRepeater = <T>(initialItems: T[] = []) => {
   const index = useRef(0)
 
-  const mapNewWithKeys = (newItems: T[]) =>
-    newItems.map(item => <[number, T]>[index.current++, item])
+  const getKey = () =>
+    index.current++
 
-  const [items, setItems] = useState<[number, T][]>(mapNewWithKeys(initialItems))
-
-  const setNewWithKeys = () =>
-    setItems(items.map(([_, item]) => [index.current++, item]))
+  const [items, setItems] = useState<[number, T][]>(
+    initialItems.map(item => [getKey(), item])
+  )
 
   const insert = (item: T, newIndex?: number) => {
     if (newIndex === undefined || newIndex < 0 || newIndex >= items.length)
-      items.push([-1, item])
+      items.push([getKey(), item])
     else
-      items.splice(newIndex, 0, [-1, item])
+      items.splice(newIndex, 0, [getKey(), item])
 
-    setNewWithKeys()
+    setItems(items.slice())
   }
 
   const remove = (index?: number) => {
@@ -156,23 +155,21 @@ export const useRepeater = <T>(initialItems: T[] = []) => {
     else
       items.splice(index, 1)
     
-    setNewWithKeys()
+    setItems(items.slice())
   }
 
   const update = (item: T, index: number) => {
     if (index < 0 || index >= items.length)
       return
 
-    if (isObject(item) && isObject(items[index][1]))
-      items[index][1] = { ...items[index][1], ...item }
-    else
-      items[index][1] = item
+    items[index][1] = item
     
-    setNewWithKeys()
+    setItems(items.slice())
   }
 
-  const reset = (newItems: T[]) =>
-    setItems(mapNewWithKeys(newItems))
+  const reset = (newItems: T[]) => {
+    setItems(newItems.map(item => [getKey(), item]))
+  }
 
   return { items, insert, remove, update, reset }
 }

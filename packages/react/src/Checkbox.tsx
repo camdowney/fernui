@@ -1,8 +1,8 @@
 import React from 'react'
 import { cn, useField } from '@fernui/react-util'
-import { check } from '../icons'
+import { check } from './icons'
 import Error from './Error'
-import Icon from '../base/Icon'
+import Icon from './Icon'
 
 export interface CheckboxProps {
   name: string
