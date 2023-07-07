@@ -2,8 +2,9 @@
   "name": "fernui",
   "scripts": {
     "build-1": "cd .\\packages\\react-core-util && tsc",
-    "build-2": "cd .\\packages\\react && tsc",
-    "build": "pnpm build-1 && pnpm build-2 && rollup -c"
+    "build-2": "cd .\\packages\\react-util && tsc",
+    "build-3": "cd .\\packages\\react && tsc",
+    "build": "pnpm build-1 && pnpm build-2 && pnpm build-3 && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

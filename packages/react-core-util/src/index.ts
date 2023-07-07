@@ -111,9 +111,8 @@ export const useField = <T>(
 
   // Handle manual value control
   useEffect(() => {
-    if (_value !== undefined) {
+    if (_value !== undefined)
       onChange(_value)
-    }
   }, [_value])
 
   // Set initial state and cleanup
@@ -125,7 +124,7 @@ export const useField = <T>(
       fields.delete(name)
       setFields(new Map(fields))
     }
-  }, [])
+  }, [name])
 
   return { value, disabled, showError, setField, onChange }
 }
@@ -158,12 +157,14 @@ export const useRepeater = <T>(initialItems: T[] = []) => {
     setItems(items.slice())
   }
 
-  const update = (item: T, index: number) => {
+  const update = (newItem: T | ((currentValue: T) => T), index: number) => {
     if (index < 0 || index >= items.length)
       return
 
-    items[index][1] = item
-    
+    items[index][1] = typeof newItem === 'function'
+      ? (newItem as any)(items[index][1])
+      : newItem
+
     setItems(items.slice())
   }
 
