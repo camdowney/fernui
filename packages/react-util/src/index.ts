@@ -91,6 +91,18 @@ export const formKeyValuesToHtml = (formKeyValues: [any, any][], heading = 'Form
   return html + '</ul>'
 }
 
+export const JSXtoText = (element: React.ReactElement | string): string => {
+  if (!element) return ''
+  if (typeof element === 'string') return element
+
+  const children = element.props && element.props.children
+
+  if (Array.isArray(children))
+    return children.map(JSXtoText).join(' ')
+
+  return JSXtoText(children)
+}
+
 export const onIntersect = (
   selector: string,
   callback: (element: any) => any,
