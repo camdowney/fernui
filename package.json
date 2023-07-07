@@ -1,10 +1,14 @@
 {
   "name": "fernui",
   "scripts": {
-    "build-1": "cd .\\packages\\react-core-util && tsc",
-    "build-2": "cd .\\packages\\react-util && tsc",
-    "build-3": "cd .\\packages\\react && tsc",
-    "build": "pnpm build-1 && pnpm build-2 && pnpm build-3 && rollup -c"
+    "build-1": "cd .\\packages\\icons && tsc",
+    "build-2": "cd .\\packages\\util && tsc",
+    "build-3": "cd .\\packages\\react-core-util && tsc",
+    "build-4": "cd .\\packages\\react-util && tsc",
+    "build-5": "cd .\\packages\\react && tsc",
+    "build-6": "cd .\\packages\\react-native-util && tsc",
+    "build-7": "cd .\\packages\\react-native && tsc",
+    "build": "pnpm build-2 && pnpm build-3 && pnpm build-4 && pnpm build-5 && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

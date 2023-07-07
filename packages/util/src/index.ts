@@ -1,3 +1,5 @@
+export interface KeyObject { [key: string]: any }
+
 export const cycle = (range: number, currentIndex: number, direction: 1 | -1) =>
   direction === -1
     ? (currentIndex > 0 ? currentIndex - 1 : range - 1)
@@ -29,6 +31,25 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
   if (!str) return ''
   if (!charLimit || str.length <= charLimit) return str
   return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
+}
+
+export const hasSimilarValue = (value1: string, value2: string) =>
+  value1.toLowerCase().includes(value2.toLowerCase())
+
+export const searchByKeys = (items: any[], keys: string[], value: string) =>
+  !keys ? items : items.filter(item => keys.some(key => hasSimilarValue(item[key], value)))
+
+export const sortByKey = (items: any[], key?: string) =>
+  !key ? items : items.sort((item1, item2) => item1[key] < item2[key] ? -1 : 1)
+
+export const filterByKeys = (items: KeyObject[], filters: KeyObject) => {
+  if (Object.entries(filters).length < 1) return items
+
+  return items.filter(item =>
+    Object.entries(filters).some(([key, value]) =>
+      [null, undefined, '@ignore', item[key]].includes(value)
+    )
+  )
 }
 
 export const getFacebookShareLink = (url: string) =>
