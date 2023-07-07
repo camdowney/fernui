@@ -3,7 +3,7 @@ import { cn, useField } from '@fernui/react-util'
 import Error from './Error'
 
 export interface InputProps {
-  name: string
+  name?: string
   value?: string
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
@@ -19,7 +19,7 @@ export interface InputProps {
 }
 
 export default function Input({
-  name,
+  name: _name,
   value: _value,
   onChange: _onChange,
   validate = () => true,
@@ -34,6 +34,8 @@ export default function Input({
   errorClass,
   ...props
 }: InputProps) {
+  const name = _name ?? label ?? placeholder ?? ''
+
   const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
     value: _value,

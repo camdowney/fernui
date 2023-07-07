@@ -5,7 +5,7 @@ import Error from './Error'
 import Icon from './Icon'
 
 export interface CheckboxProps {
-  name: string
+  name?: string
   value?: string
   onChange?: (e: any) => any
   validate?: (newValue: string) => boolean
@@ -21,7 +21,7 @@ export interface CheckboxProps {
 }
 
 export default function Checkbox({
-  name,
+  name: _name,
   value: _value,
   onChange: _onChange,
   validate = () => true,
@@ -35,6 +35,8 @@ export default function Checkbox({
   errorClass,
   ...props
 }: CheckboxProps) {
+  const name = _name ?? label ?? ''
+
   const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
     value: _value,

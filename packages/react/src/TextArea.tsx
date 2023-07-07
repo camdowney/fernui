@@ -4,7 +4,7 @@ import Error from './Error'
 
 export interface TextAreaProps {
   innerRef?: any
-  name: string
+  name?: string
   value?: string
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
@@ -22,7 +22,7 @@ export interface TextAreaProps {
 
 export default function TextArea({
   innerRef,
-  name,
+  name: _name,
   value: _value,
   onChange: _onChange,
   validate = () => true,
@@ -38,6 +38,7 @@ export default function TextArea({
   errorClass,
   ...props
 }: TextAreaProps) {
+  const name = _name ?? label ?? placeholder ?? ''
   const ref = innerRef || useRef()
 
   const __onChange = (value: any) => {
@@ -48,11 +49,6 @@ export default function TextArea({
       adjustHeight(ref.current)
   }
 
-  useEffect(() => {
-    if (defaultValue && autoResize)
-      adjustHeight(ref.current)
-  }, [])
-
   const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
     value: _value,
@@ -60,6 +56,11 @@ export default function TextArea({
     validate,
     onChange: __onChange,
   })
+
+  useEffect(() => {
+    if (defaultValue && autoResize)
+      adjustHeight(ref.current)
+  }, [])
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
@@ -85,7 +86,7 @@ export default function TextArea({
 
 const adjustHeight = (element: any) => {
   const getStyle = (property: any) =>
-    parseFloat(getComputedStyle(element)[property]?.replace('/\D^./g', ''))
+    parseFloat(getComputedStyle(element)[property].replace('/\D^./g', ''))
 
   element.style.height = 'auto'
   element.style.height = (element.scrollHeight + getStyle('borderTopWidth') + getStyle('borderBottomWidth')) + 'px'

@@ -7,7 +7,7 @@ import Icon from './Icon'
 export interface Option { label: string, value?: string }
 
 export interface SelectProps {
-  name: string
+  name?: string
   value?: string
   options: Option[]
   onChange?: (newValue: string) => void
@@ -25,7 +25,7 @@ export interface SelectProps {
 }
 
 export default function Select({
-  name,
+  name: _name,
   value: _value,
   options,
   onChange: _onChange,
@@ -43,6 +43,8 @@ export default function Select({
   errorClass,
   ...props
 }: SelectProps) {
+  const name = _name ?? label ?? placeholder ?? ''
+
   const { value, disabled, showError, onChange } = useField(name, {
     defaultValue,
     value: _value,

@@ -24,7 +24,7 @@ export default function Lightbox({
     if (e.repeat || !active || items.length < 2)
       return
 
-    const key = e?.key?.toLowerCase()
+    const key = e.key.toLowerCase()
 
     if (key === 'arrowleft' || key === 'a')
       previous()
