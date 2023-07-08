@@ -66,7 +66,7 @@ const _outerStyle = {
 }
 
 const _style = (active: boolean | null) => ({
-  overflowY: 'auto',
   position: 'absolute',
-  visibility: active === null && 'hidden !important',
+  overflowY: 'auto',
+  ...(active === null && { visibility : 'hidden !important' }),
 })

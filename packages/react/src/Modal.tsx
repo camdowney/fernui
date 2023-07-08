@@ -88,7 +88,7 @@ const _bgStyle = {
 }
 
 const _style = (active: boolean | null) => ({
-  overflowY: 'auto',
   position: 'fixed',
-  visibility: active === null && 'hidden !important',
+  overflowY: 'auto',
+  ...(active === null && { visibility : 'hidden !important' }),
 })

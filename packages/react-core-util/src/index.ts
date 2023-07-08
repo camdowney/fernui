@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { collapseKeyValues, cycle, isObject, stringifyMap } from '@fernui/util'
+import { collapseKeyValues, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
