@@ -34,7 +34,12 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
   const savedData = useRef<string>('')
 
   useEffect(() => {
-    setData(collapseKeyValues(Array.from(fields).map(([name, state]) => [name, state.value])))
+    setData(collapseKeyValues(
+      Array.from(fields)
+        .filter(([name]) => !name.startsWith('__config'))
+        .map(([name, state]) => [name, state.value])
+    ))
+
     setValid(Array.from(fields).every(([_, state]) => !state.error))
 
     // True if user made change; else false for registering default values
@@ -64,31 +69,20 @@ export const FormContext = createContext<FormState | null>(null)
 
 export const useFormContext = () => useContext(FormContext) ?? useForm()
 
-export const useField = <T>(
+export const useField = <T extends unknown>(
   name: string,
+  value: T,
   options?: {
-    defaultValue?: T
-    value?: T
     disabled?: boolean
     validate?: (newValue: T) => boolean
     onChange?: (newValue: T) => void
   }
 ) => {
-  const {
-    defaultValue,
-    value: _value,
-    disabled: _disabled,
-    validate,
-    onChange: _onChange,
-  } = options || {}
+  const { disabled: _disabled, validate, onChange: _onChange } = options || {}
 
-  const {
-    disabled: formDisabled,
-    exposed: formExposed,
-    fields, setFields,
-  } = useFormContext()
+  const { disabled: formDisabled, exposed: formExposed, fields, setFields } = useFormContext()
 
-  const value = _value ?? (fields.get(name) ?? {}).value ?? defaultValue
+  const _value = (fields.get(name) ?? {}).value ?? value
   const disabled = _disabled ?? formDisabled
   const showError = (fields.get(name) ?? {}).error && ((fields.get(name) ?? {}).modified || formExposed)
 
@@ -111,14 +105,12 @@ export const useField = <T>(
 
   // Handle manual value control
   useEffect(() => {
-    if (_value !== undefined)
-      onChange(_value)
-  }, [_value])
+    onChange(value)
+  }, [value])
 
   // Set initial state and cleanup
   useEffect(() => {
-    if (defaultValue)
-      setField(defaultValue)
+    setField(_value, false)
 
     return () => {
       fields.delete(name)
@@ -126,7 +118,7 @@ export const useField = <T>(
     }
   }, [name])
 
-  return { value, disabled, showError, setField, onChange }
+  return { value: _value, disabled, showError, setField, onChange }
 }
 
 export const useRepeater = <T>(initialItems: T[] = []) => {

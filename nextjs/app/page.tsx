@@ -1,7 +1,7 @@
 'use client'
 
+import { useState } from 'react'
 import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
-import { useEffect, useState } from 'react'
 import { FormState, useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
 import { cn } from '../../packages/react-util/dist'
 import { angle } from '../../packages/icons/dist'
@@ -9,7 +9,9 @@ import { angle } from '../../packages/icons/dist'
 const handleSubmit = (context: FormState, callback: () => any) => async (e: any) => {
   e.preventDefault()
   
-  const { setDisabled, setExposed, isValid } = context
+  const { setDisabled, setExposed, isValid, fields } = context
+
+  console.log(fields)
   
   setExposed(true)
 
@@ -19,6 +21,7 @@ const handleSubmit = (context: FormState, callback: () => any) => async (e: any)
   try {
     setDisabled(true)
     await callback()
+    alert('Success')
   }
   catch (error: any) {
     alert('Error')
@@ -29,7 +32,7 @@ const handleSubmit = (context: FormState, callback: () => any) => async (e: any)
 }
 
 export default () => {
-  const { context, data, setFields } = useForm()
+  const { context, data } = useForm()
 
   const { items, insert, remove, update } = useRepeater<string>([
     '1',
@@ -55,24 +58,23 @@ export default () => {
   return <>
     <section>
       <div className='container space-y-4'>
-        <div>
-          <button onClick={() => setFields(curr => curr)}>
-            Update value
-          </button>
-        </div>
         <Form
           context={context}
           onSubmit={testSubmit}
         >
           <div className='grid gap-4'>
+            <Input
+              name='field1'
+              label='Full name *'
+              validate={Boolean}
+            />
             <TextArea
               name='field.0.a'
               label='Full name *'
-              defaultValue='qwe'
               rows={1}
               fieldClass='resize-none' // break-all overflow-hidden
               autoResize
-              required
+              validate={Boolean}
             />
             <Select
               name='select'
@@ -82,7 +84,7 @@ export default () => {
                 { label: 'Option 2' },
                 { label: 'Option 3' },
               ]}
-              required
+              validate={Boolean}
             />
             <div>
               <h2>Repeater</h2>
@@ -101,9 +103,8 @@ export default () => {
                   <Input
                     name={`repeater.${index}`}
                     label='Label'
-                    defaultValue={item}
+                    value={item}
                     onChange={newValue => update(newValue, index)}
-                    required
                     key={key}
                   />
                 )}

@@ -9,7 +9,6 @@ export interface CheckboxProps {
   value?: string
   onChange?: (e: any) => any
   validate?: (newValue: string) => boolean
-  defaultValue?: string
   readOnly?: boolean
   className?: string
   label?: string
@@ -22,10 +21,9 @@ export interface CheckboxProps {
 
 export default function Checkbox({
   name: _name,
-  value: _value,
+  value: _value = 'false',
   onChange: _onChange,
   validate = () => true,
-  defaultValue = 'false',
   readOnly,
   className,
   label,
@@ -37,9 +35,7 @@ export default function Checkbox({
 }: CheckboxProps) {
   const name = _name ?? label ?? ''
 
-  const { value, disabled, showError, onChange } = useField(name, {
-    defaultValue,
-    value: _value,
+  const { value, disabled, showError, onChange } = useField(name, _value, {
     disabled: readOnly,
     validate,
     onChange: _onChange,

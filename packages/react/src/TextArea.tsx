@@ -8,7 +8,6 @@ export interface TextAreaProps {
   value?: string
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
-  defaultValue?: string
   readOnly?: boolean
   autoResize?: boolean
   className?: string
@@ -23,11 +22,10 @@ export interface TextAreaProps {
 export default function TextArea({
   innerRef,
   name: _name,
-  value: _value,
+  value: _value = '',
   onChange: _onChange,
   validate = () => true,
   placeholder,
-  defaultValue = '',
   readOnly,
   autoResize,
   className,
@@ -49,16 +47,14 @@ export default function TextArea({
       adjustHeight(ref.current)
   }
 
-  const { value, disabled, showError, onChange } = useField(name, {
-    defaultValue,
-    value: _value,
+  const { value, disabled, showError, onChange } = useField(name, _value, {
     disabled: readOnly,
     validate,
     onChange: __onChange,
   })
 
   useEffect(() => {
-    if (defaultValue && autoResize)
+    if (_value && autoResize)
       adjustHeight(ref.current)
   }, [])
 

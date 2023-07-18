@@ -7,7 +7,6 @@ export interface InputProps {
   value?: string
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
-  defaultValue?: string
   readOnly?: boolean
   className?: string
   label?: string
@@ -20,11 +19,10 @@ export interface InputProps {
 
 export default function Input({
   name: _name,
-  value: _value,
+  value: _value = '',
   onChange: _onChange,
   validate = () => true,
   placeholder,
-  defaultValue = '',
   readOnly,
   className,
   label,
@@ -36,9 +34,7 @@ export default function Input({
 }: InputProps) {
   const name = _name ?? label ?? placeholder ?? ''
 
-  const { value, disabled, showError, onChange } = useField(name, {
-    defaultValue,
-    value: _value,
+  const { value, disabled, showError, onChange } = useField(name, _value, {
     disabled: readOnly,
     validate,
     onChange: _onChange,

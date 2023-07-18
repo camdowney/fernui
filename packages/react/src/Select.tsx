@@ -13,7 +13,6 @@ export interface SelectProps {
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
   placeholder?: string
-  defaultValue?: string
   disabled?: boolean
   className?: string
   label?: string
@@ -32,7 +31,6 @@ export default function Select({
   validate = () => true,
   placeholder,
   placeholderStyle,
-  defaultValue = '',
   readOnly,
   className,
   style,
@@ -44,10 +42,9 @@ export default function Select({
   ...props
 }: SelectProps) {
   const name = _name ?? label ?? placeholder ?? ''
+  const selectedValue = _value ?? (placeholder ? '' : (options[0].value ?? options[0].label))
 
-  const { value, disabled, showError, onChange } = useField(name, {
-    defaultValue,
-    value: _value,
+  const { value, disabled, showError, onChange } = useField(name, selectedValue, {
     disabled: readOnly,
     validate,
     onChange: _onChange,

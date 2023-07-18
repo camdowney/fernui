@@ -6,47 +6,47 @@ settings:
 
 dependencies:
   '@fernui/react-util':
-    specifier: ^1.0.3
-    version: 1.1.0(@fernui/react-core-util@1.1.10)
+    specifier: ^1.1.0
+    version: 1.1.2(@fernui/react-core-util@1.2.1)
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.14
-    version: 18.2.14
+    specifier: ^18.2.15
+    version: 18.2.15
 
 packages:
 
-  /@fernui/react-core-util@1.1.10(@fernui/util@2.3.5)(react@18.2.0):
-    resolution: {integrity: sha512-D/PzEtGscgVAtJdGPMmfw99GL/r8hyBDaqxFnwKlmGwEsHSygq/9KFwTeeaLOagvV+r3idBTjqXkPJrZbbEuPw==}
+  /@fernui/react-core-util@1.2.1(@fernui/util@2.3.6)(react@18.2.0):
+    resolution: {integrity: sha512-ou3zJBeP/bGb/Z63DWP0+eMv+h/ekdiPedPe3bdIWO/dKLJ1EGoRjh+Ju7XJhmqbPtWbXvcZ8XF4em0GtUKYQg==}
     peerDependencies:
       '@fernui/util': ^2.3.2
       react: ^18.2.0
     dependencies:
-      '@fernui/util': 2.3.5
+      '@fernui/util': 2.3.6
       react: 18.2.0
     dev: false
 
-  /@fernui/react-util@1.1.0(@fernui/react-core-util@1.1.10):
-    resolution: {integrity: sha512-FnLY7T+nl2bePSuximl7OIZK93azGNLGII0p30fuOCubTLYM3Lgh+wDYjhrGBfMwK36Atfv8lWyvO74BzV0i9Q==}
+  /@fernui/react-util@1.1.2(@fernui/react-core-util@1.2.1):
+    resolution: {integrity: sha512-H+fjhsreQqKSehhGw7mRM5Dr+KosCrafk+KKLcDPVf83g7uUvrEbuutgUr3EHDlSXdnA51+clndVZmLEfxC8QQ==}
     peerDependencies:
       '@fernui/react-core-util': ^1.1.10
     dependencies:
-      '@fernui/react-core-util': 1.1.10(@fernui/util@2.3.5)(react@18.2.0)
+      '@fernui/react-core-util': 1.2.1(@fernui/util@2.3.6)(react@18.2.0)
     dev: false
 
-  /@fernui/util@2.3.5:
-    resolution: {integrity: sha512-sHsqY6Q8MqoTCyva1wPjn/q5L6e1DQpolOAua8SZWYLi/ocC1rrVJFFTB/bm2jRO/OAqonUUhefXiUW9w07rWA==}
+  /@fernui/util@2.3.6:
+    resolution: {integrity: sha512-vBzJyhIXiz8cFLqr5yF+KDLNbVhae8QCuyqxyt2JMPadbd0tl0R2+GOFB9bfh7XTcQquSqvofjCkXfd72FgE+g==}
     dev: false
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
     dev: true
 
-  /@types/react@18.2.14:
-    resolution: {integrity: sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==}
+  /@types/react@18.2.15:
+    resolution: {integrity: sha512-oEjE7TQt1fFTFSbf8kkNuc798ahTUzn3Le67/PWjE8MAfYAD/qB7O8hSTcromLFqHCt9bcdOg5GXMokzTjJ5SA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
