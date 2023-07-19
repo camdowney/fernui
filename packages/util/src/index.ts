@@ -106,7 +106,7 @@ interface PingOptions {
 }
 
 interface PingResponse {
-  res: Response | null
+  res: Response
   data: Object
 }
 
@@ -130,12 +130,15 @@ export const ping = async (
 
     return {
       res,
-      data: res.headers.get('content-type')?.includes('application/json') ? await res.json() : {},
+      data: ((res.headers.get('content-type') ?? '').includes('application/json'))
+        ? await res.json()
+        : {},
     }
   }
-  catch (err) {
-    console.error('Ping error:', err)
-
-    return { res: null, data: {} }
+  catch (error) {
+    return {
+      res: new Response(null, { status: 400 }),
+      data: { error },
+    }
   }
 }

@@ -227,9 +227,9 @@ export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, opt
       if (onSuccess)
         onSuccess(newData, oldData)
     }
-    catch (err) {
+    catch (error) {
       if (onError)
-        onError(err)
+        onError(error)
     }
   }
 
