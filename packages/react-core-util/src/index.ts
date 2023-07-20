@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { collapseKeyValues, cycle, stringifyMap } from '@fernui/util'
+import { collapseEntries, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
@@ -34,7 +34,7 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
   const savedData = useRef<string>('')
 
   useEffect(() => {
-    setData(collapseKeyValues(
+    setData(collapseEntries(
       Array.from(fields)
         .filter(([name]) => !name.startsWith('__config'))
         .map(([name, state]) => [name, state.value])

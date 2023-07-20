@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { SetState, escapeHtml } from '@fernui/react-core-util'
+import { SetState } from '@fernui/react-core-util'
 
 export * from '@fernui/react-core-util'
 
@@ -73,23 +73,6 @@ export const ss = (selector: string) => () =>
 
 export const cn = (...classes: any[]) =>
   classes.filter(Boolean).join(' ')
-
-export const formKeyValuesToHtml = (formKeyValues: [any, any][], heading = 'Form Submission') => {
-  let html = heading ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> ` : ''
-
-  html += `<ul style='padding: 0 0 0 24px; margin: 0;'>`
-
-  formKeyValues
-    .filter(([_name]) => !_name.startsWith('__config'))
-    .forEach(([_name, _value]) => {
-      const name = escapeHtml(_name.replace(/\*/g, ''))
-      const value = _value === true ? 'Yes' : _value === false ? 'No' : escapeHtml(_value)
-
-      html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${name}:</span> <br>${value}</li>`
-    })
-
-  return html + '</ul>'
-}
 
 export const JSXtoText = (element: React.ReactElement | string): string => {
   if (!element) return ''
