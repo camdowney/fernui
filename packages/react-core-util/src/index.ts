@@ -121,6 +121,34 @@ export const useField = <T extends unknown>(
   return { value: _value, disabled, showError, setField, onChange }
 }
 
+export const handleSubmit = (
+  context: FormState,
+  callback: () => any,
+  onError?: (error: any) => any
+) => async (e: any) => {
+  if (e.preventDefault)
+    e.preventDefault()
+
+  const { setExposed, setDisabled, isValid } = context
+
+  setExposed(true)
+
+  try {
+    if (!isValid)
+      throw Error('invalid-input')
+
+    setDisabled(true)
+
+    await callback()
+  }
+  catch (error: any) {
+    setDisabled(false)
+
+    if (onError)
+      onError(error)
+  }
+}
+
 export const useRepeater = <T>(initialItems: T[] = []) => {
   const index = useRef(0)
 
