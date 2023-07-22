@@ -1,11 +1,10 @@
-import React, { useRef } from 'react'
-import { useListener } from '@fernui/react-util'
+import React from 'react'
 import Icon, { IconProps } from './Icon'
 
-export interface LinkProps {
+export interface ButtonProps {
   innerRef?: any
   as?: any
-  to?: string
+  link?: string
   children?: any
   text?: any
   before?: any
@@ -14,14 +13,13 @@ export interface LinkProps {
   iconAfter?: IconProps
   blank?: boolean
   label?: string
-  preventDefaultFocus?: boolean,
   [props: string]: any
 }
 
-export default function Link({
+export default function Button({
   innerRef,
   as,
-  to,
+  link,
   children,
   text,
   before,
@@ -30,21 +28,14 @@ export default function Link({
   iconAfter,
   blank,
   label,
-  preventDefaultFocus,
   ...props
-}: LinkProps) {
-  const Shell = as || (to ? 'a' : 'button')
-  const ref = innerRef || useRef()
-
-  useListener('mousedown', (e: any) => {
-    if (preventDefaultFocus)
-      e.preventDefault()
-  }, { element: ref })
+}: ButtonProps) {
+  const Shell = as || (link ? 'a' : 'button')
 
   return (
     <Shell
-      ref={ref}
-      href={to}
+      ref={innerRef}
+      href={link}
       target={blank && '_blank'}
       rel={blank && 'noopener noreferrer'}
       aria-label={label || text}

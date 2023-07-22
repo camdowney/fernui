@@ -1,17 +1,29 @@
-import React from 'react'
-import { useFormContext } from '@fernui/react-util'
-import Link, { LinkProps } from './Link'
+import React, { useRef } from 'react'
+import { useFormContext, useListener } from '@fernui/react-util'
+import Button, { ButtonProps } from './Button'
+
+export interface FormButtonProps extends ButtonProps {
+  innerRef?: any
+  preventDefaultFocus?: boolean
+}
 
 export default function FormButton({
-  type = 'button',
   innerRef,
-  to,
+  preventDefaultFocus,
+  type = 'button',
   ...props
-}: LinkProps) {
+}: FormButtonProps) {
   const { disabled } = useFormContext()
+  const ref = innerRef || useRef()
+
+  useListener('mousedown', (e: any) => {
+    if (preventDefaultFocus)
+      e.preventDefault()
+  }, { element: ref })
 
   return (
-    <Link
+    <Button
+      innerRef={ref}
       type={type}
       disabled={disabled}
       {...props}

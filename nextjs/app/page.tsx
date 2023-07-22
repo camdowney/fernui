@@ -1,35 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Media, Avatar, Link, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
-import { FormState, useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
-import { cn } from '../../packages/react-util/dist'
+import { Media, Avatar, Button, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
+import { useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
+import { cn, handleSubmit } from '../../packages/react-util/dist'
 import { angle } from '../../packages/icons/dist'
-
-const handleSubmit = (context: FormState, callback: () => any) => async (e: any) => {
-  e.preventDefault()
-  
-  const { setDisabled, setExposed, isValid, fields } = context
-
-  console.log(fields)
-  
-  setExposed(true)
-
-  if (!isValid)
-    return alert('Invalid input')
-  
-  try {
-    setDisabled(true)
-    await callback()
-    alert('Success')
-  }
-  catch (error: any) {
-    alert('Error')
-  }
-  finally {
-    setDisabled(false)
-  }
-}
 
 export default () => {
   const { context, data } = useForm()
@@ -51,8 +26,10 @@ export default () => {
 
   const { control, open, previous, next } = useLightbox(lightboxItems.length)
 
-  const testSubmit = handleSubmit(context, async () => {
+  const testSubmit = handleSubmit(context, () => {
     console.log(data)
+  }, error => {
+    alert(error.message)
   })
 
   return <>
@@ -134,7 +111,10 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => setExpandActive(curr => !curr)}>Expand</button>
+        <Button
+          onClick={() => setExpandActive(curr => !curr)}
+          text='Expand'
+        />
         <Expand active={expandActive}>
           Content
         </Expand>
@@ -143,7 +123,10 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => setDropdownActive(true)}>Dropdown</button>
+        <Button
+          onClick={() => setDropdownActive(curr => !curr)}
+          text='Dropdown'
+        />
         <Dropdown
           active={dropdownActive}
           setActive={setDropdownActive}
@@ -155,7 +138,10 @@ export default () => {
 
     <section>
       <div className='container'>
-        <button onClick={() => open()}>Lightbox</button>
+        <Button
+          onClick={() => open(0)}
+          text='Lightbox'
+        />
       </div>
     </section>
 
@@ -164,12 +150,12 @@ export default () => {
       items={lightboxItems}
       className='m-auto inset-5 max-w-5xl max-h-max'
       overlay={<>
-        <Link
+        <Button
           onClick={previous}
           className='absolute top-1/2 -translate-y-1/2 left-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
           iconBefore={{ i: angle, className: 'w-7 rotate-90' }}
         />
-        <Link
+        <Button
           onClick={next}
           className='absolute top-1/2 -translate-y-1/2 right-8 bg-gray-900/70 hover:bg-gray-900/80 text-gray-100 rounded-full p-4'
           iconBefore={{ i: angle, className: 'w-7 -rotate-90' }}
@@ -179,7 +165,8 @@ export default () => {
       {({ item, active }) =>
         <Media
           src={item}
-          className={cn('pb-[67%]', !active && '!hidden')}
+          className={cn(!active && '!hidden')}
+          ratioClass='pb-[67%]'
           key={item}
         />
       }
@@ -189,7 +176,7 @@ export default () => {
       <div className='container'>
         <Media
           src='aurora.webp'
-          className='pb-[65%]'
+          ratioClass='pb-[65%]'
         />
       </div>
     </section>

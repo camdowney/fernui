@@ -31,7 +31,7 @@ export default function Avatar({
 }: AvatarProps) {
   const firstLetter = title ? title.substring(0, 1).toUpperCase() : null
   const [validSrc, setValidSrc] = useState(!!src)
-  const { as, mediaClass, placeholder, cover, lazy, ...nonMediaProps } = props
+  const { as, innerClass, placeholder, cover, lazy, ...nonMediaProps } = props
 
   return validSrc ? (
     <Media

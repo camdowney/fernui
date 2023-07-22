@@ -1,63 +1,41 @@
 import React from 'react'
 import { cn } from '@fernui/react-util'
+import MediaRaw, { MediaRawProps } from './MediaRaw'
 
-export interface MediaProps {
-  as?: any
-  src?: string
-  srcSet?: string
-  sizes?: string
-  alt?: string
+export interface MediaProps extends MediaRawProps {
   className?: string
   style?: Object
-  mediaClass?: string
+  ratioClass?: string
+  innerClass?: string
   placeholder?: any
   cover?: boolean
-  outer?: boolean
-  lazy?: boolean
-  [props: string]: any
 }
 
 export default function Media({
   as = 'img',
-  src,
-  srcSet,
-  sizes,
-  alt,
   className,
   style,
-  mediaClass,
+  ratioClass,
+  innerClass,
   placeholder,
   cover,
-  outer = true,
-  lazy,
   ...props
 }: MediaProps) {
-  const Shell = as
-
-  const MediaInner = () => (
-    <Shell
-      src={(src && !lazy) ? src : undefined}
-      data-lazy-src={(src && lazy) ? src : undefined}
-      srcSet={(srcSet && !lazy) ? srcSet : undefined}
-      data-lazy-srcset={(srcSet && lazy) ? srcSet : undefined}
-      sizes={sizes ?? '100vw'}
-      alt={alt ?? ''}
-      className={outer ? mediaClass : className}
-      style={(outer && typeof as === 'string') ? _innerStyle(as) : undefined}
-      {...props}
-    />
-  )
-
-  return outer ? (
+  return (
     <div
       className={cn('fui-media', className)}
       style={{ ...style, ...(cover ? _coverStyle : _defaultStyle) } as Object}
     >
-      {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}
-      <MediaInner />
+      <div className={cn(ratioClass)}>
+        {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}
+        <MediaRaw
+          as={as}
+          className={innerClass}
+          style={typeof as === 'string' ? _innerStyle(as) : undefined}
+          {...props}
+        />
+      </div>
     </div>
-  ) : (
-    <MediaInner />
   )
 }
 

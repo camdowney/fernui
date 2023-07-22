@@ -200,7 +200,7 @@ export interface LightboxControl {
   setIndex: SetState<number>
   active: boolean
   setActive: SetState<boolean>
-  open: (newIndex?: number) => void
+  open: (newIndex: number) => void
   previous: () => void
   next: () => void
 }
@@ -211,7 +211,7 @@ export const useLightbox = (numItems: number, options?: { index?: number, active
   const [index, setIndex] = useState(_index ?? 0)
   const [active, setActive] = useState(_active ?? false)
 
-  const open = (newIndex: number = 0) => {
+  const open = (newIndex: number) => {
     setIndex(newIndex)
     setActive(true)
   }
