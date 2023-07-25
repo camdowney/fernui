@@ -136,5 +136,7 @@ export const initSplitLetters = (selector: string, delay = 0, step = 25) => {
       ).join('')
       + '</span>'
     ).join(' ')
+
+    element.classList.add('split-letter-active')
   })
 }
