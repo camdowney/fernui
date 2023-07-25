@@ -12,12 +12,14 @@ export const useListener = (
     [props: string]: any
   }
 ) => {
+  const { element, dependencies, ...rest } = options ?? {}
+
   useEffect(() => {
-    const current = options?.element?.current || options?.element || window
+    const current = element.current || element || window
     
-    current.addEventListener(event, callback, options?.rest)
-    return () => current.removeEventListener(event, callback, options?.rest)
-  }, [event, callback, ...(options?.dependencies ?? [])])
+    current.addEventListener(event, callback, rest)
+    return () => current.removeEventListener(event, callback, rest)
+  }, [event, callback, ...(dependencies ?? [])])
 }
 
 export const useModal = (
@@ -56,7 +58,7 @@ export const useModal = (
   }, [active])
 
   useListener('keydown', (e: any) => {
-    if (active && !e.repeat && exitOnEscape && e?.key?.toLowerCase() === 'escape')
+    if (active && !e.repeat && exitOnEscape && e.key && e.key.toLowerCase() === 'escape')
       setActive(false)
   })
 
@@ -69,7 +71,7 @@ export const useModal = (
 }
 
 export const ss = (selector: string) => () =>
-  document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' })
+  (document.querySelector(selector) ?? document.body).scrollIntoView({ behavior: 'smooth' })
 
 export const cn = (...classes: any[]) =>
   classes.filter(Boolean).join(' ')
