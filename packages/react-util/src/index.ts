@@ -15,10 +15,10 @@ export const useListener = (
   const { element, dependencies, ...rest } = options ?? {}
 
   useEffect(() => {
-    const current = element.current || element || window
+    const root = element ? (element.current || element) : window
     
-    current.addEventListener(event, callback, rest)
-    return () => current.removeEventListener(event, callback, rest)
+    root.addEventListener(event, callback, rest)
+    return () => root.removeEventListener(event, callback, rest)
   }, [event, callback, ...(dependencies ?? [])])
 }
 
