@@ -70,7 +70,7 @@ export const useModal = (
   return { ref }
 }
 
-export const ss = (selector: string) => () =>
+export const ss = (selector: string) =>
   (document.querySelector(selector) ?? document.body).scrollIntoView({ behavior: 'smooth' })
 
 export const cn = (...classes: any[]) =>
