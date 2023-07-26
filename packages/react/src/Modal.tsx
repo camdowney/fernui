@@ -59,7 +59,7 @@ export default function Modal({
   return (
     <span
       ref={ref}
-      className={cn('fui-listener fui-modal-outer', outerClass)}
+      className={cn('fui-modal-outer', outerClass)}
     >
       <div
         className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}

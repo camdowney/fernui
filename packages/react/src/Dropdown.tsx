@@ -45,7 +45,7 @@ export default function Dropdown({
   return (
     <span
       ref={ref}
-      className={cn('fui-listener fui-dropdown-outer', outerClass)}
+      className={cn('fui-dropdown-outer', outerClass)}
       style={_outerStyle as Object}
     >
       <div

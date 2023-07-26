@@ -28,7 +28,7 @@ export default function Expand({
   return (
     <div
       ref={ref}
-      className={cn('fui-listener fui-expand', className)}
+      className={cn('fui-expand', className)}
       style={_style(active, height)}
       tabIndex={active ? undefined : -1}
       {...props}

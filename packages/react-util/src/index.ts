@@ -73,8 +73,20 @@ export const useModal = (
 export const ss = (selector: string) =>
   (document.querySelector(selector) ?? document.body).scrollIntoView({ behavior: 'smooth' })
 
-export const cn = (...classes: any[]) =>
-  classes.filter(Boolean).join(' ')
+export const cn = (...classes: (string | { [key: string]: string } | any)[]) => {
+  let classesStr = ''
+
+  classes.filter(Boolean).forEach(_class => {
+    if (typeof _class === 'string')
+      return classesStr += _class + ' '
+
+    Object.entries(_class)
+      .filter(([key]) => !classesStr.includes(key))
+      .forEach(([_, value]) => classesStr += value + ' ')
+  })
+
+  return classesStr.trim()
+}
 
 export const JSXtoText = (element: React.ReactElement | string): string => {
   if (!element) return ''
