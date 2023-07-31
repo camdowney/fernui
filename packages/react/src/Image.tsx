@@ -61,7 +61,7 @@ const _placeholderStyle = {
   backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
 }
 
-const _imageStyle = () => ({
+const _imageStyle = {
   position: 'absolute',
   top: 0,
   left: 0,
@@ -69,4 +69,4 @@ const _imageStyle = () => ({
   height: '100%',
   objectFit: 'cover',
   objectPosition: 'center',
-})
+}
