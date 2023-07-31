@@ -1,33 +1,33 @@
 import React from 'react'
+import { cn } from '@fernui/react-util'
 
-export interface MediaRawProps {
-  as?: any
+export interface ImageRawProps {
   src?: string
   srcSet?: string
   sizes?: string
+  className?: string
   alt?: string
   lazy?: boolean
   [props: string]: any
 }
 
-export default function MediaRaw({
-  as = 'img',
+export default function ImageRaw({
   src,
   srcSet,
   sizes,
+  className,
   alt,
   lazy,
   ...props
-}: MediaRawProps) {
-  const Shell = as
-
+}: ImageRawProps) {
   return (
-    <Shell
+    <img
       src={(src && !lazy) ? src : undefined}
       data-lazy-src={(src && lazy) ? src : undefined}
       srcSet={(srcSet && !lazy) ? srcSet : undefined}
       data-lazy-srcset={(srcSet && lazy) ? srcSet : undefined}
       sizes={sizes ?? '100vw'}
+      className={cn('fui-image-raw', className)}
       alt={alt ?? ''}
       {...props}
     />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { cn } from '@fernui/react-util'
 import { profile } from './icons'
-import Media, { MediaProps } from './Media'
+import Image, { ImageProps } from './Image'
 import Icon from './Icon'
 
 export type Color = string
@@ -15,7 +15,7 @@ const defaultColors: ColorMap = letter => (
   '#469310'                               // green 
 )
 
-export interface AvatarProps extends MediaProps {
+export interface AvatarProps extends ImageProps {
   title?: any
   src?: any
   colors?: ColorMap
@@ -31,10 +31,10 @@ export default function Avatar({
 }: AvatarProps) {
   const firstLetter = title ? title.substring(0, 1).toUpperCase() : null
   const [validSrc, setValidSrc] = useState(!!src)
-  const { as, innerClass, placeholder, cover, lazy, ...nonMediaProps } = props
+  const { as, innerClass, placeholder, cover, lazy, ...nonImageProps } = props
 
   return validSrc ? (
-    <Media
+    <Image
       src={src}
       alt={title}
       className={cn('fui-avatar', className)}
@@ -45,7 +45,7 @@ export default function Avatar({
     <div
       className={cn('fui-avatar', className)}
       style={_letterStyle(firstLetter, colors)}
-      {...nonMediaProps}
+      {...nonImageProps}
     >
       {firstLetter}
     </div>
@@ -53,7 +53,7 @@ export default function Avatar({
     <Icon
       i={profile}
       className={cn('fui-avatar', className)}
-      {...nonMediaProps}
+      {...nonImageProps}
     />
   )
 }
