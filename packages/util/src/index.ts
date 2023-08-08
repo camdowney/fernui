@@ -135,11 +135,6 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
   }
 }
 
-interface PingResponse {
-  res: Response
-  data: Object
-}
-
 export const ping = {
   post: async (url: string, request?: RequestInit) => {
     const { body, headers, ...rest } = request || {}
