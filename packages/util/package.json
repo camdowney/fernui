@@ -1,7 +1,7 @@
 {
   "name": "@fernui/util",
   "author": "@camdowney",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "A library of general-purpose utility functions for web development.",
   "keywords": [
     "ui",
