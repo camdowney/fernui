@@ -122,15 +122,15 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
 
     return {
       res,
-      data: ((res.headers.get('content-type') ?? '').includes('application/json'))
+      data: <Object>(((res.headers.get('content-type') ?? '').includes('application/json'))
         ? await res.json()
-        : {}
+        : {})
     }
   }
   catch (error) {
     return {
       res: new Response(null, { status: 400 }),
-      data: { error },
+      data: <Object>({ error }),
     }
   }
 }
@@ -141,10 +141,10 @@ interface PingResponse {
 }
 
 export const ping = {
-  post: async (url: string, request?: RequestInit): Promise<PingResponse> => {
+  post: async (url: string, request?: RequestInit) => {
     const { body, headers, ...rest } = request || {}
 
-    return handlePingResponse(async () =>
+    return await handlePingResponse(async () =>
       await fetch(url, {
         method: 'POST',
         body: typeof body === 'object' ? JSON.stringify(body) : body,
@@ -156,8 +156,8 @@ export const ping = {
       })
     )
   },
-  get: async (url: string, request?: RequestInit): Promise<PingResponse> => {
-    return handlePingResponse(async () =>
+  get: async (url: string, request?: RequestInit) => {
+    return await handlePingResponse(async () =>
       await fetch(url, {
         method: 'GET',
         ...request,
