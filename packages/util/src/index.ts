@@ -115,41 +115,16 @@ export const promisify = async (callback: Function) =>
       .then((res: any) => resolve(res.result))
       .catch((err: any) => reject(err.result))
   })
-  
-interface PingOptions {
-  method?: string
-  headers?: {}
-  [options:string]: any
-}
 
-interface PingResponse {
-  res: Response
-  data: Object
-}
-
-export const ping = async (
-  url: string,  
-  body: any,
-  options?: PingOptions
-): Promise<PingResponse> => {
-  const { method, headers, ...rest } = options ?? {}
-
+export const handlePingResponse = async (fetchCallback: () => Promise<Response>) => {
   try {
-    const res = await fetch(url, {
-      method: method || 'POST',
-      body: typeof body === 'object' ? JSON.stringify(body) : body,
-      ...rest,
-      headers: {
-        ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
-        ...headers,
-      },
-    })
+    const res = await fetchCallback()
 
     return {
       res,
       data: ((res.headers.get('content-type') ?? '').includes('application/json'))
         ? await res.json()
-        : {},
+        : {}
     }
   }
   catch (error) {
@@ -158,4 +133,35 @@ export const ping = async (
       data: { error },
     }
   }
+}
+
+interface PingResponse {
+  res: Response
+  data: Object
+}
+
+export const ping = {
+  post: async (url: string, request?: RequestInit): Promise<PingResponse> => {
+    const { body, headers, ...rest } = request || {}
+
+    return handlePingResponse(async () =>
+      await fetch(url, {
+        method: 'POST',
+        body: typeof body === 'object' ? JSON.stringify(body) : body,
+        ...rest,
+        headers: {
+          ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
+          ...headers,
+        },
+      })
+    )
+  },
+  get: async (url: string, request?: RequestInit): Promise<PingResponse> => {
+    return handlePingResponse(async () =>
+      await fetch(url, {
+        method: 'GET',
+        ...request,
+      })
+    )
+  },
 }
