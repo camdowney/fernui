@@ -119,18 +119,23 @@ export const promisify = async (callback: Function) =>
 export const handlePingResponse = async (fetchCallback: () => Promise<Response>) => {
   try {
     const res = await fetchCallback()
+    const text = await res.text()
+    
+    let data = {}
 
-    return {
-      res,
-      data: <Object>(((res.headers.get('content-type') ?? '').includes('application/json'))
-        ? await res.json()
-        : {})
+    try {
+      data = JSON.parse(text)
     }
+    catch (error) {
+      data = { text }
+    }
+
+    return { res, data }
   }
   catch (error) {
     return {
       res: new Response(null, { status: 400 }),
-      data: <Object>({ error }),
+      data: { error } as Object,
     }
   }
 }
