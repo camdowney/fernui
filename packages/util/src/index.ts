@@ -120,7 +120,7 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
   try {
     const res = await fetchCallback()
     const text = await res.text()
-    
+
     let data = {}
 
     try {
@@ -140,8 +140,12 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
   }
 }
 
+export interface PingRequest extends Omit<RequestInit, 'body'>{
+  body: any
+}
+
 export const ping = {
-  post: async (url: string, request?: RequestInit) => {
+  post: async (url: string, request?: PingRequest) => {
     const { body, headers, ...rest } = request || {}
 
     return await handlePingResponse(async () =>
@@ -156,7 +160,7 @@ export const ping = {
       })
     )
   },
-  get: async (url: string, request?: RequestInit) => {
+  get: async (url: string, request?: PingRequest) => {
     return await handlePingResponse(async () =>
       await fetch(url, {
         method: 'GET',

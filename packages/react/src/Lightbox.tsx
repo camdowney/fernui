@@ -2,7 +2,7 @@ import React from 'react'
 import { LightboxControl, cn, useListener } from '@fernui/react-util'
 import Modal, { ModalProps } from './Modal'
 
-export interface LightboxProps extends Omit<ModalProps, 'active' | 'setActive'> {
+export interface LightboxProps extends Omit<ModalProps, 'active' | 'setActive'>{
   control: LightboxControl
   items: any[]
   children: ({ item, index, active }: { item: any, index: number, active: boolean }) => any
