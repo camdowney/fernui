@@ -34,11 +34,13 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
   const savedData = useRef<string>('')
 
   useEffect(() => {
-    setData(collapseEntries(
-      Array.from(fields)
-        .filter(([name]) => !name.startsWith('__config'))
-        .map(([name, state]) => [name, state.value])
-    ))
+    if (fields.size > 0) {
+      setData(collapseEntries(
+        Array.from(fields)
+          .filter(([name]) => !name.startsWith('__config'))
+          .map(([name, state]) => [name, state.value])
+      ))
+    }
 
     setValid(Array.from(fields).every(([_, state]) => !state.error))
 
