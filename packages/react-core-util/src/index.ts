@@ -27,7 +27,7 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
 
   const [fields, setFields] = useState<Map<string, FieldState>>(new Map())
 
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<any>({})
   const [isValid, setValid] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
