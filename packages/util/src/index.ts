@@ -141,7 +141,7 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
 }
 
 export interface PingRequest extends Omit<RequestInit, 'body'>{
-  body: any
+  body?: any
 }
 
 export const ping = {
