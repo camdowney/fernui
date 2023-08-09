@@ -36,13 +36,13 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
 export const hasSimilarValue = (value1: string, value2: string) =>
   value1.toLowerCase().includes(value2.toLowerCase())
 
-export const searchByKeys = (items: any[], keys: string[], value: string) =>
+export const searchByKeys = <T extends KeyObject>(items: T[], keys: string[], value: string) =>
   !keys ? items : items.filter(item => keys.some(key => hasSimilarValue(item[key], value)))
 
-export const sortByKey = (items: any[], key?: string) =>
+export const sortByKey = <T extends KeyObject>(items: T[], key?: string) =>
   !key ? items : items.sort((item1, item2) => item1[key] < item2[key] ? -1 : 1)
 
-export const filterByKeys = (items: KeyObject[], filters: KeyObject) => {
+export const filterByKeys = <T extends KeyObject>(items: T[], filters: KeyObject) => {
   if (Object.entries(filters).length < 1) return items
 
   return items.filter(item =>
