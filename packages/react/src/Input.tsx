@@ -50,6 +50,7 @@ export default function Input({
       <input
         name={name}
         value={value}
+        placeholder={placeholder}
         readOnly={disabled}
         aria-label={label || placeholder || name}
         onChange={e => onChange(e.target.value)}
