@@ -15,6 +15,7 @@ export interface FormState {
   setFields: SetState<Map<string, FieldState>>
   data: any
   isValid: boolean
+  wasModified: boolean
   hasChanges: boolean
   pushChanges: () => void
 }
@@ -29,6 +30,7 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
 
   const [data, setData] = useState<any>({})
   const [isValid, setValid] = useState(false)
+  const [wasModified, setModified] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
   const savedData = useRef<string>('')
@@ -42,10 +44,13 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
       ))
     }
 
+    const newModified = Array.from(fields).some(([_, state]) => state.modified)
+
     setValid(Array.from(fields).every(([_, state]) => !state.error))
+    setModified(newModified)
 
     // True if user made change; else false for registering default values
-    if (Array.from(fields).some(([_, state]) => state.modified))
+    if (newModified)
       setHasChanges(stringifyMap(fields) !== savedData.current)
     else
       pushChanges()
@@ -60,7 +65,7 @@ export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields,
-    data, isValid,
+    data, isValid, wasModified,
     hasChanges, pushChanges,
   }
 
