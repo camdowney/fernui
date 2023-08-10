@@ -33,7 +33,7 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
   return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
 }
 
-export const anyToNumber = (value: any) =>
+export const toNumber = (value: any) =>
   isNaN(value) ? Number(String(value).replace(/[^0-9.]/g, '')) : value
 
 export const hasSimilarValue = (value1: string, value2: string) =>
@@ -57,7 +57,7 @@ export const sortByKey = <T extends KeyObject>(
   const orderDesc = order === 'desc'
 
   const normalizeValue = (value: T) =>
-    numeric ? anyToNumber(value) : value
+    numeric ? toNumber(value) : value
 
   return Array.from(items)
     .sort((item1, item2) => 
