@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { collapseEntries, cycle, stringifyMap } from '@fernui/util'
+import { KeyObject, collapseEntries, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
@@ -20,13 +20,19 @@ export interface FormState {
   pushChanges: () => void
 }
 
-export const useForm = (options?: { disabled: boolean, exposed: boolean }) => {
-  const { disabled: _disabled, exposed: _exposed } = options || {}
+export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolean, exposed?: boolean }) => {
+  const { defaultValues, disabled: _disabled, exposed: _exposed } = options || {}
 
   const [disabled, setDisabled] = useState(_disabled ?? false)
   const [exposed, setExposed] = useState(_exposed ?? false)
 
-  const [fields, setFields] = useState<Map<string, FieldState>>(new Map())
+  const [fields, setFields] = useState<Map<string, FieldState>>(new Map(
+    defaultValues ? Object.entries(defaultValues).map(([key, value]) => [key, {
+      value,
+      modified: false,
+      error: false,
+    }]) : []
+  ))
 
   const [data, setData] = useState<any>({})
   const [isValid, setValid] = useState(false)
