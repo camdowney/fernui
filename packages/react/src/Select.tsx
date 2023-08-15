@@ -13,11 +13,12 @@ export interface SelectProps {
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
   placeholder?: string
-  disabled?: boolean
+  readOnly?: boolean
   className?: string
   label?: string
   labelClass?: string
   fieldClass?: string
+  style?: Object
   error?: string
   errorClass?: string
   [props: string]: any
@@ -30,13 +31,12 @@ export default function Select({
   onChange: _onChange,
   validate = () => true,
   placeholder,
-  placeholderStyle,
   readOnly,
   className,
-  style,
   label,
   labelClass,
   fieldClass,
+  style,
   error = 'Please complete this field.',
   errorClass,
   ...props
@@ -65,7 +65,7 @@ export default function Select({
           aria-label={label || placeholder || name}
           onChange={e => onChange(e.target.value)}
           className={cn('fui-select', fieldClass)}
-          style={{ cursor: 'pointer' }}
+          style={{ ..._style(disabled), ...style }}
           {...props}
         >
           {placeholder && 
@@ -87,6 +87,10 @@ export default function Select({
     </label>
   )
 }
+
+const _style = (disabled: boolean) => ({
+  ...(!disabled && { cursor: 'pointer' })
+})
 
 const _iconStyle = {
   position: 'absolute',
