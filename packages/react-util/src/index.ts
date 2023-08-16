@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SetState } from '@fernui/react-core-util'
 
 export * from '@fernui/react-core-util'
@@ -15,11 +15,32 @@ export const useListener = (
   const { element, dependencies, ...rest } = options ?? {}
 
   useEffect(() => {
-    const root = element ? (element.current || element) : window
+    const root = element === 'document' ? document
+      : element ? (element.current || element)
+      : window
     
     root.addEventListener(event, callback, rest)
     return () => root.removeEventListener(event, callback, rest)
   }, [event, callback, ...(dependencies ?? [])])
+}
+
+export const useLocalStorage = <T>(key: string, fallbackValue: T) => {
+  const [data, _setData] = useState<T>(fallbackValue)
+  const loaded = useRef(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(key)
+    if (stored) _setData(JSON.parse(stored))
+    loaded.current = true
+  }, [])
+
+  const setData = (newValue: T) => {
+    if (!loaded.current) return
+    localStorage.setItem(key, JSON.stringify(newValue))
+    _setData(newValue)
+  }
+
+  return [data, setData] as const
 }
 
 export const useModal = (
@@ -86,6 +107,16 @@ export const cn = (...classes: (string | { [key: string]: string } | any)[]) => 
   })
 
   return classesStr.trim()
+}
+
+export const downloadFile = (content: string | object, name: string, type = 'text/plain') => {
+  const a = document.createElement('a')
+  const blob = new Blob([typeof content === 'string' ? content : JSON.stringify(content)], { type })
+  const url = URL.createObjectURL(blob)
+
+  a.setAttribute('href', url)
+  a.setAttribute('download', name)
+  a.click()
 }
 
 export const JSXtoText = (element: React.ReactElement | string): string => {
