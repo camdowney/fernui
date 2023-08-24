@@ -91,8 +91,9 @@ export const useModal = (
   return { ref }
 }
 
-export const ss = (selector: string) =>
-  (document.querySelector(selector) ?? document.body).scrollIntoView({ behavior: 'smooth' })
+export const sv = (selector: string, smooth: boolean) =>
+  (document.querySelector(selector) ?? document.body)
+    .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
 
 export const cn = (...classes: (string | { [key: string]: string } | any)[]) => {
   let classesStr = ''
