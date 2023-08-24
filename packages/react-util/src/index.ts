@@ -91,7 +91,7 @@ export const useModal = (
   return { ref }
 }
 
-export const st = (selector: string, smooth: boolean) =>
+export const st = (selector: string, smooth?: boolean) =>
   (document.querySelector(selector) ?? document.body)
     .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
 
