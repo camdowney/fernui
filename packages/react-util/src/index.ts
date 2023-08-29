@@ -103,7 +103,7 @@ export const cn = (...classes: (string | { [key: string]: string } | any)[]) => 
       return classesStr += _class + ' '
 
     Object.entries(_class)
-      .filter(([key]) => !classesStr.includes(key))
+      .filter(([key, value]) => Boolean(value) && !classesStr.includes(key))
       .forEach(([_, value]) => classesStr += value + ' ')
   })
 
