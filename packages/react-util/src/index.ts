@@ -122,7 +122,7 @@ export const downloadFile = (content: string | object, name: string, type = 'tex
 
 export const JSXtoText = (element: React.ReactElement | string): string => {
   if (!element) return ''
-  if (typeof element === 'string') return element
+  if (typeof element === 'string') return element.trim()
 
   const children = element.props && element.props.children
 
