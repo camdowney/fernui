@@ -127,7 +127,7 @@ export const JSXtoText = (element: React.ReactElement | string): string => {
   const children = element.props && element.props.children
 
   if (Array.isArray(children))
-    return children.map(JSXtoText).join(' ')
+    return children.map(JSXtoText).filter(Boolean).join(' ')
 
   return JSXtoText(children)
 }
