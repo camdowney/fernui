@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { SetState } from '@fernui/react-core-util'
 
 export * from '@fernui/react-core-util'
@@ -24,7 +24,7 @@ export const useListener = (
   }, [event, callback, ...(dependencies ?? [])])
 }
 
-export const useLocalStorage = <T>(key: string, fallbackValue: T) => {
+export const useLocalStorage = <T extends unknown>(key: string, fallbackValue: T) => {
   const [data, _setData] = useState<T>(fallbackValue)
   const loaded = useRef(false)
 
@@ -120,17 +120,20 @@ export const downloadFile = (content: string | object, name: string, type = 'tex
   a.click()
 }
 
-export const JSXtoText = (element: React.ReactElement | string): string => {
+export const JSXToText = (element: React.ReactElement | string): string => {
   if (!element) return ''
   if (typeof element === 'string') return element.trim()
 
   const children = element.props && element.props.children
 
   if (Array.isArray(children))
-    return children.map(JSXtoText).filter(Boolean).join(' ')
+    return children.map(JSXToText).filter(Boolean).join(' ')
 
-  return JSXtoText(children)
+  return JSXToText(children)
 }
+
+export const textToJSX = (text: string) =>
+  text.split('&nbsp;').map((node, i) => <React.Fragment key={i}>{node}&nbsp;</React.Fragment>)
 
 export const onIntersect = (
   selector: string,

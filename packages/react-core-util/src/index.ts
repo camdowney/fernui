@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, collapseEntries, cycle, stringifyMap } from '@fernui/util'
+import { KeyObject, expandEntries, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
@@ -43,7 +43,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
 
   useEffect(() => {
     if (fields.size > 0) {
-      setData(collapseEntries(
+      setData(expandEntries(
         Array.from(fields)
           .filter(([name]) => !name.startsWith('__config'))
           .map(([name, state]) => [name, state.value])

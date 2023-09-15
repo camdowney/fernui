@@ -20,17 +20,17 @@ export const isEmail = (str: string) =>
 export const slugify = (str: string) =>
   (str || '').toLowerCase().replace(/[^\w\s]+/g, '').trim().replace(/[\s\-]+/g, '-')
 
-export const escapeHtml = (str: string) =>
+export const escapeHTML = (str: string) =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim()
 
-export const removeHtml = (str: string) =>
+export const removeHTML = (str: string) =>
   (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
 export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true) => {
   if (!str) return ''
   if (!charLimit || str.length <= charLimit) return str
-  return escapeHtml(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
+  return escapeHTML(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
 }
 
 export const toNumber = (value: any) =>
@@ -96,7 +96,7 @@ export const objectToURI = (object: {}) =>
     .sort()
     .join('&')
 
-export const collapseEntries = (values: [any, any][]): any => {
+export const expandEntries = (values: [any, any][]): any => {
   const concat = (acc: any, [_key, _value]: any): any => {
     const keys = Array.isArray(_key) ? _key : _key.split('.')
     const [key, ...subKeys] = keys
@@ -117,7 +117,7 @@ export const collapseEntries = (values: [any, any][]): any => {
   return values.reduce(concat, null) ?? {}
 }
 
-export const formEntriesToHtml = (formEntries: [any, any][], heading = 'Form Submission') => {
+export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Submission') => {
   let html = heading ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> ` : ''
 
   html += `<ul style='padding: 0 0 0 24px; margin: 0;'>`
@@ -125,10 +125,10 @@ export const formEntriesToHtml = (formEntries: [any, any][], heading = 'Form Sub
   formEntries
     .filter(([_name]) => !_name.startsWith('__config'))
     .forEach(([_name, _value]) => {
-      const name = escapeHtml(_name.replace(/\*/g, ''))
-      const value = _value === true ? 'Yes' : _value === false ? 'No' : escapeHtml(_value)
+      const name = escapeHTML(_name.replace(/\*/g, ''))
+      const value = _value === true ? 'Yes' : _value === false ? 'No' : escapeHTML(_value)
 
-      html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${name}:</span> <br>${value}</li>`
+      html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${name}:</span> <br>${value}</li> `
     })
 
   return html + '</ul>'
