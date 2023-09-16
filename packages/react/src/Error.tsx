@@ -3,7 +3,6 @@ import { cn } from '@fernui/react-util'
 import { warning } from './icons'
 import Icon from './Icon'
 
-
 export default function Error({
   text,
   className,
