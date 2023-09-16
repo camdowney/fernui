@@ -25,10 +25,10 @@ export interface SelectProps {
 }
 
 export default function Select({
-  name: _name,
-  value: _value,
+  name: nameProp,
+  value: valueProp,
   options,
-  onChange: _onChange,
+  onChange: onChangeProp,
   validate = () => true,
   placeholder,
   readOnly,
@@ -41,13 +41,13 @@ export default function Select({
   errorClass,
   ...props
 }: SelectProps) {
-  const name = _name ?? label ?? placeholder ?? ''
-  const selectedValue = _value ?? (placeholder ? '' : (options[0].value ?? options[0].label))
+  const name = nameProp ?? label ?? placeholder ?? ''
+  const selectedValue = valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label))
 
   const { value, disabled, showError, onChange } = useField(name, selectedValue, {
     disabled: readOnly,
     validate,
-    onChange: _onChange,
+    onChange: onChangeProp,
   })
 
   return (

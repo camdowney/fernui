@@ -20,9 +20,9 @@ export interface CheckboxProps {
 }
 
 export default function Checkbox({
-  name: _name,
-  value: _value = 'false',
-  onChange: _onChange,
+  name: nameProp,
+  value: valueProp = 'false',
+  onChange: onChangeProp,
   validate = () => true,
   readOnly,
   className,
@@ -33,12 +33,12 @@ export default function Checkbox({
   errorClass,
   ...props
 }: CheckboxProps) {
-  const name = _name ?? label ?? ''
+  const name = nameProp ?? label ?? ''
 
-  const { value, disabled, showError, onChange } = useField(name, _value, {
+  const { value, disabled, showError, onChange } = useField(name, valueProp, {
     disabled: readOnly,
     validate,
-    onChange: _onChange,
+    onChange: onChangeProp,
   })
 
   return (
@@ -47,7 +47,7 @@ export default function Checkbox({
         <input
           type='checkbox'
           name={name}
-          checked={value}
+          checked={value === 'true'}
           readOnly={disabled}
           aria-label={label || name}
           onChange={e => onChange(e.target.value)}

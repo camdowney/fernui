@@ -21,9 +21,9 @@ export interface TextAreaProps {
 
 export default function TextArea({
   innerRef,
-  name: _name,
-  value: _value = '',
-  onChange: _onChange,
+  name: nameProp,
+  value: valueProp = '',
+  onChange: onChangeProp,
   validate = () => true,
   placeholder,
   readOnly,
@@ -36,25 +36,25 @@ export default function TextArea({
   errorClass,
   ...props
 }: TextAreaProps) {
-  const name = _name ?? label ?? placeholder ?? ''
+  const name = nameProp ?? label ?? placeholder ?? ''
   const ref = innerRef || useRef()
 
-  const __onChange = (value: any) => {
-    if (_onChange)
-      _onChange(value)
+  const onChangeAndResize = (value: any) => {
+    if (onChangeProp)
+      onChangeProp(value)
 
     if (autoResize)
       adjustHeight(ref.current)
   }
 
-  const { value, disabled, showError, onChange } = useField(name, _value, {
+  const { value, disabled, showError, onChange } = useField(name, valueProp, {
     disabled: readOnly,
     validate,
-    onChange: __onChange,
+    onChange: onChangeAndResize,
   })
 
   useEffect(() => {
-    if (_value && autoResize)
+    if (valueProp && autoResize)
       adjustHeight(ref.current)
   }, [])
 

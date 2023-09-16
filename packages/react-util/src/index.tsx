@@ -25,22 +25,22 @@ export const useListener = (
 }
 
 export const useLocalStorage = <T extends unknown>(key: string, fallbackValue: T) => {
-  const [data, _setData] = useState<T>(fallbackValue)
+  const [data, setData] = useState<T>(fallbackValue)
   const loaded = useRef(false)
 
   useEffect(() => {
     const stored = localStorage.getItem(key)
-    if (stored) _setData(JSON.parse(stored))
+    if (stored) setData(JSON.parse(stored))
     loaded.current = true
   }, [])
 
-  const setData = (newValue: T) => {
+  const setDataAndStore = (newValue: T) => {
     if (!loaded.current) return
     localStorage.setItem(key, JSON.stringify(newValue))
-    _setData(newValue)
+    setData(newValue)
   }
 
-  return [data, setData] as const
+  return [data, setDataAndStore] as const
 }
 
 export const useModal = (
@@ -55,9 +55,16 @@ export const useModal = (
     preventScroll?: boolean
   }
 ) => {
-  const { ref: _ref, openDelay, closeDelay, exitOnOutsideClick, exitOnEscape, preventScroll } = options || {}
+  const {
+    ref: refProp,
+    openDelay,
+    closeDelay,
+    exitOnOutsideClick,
+    exitOnEscape,
+    preventScroll
+  } = options || {}
 
-  const ref = _ref || useRef()
+  const ref = refProp || useRef()
   const timer = useRef<any>() 
 
   const setActiveTimer = (newActive: boolean, delay: number) =>
@@ -156,15 +163,15 @@ export const onIntersect = (
 }
 
 export const initLazyLoad = (offset = '750px') => {
-  const _offset = `${offset} ${offset} ${offset} ${offset}`
+  const offsetStr = `${offset} ${offset} ${offset} ${offset}`
 
   onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
     element.src = element.dataset.lazySrc ?? ''
-  }, { offset: _offset })
+  }, { offset: offsetStr })
 
   onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
     element.srcset = element.dataset.lazySrcset ?? ''
-  }, { offset: _offset })
+  }, { offset: offsetStr })
 }
 
 export const initScrollView = (offset = '999999px 0px -25% 0px') =>

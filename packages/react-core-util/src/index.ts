@@ -21,10 +21,14 @@ export interface FormState {
 }
 
 export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolean, exposed?: boolean }) => {
-  const { defaultValues, disabled: _disabled, exposed: _exposed } = options || {}
+  const {
+    defaultValues,
+    disabled: disabledInit,
+    exposed: exposedInit
+  } = options || {}
 
-  const [disabled, setDisabled] = useState(_disabled ?? false)
-  const [exposed, setExposed] = useState(_exposed ?? false)
+  const [disabled, setDisabled] = useState(disabledInit ?? false)
+  const [exposed, setExposed] = useState(exposedInit ?? false)
 
   const [fields, setFields] = useState<Map<string, FieldState>>(new Map(
     defaultValues ? Object.entries(defaultValues).map(([key, value]) => [key, {
@@ -91,12 +95,21 @@ export const useField = <T extends unknown>(
     onChange?: (newValue: T) => void
   }
 ) => {
-  const { disabled: _disabled, validate, onChange: _onChange } = options || {}
+  const {
+    disabled: disabledInit,
+    validate,
+    onChange: onChangeProp
+  } = options || {}
 
-  const { disabled: formDisabled, exposed: formExposed, fields, setFields } = useFormContext()
+  const {
+    disabled: formDisabled,
+    exposed: formExposed,
+    fields,
+    setFields
+  } = useFormContext()
 
-  const _value = (fields.get(name) ?? {}).value ?? value
-  const disabled = _disabled ?? formDisabled
+  const calcValue = (fields.get(name) ?? { value }).value as T
+  const disabled = disabledInit ?? formDisabled
   const showError = (fields.get(name) ?? {}).error && ((fields.get(name) ?? {}).modified || formExposed)
 
   const setField = (newValue: T, newModified = true) => {
@@ -112,18 +125,18 @@ export const useField = <T extends unknown>(
   const onChange = (newValue: T) => {
     setField(newValue)
       
-    if (_onChange)
-      _onChange(newValue)
+    if (onChangeProp)
+      onChangeProp(newValue)
   }
 
   // Handle manual value control
   useEffect(() => {
     onChange(value)
-  }, [value])
+  }, [value === Object(value) ? JSON.stringify(value) : value])
 
   // Set initial state and cleanup
   useEffect(() => {
-    setField(_value, false)
+    setField(calcValue, false)
 
     return () => {
       fields.delete(name)
@@ -131,7 +144,7 @@ export const useField = <T extends unknown>(
     }
   }, [name])
 
-  return { value: _value, disabled, showError, setField, onChange }
+  return { value: calcValue, disabled, showError, setField, onChange }
 }
 
 export const handleSubmit = (
@@ -219,10 +232,10 @@ export interface LightboxControl {
 }
 
 export const useLightbox = (numItems: number, options?: { index?: number, active?: boolean }) => {
-  const { index: _index, active: _active } = options || {}
+  const { index: indexInit, active: activeInit } = options || {}
 
-  const [index, setIndex] = useState(_index ?? 0)
-  const [active, setActive] = useState(_active ?? false)
+  const [index, setIndex] = useState(indexInit ?? 0)
+  const [active, setActive] = useState(activeInit ?? false)
 
   const open = (newIndex: number) => {
     setIndex(newIndex)

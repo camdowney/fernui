@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@fernui/react-core-util':
-    specifier: ^1.4.3
-    version: 1.5.0(@fernui/util@2.6.0)(react@18.2.0)
+    specifier: ^1.5.0
+    version: 1.5.1(@fernui/util@2.6.0)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -19,8 +19,8 @@ devDependencies:
 
 packages:
 
-  /@fernui/react-core-util@1.5.0(@fernui/util@2.6.0)(react@18.2.0):
-    resolution: {integrity: sha512-qCunjqZMhPZBZvBc1EaQASgdVV4b1n0mxHCW32X1c6AfoscISU+qjfb/DAMSohsXFFRmsTxSAIo+0L/dzfgUkw==}
+  /@fernui/react-core-util@1.5.1(@fernui/util@2.6.0)(react@18.2.0):
+    resolution: {integrity: sha512-dXFg6A6tOxE5ISfhobdNmIkgbJukH41WVS0zZR0V1BMYo4s0I2MBpJdto4fxyxCw+47wDnel9/2XsDc0FnAoXg==}
     peerDependencies:
       '@fernui/util': ^2.6.0
       react: ^18.2.0
