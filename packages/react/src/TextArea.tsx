@@ -16,6 +16,8 @@ export interface TextAreaProps {
   fieldClass?: string
   error?: string
   errorClass?: string
+  info?: any
+  infoClass?: string
   [props: string]: any
 }
 
@@ -34,6 +36,8 @@ export default function TextArea({
   fieldClass,
   error = 'Please complete this field.',
   errorClass,
+  info,
+  infoClass,
   ...props
 }: TextAreaProps) {
   const name = nameProp ?? label ?? placeholder ?? ''
@@ -60,11 +64,14 @@ export default function TextArea({
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
+      {/* Label */}
       {label &&
         <div className={cn('fui-field-label', labelClass)}>
           {label}
         </div>
       }
+
+      {/* Field */}
       <textarea
         ref={ref}
         name={name}
@@ -73,10 +80,21 @@ export default function TextArea({
         readOnly={disabled}
         aria-label={label || placeholder || name}
         onChange={e => onChange(e.target.value)}
-        className={cn('fui-textarea', fieldClass)}
+        className={cn('fui-textarea fui-field-block', fieldClass)}
         {...props}
       />
-      {error && showError && <Error text={error} className={errorClass} />}
+
+      {/* Error */}
+      {(error && showError) && (
+        <Error text={error} className={errorClass} />
+      )}
+
+      {/* Info */}
+      {info && (
+        <p className={cn('fui-field-info', infoClass)}>
+          {info}
+        </p>
+      )}
     </label>
   )
 }

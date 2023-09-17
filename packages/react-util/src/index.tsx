@@ -162,6 +162,20 @@ export const onIntersect = (
   })
 }
 
+export const customButtonProps = (label?: string, tabIndex = 0) => ({
+  role: 'button',
+  ...(label && { 'aria-label': label }),
+  tabIndex,
+  style: { cursor: 'pointer' },
+  onKeyDown: (e: any) => {
+    if (['Enter', 'Spacebar', ' '].indexOf(e.key) >= 0) {
+      e.preventDefault()
+      e.stopPropagation()
+      e.target.click()
+    }
+  },
+})
+
 export const initLazyLoad = (offset = '750px') => {
   const offsetStr = `${offset} ${offset} ${offset} ${offset}`
 

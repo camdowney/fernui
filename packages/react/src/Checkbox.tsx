@@ -16,6 +16,8 @@ export interface CheckboxProps {
   fieldClass?: string
   error?: string
   errorClass?: string
+  info?: any
+  infoClass?: string
   [props: string]: any
 }
 
@@ -31,6 +33,8 @@ export default function Checkbox({
   fieldClass,
   error = 'Please complete this field.',
   errorClass,
+  info,
+  infoClass,
   ...props
 }: CheckboxProps) {
   const name = nameProp ?? label ?? ''
@@ -43,6 +47,7 @@ export default function Checkbox({
 
   return (
     <div className={cn('fui-field', showError && 'fui-field-invalid', className)}>
+      {/* Field */}
       <label style={_outerStyle}>
         <input
           type='checkbox'
@@ -64,7 +69,18 @@ export default function Checkbox({
           </div>
         }
       </label>
-      {error && showError && <Error text={error} className={errorClass} />}
+
+      {/* Error */}
+      {(error && showError) && (
+        <Error text={error} className={errorClass} />
+      )}
+
+      {/* Info */}
+      {info && (
+        <p className={cn('fui-field-info', infoClass)}>
+          {info}
+        </p>
+      )}
     </div>
   )
 }

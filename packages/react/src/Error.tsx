@@ -13,9 +13,9 @@ export default function Error({
   className,
 }: ErrorProps) {
   return (
-    <div className='fui-field-error'>
+    <p className='fui-field-error'>
       <Icon i={warning} className={cn('fui-field-error-icon', className)} />
       <span>{text}</span>
-    </div>
+    </p>
   )
 }

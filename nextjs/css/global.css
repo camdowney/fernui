@@ -144,10 +144,7 @@ section {
 .fui-field-error {
   @apply flex items-center space-x-1.5 text-red-500;
 }
-.fui-form-error {
-  @apply min-w-max flex items-center bg-gray-100 rounded-3xl shadow-sm origin-top-left duration-200 text-gray-700 space-x-1.5 px-3.5 md:px-4 py-1.5 mt-2 md:mt-2.5;
-}
-.fui-field-error-icon, .fui-form-error-icon {
+.fui-field-error-icon {
   @apply w-3.5 md:w-4;
 }
 ::placeholder {

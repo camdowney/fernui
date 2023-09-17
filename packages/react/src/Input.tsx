@@ -14,6 +14,8 @@ export interface InputProps {
   fieldClass?: string
   error?: string
   errorClass?: string
+  info?: any
+  infoClass?: string
   [props: string]: any
 }
 
@@ -30,6 +32,8 @@ export default function Input({
   fieldClass,
   error = 'Please complete this field.',
   errorClass,
+  info,
+  infoClass,
   ...props
 }: InputProps) {
   const name = nameProp ?? label ?? placeholder ?? ''
@@ -42,11 +46,14 @@ export default function Input({
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
+      {/* Label */}
       {label &&
         <div className={cn('fui-field-label', labelClass)}>
           {label}
         </div>
       }
+
+      {/* Field */}
       <input
         name={name}
         value={value}
@@ -54,10 +61,21 @@ export default function Input({
         readOnly={disabled}
         aria-label={label || placeholder || name}
         onChange={e => onChange(e.target.value)}
-        className={cn('fui-input', fieldClass)}
+        className={cn('fui-input fui-field-block', fieldClass)}
         {...props}
       />
-      {error && showError && <Error text={error} className={errorClass} />}
+
+      {/* Error */}
+      {(error && showError) && (
+        <Error text={error} className={errorClass} />
+      )}
+
+      {/* Info */}
+      {info && (
+        <p className={cn('fui-field-info', infoClass)}>
+          {info}
+        </p>
+      )}
     </label>
   )
 }

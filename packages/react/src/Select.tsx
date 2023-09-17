@@ -21,6 +21,8 @@ export interface SelectProps {
   style?: Object
   error?: string
   errorClass?: string
+  info?: any
+  infoClass?: string
   [props: string]: any
 }
 
@@ -39,6 +41,8 @@ export default function Select({
   style,
   error = 'Please complete this field.',
   errorClass,
+  info,
+  infoClass,
   ...props
 }: SelectProps) {
   const name = nameProp ?? label ?? placeholder ?? ''
@@ -52,11 +56,14 @@ export default function Select({
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
+      {/* Label */}
       {label &&
         <div className={cn('fui-field-label', labelClass)}>
           {label}
         </div>
       }
+
+      {/* Field */}
       <div style={{ position: 'relative' }}>
         <select
           name={name}
@@ -64,7 +71,7 @@ export default function Select({
           disabled={disabled}
           aria-label={label || placeholder || name}
           onChange={e => onChange(e.target.value)}
-          className={cn('fui-select', fieldClass)}
+          className={cn('fui-select fui-field-block', fieldClass)}
           style={{ ..._style(disabled), ...style }}
           {...props}
         >
@@ -83,7 +90,18 @@ export default function Select({
           style={_iconStyle}
         />
       </div>
-      {error && showError && <Error text={error} className={errorClass} />}
+
+      {/* Error */}
+      {(error && showError) && (
+        <Error text={error} className={errorClass} />
+      )}
+
+      {/* Info */}
+      {info && (
+        <p className={cn('fui-field-info', infoClass)}>
+          {info}
+        </p>
+      )}
     </label>
   )
 }
