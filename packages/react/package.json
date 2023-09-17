@@ -11,7 +11,7 @@
   ],
   "main": "./dist/index.js",
   "peerDependencies": {
-    "@fernui/react-util": "^1.4.0",
+    "@fernui/react-util": "^1.5.0",
     "react": "^18.2.0"
   },
   "devDependencies": {

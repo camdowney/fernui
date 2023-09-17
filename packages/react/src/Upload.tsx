@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { cn, useField, textToJSX } from '@fernui/react-util'
+import { cn, useField, textToJSX, customButtonProps } from '@fernui/react-util'
 import Error from './Error'
 
 // const BYTES_PER_MB = 1_048_576
@@ -138,7 +138,7 @@ export default function Upload({
         onDragLeave={() => setDragging(false)}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        {...getButtonRoleProps(label || placeholder || name)}
+        {...customButtonProps(label || placeholder || name)}
         className={cn(
           'fui-upload fui-field-block',
           value.length < 1 && 'fui-upload-empty',
@@ -160,7 +160,7 @@ export default function Upload({
                   e.stopPropagation()
                   removeFile(i)
                 }}
-                {...getButtonRoleProps('Remove upload')}
+                {...customButtonProps('Remove upload')}
                 className='fui-upload-remove'
               >
                 Remove

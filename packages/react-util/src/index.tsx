@@ -162,7 +162,7 @@ export const onIntersect = (
   })
 }
 
-export const customButtonProps = (label?: string, tabIndex = 0) => ({
+export const buttonRoleProps = (label?: string, tabIndex = 0) => ({
   role: 'button',
   ...(label && { 'aria-label': label }),
   tabIndex,
