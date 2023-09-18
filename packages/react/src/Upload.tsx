@@ -150,29 +150,28 @@ export default function Upload({
         style={{ cursor: !disabled ? 'pointer' : 'auto' }}
         {...props}
       >
-        {value.length > 0 ? (
-          value.map((file, i) => 
-            <React.Fragment key={i}>
-              <span>
-                {file.name}
-              </span>
-              {' | '}
-              <span
-                onClick={e => {
-                  e.stopPropagation()
-                  removeFile(i)
-                }}
-                {...buttonRoleProps('Remove upload')}
-                className='fui-upload-remove'
-              >
-                Remove
-              </span>
-              <br/>
-            </React.Fragment>
-          )
-        ) : (
-          placeholder
+        {value.map((file, i) => 
+          <React.Fragment key={i}>
+            <span>
+              {file.name}
+            </span>
+            {' | '}
+            <span
+              onClick={e => {
+                e.stopPropagation()
+                removeFile(i)
+              }}
+              {...buttonRoleProps('Remove upload')}
+              className='fui-upload-remove'
+            >
+              Remove
+            </span>
+            <br/>
+          </React.Fragment>
         )}
+        <span>
+          {placeholder}
+        </span>
       </div>
 
       {/* Error */}
