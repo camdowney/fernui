@@ -42,7 +42,7 @@ export default function Upload({
   maxTotalSizeMB = Infinity,
   minFileCount = 0,
   maxFileCount = Infinity,
-  placeholder,
+  placeholder = 'Select or drop file(s)',
   readOnly,
   className,
   label,
@@ -140,7 +140,7 @@ export default function Upload({
         onDragLeave={() => setDragging(false)}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        {...buttonRoleProps(label || placeholder || name)}
+        {...buttonRoleProps(placeholder)}
         className={cn(
           'fui-upload fui-field-block',
           value.length < 1 && 'fui-upload-empty',
