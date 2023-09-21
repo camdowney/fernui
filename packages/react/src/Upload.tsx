@@ -93,7 +93,7 @@ export default function Upload({
     e.preventDefault()
     e.stopPropagation()
 
-    if (!e.dataTransfer.files) return
+    if (!e.dataTransfer.files || disabled) return
 
     handleFiles(e.dataTransfer.files)
     e.dataTransfer.clearData()
@@ -120,6 +120,8 @@ export default function Upload({
   }
 
   const removeFile = (index: number) => {
+    if (disabled) return
+
     value.splice(index, 1)
     onChange([...value])
   }
