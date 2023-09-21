@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react-util",
   "author": "@camdowney",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "A library of general-purpose utility functions for React.",
   "keywords": [
     "ui",
@@ -15,6 +15,6 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.21"
+    "@types/react": "^18.2.22"
   }
 }
