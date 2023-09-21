@@ -17,8 +17,21 @@ export const isObject = (x: any) =>
 export const isEmail = (str: string) =>
 	/^\S+@\S+\.\S+$/.test(str || '')
 
-export const slugify = (str: string) =>
-  (str || '').toLowerCase().replace(/[^\w\s]+/g, '').trim().replace(/[\s\-]+/g, '-')
+// Courtesy of https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
+export const slugify = (str: string) => {
+  const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìıİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
+  const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
+  const p = new RegExp(a.split('').join('|'), 'g')
+  
+  return str.toString().toLowerCase()
+    .replace(/\s+/g, '-') // Replace spaces with -
+    .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+    .replace(/&/g, '-and-') // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+    .replace(/\-\-+/g, '-') // Replace multiple - with single -
+    .replace(/^-+/, '') // Trim - from start of text
+    .replace(/-+$/, '') // Trim - from end of text
+  }
 
 export const escapeHTML = (str: string) =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -118,8 +131,11 @@ export const expandEntries = (values: [any, any][]): any => {
 }
 
 export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Submission') => {
-  const getHeadingHTML = (children: string) =>
+  const getH3HTML = (children: string) =>
     `<h3 style='margin: 0;'>${children}</h3> `
+
+  const getLinkHTML = (children: string) =>
+    `<a style='margin: 0;' href='${children}' target='_blank' rel='noopener noreferrer'>${children}</a> `
 
   const getBoldHTML = (children: string) =>
     `<span style='font-weight: bold;'>${children}:</span> `
@@ -130,19 +146,22 @@ export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Sub
   const getListHTML = (children: string[]) =>
     `<ul style='padding: 0 0 0 24px; margin: 0;'>${children.map(getBulletHTML).join('')}</ul> `
 
-  return (heading ? getHeadingHTML(heading) : '')
+  return (heading ? getH3HTML(heading) : '')
     + getListHTML(
         formEntries
           .filter(([name]) => !name.startsWith('__config'))
-          .map(([name, value]) => {
-            const nameClean = escapeHTML(name.replace(/\*/g, ''))
-            const valueClean = Array.isArray(value) ? getListHTML(value)
+          .map(([name, value]) =>
+            `${
+              getBoldHTML(escapeHTML(name.replace(/\*/g, '')))
+            }<br>${
+              Array.isArray(value) ? getListHTML(
+                value.map(v => v.startsWith('http') ? getLinkHTML(v) : v)
+              )
               : value === true ? 'Yes' 
               : value === false ? 'No'
               : escapeHTML(value)
-
-            return `${getBoldHTML(nameClean)}<br>${valueClean}`
-          })
+            }`
+          )
       )
 }
 
