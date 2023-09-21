@@ -156,8 +156,8 @@ export default function Upload({
             <span>
               {file.name}
             </span>
-            {' | '}
-            {!disabled && (
+            {!disabled && <>
+              {' | '}
               <span
                 onClick={e => {
                   e.stopPropagation()
@@ -168,7 +168,7 @@ export default function Upload({
               >
                 Remove
               </span>
-            )}
+            </>}
             <br/>
           </Fragment>
         )}
