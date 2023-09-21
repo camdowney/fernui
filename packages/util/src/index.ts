@@ -119,13 +119,13 @@ export const expandEntries = (values: [any, any][]): any => {
 
 export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Submission') => {
   const getHeadingHTML = (children: string) =>
-    `<h3 style='margin: 0 0 12px 0;'>${children}</h3> `
+    `<h3 style='margin: 0;'>${children}</h3> `
 
   const getBoldHTML = (children: string) =>
     `<span style='font-weight: bold;'>${children}:</span> `
 
   const getBulletHTML = (children: string) =>
-    `<li style='margin: 0 0 12px 0;'>${children}</li> `
+    `<li style='padding: 12px 0 0 0; margin: 0;'>${children}</li> `
 
   const getListHTML = (children: string[]) =>
     `<ul style='padding: 0 0 0 24px; margin: 0;'>${children.map(getBulletHTML).join('')}</ul> `
