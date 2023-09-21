@@ -170,9 +170,11 @@ export default function Upload({
             <br/>
           </Fragment>
         )}
-        <span>
-          {placeholder}
-        </span>
+        {!(disabled && value.length > 0) && (
+          <span>
+            {placeholder}
+          </span>
+        )}
       </div>
 
       {/* Error */}
