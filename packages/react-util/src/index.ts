@@ -163,6 +163,7 @@ export const buttonRoleProps = (options: { label?: string, tabIndex?: number, di
   role: 'button',
   ...(options.label && { 'aria-label': options.label }),
   tabIndex: options.tabIndex ?? 0,
+  'aria-disabled': options.disabled ?? false,
   style: { cursor: options.disabled ? 'auto' : 'pointer' },
   onKeyDown: (e: any) => {
     if (['Enter', 'Spacebar', ' '].indexOf(e.key) >= 0) {
