@@ -157,16 +157,18 @@ export default function Upload({
               {file.name}
             </span>
             {' | '}
-            <span
-              onClick={e => {
-                e.stopPropagation()
-                removeFile(i)
-              }}
-              {...buttonRoleProps({ label: 'Remove upload', disabled })}
-              className='fui-upload-remove'
-            >
-              Remove
-            </span>
+            {!disabled && (
+              <span
+                onClick={e => {
+                  e.stopPropagation()
+                  removeFile(i)
+                }}
+                {...buttonRoleProps({ label: 'Remove upload', disabled })}
+                className='fui-upload-remove'
+              >
+                Remove
+              </span>
+            )}
             <br/>
           </Fragment>
         )}
