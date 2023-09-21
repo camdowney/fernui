@@ -2,20 +2,12 @@ import React, { Fragment, useState } from 'react'
 import { cn, useField, buttonRoleProps } from '@fernui/react-util'
 import Error from './Error'
 
-// const BYTES_PER_MB = 1_048_576
 const BYTES_PER_MB = 1_000_000
-
-export interface UploadFile {
-  name: string
-  type: string
-  data: string
-  sizeMB: number
-}
 
 export interface UploadProps {
   name?: string
-  value?: UploadFile[]
-  onChange?: (newValue: UploadFile[]) => void
+  value?: File[]
+  onChange?: (newValue: File[]) => void
   acceptedFormats?: string
   maxFileSizeMB?: number
   maxTotalSizeMB?: number
@@ -56,12 +48,12 @@ export default function Upload({
 }: UploadProps) {
   const name = nameProp ?? label ?? placeholder ?? ''
 
-  const validate = (files: UploadFile[]) =>
+  const validate = (files: File[]) =>
     files.length >= minFileCount
     && files.length <= maxFileCount
     && files.every(file => file.type.match(acceptedFormats ?? '*'))
-    && files.every(file => file.sizeMB <= maxFileSizeMB)
-    && files.reduce((totalSize, file) => totalSize + file.sizeMB, 0) <= maxTotalSizeMB
+    && files.every(file => file.size <= maxFileSizeMB * BYTES_PER_MB)
+    && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMB * BYTES_PER_MB
 
   const { value, disabled, showError, onChange } = useField(name, valueProp, {
     disabled: readOnly,
@@ -103,20 +95,7 @@ export default function Upload({
   const handleFiles = async (files: any) => {
     if (!files || files.length < 1) return
 
-    const newFiles = []
-
-    for (const file of Array.from(files as File[])) {
-      const data = await file.text()
-
-      newFiles.push({
-        name: file.name,
-        type: file.type,
-        data,
-        sizeMB: data.length / BYTES_PER_MB,
-      })
-    }
-
-    onChange([...value, ...newFiles])
+    onChange([...value, ...Array.from(files as File[])])
   }
 
   const removeFile = (index: number) => {
