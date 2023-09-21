@@ -7,40 +7,40 @@ settings:
 dependencies:
   '@fernui/react-core-util':
     specifier: ^1.5.0
-    version: 1.5.1(@fernui/util@2.6.0)(react@18.2.0)
+    version: 1.5.2(@fernui/util@2.6.1)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.21
-    version: 18.2.21
+    specifier: ^18.2.22
+    version: 18.2.22
 
 packages:
 
-  /@fernui/react-core-util@1.5.1(@fernui/util@2.6.0)(react@18.2.0):
-    resolution: {integrity: sha512-dXFg6A6tOxE5ISfhobdNmIkgbJukH41WVS0zZR0V1BMYo4s0I2MBpJdto4fxyxCw+47wDnel9/2XsDc0FnAoXg==}
+  /@fernui/react-core-util@1.5.2(@fernui/util@2.6.1)(react@18.2.0):
+    resolution: {integrity: sha512-uPnpCaOlWomRM83JFxJikREl/dtm6nkWqNT350O4Xv5m7dxp5bRpRbYU8ar/1VEv6X+cHwlGPfSTU24iDMkTJQ==}
     peerDependencies:
       '@fernui/util': ^2.6.0
       react: ^18.2.0
     dependencies:
-      '@fernui/util': 2.6.0
+      '@fernui/util': 2.6.1
       react: 18.2.0
     dev: false
 
-  /@fernui/util@2.6.0:
-    resolution: {integrity: sha512-IxnY3TIWZv0VAw6HzRjRPTmgw3oS9PRgAw1B1mRCXTHBF5b5mteqH8amgAGe33/f38uQAYQ+j/mXIuMnqzHKBw==}
+  /@fernui/util@2.6.1:
+    resolution: {integrity: sha512-uhhwJvmWsMKEt2ljmc9+YUPhp85A035p8zccUwB5/tWcWXjJOb9UJnXenIMKjQ6iKbzfJ/hzNGTW5nylm9yJyw==}
     dev: false
 
-  /@types/prop-types@15.7.5:
-    resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+  /@types/prop-types@15.7.6:
+    resolution: {integrity: sha512-RK/kBbYOQQHLYj9Z95eh7S6t7gq4Ojt/NT8HTk8bWVhA5DaF+5SMnxHKkP4gPNN3wAZkKP+VjAf0ebtYzf+fxg==}
     dev: true
 
-  /@types/react@18.2.21:
-    resolution: {integrity: sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==}
+  /@types/react@18.2.22:
+    resolution: {integrity: sha512-60fLTOLqzarLED2O3UQImc/lsNRgG0jE/a1mPW9KjMemY0LMITWEsbS4VvZ4p6rorEHd5YKxxmMKSDK505GHpA==}
     dependencies:
-      '@types/prop-types': 15.7.5
+      '@types/prop-types': 15.7.6
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
     dev: true

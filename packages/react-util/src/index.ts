@@ -139,9 +139,6 @@ export const JSXToText = (element: React.ReactElement | string): string => {
   return JSXToText(children)
 }
 
-export const textToJSX = (text: string) =>
-  text.split('&nbsp;').map((node, i) => <React.Fragment key={i}>{node}&nbsp;</React.Fragment>)
-
 export const onIntersect = (
   selector: string,
   callback: (element: any) => any,
@@ -162,11 +159,11 @@ export const onIntersect = (
   })
 }
 
-export const buttonRoleProps = (label?: string, tabIndex = 0) => ({
+export const buttonRoleProps = (options: { label?: string, tabIndex?: number, disabled?: boolean } = {}) => ({
   role: 'button',
-  ...(label && { 'aria-label': label }),
-  tabIndex,
-  style: { cursor: 'pointer' },
+  ...(options.label && { 'aria-label': options.label }),
+  tabIndex: options.tabIndex ?? 0,
+  style: { cursor: options.disabled ? 'auto' : 'pointer' },
   onKeyDown: (e: any) => {
     if (['Enter', 'Spacebar', ' '].indexOf(e.key) >= 0) {
       e.preventDefault()

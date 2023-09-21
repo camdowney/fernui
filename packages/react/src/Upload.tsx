@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { cn, useField, textToJSX, buttonRoleProps } from '@fernui/react-util'
+import React, { Fragment, useState } from 'react'
+import { cn, useField, buttonRoleProps } from '@fernui/react-util'
 import Error from './Error'
 
 // const BYTES_PER_MB = 1_048_576
@@ -140,18 +140,17 @@ export default function Upload({
         onDragLeave={() => setDragging(false)}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        {...buttonRoleProps(placeholder)}
+        {...buttonRoleProps({ label: placeholder, disabled })}
         className={cn(
           'fui-upload fui-field-block',
           value.length < 1 && 'fui-upload-empty',
           dragging && 'fui-upload-dragover',
           fieldClass
         )}
-        style={{ cursor: !disabled ? 'pointer' : 'auto' }}
         {...props}
       >
         {value.map((file, i) => 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <span>
               {file.name}
             </span>
@@ -161,13 +160,13 @@ export default function Upload({
                 e.stopPropagation()
                 removeFile(i)
               }}
-              {...buttonRoleProps('Remove upload')}
+              {...buttonRoleProps({ label: 'Remove upload', disabled })}
               className='fui-upload-remove'
             >
               Remove
             </span>
             <br/>
-          </React.Fragment>
+          </Fragment>
         )}
         <span>
           {placeholder}
@@ -183,17 +182,19 @@ export default function Upload({
       {info !== false && (
         <p className={cn('fui-field-info', infoClass)}>
           {info ?? <>
-            Accepts: {textToJSX([
-              acceptedFormats,
-              ...((minFileCount > 0 && maxFileCount < Infinity) ? [
-                `${minFileCount} to ${maxFileCount} file${maxFileCount !== 1 ? 's' : ''}`,
-              ] : [
-                minFileCount > 0 && `${minFileCount} file${minFileCount !== 1 ? 's' : ''} min`,
-                maxFileCount < Infinity && `${maxFileCount} file${maxFileCount !== 1 ? 's' : ''} max`,
-              ]),
-              maxFileSizeMB < Infinity && `${maxFileSizeMB}&nbsp;MB&nbsp;per&nbsp;file`,
-              maxTotalSizeMB < Infinity && `${maxTotalSizeMB}&nbsp;MB&nbsp;total`,
-            ].filter(Boolean).join('; '))}
+            Accepts: <span dangerouslySetInnerHTML={{
+              __html: [
+                acceptedFormats,
+                ...((minFileCount > 0 && maxFileCount < Infinity) ? [
+                  `${minFileCount} to ${maxFileCount} file${maxFileCount !== 1 ? 's' : ''}`,
+                ] : [
+                  minFileCount > 0 && `${minFileCount} file${minFileCount !== 1 ? 's' : ''} min`,
+                  maxFileCount < Infinity && `${maxFileCount} file${maxFileCount !== 1 ? 's' : ''} max`,
+                ]),
+                maxFileSizeMB < Infinity && `${maxFileSizeMB}&nbsp;MB&nbsp;per&nbsp;file`,
+                maxTotalSizeMB < Infinity && `${maxTotalSizeMB}&nbsp;MB&nbsp;total`,
+              ].filter(Boolean).join('; ')
+            }} />
           </>}
         </p>
       )}

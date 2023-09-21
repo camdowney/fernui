@@ -118,20 +118,32 @@ export const expandEntries = (values: [any, any][]): any => {
 }
 
 export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Submission') => {
-  let html = heading ? `<h3 style='margin: 0 0 12px 0;'>${heading}</h3> ` : ''
+  const getHeadingHTML = (children: string) =>
+    `<h3 style='margin: 0 0 12px 0;'>${children}</h3> `
 
-  html += `<ul style='padding: 0 0 0 24px; margin: 0;'>`
+  const getBoldHTML = (children: string) =>
+    `<span style='font-weight: bold;'>${children}:</span> `
 
-  formEntries
-    .filter(([_name]) => !_name.startsWith('__config'))
-    .forEach(([_name, _value]) => {
-      const name = escapeHTML(_name.replace(/\*/g, ''))
-      const value = _value === true ? 'Yes' : _value === false ? 'No' : escapeHTML(_value)
+  const getBulletHTML = (children: string) =>
+    `<li style='margin: 0 0 12px 0;'>${children}</li> `
 
-      html += `<li style='margin: 0 0 12px 0;'><span style='font-weight: bold;'>${name}:</span> <br>${value}</li> `
-    })
+  const getListHTML = (children: string[]) =>
+    `<ul style='padding: 0 0 0 24px; margin: 0;'>${children.map(getBulletHTML).join('')}</ul> `
 
-  return html + '</ul>'
+  return (heading ? getHeadingHTML(heading) : '')
+    + getListHTML(
+        formEntries
+          .filter(([name]) => !name.startsWith('__config'))
+          .map(([name, value]) => {
+            const nameClean = escapeHTML(name.replace(/\*/g, ''))
+            const valueClean = Array.isArray(value) ? getListHTML(value)
+              : value === true ? 'Yes' 
+              : value === false ? 'No'
+              : escapeHTML(value)
+
+            return `${getBoldHTML(nameClean)}<br>${valueClean}`
+          })
+      )
 }
 
 export const promisify = async (callback: Function) =>
