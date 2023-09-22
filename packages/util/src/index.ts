@@ -49,6 +49,13 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
 export const toNumber = (value: any) =>
   isNaN(value) ? Number(String(value).replace(/[^0-9.]/g, '')) : value
 
+export const callIfFunction = <T>(value: T, ...params: any[]) =>
+  typeof value === 'function' ? value(...params) : value
+
+export const getUniqueFileName = (fileName: string, index = -1) =>
+  `${slugify(fileName.split('.').slice(0, -1).join('.'))
+  }-${Date.now().toString(36)}${index >= 0 ? `-${index}` : ''}.${fileName.split('.').pop()}`
+
 export const hasSimilarValue = (value1: string, value2: string) =>
   value1.toLowerCase().includes(value2.toLowerCase())
 

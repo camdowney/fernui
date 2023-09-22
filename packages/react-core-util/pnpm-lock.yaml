@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@fernui/util':
     specifier: ^2.7.0
-    version: 2.7.1
+    version: 2.8.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -19,8 +19,8 @@ devDependencies:
 
 packages:
 
-  /@fernui/util@2.7.1:
-    resolution: {integrity: sha512-ZL8vpudcKE1drGgxlyvFXHjOSnizRvwCBJh2tC5CDWkwAcH72K14CrablC13dD4Kad6KVVGWWmnLy85jpzhnGg==}
+  /@fernui/util@2.8.0:
+    resolution: {integrity: sha512-628ZGXhU9mhyqZyZQydkD+ri6l1I19/TgdU3cqBF0Nc4cHVIX/kN0Nu5qGYfYLV4/j3SeEBLnjnQnbcpwVmLmg==}
     dev: false
 
   /@types/prop-types@15.7.6:

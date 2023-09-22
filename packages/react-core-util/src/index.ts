@@ -3,12 +3,12 @@ import { KeyObject, expandEntries, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
-export const fileToBase64 = async (file: File) =>
+export const fileToBase64 = async (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = reject
+    reader.onload = () => resolve(String(reader.result))
+    reader.onerror = () => reject('')
   })
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
