@@ -131,7 +131,7 @@ export const expandEntries = (values: [any, any][]): any => {
 }
 
 export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Submission') => {
-  const getH3HTML = (children: string) =>
+  const getHeadingHTML = (children: string) =>
     `<h3 style='margin: 0;'>${children}</h3> `
 
   const getLinkHTML = (children: string) =>
@@ -140,13 +140,14 @@ export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Sub
   const getBoldHTML = (children: string) =>
     `<span style='font-weight: bold;'>${children}:</span> `
 
-  const getBulletHTML = (children: string) =>
-    `<li style='padding: 12px 0 0 0; margin: 0;'>${children}</li> `
+  const getListHTML = (children: string[], options: { pt?: number } = {}) =>
+    `<ul style='padding: ${options.pt ?? 12}px 0 0 24px; margin: 0;'>${
+      children.map((child, i) =>
+        `<li style='padding: ${i < 1 ? '0' : '12'}px 0 0 0; margin: 0;'>${child}</li> `
+      ).join('')
+    }</ul> `
 
-  const getListHTML = (children: string[]) =>
-    `<ul style='padding: 0 0 0 24px; margin: 0;'>${children.map(getBulletHTML).join('')}</ul> `
-
-  return (heading ? getH3HTML(heading) : '')
+  return (heading ? getHeadingHTML(heading) : '')
     + getListHTML(
         formEntries
           .filter(([name]) => !name.startsWith('__config'))
@@ -156,7 +157,7 @@ export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Sub
             }<br>${
               Array.isArray(value) ? getListHTML(
                 value.map(v => v.startsWith('http') ? getLinkHTML(v) : v)
-              )
+              , { pt: 6 })
               : value === true ? 'Yes' 
               : value === false ? 'No'
               : escapeHTML(value)
