@@ -141,8 +141,8 @@ export const formEntriesToHTML = (
   const getHeadingHTML = (children: string) =>
     `<h3 style='margin: 0;'>${children}</h3> `
 
-  const getParagraphHTML = (children: string) =>
-    `<p style='padding: 12px 0 0 0; margin: 0;'>${children}</p>`
+  const getSignatureHTML = (children: string) =>
+    `<p style='font-style: italic; padding: 18px 0 0 0; margin: 0;'>${children}</p>`
 
   const getBoldHTML = (children: string) =>
     `<span style='font-weight: bold;'>${children}:</span> `
@@ -178,7 +178,7 @@ export const formEntriesToHTML = (
             }`
           )
       )
-    + (options.signature ? getParagraphHTML(options.signature) : '')
+    + (options.signature ? getSignatureHTML(options.signature) : '')
 }
 
 export const promisify = async (callback: Function) =>
