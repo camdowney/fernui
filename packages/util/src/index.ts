@@ -130,15 +130,29 @@ export const expandEntries = (values: [any, any][]): any => {
   return values.reduce(concat, null) ?? {}
 }
 
-export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Submission') => {
+export const formEntriesToHTML = (
+  formEntries: [any, any][],
+  options: {
+    heading?: string
+    signature?: string | false
+    uploadPath?: string,
+  } = {}
+) => {
   const getHeadingHTML = (children: string) =>
     `<h3 style='margin: 0;'>${children}</h3> `
 
-  const getLinkHTML = (children: string) =>
-    `<a style='margin: 0;' href='${children}' target='_blank' rel='noopener noreferrer'>${children}</a> `
+  const getParagraphHTML = (children: string) =>
+    `<p style='padding: 12px 0 0 0; margin: 0;'>${children}</p>`
 
   const getBoldHTML = (children: string) =>
     `<span style='font-weight: bold;'>${children}:</span> `
+
+  const getLinkHTML = (children: string) =>
+    `<a style='margin: 0;' href='${children}' target='_blank' rel='noopener noreferrer'>${
+      (options.uploadPath && children.includes(options.uploadPath))
+        ? children.split('/').pop()
+        : children
+    }</a> `
 
   const getListHTML = (children: string[], options: { pt?: number } = {}) =>
     `<ul style='padding: ${options.pt ?? 12}px 0 0 24px; margin: 0;'>${
@@ -147,7 +161,7 @@ export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Sub
       ).join('')
     }</ul> `
 
-  return (heading ? getHeadingHTML(heading) : '')
+  return (options.heading ? getHeadingHTML(options.heading) : '')
     + getListHTML(
         formEntries
           .filter(([name]) => !name.startsWith('__config'))
@@ -164,6 +178,7 @@ export const formEntriesToHTML = (formEntries: [any, any][], heading = 'Form Sub
             }`
           )
       )
+    + (options.signature ? getParagraphHTML(options.signature) : '')
 }
 
 export const promisify = async (callback: Function) =>
