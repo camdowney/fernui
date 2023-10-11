@@ -43,6 +43,43 @@ export const useLocalStorage = <T extends unknown>(key: string, fallbackValue: T
   return [data, setDataAndStore] as const
 }
 
+export const useScreens = (mode: 'min' | 'max' = 'min') => {
+  const breakpoints = {
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+    xl2: 1536,
+  }
+  
+  const [screens, setScreensInit] = useState({
+    'sm': false,
+    'md': false,
+    'lg': false,
+    'xl': false,
+    'xl2': false,
+    '2xl': false,
+  })
+
+  const setScreens = () => {
+    const w = window.innerWidth
+
+    setScreensInit({
+      'sm': (mode === 'max') === (w < breakpoints.sm),
+      'md': (mode === 'max') === (w < breakpoints.md),
+      'lg': (mode === 'max') === (w < breakpoints.lg),
+      'xl': (mode === 'max') === (w < breakpoints.xl),
+      'xl2': (mode === 'max') === (w < breakpoints.xl2),
+      '2xl': (mode === 'max') === (w < breakpoints.xl2),
+    })
+  }
+
+  useListener('resize', () => setScreens())
+  useEffect(() => setScreens(), [])
+
+  return screens
+}
+
 export const useModal = (
   active: boolean,
   setActive: SetState<boolean>,

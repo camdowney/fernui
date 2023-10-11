@@ -5,10 +5,16 @@ export const cycle = (range: number, currentIndex: number, direction: 1 | -1) =>
     ? (currentIndex > 0 ? currentIndex - 1 : range - 1)
     : (currentIndex < range - 1 ? currentIndex + 1 : 0)
 
-export const chunk = (arr: any[], size: number): any[] => {
+export const chunk = <T>(arr: T[], chunkSize: number): T[][] => {
   if (!Array.isArray(arr)) return []
-  if (!size || size < 1) return arr
-  return arr.reduce((acc, _, i) => (i % size) ? acc : [...acc, arr.slice(i, i + size)], [])
+  if (!chunkSize || chunkSize < 1) return [arr]
+
+  const chunks: T[][] = []
+
+  for (let i = 0; i < arr.length; i += chunkSize)
+    chunks.push(arr.slice(i, i + chunkSize))
+
+  return chunks
 }
 
 export const isObject = (x: any) => 
@@ -32,6 +38,9 @@ export const slugify = (str: string) => {
     .replace(/^-+/, '') // Trim - from start of text
     .replace(/-+$/, '') // Trim - from end of text
   }
+
+export const capitalize = (str: string) =>
+  (str && str.length > 0) ? (str[0].toLocaleUpperCase() + str.substring(1)) : ''
 
 export const escapeHTML = (str: string) =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -57,7 +66,7 @@ export const getUniqueFileName = (fileName: string, index = -1) =>
   }-${Date.now().toString(36)}${index >= 0 ? `-${index}` : ''}.${fileName.split('.').pop()}`
 
 export const hasSimilarValue = (value1: string, value2: string) =>
-  value1.toLowerCase().includes(value2.toLowerCase())
+  (value1 ?? '').toLowerCase().includes((value2 ?? '').toLowerCase())
 
 export const searchByKeys = <T extends KeyObject>(items: T[], keys: string[], value: string) =>
   !keys ? items : items.filter(item => keys.some(key => hasSimilarValue(item[key], value)))
