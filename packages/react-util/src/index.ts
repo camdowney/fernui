@@ -173,16 +173,16 @@ export const downloadFile = (content: string | object, name: string, type = 'tex
   a.click()
 }
 
-export const JSXToText = (element: React.ReactElement | string): string => {
+export const jsxToText = (element: React.ReactElement | string): string => {
   if (!element) return ''
   if (typeof element === 'string') return element.trim()
 
   const children = element.props && element.props.children
 
   if (Array.isArray(children))
-    return children.map(JSXToText).filter(Boolean).join(' ')
+    return children.map(jsxToText).filter(Boolean).join(' ')
 
-  return JSXToText(children)
+  return jsxToText(children)
 }
 
 export const buttonRoleProps = (options: { label?: string, tabIndex?: number, disabled?: boolean } = {}) => ({
