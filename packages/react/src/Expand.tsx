@@ -23,7 +23,7 @@ export default function Expand({
     _setHeight(ref.current.firstChild.clientHeight)
 
   useEffect(setHeight, [])
-  useListener('resize', setHeight)
+  useListener('windowresize', setHeight)
 
   return (
     <div

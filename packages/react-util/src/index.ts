@@ -74,10 +74,19 @@ export const useScreens = (mode: 'min' | 'max' = 'min') => {
     })
   }
 
-  useListener('resize', () => setScreens())
+  useListener('windowresize', () => setScreens())
   useEffect(() => setScreens(), [])
 
   return screens
+}
+
+export const useWindowResizeAnnouncer = () => {
+  useListener('resize', () => {
+    window.dispatchEvent(new Event('windowresize', {
+      bubbles: false,
+      cancelable: false
+    }))
+  })
 }
 
 export const useModal = (
