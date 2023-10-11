@@ -46,7 +46,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
     }]) : []
   ))
 
-  const [data, setData] = useState<any>({})
+  const [data, setData] = useState<any>(defaultValues ?? {})
   const [isValid, setValid] = useState(false)
   const [wasModified, setModified] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)

@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@fernui/util':
-    specifier: ^2.8.0
+    specifier: ^2.9.0
     version: 2.9.0
   react:
     specifier: ^18.2.0
