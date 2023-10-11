@@ -7,56 +7,56 @@ settings:
 dependencies:
   '@fernui/react-util':
     specifier: ^1.6.0
-    version: 1.6.1(@fernui/react-core-util@1.5.2)(react@18.2.0)
+    version: 1.7.0(@fernui/react-core-util@1.6.5)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.22
-    version: 18.2.22
+    specifier: ^18.2.28
+    version: 18.2.28
 
 packages:
 
-  /@fernui/react-core-util@1.5.2(@fernui/util@2.6.1)(react@18.2.0):
-    resolution: {integrity: sha512-uPnpCaOlWomRM83JFxJikREl/dtm6nkWqNT350O4Xv5m7dxp5bRpRbYU8ar/1VEv6X+cHwlGPfSTU24iDMkTJQ==}
+  /@fernui/react-core-util@1.6.5(@fernui/util@2.9.0)(react@18.2.0):
+    resolution: {integrity: sha512-t8rVuPz3jCfpRRGb4wvADK2hQrXOkmE16IulMQ1jh7+mllhASCU4ewnZqOG+jlntc7PL9spsTvZ+PAktW6MN0Q==}
     peerDependencies:
-      '@fernui/util': ^2.6.0
+      '@fernui/util': ^2.9.0
       react: ^18.2.0
     dependencies:
-      '@fernui/util': 2.6.1
+      '@fernui/util': 2.9.0
       react: 18.2.0
     dev: false
 
-  /@fernui/react-util@1.6.1(@fernui/react-core-util@1.5.2)(react@18.2.0):
-    resolution: {integrity: sha512-MHBTlGj6Ux2SdHtti/DN1vkv70xrjUtFqs8g7hfgLIrfMlubhL5xLQHZGtex7F7PrUplGmWGcXT+dHpTm7mM+g==}
+  /@fernui/react-util@1.7.0(@fernui/react-core-util@1.6.5)(react@18.2.0):
+    resolution: {integrity: sha512-NuNua2HcvSJ+rKbOX9jQzHuZzuLkKgT2kCyg2kUuKxWtBKdiDbkewCWCb7H441+3mXEqVjWuCDl5bNpz4PLazA==}
     peerDependencies:
-      '@fernui/react-core-util': ^1.5.0
+      '@fernui/react-core-util': ^1.6.5
       react: ^18.2.0
     dependencies:
-      '@fernui/react-core-util': 1.5.2(@fernui/util@2.6.1)(react@18.2.0)
+      '@fernui/react-core-util': 1.6.5(@fernui/util@2.9.0)(react@18.2.0)
       react: 18.2.0
     dev: false
 
-  /@fernui/util@2.6.1:
-    resolution: {integrity: sha512-uhhwJvmWsMKEt2ljmc9+YUPhp85A035p8zccUwB5/tWcWXjJOb9UJnXenIMKjQ6iKbzfJ/hzNGTW5nylm9yJyw==}
+  /@fernui/util@2.9.0:
+    resolution: {integrity: sha512-aYldP8V/LHnK/jfs7c916/SFirGOSIZ5ZbOatnWnUWPdaNRiO9xcDZr3jM7WVymJplkp09fn94ibaRwcUExnCA==}
     dev: false
 
-  /@types/prop-types@15.7.6:
-    resolution: {integrity: sha512-RK/kBbYOQQHLYj9Z95eh7S6t7gq4Ojt/NT8HTk8bWVhA5DaF+5SMnxHKkP4gPNN3wAZkKP+VjAf0ebtYzf+fxg==}
+  /@types/prop-types@15.7.8:
+    resolution: {integrity: sha512-kMpQpfZKSCBqltAJwskgePRaYRFukDkm1oItcAbC3gNELR20XIBcN9VRgg4+m8DKsTfkWeA4m4Imp4DDuWy7FQ==}
     dev: true
 
-  /@types/react@18.2.22:
-    resolution: {integrity: sha512-60fLTOLqzarLED2O3UQImc/lsNRgG0jE/a1mPW9KjMemY0LMITWEsbS4VvZ4p6rorEHd5YKxxmMKSDK505GHpA==}
+  /@types/react@18.2.28:
+    resolution: {integrity: sha512-ad4aa/RaaJS3hyGz0BGegdnSRXQBkd1CCYDCdNjBPg90UUpLgo+WlJqb9fMYUxtehmzF3PJaTWqRZjko6BRzBg==}
     dependencies:
-      '@types/prop-types': 15.7.6
-      '@types/scheduler': 0.16.3
+      '@types/prop-types': 15.7.8
+      '@types/scheduler': 0.16.4
       csstype: 3.1.2
     dev: true
 
-  /@types/scheduler@0.16.3:
-    resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
+  /@types/scheduler@0.16.4:
+    resolution: {integrity: sha512-2L9ifAGl7wmXwP4v3pN4p2FLhD0O1qsJpvKmNin5VA8+UvNVb447UDaAEV6UdrkA+m/Xs58U1RFps44x6TFsVQ==}
     dev: true
 
   /csstype@3.1.2:
