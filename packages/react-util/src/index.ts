@@ -185,6 +185,21 @@ export const JSXToText = (element: React.ReactElement | string): string => {
   return JSXToText(children)
 }
 
+export const buttonRoleProps = (options: { label?: string, tabIndex?: number, disabled?: boolean } = {}) => ({
+  role: 'button',
+  ...(options.label && { 'aria-label': options.label }),
+  tabIndex: options.tabIndex ?? 0,
+  'aria-disabled': options.disabled ?? false,
+  style: { cursor: options.disabled ? 'auto' : 'pointer' },
+  onKeyDown: (e: any) => {
+    if (['Enter', 'Spacebar', ' '].indexOf(e.key) >= 0) {
+      e.preventDefault()
+      e.stopPropagation()
+      e.target.click()
+    }
+  },
+})
+
 export const onIntersect = (
   selector: string,
   callback: (element: any) => any,
@@ -205,50 +220,42 @@ export const onIntersect = (
   })
 }
 
-export const buttonRoleProps = (options: { label?: string, tabIndex?: number, disabled?: boolean } = {}) => ({
-  role: 'button',
-  ...(options.label && { 'aria-label': options.label }),
-  tabIndex: options.tabIndex ?? 0,
-  'aria-disabled': options.disabled ?? false,
-  style: { cursor: options.disabled ? 'auto' : 'pointer' },
-  onKeyDown: (e: any) => {
-    if (['Enter', 'Spacebar', ' '].indexOf(e.key) >= 0) {
-      e.preventDefault()
-      e.stopPropagation()
-      e.target.click()
-    }
-  },
-})
-
-export const initLazyLoad = (offset = '750px') => {
-  const offsetStr = `${offset} ${offset} ${offset} ${offset}`
-
-  onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
-    element.src = element.dataset.lazySrc ?? ''
-  }, { offset: offsetStr })
-
-  onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
-    element.srcset = element.dataset.lazySrcset ?? ''
-  }, { offset: offsetStr })
+export const useLazyLoad = (offset = '750px') => {
+  useEffect(() => {
+    const offsetStr = `${offset} ${offset} ${offset} ${offset}`
+  
+    onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
+      element.src = element.dataset.lazySrc ?? ''
+    }, { offset: offsetStr })
+  
+    onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
+      element.srcset = element.dataset.lazySrcset ?? ''
+    }, { offset: offsetStr })
+  }, [])
 }
 
-export const initScrollView = (offset = '999999px 0px -25% 0px') =>
-  onIntersect('.scroll-view', (element: HTMLElement) => {
-    element.classList.add('scroll-view-active')
-  }, { offset })
+export const useScrollView = (offset = '999999px 0px -25% 0px') => {
+  useEffect(() => {
+    onIntersect('.scroll-view', (element: HTMLElement) => {
+      element.classList.add('scroll-view-active')
+    }, { offset })
+  }, [])
+}
 
-export const initSplitLetters = (selector: string, delay = 0, step = 25) => {
-  document.querySelectorAll(selector).forEach(element => {
-    let letterIndex = 0
-
-    element.innerHTML = element.innerHTML.split(' ').map(word =>
-      '<span class="split-letter-word" style="display: inline-flex;">'
-      + word.split('').map(letter => 
-        `<div class="split-letter" style="display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms">${letter}</div>`
-      ).join('')
-      + '</span>'
-    ).join(' ')
-
-    element.classList.add('split-letter-active')
-  })
+export const useSplitLetters = (selector: string, delay = 0, step = 25) => {
+  useEffect(() => {
+    document.querySelectorAll(selector).forEach(element => {
+      let letterIndex = 0
+  
+      element.innerHTML = element.innerHTML.split(' ').map(word =>
+        '<span class="split-letter-word" style="display: inline-flex;">'
+        + word.split('').map(letter => 
+          `<div class="split-letter" style="display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms">${letter}</div>`
+        ).join('')
+        + '</span>'
+      ).join(' ')
+  
+      element.classList.add('split-letter-active')
+    })
+  }, [])
 }
