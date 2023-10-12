@@ -13,15 +13,17 @@ export const fileToBase64 = async (file: File): Promise<string> =>
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 export type FieldState = { value: any, modified: boolean, error: boolean }
+export type FieldsMap = Map<string, FieldState>
 
 export interface FormState {
   disabled: boolean
   setDisabled: SetState<boolean>
   exposed: boolean
   setExposed: SetState<boolean>
-  fields: Map<string, FieldState>
-  setFields: SetState<Map<string, FieldState>>
-  data: any
+  fields: FieldsMap
+  setFields: SetState<FieldsMap>
+  values: KeyObject
+  setValues: (newValues: KeyObject) => void
   isValid: boolean
   wasModified: boolean
   hasChanges: boolean
@@ -35,27 +37,36 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
     exposed: exposedInit
   } = options || {}
 
+  const getFieldsMap = (newValues: KeyObject, fieldsCurr: FieldsMap = new Map()) => {
+    const fieldsClean = new Map(fieldsCurr)
+
+    Object.entries(newValues).forEach(([key, value]) => {
+      fieldsClean.set(key, {
+        modified: false,
+        error: false,
+        ...(fieldsClean.get(key) ?? {}),
+        value,
+      })
+    })
+
+    return fieldsClean
+  }
+
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
 
-  const [fields, setFields] = useState<Map<string, FieldState>>(new Map(
-    defaultValues ? Object.entries(defaultValues).map(([key, value]) => [key, {
-      value,
-      modified: false,
-      error: false,
-    }]) : []
-  ))
+  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(defaultValues ?? {}))
+  const [values, setValuesRaw] = useState<KeyObject>(defaultValues ?? {}) // actually not sure if we want to do this since it causes an issue with expanding data entries
 
-  const [data, setData] = useState<any>(defaultValues ?? {})
   const [isValid, setValid] = useState(false)
   const [wasModified, setModified] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
-  const savedData = useRef<string>('')
+  const savedFields = useRef<string>('')
 
   useEffect(() => {
     if (fields.size > 0) {
-      setData(expandEntries(
+      setValuesRaw(expandEntries(
         Array.from(fields)
           .filter(([name]) => !name.startsWith('__config'))
           .map(([name, state]) => [name, state.value])
@@ -69,13 +80,17 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
 
     // True if user made change; else false for registering default values
     if (newModified)
-      setHasChanges(stringifyMap(fields) !== savedData.current)
+      setHasChanges(stringifyMap(fields) !== savedFields.current)
     else
       pushChanges()
   }, [fields])
 
+  const setValues = (newValues: KeyObject) => {
+    setFields(curr => getFieldsMap(newValues, curr))
+  }
+
   const pushChanges = () => {
-    savedData.current = stringifyMap(fields)
+    savedFields.current = stringifyMap(fields)
     setHasChanges(false)
   }
 
@@ -83,7 +98,8 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields,
-    data, isValid, wasModified,
+    values, setValues,
+    isValid, wasModified,
     hasChanges, pushChanges,
   }
 
