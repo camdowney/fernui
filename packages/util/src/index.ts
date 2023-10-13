@@ -122,7 +122,8 @@ export const objectToURI = (object: {}) =>
     .sort()
     .join('&')
 
-export const deepenObject = (obj: KeyObject | Map<any, any> | [any, any][]): KeyObject => {
+// TODO: Publish changes
+export const toDeepObject = (obj: any): KeyObject => {
   const concat = (acc: KeyObject, [keyInit, valueInit]: any): any => {
     const keys = Array.isArray(keyInit) ? keyInit : keyInit.split('.')
     const [rootKey, ...subKeys] = keys
