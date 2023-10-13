@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, deepenObject, cycle, stringifyMap } from '@fernui/util'
+import { KeyObject, toDeepObject, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
@@ -73,7 +73,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
   }
 
   const setValuesDeep = (newFields: FieldsMap) => {
-    setValuesRaw(deepenObject(Object.fromEntries(
+    setValuesRaw(toDeepObject(Object.fromEntries(
       Array.from(newFields)
         .filter(([name]) => !name.startsWith('__config'))
         .map(([name, state]) => [name, state.value])
