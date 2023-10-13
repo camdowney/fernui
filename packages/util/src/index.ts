@@ -17,9 +17,6 @@ export const chunk = <T>(arr: T[], chunkSize: number): T[][] => {
   return chunks
 }
 
-export const isObject = (x: any) => 
-  typeof x === 'object' && !Array.isArray(x)
-
 export const isEmail = (str: string) =>
 	/^\S+@\S+\.\S+$/.test(str || '')
 
@@ -125,25 +122,31 @@ export const objectToURI = (object: {}) =>
     .sort()
     .join('&')
 
-export const expandEntries = (values: [any, any][]): any => {
-  const concat = (acc: any, [_key, _value]: any): any => {
-    const keys = Array.isArray(_key) ? _key : _key.split('.')
-    const [key, ...subKeys] = keys
+export const deepenObject = (obj: KeyObject | Map<any, any> | [any, any][]): KeyObject => {
+  const concat = (acc: KeyObject, [keyInit, valueInit]: any): any => {
+    const keys = Array.isArray(keyInit) ? keyInit : keyInit.split('.')
+    const [rootKey, ...subKeys] = keys
 
     const value = keys.length === 1 
-      ? _value
-      : concat(acc ? acc[key] : null, [subKeys, _value])
+      ? valueInit
+      : concat(acc ? acc[rootKey] : null, [subKeys, valueInit])
 
-    if (+key >= 0) {
+    if (+rootKey >= 0) {
       const arr = acc || []
-      arr[key] = value
+      arr[rootKey] = value
       return arr
     }
 
-    return { ...acc, [key]: value }
+    return { ...acc, [rootKey]: value }
   }
 
-  return values.reduce(concat, null) ?? {}
+  const objectClean: KeyObject =
+    obj instanceof Map ? Object.fromEntries(obj)
+    : Array.isArray(obj) ? { array: obj }
+    : typeof obj === 'object' ? obj
+    : { primitive: obj }
+
+  return Object.entries(objectClean).reduce(concat, {}) ?? {}
 }
 
 export const formEntriesToHTML = (

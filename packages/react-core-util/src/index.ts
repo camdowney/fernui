@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, expandEntries, cycle, stringifyMap } from '@fernui/util'
+import { KeyObject, deepenObject, cycle, stringifyMap } from '@fernui/util'
 
 export * from '@fernui/util'
 
@@ -56,7 +56,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
   const [exposed, setExposed] = useState(exposedInit ?? false)
 
   const [fields, setFields] = useState<FieldsMap>(getFieldsMap(defaultValues ?? {}))
-  const [values, setValuesRaw] = useState<KeyObject>(defaultValues ?? {}) // actually not sure if we want to do this since it causes an issue with expanding data entries
+  const [values, setValuesRaw] = useState<KeyObject>(defaultValues ?? {})
 
   const [isValid, setValid] = useState(false)
   const [wasModified, setModified] = useState(false)
@@ -64,14 +64,26 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
 
   const savedFields = useRef<string>('')
 
+  const setValues = (newValues: KeyObject) =>
+    setFields(curr => getFieldsMap(newValues, curr))
+
+  const pushChanges = () => {
+    savedFields.current = stringifyMap(fields)
+    setHasChanges(false)
+  }
+
+  const setValuesDeep = (newFields: FieldsMap) => {
+    if (newFields.size < 1) return
+
+    setValuesRaw(deepenObject(
+      Array.from(newFields)
+        .filter(([name]) => !name.startsWith('__config'))
+        .map(([name, state]) => [name, state.value])
+    ))
+  }
+
   useEffect(() => {
-    if (fields.size > 0) {
-      setValuesRaw(expandEntries(
-        Array.from(fields)
-          .filter(([name]) => !name.startsWith('__config'))
-          .map(([name, state]) => [name, state.value])
-      ))
-    }
+    setValuesDeep(fields)
 
     const newModified = Array.from(fields).some(([_, state]) => state.modified)
 
@@ -84,15 +96,6 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
     else
       pushChanges()
   }, [fields])
-
-  const setValues = (newValues: KeyObject) => {
-    setFields(curr => getFieldsMap(newValues, curr))
-  }
-
-  const pushChanges = () => {
-    savedFields.current = stringifyMap(fields)
-    setHasChanges(false)
-  }
 
   const context: FormState = {
     disabled, setDisabled,
