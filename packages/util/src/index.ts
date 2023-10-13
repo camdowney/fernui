@@ -122,7 +122,6 @@ export const objectToURI = (object: {}) =>
     .sort()
     .join('&')
 
-// TODO: Publish changes
 export const toDeepObject = (obj: any): KeyObject => {
   const concat = (acc: KeyObject, [keyInit, valueInit]: any): any => {
     const keys = Array.isArray(keyInit) ? keyInit : keyInit.split('.')

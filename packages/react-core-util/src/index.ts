@@ -73,20 +73,17 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
   }
 
   const setValuesDeep = (newFields: FieldsMap) => {
-    if (newFields.size < 1) return
-
-    setValuesRaw(deepenObject(
+    setValuesRaw(deepenObject(Object.fromEntries(
       Array.from(newFields)
         .filter(([name]) => !name.startsWith('__config'))
         .map(([name, state]) => [name, state.value])
-    ))
+    )))
   }
 
   useEffect(() => {
-    setValuesDeep(fields)
-
     const newModified = Array.from(fields).some(([_, state]) => state.modified)
-
+    
+    setValuesDeep(fields)
     setValid(Array.from(fields).every(([_, state]) => !state.error))
     setModified(newModified)
 
