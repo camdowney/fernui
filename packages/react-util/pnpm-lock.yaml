@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@fernui/react-core-util':
-    specifier: ^1.6.6
-    version: 1.7.0(@fernui/util@2.10.0)(react@18.2.0)
+    specifier: ^1.7.0
+    version: 1.7.1(@fernui/util@2.11.0)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -19,18 +19,18 @@ devDependencies:
 
 packages:
 
-  /@fernui/react-core-util@1.7.0(@fernui/util@2.10.0)(react@18.2.0):
-    resolution: {integrity: sha512-OFRcv6i5wGOc8Xj110hJKPnlu83ygpByJe0cwBGvzL2VtHrrzsx7Pwb9ExMFIjKZyM9aXzmXepDefbXxTnNNJg==}
+  /@fernui/react-core-util@1.7.1(@fernui/util@2.11.0)(react@18.2.0):
+    resolution: {integrity: sha512-BeoX0lOLRVuLcWCBkuTpT8885yzPq3MnATU8N7KgIYx7Mt+gAs1wLyfr5yewk2QekAiGSFGE94+YsB4s06EbTg==}
     peerDependencies:
-      '@fernui/util': ^2.10.0
+      '@fernui/util': ^2.11.0
       react: ^18.2.0
     dependencies:
-      '@fernui/util': 2.10.0
+      '@fernui/util': 2.11.0
       react: 18.2.0
     dev: false
 
-  /@fernui/util@2.10.0:
-    resolution: {integrity: sha512-KRlUyPucuqlt+cXXRiyrvl6FiyybutGitvj2xh6cqlANaMZeYcZ7ypSh43yf9CU1qly8oTkBtUEOi5YKQSov5g==}
+  /@fernui/util@2.11.0:
+    resolution: {integrity: sha512-+6/ec36SBjwL6y2unMiVdhHl3xvFnAkbaHUHlzNgQToq82fn6FulhVbKm2j7LF3+kErOjX4O6DUDxhi8wg73eQ==}
     dev: false
 
   /@types/prop-types@15.7.8:
