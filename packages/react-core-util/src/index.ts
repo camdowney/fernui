@@ -21,28 +21,41 @@ export interface FormState {
   pushChanges: () => void
 }
 
-export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolean, exposed?: boolean }) => {
+export const useForm = (options?: {
+  defaultValues?: KeyObject
+  disabled?: boolean
+  exposed?: boolean
+  dependencies?: any[]
+}) => {
+  // Destructure props
   const {
     defaultValues,
     disabled: disabledInit,
-    exposed: exposedInit
+    exposed: exposedInit,
+    dependencies,
   } = options || {}
 
-  const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) => {
-    const fieldsClean = new Map(fieldsCurr)
+  // Values are derived from fields
+  const getValuesDeep = (newFields: FieldsMap) =>
+    toDeepObject(Object.fromEntries(
+      Array.from(newFields)
+        .filter(([name]) => !name.startsWith('__config'))
+        .map(([name, state]) => [name, state.value])
+    ))
 
-    Object.entries(newValues).forEach(([key, value]) => {
-      fieldsClean.set(key, {
+  // Calculate new fields based on old fields and new field values
+  const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) =>
+    Object.entries(newValues).reduce((acc, [key, value]) => {
+      acc.set(key, {
         modified: false,
         error: false,
-        ...(fieldsClean.get(key) ?? {}),
+        ...(acc.get(key) ?? {}),
         value,
         ...(newModified !== undefined && { modified: newModified })
       })
-    })
 
-    return fieldsClean
-  }
+      return acc
+    }, new Map(fieldsCurr))
 
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
@@ -56,26 +69,35 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
 
   const savedFields = useRef<string>('')
 
+  // Abstract user-facing method which recalculates fields then values
   const setValues = (newValues: KeyObject, newModified?: boolean) =>
     setFields(curr => getFieldsMap(curr, newValues, newModified))
 
+  // User-facing method
   const pushChanges = () => {
     savedFields.current = stringifyMap(fields)
     setHasChanges(false)
   }
 
-  const setValuesDeep = (newFields: FieldsMap) => {
-    setValuesRaw(toDeepObject(Object.fromEntries(
-      Array.from(newFields)
-        .filter(([name]) => !name.startsWith('__config'))
-        .map(([name, state]) => [name, state.value])
-    )))
-  }
+  // Recalculate initial values if any dependencies
+  useEffect(() => {
+    if (!dependencies) return
 
+    if (defaultValues)
+      setValues(defaultValues)
+
+    if (disabledInit !== undefined)
+      setDisabled(disabledInit)
+
+    if (exposedInit !== undefined)
+      setExposed(exposedInit)
+  }, dependencies ?? [])
+
+  // Recalculate values when fields change
   useEffect(() => {
     const newModified = Array.from(fields).some(([_, state]) => state.modified)
     
-    setValuesDeep(fields)
+    setValuesRaw(getValuesDeep(fields))
     setValid(Array.from(fields).every(([_, state]) => !state.error))
     setModified(newModified)
 
