@@ -43,7 +43,7 @@ export const useLocalStorage = <T extends unknown>(key: string, fallbackValue: T
   return [data, setDataAndStore] as const
 }
 
-export const useScreens = (mode: 'min' | 'max' = 'min') => {
+export const useScreen = (mode: 'min' | 'max' = 'min') => {
   const breakpoints = {
     sm: 640,
     md: 768,
@@ -52,32 +52,37 @@ export const useScreens = (mode: 'min' | 'max' = 'min') => {
     xl2: 1536,
   }
   
-  const [screens, setScreensInit] = useState({
-    'sm': false,
-    'md': false,
-    'lg': false,
-    'xl': false,
-    'xl2': false,
+  const [screen, setScreenRaw] = useState({
+    width: 0,
+    height: 0,
+    sm: false,
+    md: false,
+    lg: false,
+    xl: false,
+    xl2: false,
     '2xl': false,
   })
 
-  const setScreens = () => {
-    const w = window.innerWidth
+  const setScreen = () => {
+    const width = window.innerWidth
+    const height = window.innerHeight
 
-    setScreensInit({
-      'sm': (mode === 'max') === (w < breakpoints.sm),
-      'md': (mode === 'max') === (w < breakpoints.md),
-      'lg': (mode === 'max') === (w < breakpoints.lg),
-      'xl': (mode === 'max') === (w < breakpoints.xl),
-      'xl2': (mode === 'max') === (w < breakpoints.xl2),
-      '2xl': (mode === 'max') === (w < breakpoints.xl2),
+    setScreenRaw({
+      width,
+      height,
+      sm: (mode === 'max') === (width < breakpoints.sm),
+      md: (mode === 'max') === (width < breakpoints.md),
+      lg: (mode === 'max') === (width < breakpoints.lg),
+      xl: (mode === 'max') === (width < breakpoints.xl),
+      xl2: (mode === 'max') === (width < breakpoints.xl2),
+      '2xl': (mode === 'max') === (width < breakpoints.xl2),
     })
   }
 
-  useListener('windowresize', () => setScreens())
-  useEffect(() => setScreens(), [])
+  useListener('windowresize', setScreen)
+  useEffect(setScreen, [])
 
-  return screens
+  return screen
 }
 
 export const useWindowResizeAnnouncer = () => {
