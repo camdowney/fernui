@@ -198,7 +198,7 @@ export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, opt
   return data
 }
 
-export const useInitialQuery = (options: {
+export const useURL = (options: {
   dependencies?: any[]
   onLoad?: ({ query, search }: { query: KeyObject, search: string }) => void
 } = {}) => {
@@ -206,6 +206,7 @@ export const useInitialQuery = (options: {
 
   const [query, setQuery] = useState<KeyObject>({})
   const [search, setSearch] = useState('?')
+  const [referrer, setReferrer] = useState('')
   const [isLoading, setLoading] = useState(true)
 
   const loadQuery = () => {
@@ -221,10 +222,12 @@ export const useInitialQuery = (options: {
 
   useEffect(loadQuery, dependencies)
 
+  useEffect(() => setReferrer(document.referrer), [])
+
   useEffect(() => {
-    if (search === window.location.search)
+    if (search === window.location.search && referrer === document.referrer)
       setLoading(false)
-  }, [search])
+  }, [search, referrer])
 
   const push = (queryOrSearch: KeyObject | string, refresh = false) => {
     if (typeof window === 'undefined') return
@@ -239,7 +242,7 @@ export const useInitialQuery = (options: {
       loadQuery()
   }
 
-  return { query, search, push, isLoading }
+  return { query, search, referrer, push, isLoading }
 }
 
 export const jsxToText = (element: React.ReactElement | string): string => {
