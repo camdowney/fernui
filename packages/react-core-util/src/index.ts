@@ -38,7 +38,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
     exposed: exposedInit
   } = options || {}
 
-  const getFieldsMap = (newValues: KeyObject, fieldsCurr: FieldsMap = new Map()) => {
+  const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) => {
     const fieldsClean = new Map(fieldsCurr)
 
     Object.entries(newValues).forEach(([key, value]) => {
@@ -47,6 +47,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
         error: false,
         ...(fieldsClean.get(key) ?? {}),
         value,
+        ...(newModified !== undefined && { modified: newModified })
       })
     })
 
@@ -56,7 +57,7 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
 
-  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(defaultValues ?? {}))
+  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(new Map(), defaultValues ?? {}))
   const [values, setValuesRaw] = useState<KeyObject>(defaultValues ?? {})
 
   const [isValid, setValid] = useState(false)
@@ -65,8 +66,8 @@ export const useForm = (options?: { defaultValues?: KeyObject, disabled?: boolea
 
   const savedFields = useRef<string>('')
 
-  const setValues = (newValues: KeyObject) =>
-    setFields(curr => getFieldsMap(newValues, curr))
+  const setValues = (newValues: KeyObject, newModified?: boolean) =>
+    setFields(curr => getFieldsMap(curr, newValues, newModified))
 
   const pushChanges = () => {
     savedFields.current = stringifyMap(fields)
