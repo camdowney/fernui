@@ -3,16 +3,6 @@ import { KeyObject, toDeepObject, cycle, stringifyMap } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export const useDependentState = <T>(callback: (currentValue?: T) => T, dependencies: any[] = []) => {
-  const [data, setData] = useState(callback())
-
-  useEffect(() => {
-    setData(callback(data))
-  }, dependencies)
-
-  return [data, setData] as const
-}
-
 export type FieldState = { value: any, modified: boolean, error: boolean }
 export type FieldsMap = Map<string, FieldState>
 
