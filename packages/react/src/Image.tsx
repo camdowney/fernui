@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@fernui/react-util'
+import { cn } from '@fernui/util'
 import ImageRaw, { ImageRawProps } from './ImageRaw'
 
 export interface ImageProps extends ImageRawProps {

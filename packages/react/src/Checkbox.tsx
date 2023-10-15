@@ -1,5 +1,6 @@
 import React from 'react'
-import { cn, useField } from '@fernui/react-util'
+import { cn } from '@fernui/util'
+import { useField } from '@fernui/react-core-util'
 import { check } from './icons'
 import Error from './Error'
 import Icon from './Icon'

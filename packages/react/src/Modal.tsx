@@ -1,5 +1,7 @@
 import React from 'react'
-import { SetState, cn, useModal } from '@fernui/react-util'
+import { cn } from '@fernui/util'
+import { SetState } from '@fernui/react-core-util'
+import { useModal } from '@fernui/react-util'
 
 export interface ModalProps {
   innerRef?: any

@@ -1,31 +1,32 @@
 {
   "name": "fernui",
   "scripts": {
-    "b-icons": "cd ./packages/icons && tsc",
-    "b-util": "cd ./packages/util && tsc",
-    "b-react-core-util": "cd ./packages/react-core-util && tsc",
-    "b-react-util": "cd ./packages/react-util && tsc",
-    "b-react": "cd ./packages/react && tsc",
-    "b-react-native-util": "cd ./packages/react-native-util && tsc",
-    "b-native": "cd ./packages/react-native && tsc",
-    "build": "pnpm b-util && pnpm b-react-core-util && pnpm b-react-util && rollup -c"
+    "b-icons": "cd .\\packages\\icons && tsc",
+    "b-util": "cd .\\packages\\util && tsc",
+    "b-dom-util": "cd .\\packages\\dom-util && tsc",
+    "b-react-core-util": "cd .\\packages\\react-core-util && tsc",
+    "b-react-util": "cd .\\packages\\react-util && tsc",
+    "b-react": "cd .\\packages\\react && tsc",
+    "b-react-native-util": "cd .\\packages\\react-native-util && tsc",
+    "b-native": "cd .\\packages\\react-native && tsc",
+    "build": "pnpm b-react && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tslib": "^2.6.1"
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.9",
-    "@babel/preset-react": "^7.22.5",
-    "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-terser": "^0.4.3",
-    "@rollup/plugin-typescript": "^11.1.2",
+    "@babel/core": "^7.23.2",
+    "@babel/preset-react": "^7.22.15",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
     "@types/node": "18.15.11",
-    "@types/react": "^18.2.17",
-    "concurrently": "^8.2.0",
-    "rollup": "^3.27.0",
+    "@types/react": "^18.2.28",
+    "concurrently": "^8.2.1",
+    "rollup": "^3.29.4",
     "rollup-plugin-dts": "^5.3.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   }
 }

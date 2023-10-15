@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { cn, useListener } from '@fernui/react-util'
+import { cn } from '@fernui/util'
+import { useListener } from '@fernui/react-util'
 
 export interface ExpandProps {
   innerRef?: any

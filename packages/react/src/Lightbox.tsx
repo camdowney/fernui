@@ -1,5 +1,7 @@
 import React from 'react'
-import { LightboxControl, cn, useListener } from '@fernui/react-util'
+import { cn } from '@fernui/util'
+import { LightboxControl } from '@fernui/react-core-util'
+import { useListener } from '@fernui/react-util'
 import Modal, { ModalProps } from './Modal'
 
 export interface LightboxProps extends Omit<ModalProps, 'active' | 'setActive'>{

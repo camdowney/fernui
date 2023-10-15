@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { cn, useField } from '@fernui/react-util'
+import { cn } from '@fernui/util'
+import { useField } from '@fernui/react-core-util'
 import Error from './Error'
 
 export interface TextAreaProps {

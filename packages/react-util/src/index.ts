@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { KeyObject, objectToURI, uriToObject } from '@fernui/util'
+import { initLazyLoad, initScrollView, initSplitLetters } from '@fernui/dom-util'
 import { SetState } from '@fernui/react-core-util'
-
-export * from '@fernui/react-core-util'
 
 export const useListener = (
   event: string,
@@ -108,7 +108,7 @@ export const useModal = (
     exitOnOutsideClick,
     exitOnEscape,
     preventScroll
-  } = options || {}
+  } = options ?? {}
 
   const ref = refProp || useRef()
   const timer = useRef<any>() 
@@ -144,33 +144,102 @@ export const useModal = (
   return { ref }
 }
 
-export const st = (selector: string, smooth?: boolean) =>
-  (document.querySelector(selector) ?? document.body)
-    .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
+export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
+  initialValue?: T
+  interval?: number
+  onSuccess?: (newValue: T, oldValue: T) => any
+  onError?: (error: any) => any
+}): T => {
+  const { initialValue = null as T, interval = 60000, onSuccess, onError } = options ?? {}
 
-export const cn = (...classes: (string | { [key: string]: string } | any)[]) => {
-  let classesStr = ''
+  const [data, setData] = useState(initialValue)
+  let intervalId: any
+  let skippedRefresh = false
 
-  classes.filter(Boolean).forEach(_class => {
-    if (typeof _class === 'string')
-      return classesStr += _class + ' '
+  const refresh = async () => {
+    if (document.hidden)
+      return skippedRefresh = true
 
-    Object.entries(_class)
-      .filter(([key, value]) => Boolean(value) && !classesStr.includes(key))
-      .forEach(([_, value]) => classesStr += value + ' ')
-  })
+    try {
+      const oldData = typeof data === 'object' ? structuredClone(data) : data
+      const newData = await callback(data)
+      setData(newData)
 
-  return classesStr.trim()
+      if (onSuccess)
+        onSuccess(newData, oldData)
+    }
+    catch (error) {
+      if (onError)
+        onError(error)
+    }
+  }
+
+  const fastRefresh = () => {
+    if (document.hidden || !skippedRefresh)
+      return
+
+    clearInterval(intervalId)
+    refresh()
+
+    intervalId = setInterval(refresh, interval)
+    skippedRefresh = false
+  }
+
+  useEffect(() => {
+    intervalId = setInterval(refresh, interval)
+    document.addEventListener('visibilitychange', fastRefresh)
+    
+    return () => {
+      clearInterval(intervalId)
+      document.removeEventListener('visibilitychange', fastRefresh)
+    }
+  }, [data])
+
+  return data
 }
 
-export const downloadFile = (content: string | object, name: string, type = 'text/plain') => {
-  const a = document.createElement('a')
-  const blob = new Blob([typeof content === 'string' ? content : JSON.stringify(content)], { type })
-  const url = URL.createObjectURL(blob)
+export const useInitialQuery = (options: {
+  dependencies?: any[]
+  onLoad?: ({ query, search }: { query: KeyObject, search: string }) => void
+} = {}) => {
+  const { dependencies = [], onLoad } = options ?? {}
 
-  a.setAttribute('href', url)
-  a.setAttribute('download', name)
-  a.click()
+  const [query, setQuery] = useState<KeyObject>({})
+  const [search, setSearch] = useState('?')
+  const [isLoading, setLoading] = useState(true)
+
+  const loadQuery = () => {
+    const newSearch = window.location.search
+    const newQuery = uriToObject(newSearch)
+    
+    if (onLoad)
+      onLoad({ query: newQuery, search: newSearch })
+
+    setQuery(newQuery)
+    setSearch(newSearch)
+  }
+
+  useEffect(loadQuery, dependencies)
+
+  useEffect(() => {
+    if (search === window.location.search)
+      setLoading(false)
+  }, [search])
+
+  const push = (queryOrSearch: KeyObject | string, refresh = false) => {
+    if (typeof window === 'undefined') return
+
+    const query = typeof queryOrSearch === 'object'
+      ? queryOrSearch
+      : uriToObject(queryOrSearch)
+
+    window.history.pushState(query, '', `?${objectToURI(query)}`)
+
+    if (refresh)
+      loadQuery()
+  }
+
+  return { query, search, push, isLoading }
 }
 
 export const jsxToText = (element: React.ReactElement | string): string => {
@@ -200,62 +269,11 @@ export const buttonRoleProps = (options: { label?: string, tabIndex?: number, di
   },
 })
 
-export const onIntersect = (
-  selector: string,
-  callback: (element: any) => any,
-  options?: { offset?: string, once?: boolean }
-) => {
-  const { offset = '0px 0px 0px 0px', once = true } = options || {}
+export const useLazyLoad = (offset?: string) =>
+  useEffect(() => initLazyLoad(offset), [])
 
-  document.querySelectorAll(selector).forEach(element => {
-    (new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return
-          
-        callback(entry.target)
-        
-        if (once) observer.disconnect()
-      })
-    }, { rootMargin: offset })).observe(element)
-  })
-}
+export const useScrollView = (offset?: string) =>
+  useEffect(() => initScrollView(offset), [])
 
-export const useLazyLoad = (offset = '750px') => {
-  useEffect(() => {
-    const offsetStr = `${offset} ${offset} ${offset} ${offset}`
-  
-    onIntersect('[data-lazy-src]', (element: HTMLImageElement) => {
-      element.src = element.dataset.lazySrc ?? ''
-    }, { offset: offsetStr })
-  
-    onIntersect('[data-lazy-srcset]', (element: HTMLImageElement) => {
-      element.srcset = element.dataset.lazySrcset ?? ''
-    }, { offset: offsetStr })
-  }, [])
-}
-
-export const useScrollView = (offset = '999999px 0px -25% 0px') => {
-  useEffect(() => {
-    onIntersect('.scroll-view', (element: HTMLElement) => {
-      element.classList.add('scroll-view-active')
-    }, { offset })
-  }, [])
-}
-
-export const useSplitLetters = (selector: string, delay = 0, step = 25) => {
-  useEffect(() => {
-    document.querySelectorAll(selector).forEach(element => {
-      let letterIndex = 0
-  
-      element.innerHTML = element.innerHTML.split(' ').map(word =>
-        '<span class="split-letter-word" style="display: inline-flex;">'
-        + word.split('').map(letter => 
-          `<div class="split-letter" style="display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms">${letter}</div>`
-        ).join('')
-        + '</span>'
-      ).join(' ')
-  
-      element.classList.add('split-letter-active')
-    })
-  }, [])
-}
+export const useSplitLetters = (selector: string, delay?: number, step?: number) =>
+  useEffect(() => initSplitLetters(selector, delay, step), [])

@@ -1,17 +1,18 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
 import { KeyObject, toDeepObject, cycle, stringifyMap } from '@fernui/util'
 
-export * from '@fernui/util'
-
-export const fileToBase64 = async (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject('')
-  })
-
 export type SetState<T> = Dispatch<SetStateAction<T>>
+
+export const useDependentState = <T>(callback: (currentValue?: T) => T, dependencies: any[] = []) => {
+  const [data, setData] = useState(callback())
+
+  useEffect(() => {
+    setData(callback(data))
+  }, dependencies)
+
+  return [data, setData] as const
+}
+
 export type FieldState = { value: any, modified: boolean, error: boolean }
 export type FieldsMap = Map<string, FieldState>
 
@@ -279,58 +280,4 @@ export const useLightbox = (numItems: number, options?: { index?: number, active
   const control: LightboxControl = { index, setIndex, active, setActive, open, previous, next }
 
   return { control, ...control }
-}
-
-export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
-  initialValue?: T
-  interval?: number
-  onSuccess?: (newValue: T, oldValue: T) => any
-  onError?: (error: any) => any
-}): T => {
-  const { initialValue = null as T, interval = 60000, onSuccess, onError } = options ?? {}
-
-  const [data, setData] = useState(initialValue)
-  let intervalId: any
-  let skippedRefresh = false
-
-  const refresh = async () => {
-    if (document.hidden)
-      return skippedRefresh = true
-
-    try {
-      const oldData = typeof data === 'object' ? structuredClone(data) : data
-      const newData = await callback(data)
-      setData(newData)
-
-      if (onSuccess)
-        onSuccess(newData, oldData)
-    }
-    catch (error) {
-      if (onError)
-        onError(error)
-    }
-  }
-
-  const fastRefresh = () => {
-    if (document.hidden || !skippedRefresh)
-      return
-
-    clearInterval(intervalId)
-    refresh()
-
-    intervalId = setInterval(refresh, interval)
-    skippedRefresh = false
-  }
-
-  useEffect(() => {
-    intervalId = setInterval(refresh, interval)
-    document.addEventListener('visibilitychange', fastRefresh)
-    
-    return () => {
-      clearInterval(intervalId)
-      document.removeEventListener('visibilitychange', fastRefresh)
-    }
-  }, [data])
-
-  return data
 }

@@ -36,6 +36,21 @@ export const slugify = (str: string) => {
     .replace(/-+$/, '') // Trim - from end of text
   }
 
+export const cn = (...classes: (string | { [key: string]: string } | any)[]) => {
+  let classesStr = ''
+
+  classes.filter(Boolean).forEach(_class => {
+    if (typeof _class === 'string')
+      return classesStr += _class + ' '
+
+    Object.entries(_class)
+      .filter(([key, value]) => Boolean(value) && !classesStr.includes(key))
+      .forEach(([_, value]) => classesStr += value + ' ')
+  })
+
+  return classesStr.trim()
+}
+
 export const capitalize = (str: string) =>
   (str && str.length > 0) ? (str[0].toLocaleUpperCase() + str.substring(1)) : ''
 
@@ -61,6 +76,9 @@ export const callIfFunction = <T>(value: T, ...params: any[]) =>
 export const getUniqueFileName = (fileName: string, index = -1) =>
   `${slugify(fileName.split('.').slice(0, -1).join('.'))
   }-${Date.now().toString(36)}${index >= 0 ? `-${index}` : ''}.${fileName.split('.').pop()}`
+
+export const objectHasValue = (obj?: any) =>
+  !!obj && typeof obj === 'object' && Object.keys(obj).length > 0
 
 export const hasSimilarValue = (value1: string, value2: string) =>
   (value1 ?? '').toLowerCase().includes((value2 ?? '').toLowerCase())
@@ -111,6 +129,15 @@ export const getTwitterShareLink = (url: string) =>
 
 export const stringifyMap = (map: Map<any, any>) =>
   JSON.stringify(Array.from(map.entries()))
+
+export const uriToObject = (uri: string) =>
+  Object.fromEntries(
+    new URLSearchParams(
+      !uri.includes('=') ? ''
+        : uri.includes('?') ? uri.substring(uri.indexOf('?'))
+        : uri
+    )
+  )
 
 export const objectToURI = (object: {}) =>
   Object.entries(object)
@@ -237,7 +264,7 @@ export interface PingRequest extends Omit<RequestInit, 'body'>{
 
 export const ping = {
   post: async (url: string, request?: PingRequest) => {
-    const { body, headers, ...rest } = request || {}
+    const { body, headers, ...rest } = request ?? {}
 
     return await handlePingResponse(async () =>
       await fetch(url, {
