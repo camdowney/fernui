@@ -79,10 +79,8 @@ export const useForm = (options?: {
     setHasChanges(false)
   }
 
-  // Recalculate initial values if any dependencies
+  // Recalculate initial values
   useEffect(() => {
-    if (!dependencies) return
-
     if (defaultValues)
       setValues(defaultValues)
 
@@ -91,7 +89,7 @@ export const useForm = (options?: {
 
     if (exposedInit !== undefined)
       setExposed(exposedInit)
-  }, dependencies ?? [])
+  }, [defaultValues, disabledInit, exposedInit, ...(dependencies ?? [])])
 
   // Recalculate values when fields change
   useEffect(() => {
