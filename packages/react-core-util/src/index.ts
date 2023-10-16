@@ -35,15 +35,17 @@ export const useForm = (options?: {
     dependencies,
   } = options || {}
 
-  // Values are derived from fields
+  // Extract values from fields
+  const getValues = (fields: FieldsMap) =>
+    Array.from(fields).map(([name, state]) => [name, state.value])
+
+  // Values are calculated after fields
   const getValuesDeep = (newFields: FieldsMap) =>
     toDeepObject(Object.fromEntries(
-      Array.from(newFields)
-        .filter(([name]) => !name.startsWith('__config'))
-        .map(([name, state]) => [name, state.value])
+      getValues(newFields).filter(([name]) => !name.startsWith('__config'))
     ))
 
-  // Calculate new fields based on old fields and new field values
+  // Calculate new fields based on old fields and new field values or modified
   const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) =>
     Object.entries(newValues).reduce((acc, [key, value]) => {
       acc.set(key, {
@@ -67,15 +69,13 @@ export const useForm = (options?: {
   const [wasModified, setModified] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
-  const savedFields = useRef<string>('')
-
   // Abstract user-facing method which recalculates fields then values
   const setValues = (newValues: KeyObject, newModified?: boolean) =>
     setFields(curr => getFieldsMap(curr, newValues, newModified))
 
   // User-facing method
   const pushChanges = () => {
-    savedFields.current = stringifyMap(fields)
+    setFields(curr => getFieldsMap(curr, getValues(curr), false))
     setHasChanges(false)
   }
 
@@ -99,13 +99,11 @@ export const useForm = (options?: {
     
     setValuesRaw(getValuesDeep(fields))
     setValid(Array.from(fields).every(([_, state]) => !state.error))
-    setModified(newModified)
 
-    // True if user made change; else false for registering default values
-    if (newModified)
-      setHasChanges(stringifyMap(fields) !== savedFields.current)
-    else
-      pushChanges()
+    if (!newModified) return
+
+    setModified(true)
+    setHasChanges(true)
   }, [fields])
 
   const context: FormState = {
