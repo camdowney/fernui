@@ -1,7 +1,7 @@
 {
   "name": "@fernui/dom-util",
   "author": "@camdowney",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A library of general-purpose utility functions for web development.",
   "keywords": [
     "ui",
@@ -11,6 +11,6 @@
   ],
   "main": "./dist/index.js",
   "peerDependencies": {
-    "@fernui/util": "^3.0.0"
+    "@fernui/util": "^3.2.0"
   }
 }
