@@ -41,7 +41,7 @@ export default [
   // ...config('icons', { flavor: 'vanilla' }),
   // ...config('util', { flavor: 'vanilla' }),
   // ...config('dom-util', { flavor: 'vanilla' }),
-  // ...config('react-core-util', { flavor: 'vanilla' }),
+  ...config('react-core-util', { flavor: 'vanilla' }),
   // ...config('react-util', { flavor: 'vanilla' }),
   ...config('react', { flavor: 'react' }),
   // ...config('react-native-util', { flavor: 'vanilla' }),

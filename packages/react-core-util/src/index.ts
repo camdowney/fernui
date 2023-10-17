@@ -60,7 +60,7 @@ export const useForm = (options?: {
         ...field,
         value,
         ...(newModified !== undefined && { modified: newModified }),
-        ...(field.validate && { error: field.validate(value) })
+        ...(field.validate && { error: !field.validate(value) })
       })
 
       return acc
@@ -96,7 +96,7 @@ export const useForm = (options?: {
 
     if (exposedInit !== undefined)
       setExposed(exposedInit)
-  }, [defaultValues, disabledInit, exposedInit, ...(dependencies ?? [])])
+  }, [stringify(defaultValues), disabledInit, exposedInit, ...(dependencies ?? [])])
 
   // Recalculate values when fields change
   useEffect(() => {

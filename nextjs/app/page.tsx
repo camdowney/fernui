@@ -1,35 +1,29 @@
 'use client'
 
 import { useState } from 'react'
-import { Media, Avatar, Button, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
-import { useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
-import { cn, handleSubmit } from '../../packages/react-util/dist'
+import { Image, Avatar, Button, Expand, Dropdown, Lightbox, Input, Select, FormButton, Form, TextArea } from '../../packages/react/dist'
+import { handleSubmit, useForm, useLightbox, useRepeater } from '../../packages/react-core-util/dist'
+import { cn } from '../../packages/util/dist'
 import { angle } from '../../packages/icons/dist'
 
+const lightboxItems = [
+  'aurora.webp',
+  'glacier1.webp',
+  'glacier2.webp',
+  'moraine.webp',
+]
+
 export default () => {
-  const { context, data } = useForm()
-
-  const { items, insert, remove, update } = useRepeater<string>([
-    '1',
-    '2',
-  ])
-
+  const { items, insert, remove, update } = useRepeater<string>(['1', '2'])
   const [expandActive, setExpandActive] = useState(false)
   const [dropdownActive, setDropdownActive] = useState(false)
-
-  const lightboxItems = [
-    'aurora.webp',
-    'glacier1.webp',
-    'glacier2.webp',
-    'moraine.webp',
-  ]
-
   const { control, open, previous, next } = useLightbox(lightboxItems.length)
+  const { context, values } = useForm({ defaultValues: { field1: 'test' }})
 
   const testSubmit = handleSubmit(context, () => {
-    console.log(data)
+    console.log(values)
   }, error => {
-    alert(error.message)
+    console.log(error.message)
   })
 
   return <>
@@ -57,7 +51,7 @@ export default () => {
               name='select'
               label='Select *'
               options={[
-                { label: 'Option 1' },
+                { label: 'Option 1', value: '1' },
                 { label: 'Option 2' },
                 { label: 'Option 3' },
               ]}
@@ -163,7 +157,7 @@ export default () => {
       </>}
     >
       {({ item, active }) =>
-        <Media
+        <Image
           src={item}
           className={cn(!active && '!hidden')}
           ratioClass='pb-[67%]'
@@ -174,7 +168,7 @@ export default () => {
 
     <section>
       <div className='container'>
-        <Media
+        <Image
           src='aurora.webp'
           ratioClass='pb-[65%]'
         />
