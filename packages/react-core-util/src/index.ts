@@ -139,7 +139,7 @@ export const useField = <T extends unknown>(
   const {
     disabled: disabledInit,
     validate = null,
-    onChange: onChangeProp
+    onChange,
   } = options || {}
 
   const {
@@ -164,18 +164,11 @@ export const useField = <T extends unknown>(
     })
 
     setFields(new Map(fields))
-  }
-
-  // Usually only used by field component
-  const onChange = (newValue: T) => {
-    setField(newValue)
-      
-    if (onChangeProp)
-      onChangeProp(newValue)
+    if (onChange) onChange(newValue)
   }
 
   // Handle manual value control
-  useEffect(() => onChange(value), [stringify(value)])
+  useEffect(() => setField(value), [stringify(value)])
 
   // Set initial state and cleanup
   useEffect(() => {
@@ -187,7 +180,7 @@ export const useField = <T extends unknown>(
     }
   }, [name])
 
-  return { value: valueClean, disabled: disabledClean, showError, setField, onChange }
+  return { value: valueClean, disabled: disabledClean, showError, setField }
 }
 
 export const handleSubmit = (
