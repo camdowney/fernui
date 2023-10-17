@@ -1,10 +1,12 @@
+import { stringify } from '@fernui/util'
+
 export const st = (selector: string, smooth?: boolean) =>
   (document.querySelector(selector) ?? document.body)
     .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
 
 export const downloadFile = (content: string | object, name: string, type = 'text/plain') => {
   const link = document.createElement('a')
-  const blob = new Blob([typeof content === 'string' ? content : JSON.stringify(content)], { type })
+  const blob = new Blob([stringify(content)], { type })
   const url = URL.createObjectURL(blob)
 
   link.setAttribute('href', url)
