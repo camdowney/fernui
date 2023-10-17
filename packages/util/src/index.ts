@@ -54,6 +54,11 @@ export const cn = (...classes: (string | { [key: string]: string } | any)[]) => 
 export const capitalize = (str: string) =>
   (str && str.length > 0) ? (str[0].toLocaleUpperCase() + str.substring(1)) : ''
 
+export const stringify = (value: any) =>
+  value instanceof Map ? JSON.stringify(Array.from(value.entries()))
+    : value === Object(value) ? JSON.stringify(value)
+    : String(value)
+
 export const escapeHTML = (str: string) =>
   (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim()
@@ -127,9 +132,6 @@ export const getFacebookShareLink = (url: string) =>
 export const getTwitterShareLink = (url: string) =>
   'https://twitter.com/intent/tweet?text=' + (url || '')
 
-export const stringifyMap = (map: Map<any, any>) =>
-  JSON.stringify(Array.from(map.entries()))
-
 export const uriToObject = (uri: string) =>
   Object.fromEntries(
     new URLSearchParams(
@@ -141,11 +143,7 @@ export const uriToObject = (uri: string) =>
 
 export const objectToURI = (object: {}) =>
   Object.entries(object)
-    .map(([key, value]: any) => 
-      `${encodeURIComponent(key)}=${
-        encodeURIComponent(typeof value === 'object' ? JSON.stringify(value) : value)
-      }`
-    )
+    .map(([key, value]: any) => `${encodeURIComponent(key)}=${encodeURIComponent(stringify(value))}`)
     .sort()
     .join('&')
 
@@ -269,7 +267,7 @@ export const ping = {
     return await handlePingResponse(async () =>
       await fetch(url, {
         method: 'POST',
-        body: typeof body === 'object' ? JSON.stringify(body) : body,
+        body: stringify(body),
         ...rest,
         headers: {
           ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),

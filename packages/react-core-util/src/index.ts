@@ -1,9 +1,9 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, toDeepObject, cycle, stringifyMap } from '@fernui/util'
+import { KeyObject, toDeepObject, cycle } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export type FieldState = { value: any, modified: boolean, error: boolean }
+export type FieldState = { value: any, modified: boolean, error: boolean,  }
 export type FieldsMap = Map<string, FieldState>
 
 export interface FormState {
@@ -142,10 +142,12 @@ export const useField = <T extends unknown>(
     setFields
   } = useFormContext()
 
-  const calcValue = (fields.get(name) ?? { value }).value as T
+  const field = fields.get(name) ?? { value, disabled: false, error: false }
+  const valueClean = field.value as T
   const disabled = disabledInit ?? formDisabled
-  const showError = (fields.get(name) ?? {}).error && ((fields.get(name) ?? {}).modified || formExposed)
+  const showError = field.error && (field.modified || formExposed)
 
+  // Lowest level way to update the field
   const setField = (newValue: T, newModified = true) => {
     fields.set(name, {
       value: newValue,
@@ -156,6 +158,7 @@ export const useField = <T extends unknown>(
     setFields(new Map(fields))
   }
 
+  // Usually only used by field component
   const onChange = (newValue: T) => {
     setField(newValue)
       
@@ -170,7 +173,7 @@ export const useField = <T extends unknown>(
 
   // Set initial state and cleanup
   useEffect(() => {
-    setField(calcValue, false)
+    setField(valueClean, false)
 
     return () => {
       fields.delete(name)
@@ -178,7 +181,7 @@ export const useField = <T extends unknown>(
     }
   }, [name])
 
-  return { value: calcValue, disabled, showError, setField, onChange }
+  return { value: valueClean, disabled, showError, setField, onChange }
 }
 
 export const handleSubmit = (
