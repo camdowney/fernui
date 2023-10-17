@@ -15,7 +15,7 @@ export interface UploadProps {
   maxTotalSizeMB?: number
   minFileCount?: number
   maxFileCount?: number
-  readOnly?: boolean
+  disabled?: boolean
   className?: string
   label?: string
   labelClass?: string
@@ -30,14 +30,14 @@ export interface UploadProps {
 export default function Upload({
   name: nameProp,
   value: valueProp = [],
-  onChange: onChangeProp,
+  onChange,
   acceptedFormats,
   maxFileSizeMB = Infinity,
   maxTotalSizeMB = Infinity,
   minFileCount = 0,
   maxFileCount = Infinity,
   placeholder = 'Select or drop file(s)',
-  readOnly,
+  disabled: disabledProp,
   className,
   label,
   labelClass,
@@ -48,8 +48,6 @@ export default function Upload({
   infoClass,
   ...props
 }: UploadProps) {
-  const name = nameProp ?? label ?? placeholder ?? ''
-
   const validate = (files: File[]) =>
     files.length >= minFileCount
     && files.length <= maxFileCount
@@ -57,10 +55,12 @@ export default function Upload({
     && files.every(file => file.size <= maxFileSizeMB * BYTES_PER_MB)
     && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMB * BYTES_PER_MB
 
-  const { value, disabled, showError, onChange } = useField(name, valueProp, {
-    disabled: readOnly,
+  const { value, setValue, disabled, showError } = useField({
+    name: nameProp ?? label ?? placeholder ?? '',
+    value: valueProp,
+    disabled: disabledProp,
     validate,
-    onChange: onChangeProp,
+    onChange,
   })
 
   const [dragging, setDragging] = useState(false)
@@ -97,14 +97,14 @@ export default function Upload({
   const handleFiles = async (files: any) => {
     if (!files || files.length < 1) return
 
-    onChange([...value, ...Array.from(files as File[])])
+    setValue([...value, ...Array.from(files as File[])])
   }
 
   const removeFile = (index: number) => {
     if (disabled) return
 
     value.splice(index, 1)
-    onChange([...value])
+    setValue([...value])
   }
 
   return (

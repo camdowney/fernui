@@ -14,7 +14,7 @@ export interface SelectProps {
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
   placeholder?: string
-  readOnly?: boolean
+  disabled?: boolean
   className?: string
   label?: string
   labelClass?: string
@@ -31,10 +31,10 @@ export default function Select({
   name: nameProp,
   value: valueProp,
   options,
-  onChange: onChangeProp,
+  onChange,
   validate = () => true,
   placeholder,
-  readOnly,
+  disabled: disabledProp,
   className,
   label,
   labelClass,
@@ -46,13 +46,12 @@ export default function Select({
   infoClass,
   ...props
 }: SelectProps) {
-  const name = nameProp ?? label ?? placeholder ?? ''
-  const selectedValue = valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label))
-
-  const { value, disabled, showError, onChange } = useField(name, selectedValue, {
-    disabled: readOnly,
+  const { name, value, setValue, disabled, showError } = useField({
+    name: nameProp ?? label ?? placeholder ?? '',
+    value: valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label)),
+    disabled: disabledProp,
     validate,
-    onChange: onChangeProp,
+    onChange,
   })
 
   return (
@@ -71,7 +70,7 @@ export default function Select({
           value={value}
           disabled={disabled}
           aria-label={label || placeholder || name}
-          onChange={e => onChange(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           className={cn('fui-select fui-field-block', fieldClass)}
           style={{ ..._style(disabled), ...style }}
           {...props}

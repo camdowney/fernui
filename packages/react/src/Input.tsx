@@ -37,9 +37,9 @@ export default function Input({
   infoClass,
   ...props
 }: InputProps) {
-  const name = nameProp ?? label ?? placeholder ?? ''
-
-  const { value, disabled, showError, setValue } = useField(name, valueProp, {
+  const { name, value, setValue, disabled, showError } = useField({
+    name: nameProp ?? label ?? placeholder ?? '',
+    value: valueProp,
     disabled: disabledProp,
     validate,
     onChange,

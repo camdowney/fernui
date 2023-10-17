@@ -9,7 +9,7 @@ export interface TextAreaProps {
   value?: string
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
-  readOnly?: boolean
+  disabled?: boolean
   autoResize?: boolean
   className?: string
   label?: string
@@ -26,10 +26,10 @@ export default function TextArea({
   innerRef,
   name: nameProp,
   value: valueProp = '',
-  onChange: onChangeProp,
+  onChange,
   validate = () => true,
   placeholder,
-  readOnly,
+  disabled: disabledProp,
   autoResize,
   className,
   label,
@@ -41,19 +41,17 @@ export default function TextArea({
   infoClass,
   ...props
 }: TextAreaProps) {
-  const name = nameProp ?? label ?? placeholder ?? ''
   const ref = innerRef || useRef()
 
   const onChangeAndResize = (value: any) => {
-    if (onChangeProp)
-      onChangeProp(value)
-
-    if (autoResize)
-      adjustHeight(ref.current)
+    if (onChange) onChange(value)
+    if (autoResize) adjustHeight(ref.current)
   }
 
-  const { value, disabled, showError, onChange } = useField(name, valueProp, {
-    disabled: readOnly,
+  const { name, value, setValue, disabled, showError } = useField({
+    name: nameProp ?? label ?? placeholder ?? '',
+    value: valueProp,
+    disabled: disabledProp,
     validate,
     onChange: onChangeAndResize,
   })
@@ -80,7 +78,7 @@ export default function TextArea({
         placeholder={placeholder}
         readOnly={disabled}
         aria-label={label || placeholder || name}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => setValue(e.target.value)}
         className={cn('fui-textarea fui-field-block', fieldClass)}
         {...props}
       />
