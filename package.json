@@ -1,15 +1,15 @@
 {
   "name": "fernui",
   "scripts": {
-    "b-icons": "cd .\\packages\\icons && tsc",
-    "b-util": "cd .\\packages\\util && tsc",
-    "b-dom-util": "cd .\\packages\\dom-util && tsc",
-    "b-react-core-util": "cd .\\packages\\react-core-util && tsc",
-    "b-react-util": "cd .\\packages\\react-util && tsc",
-    "b-react": "cd .\\packages\\react && tsc",
-    "b-react-native-util": "cd .\\packages\\react-native-util && tsc",
-    "b-native": "cd .\\packages\\react-native && tsc",
-    "build": "pnpm b-react-core-util && pnpm b-react && rollup -c"
+    "b-icons": "cd ./packages/icons && tsc",
+    "b-util": "cd ./packages/util && tsc",
+    "b-dom-util": "cd ./packages/dom-util && tsc",
+    "b-react-core-util": "cd ./packages/react-core-util && tsc",
+    "b-react-util": "cd ./packages/react-util && tsc",
+    "b-react": "cd ./packages/react && tsc",
+    "b-react-native-util": "cd ./packages/react-native-util && tsc",
+    "b-native": "cd ./packages/react-native && tsc",
+    "build": "pnpm b-util && pnpm b-react && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

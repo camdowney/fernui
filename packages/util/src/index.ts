@@ -75,6 +75,9 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
 export const toNumber = (value: any) =>
   isNaN(value) ? Number(String(value).replace(/[^0-9.]/g, '')) : value
 
+export const toArray = (value: any) =>
+  Array.isArray(value) ? value : [value]
+
 export const callIfFunction = <T>(value: T, ...params: any[]) =>
   typeof value === 'function' ? value(...params) : value
 
