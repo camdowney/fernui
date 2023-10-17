@@ -12,7 +12,7 @@
   "main": "./dist/index.js",
   "peerDependencies": {
     "@fernui/dom-util": "^1.1.1",
-    "@fernui/react-core-util": "^2.5.2",
+    "@fernui/react-core-util": "^2.7.0",
     "@fernui/react-util": "^2.2.0",
     "@fernui/util": "^3.2.0",
     "react": "^18.2.0"

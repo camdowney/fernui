@@ -27,31 +27,26 @@ export interface FormState {
   pushChanges: () => void
 }
 
-export const useForm = (options?: {
+export const useForm = ({
+  defaultValues = {},
+  disabled: disabledInit,
+  exposed: exposedInit,
+}: {
   defaultValues?: KeyObject
   disabled?: boolean
   exposed?: boolean
-  dependencies?: any[]
-}) => {
-  // Destructure props
-  const {
-    defaultValues,
-    disabled: disabledInit,
-    exposed: exposedInit,
-    dependencies,
-  } = options || {}
-
-  // Extract values from fields
-  const getValues = (fields: FieldsMap) =>
+} = {}) => {
+  // Internal method
+  const extractFieldValues = (fields: FieldsMap) =>
     Array.from(fields).map(([name, state]) => [name, state.value])
 
-  // Values are calculated after fields
+  // Internal method; values are calculated after fields
   const getValuesDeep = (newFields: FieldsMap) =>
     toDeepObject(Object.fromEntries(
-      getValues(newFields).filter(([name]) => !name.startsWith('__config'))
+      extractFieldValues(newFields).filter(([name]) => !name.startsWith('__config'))
     ))
 
-  // Calculate new fields based on old fields and new field values or modified
+  // Internal method; insert/replace new values in current fields
   const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) =>
     Object.entries(newValues).reduce((acc, [key, value]) => {
       const field = acc.get(key) ?? { modified: false, error: false, validate: null }
@@ -69,43 +64,35 @@ export const useForm = (options?: {
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
 
-  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(new Map(), defaultValues ?? {}))
-  const [values, setValuesRaw] = useState<KeyObject>(defaultValues ?? {})
+  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(new Map(), defaultValues))
+  const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
 
   const [isValid, setValid] = useState(false)
   const [wasModified, setModified] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
-  // Abstract user-facing method which recalculates fields then values
+  // User-facing method
   const setValues = (newValues: KeyObject, newModified?: boolean) =>
     setFields(curr => getFieldsMap(curr, newValues, newModified))
 
   // User-facing method
   const pushChanges = () => {
-    setFields(curr => getFieldsMap(curr, getValues(curr), false))
+    setFields(curr => getFieldsMap(curr, extractFieldValues(curr), false))
     setHasChanges(false)
   }
 
-  // Recalculate initial values
+  // Recalculate default values
   useEffect(() => {
     if (defaultValues)
       setValues(defaultValues)
-
-    if (disabledInit !== undefined)
-      setDisabled(disabledInit)
-
-    if (exposedInit !== undefined)
-      setExposed(exposedInit)
-  }, [stringify(defaultValues), disabledInit, exposedInit, ...(dependencies ?? [])])
+  }, [stringify(defaultValues)])
 
   // Recalculate values when fields change
   useEffect(() => {
-    const newModified = Array.from(fields).some(([_, state]) => state.modified)
-    
     setValuesRaw(getValuesDeep(fields))
     setValid(Array.from(fields).every(([_, state]) => !state.error))
 
-    if (!newModified) return
+    if (!Array.from(fields).some(([_, state]) => state.modified)) return
 
     setModified(true)
     setHasChanges(true)
@@ -127,35 +114,28 @@ export const FormContext = createContext<FormState | null>(null)
 
 export const useFormContext = () => useContext(FormContext) ?? useForm()
 
-export const useField = <T extends unknown>(
-  name: string,
-  value: T,
-  options?: {
-    disabled?: boolean
-    validate?: (newValue: T) => boolean
-    onChange?: (newValue: T) => void
-  }
-) => {
-  const {
-    disabled: disabledInit,
-    validate = null,
-    onChange,
-  } = options || {}
-
-  const {
-    disabled: formDisabled,
-    exposed: formExposed,
-    fields,
-    setFields
-  } = useFormContext()
+export const useField = <T extends unknown>({
+  name,
+  value,
+  disabled: disabledInit,
+  validate = null,
+  onChange,
+}: {
+  name: string
+  value: T
+  disabled?: boolean
+  validate?: ((newValue: T) => boolean) | null
+  onChange?: (newValue: T) => void
+}) => {
+  const { disabled: formDisabled, exposed: formExposed, fields, setFields } = useFormContext()
 
   const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
   const disabledClean = disabledInit ?? formDisabled
   const showError = field.error && (field.modified || formExposed)
 
-  // Lowest level way to update the field
-  const setField = (newValue: T, newModified = true) => {
+  // User-facing method; also used by the component
+  const setValue = (newValue: T, newModified = true) => {
     fields.set(name, {
       value: newValue,
       modified: newModified,
@@ -168,11 +148,11 @@ export const useField = <T extends unknown>(
   }
 
   // Handle manual value control
-  useEffect(() => setField(value), [stringify(value)])
+  useEffect(() => setValue(value), [stringify(value)])
 
   // Set initial state and cleanup
   useEffect(() => {
-    setField(valueClean, false)
+    setValue(valueClean, false)
 
     return () => {
       fields.delete(name)
@@ -180,7 +160,7 @@ export const useField = <T extends unknown>(
     }
   }, [name])
 
-  return { value: valueClean, disabled: disabledClean, showError, setField }
+  return { name, value: valueClean, setValue, disabled: disabledClean, showError }
 }
 
 export const handleSubmit = (
@@ -267,9 +247,16 @@ export interface LightboxControl {
   next: () => void
 }
 
-export const useLightbox = (numItems: number, options?: { index?: number, active?: boolean }) => {
-  const { index: indexInit, active: activeInit } = options || {}
-
+export const useLightbox = (
+  numItems: number,
+  {
+    index: indexInit,
+    active: activeInit
+  }: {
+    index?: number
+    active?: boolean
+  } = {}
+) => {
   const [index, setIndex] = useState(indexInit ?? 0)
   const [active, setActive] = useState(activeInit ?? false)
 

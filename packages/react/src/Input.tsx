@@ -8,7 +8,7 @@ export interface InputProps {
   value?: string
   onChange?: (newValue: string) => void
   validate?: (newValue: string) => boolean
-  readOnly?: boolean
+  disabled?: boolean
   className?: string
   label?: string
   labelClass?: string
@@ -23,10 +23,10 @@ export interface InputProps {
 export default function Input({
   name: nameProp,
   value: valueProp = '',
-  onChange: onChangeProp,
+  onChange,
   validate = () => true,
   placeholder,
-  readOnly,
+  disabled: disabledProp,
   className,
   label,
   labelClass,
@@ -39,10 +39,10 @@ export default function Input({
 }: InputProps) {
   const name = nameProp ?? label ?? placeholder ?? ''
 
-  const { value, disabled, showError, onChange } = useField(name, valueProp, {
-    disabled: readOnly,
+  const { value, disabled, showError, setValue } = useField(name, valueProp, {
+    disabled: disabledProp,
     validate,
-    onChange: onChangeProp,
+    onChange,
   })
 
   return (
@@ -61,7 +61,7 @@ export default function Input({
         placeholder={placeholder}
         readOnly={disabled}
         aria-label={label || placeholder || name}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => setValue(e.target.value)}
         className={cn('fui-input fui-field-block', fieldClass)}
         {...props}
       />
