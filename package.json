@@ -9,7 +9,7 @@
     "b-react": "cd .\\packages\\react && tsc",
     "b-react-native-util": "cd .\\packages\\react-native-util && tsc",
     "b-native": "cd .\\packages\\react-native && tsc",
-    "build": "pnpm b-util && rollup -c"
+    "build": "pnpm b-react-core-util && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

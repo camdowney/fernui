@@ -1,9 +1,15 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, toDeepObject, cycle } from '@fernui/util'
+import { KeyObject, toDeepObject, cycle, stringify } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export type FieldState = { value: any, modified: boolean, error: boolean,  }
+export type FieldState = {
+  value: any
+  modified: boolean
+  error: boolean
+  validate: ((newValue: any) => boolean) | null
+}
+
 export type FieldsMap = Map<string, FieldState>
 
 export interface FormState {
@@ -48,12 +54,13 @@ export const useForm = (options?: {
   // Calculate new fields based on old fields and new field values or modified
   const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) =>
     Object.entries(newValues).reduce((acc, [key, value]) => {
+      const field = acc.get(key) ?? { modified: false, error: false, validate: null }
+
       acc.set(key, {
-        modified: false,
-        error: false,
-        ...(acc.get(key) ?? {}),
+        ...field,
         value,
-        ...(newModified !== undefined && { modified: newModified })
+        ...(newModified !== undefined && { modified: newModified }),
+        ...(field.validate && { error: field.validate(value) })
       })
 
       return acc
@@ -131,7 +138,7 @@ export const useField = <T extends unknown>(
 ) => {
   const {
     disabled: disabledInit,
-    validate,
+    validate = null,
     onChange: onChangeProp
   } = options || {}
 
@@ -142,9 +149,9 @@ export const useField = <T extends unknown>(
     setFields
   } = useFormContext()
 
-  const field = fields.get(name) ?? { value, disabled: false, error: false }
+  const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
-  const disabled = disabledInit ?? formDisabled
+  const disabledClean = disabledInit ?? formDisabled
   const showError = field.error && (field.modified || formExposed)
 
   // Lowest level way to update the field
@@ -152,7 +159,8 @@ export const useField = <T extends unknown>(
     fields.set(name, {
       value: newValue,
       modified: newModified,
-      error: validate ? !validate(newValue) : false
+      error: validate ? !validate(newValue) : false,
+      validate,
     })
 
     setFields(new Map(fields))
@@ -167,9 +175,7 @@ export const useField = <T extends unknown>(
   }
 
   // Handle manual value control
-  useEffect(() => {
-    onChange(value)
-  }, [value === Object(value) ? JSON.stringify(value) : value])
+  useEffect(() => onChange(value), [stringify(value)])
 
   // Set initial state and cleanup
   useEffect(() => {
@@ -181,7 +187,7 @@ export const useField = <T extends unknown>(
     }
   }, [name])
 
-  return { value: valueClean, disabled, showError, setField, onChange }
+  return { value: valueClean, disabled: disabledClean, showError, setField, onChange }
 }
 
 export const handleSubmit = (
