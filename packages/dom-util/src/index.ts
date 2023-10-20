@@ -14,6 +14,12 @@ export const downloadFile = (content: string | object, name: string, type = 'tex
   link.click()
 }
 
+export const parseHTML = (str: string) => {
+  const element = document.createElement('div')
+  element.innerHTML = String(str).replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '')
+  return element.textContent ?? ''
+}
+
 export const fileToBase64 = async (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -58,4 +64,27 @@ export const initScrollView = (offset = '999999px 0px -25% 0px') => {
   onIntersect('.scroll-view', (element: HTMLElement) => {
     element.classList.add('scroll-view-active')
   }, { offset })
+}
+
+export const initSplitLetters = (
+  sectionSelector: string,
+  textNodeSelector: string,
+  step: number = 10,
+  start: number = 0,
+) => {
+  document.querySelectorAll(sectionSelector).forEach(section => {
+    let index = 0
+    
+    section.querySelectorAll(textNodeSelector).forEach(textNode => {
+      if (textNode.innerHTML.includes('split-letter-word')) return
+
+      textNode.innerHTML = parseHTML(textNode.innerHTML).split(' ').map(word =>
+        `<span class='split-letter-word' style='display: inline-flex;'>`
+        + word.split('').map(letter => 
+          `<div class='split-letter' style='display: inline-block; animation-delay: ${start + index++ * step}ms'>${letter}</div>`
+        ).join('')
+        + `</span>`
+      ).join(' ')
+    })
+  })
 }

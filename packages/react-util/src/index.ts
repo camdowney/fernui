@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { KeyObject, objectToURI, uriToObject } from '@fernui/util'
-import { initLazyLoad, initScrollView } from '@fernui/dom-util'
+import { initLazyLoad, initScrollView, initSplitLetters } from '@fernui/dom-util'
 import { SetState } from '@fernui/react-core-util'
 
 export const useListener = (
@@ -283,22 +283,10 @@ export const useLazyLoad = (offset?: string) =>
 export const useScrollView = (offset?: string) =>
   useEffect(() => initScrollView(offset), [])
 
-export const useSplitLetters = (selector: string, delay = 0, step = 25) => {
-  useEffect(() => {
-    document.querySelectorAll(selector).forEach(element => {
-      if (element.innerHTML.includes('split-letter')) return
-      
-      let letterIndex = 0
-  
-      element.innerHTML = element.innerHTML.split(' ').map(word =>
-        `<span class='split-letter-word' style='display: inline-flex;'>`
-        + word.split('').map(letter => 
-          `<div class='split-letter' style='display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms'>${letter}</div>`
-        ).join('')
-        + `</span>`
-      ).join(' ')
-  
-      element.classList.add('split-letter-active')
-    })
-  }, [])
-}
+export const useSplitLetters = (
+  sectionSelector: string,
+  textNodeSelector: string,
+  step?: number,
+  start?: number
+) =>
+  useEffect(() => initSplitLetters(sectionSelector, textNodeSelector, step, start), [])
