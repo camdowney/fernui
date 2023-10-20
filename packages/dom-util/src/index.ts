@@ -59,19 +59,3 @@ export const initScrollView = (offset = '999999px 0px -25% 0px') => {
     element.classList.add('scroll-view-active')
   }, { offset })
 }
-
-export const initSplitLetters = (selector: string, delay = 0, step = 25) => {
-  document.querySelectorAll(selector).forEach(element => {
-    let letterIndex = 0
-
-    element.innerHTML = element.innerHTML.split(' ').map(word =>
-      `<span class='split-letter-word' style='display: inline-flex;'>`
-      + word.split('').map(letter => 
-        `<div class='split-letter' style='display: inline-block; animation-delay: ${letterIndex++ * step + delay}ms'>${letter}</div>`
-      ).join('')
-      + `</span>`
-    ).join(' ')
-
-    element.classList.add('split-letter-active')
-  })
-}
