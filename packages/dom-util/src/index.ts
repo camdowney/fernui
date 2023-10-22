@@ -103,6 +103,7 @@ export const animDelay = (selector: string, step: number) => event((time, root) 
     element.style.animationDelay = `${time.current}ms`
     time.current += step
   })
+  time.current -= step
 })
 
 export const animLetters = (selector: string, step: number) => event((time, root) => {
@@ -118,5 +119,7 @@ export const animLetters = (selector: string, step: number) => event((time, root
       }).join('')
       + `</span>`
     ).join(' ')
+
+    time.current -= step
   })
 })
