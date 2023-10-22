@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { KeyObject, objectToURI, uriToObject } from '@fernui/util'
-import { initLazyLoad, initScrollView, initSplitLetters } from '@fernui/dom-util'
+import { TimelineEvent, initLazyLoad, initScrollView, initTimeline } from '@fernui/dom-util'
 import { SetState } from '@fernui/react-core-util'
 
 export const useListener = (
@@ -276,17 +276,3 @@ export const buttonRoleProps = (options: { label?: string, tabIndex?: number, di
     }
   },
 })
-
-export const useLazyLoad = (offset?: string) =>
-  useEffect(() => initLazyLoad(offset), [])
-
-export const useScrollView = (offset?: string) =>
-  useEffect(() => initScrollView(offset), [])
-
-export const useSplitLetters = (
-  sectionSelector: string,
-  textNodeSelector: string,
-  step?: number,
-  start?: number
-) =>
-  useEffect(() => initSplitLetters(sectionSelector, textNodeSelector, step, start), [])

@@ -66,25 +66,57 @@ export const initScrollView = (offset = '999999px 0px -25% 0px') => {
   }, { offset })
 }
 
-export const initSplitLetters = (
-  sectionSelector: string,
-  textNodeSelector: string,
-  step: number = 10,
-  start: number = 0,
-) => {
-  document.querySelectorAll(sectionSelector).forEach(section => {
-    let index = 0
-    
-    section.querySelectorAll(textNodeSelector).forEach(textNode => {
-      if (textNode.innerHTML.includes('split-letter-word')) return
+export type Timestamp = { current: number }
+export type TimelineCallbackProps = [time: Timestamp, root: Element | Document]
+export type TimelineCallback<T> = (...props: TimelineCallbackProps) => T
+export type TimelineEvent = [
+  time: number,
+  callback: TimelineCallback<number>,
+  carryOn?: boolean,
+]
 
-      textNode.innerHTML = parseHTML(textNode.innerHTML).split(' ').map(word =>
-        `<span class='split-letter-word' style='display: inline-flex;'>`
-        + word.split('').map(letter => 
-          `<div class='split-letter' style='display: inline-block; animation-delay: ${start + index++ * step}ms'>${letter}</div>`
-        ).join('')
-        + `</span>`
-      ).join(' ')
+export const initTimeline = (timeline: TimelineEvent[], sectionSelector?: string) => {
+  let time = { current: 0 }
+
+  ;(sectionSelector ? document.querySelectorAll(sectionSelector) : [document])
+    .forEach(section => {
+      timeline.forEach(event => {
+        const [eventTime, callback, carryOn] = event
+
+        time.current = carryOn ? (time.current + eventTime) : eventTime 
+        time.current = callback(time, section)
+      })
     })
-  })
 }
+
+export const event = (
+  callback: TimelineCallback<void>
+) => (
+  ...[time, root]: TimelineCallbackProps
+) => {
+  callback(time, root)
+  return time.current
+}
+
+export const animDelay = (selector: string, step: number) => event((time, root) => {
+  root.querySelectorAll(selector).forEach((element: any) => {
+    element.style.animationDelay = `${time.current}ms`
+    time.current += step
+  })
+})
+
+export const animLetters = (selector: string, step: number) => event((time, root) => {
+  root.querySelectorAll(selector).forEach(textNode => {
+    if (textNode.innerHTML.includes('split-letter-word')) return
+
+    textNode.innerHTML = parseHTML(textNode.innerHTML).split(' ').map(word =>
+      `<span class='split-letter-word' style='display: inline-flex;'>`
+      + word.split('').map(letter => {
+        const html = `<div class='split-letter' style='display: inline-block; animation-delay: ${time.current}ms'>${letter}</div>`
+        time.current += step
+        return html
+      }).join('')
+      + `</span>`
+    ).join(' ')
+  })
+})
