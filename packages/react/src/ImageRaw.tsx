@@ -2,6 +2,7 @@ import React from 'react'
 import { cn } from '@fernui/util'
 
 export interface ImageRawProps {
+  domRef?: any
   src?: string
   srcSet?: string
   sizes?: string
@@ -12,6 +13,7 @@ export interface ImageRawProps {
 }
 
 export default function ImageRaw({
+  domRef,
   src,
   srcSet,
   sizes,
@@ -22,6 +24,7 @@ export default function ImageRaw({
 }: ImageRawProps) {
   return (
     <img
+      ref={domRef}
       src={(src && !lazy) ? src : undefined}
       data-lazy-src={(src && lazy) ? src : undefined}
       srcSet={(srcSet && !lazy) ? srcSet : undefined}

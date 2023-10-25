@@ -4,18 +4,18 @@ import { useListener } from '@fernui/react-util'
 import Button, { ButtonProps } from './Button'
 
 export interface FormButtonProps extends ButtonProps {
-  innerRef?: any
+  domRef?: any
   preventDefaultFocus?: boolean
 }
 
 export default function FormButton({
-  innerRef,
+  domRef,
   preventDefaultFocus,
   type = 'button',
   ...props
 }: FormButtonProps) {
   const { disabled } = useFormContext()
-  const ref = innerRef || useRef()
+  const ref = domRef || useRef()
 
   useListener('mousedown', (e: any) => {
     if (preventDefaultFocus)
@@ -24,7 +24,7 @@ export default function FormButton({
 
   return (
     <Button
-      innerRef={ref}
+      domRef={ref}
       type={type}
       disabled={disabled}
       {...props}

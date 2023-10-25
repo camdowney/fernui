@@ -4,7 +4,7 @@ import { SetState } from '@fernui/react-core-util'
 import { useModal } from '@fernui/react-util'
 
 export interface DropdownProps {
-  innerRef?: any
+  domRef?: any
   active: boolean
   setActive: SetState<boolean>
   outerClass?: string
@@ -21,7 +21,7 @@ export interface DropdownProps {
 }
 
 export default function Dropdown({
-  innerRef,
+  domRef,
   active,
   setActive,
   outerClass,
@@ -37,7 +37,7 @@ export default function Dropdown({
   ...props
 }: DropdownProps) {
   const { ref } = useModal(active, setActive, {
-    ref: innerRef,
+    ref: domRef,
     openDelay,
     closeDelay,
     exitOnOutsideClick,

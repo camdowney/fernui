@@ -4,7 +4,7 @@ import { useField } from '@fernui/react-core-util'
 import Error from './Error'
 
 export interface TextAreaProps {
-  innerRef?: any
+  domRef?: any
   name?: string
   value?: string
   onChange?: (newValue: string) => void
@@ -23,7 +23,7 @@ export interface TextAreaProps {
 }
 
 export default function TextArea({
-  innerRef,
+  domRef,
   name: nameProp,
   value: valueProp = '',
   onChange,
@@ -41,7 +41,7 @@ export default function TextArea({
   infoClass,
   ...props
 }: TextAreaProps) {
-  const ref = innerRef || useRef()
+  const ref = domRef || useRef()
 
   const onChangeAndResize = (value: any) => {
     if (onChange) onChange(value)

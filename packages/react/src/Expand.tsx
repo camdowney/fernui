@@ -3,7 +3,7 @@ import { cn } from '@fernui/util'
 import { useListener } from '@fernui/react-util'
 
 export interface ExpandProps {
-  innerRef?: any
+  domRef?: any
   active: boolean
   className?: string
   children?: any
@@ -11,14 +11,14 @@ export interface ExpandProps {
 }
 
 export default function Expand({
-  innerRef,
+  domRef,
   active,
   className,
   children,
   ...props
 }: ExpandProps) {
   const [height, _setHeight] = useState(0)
-  const ref = innerRef || useRef()
+  const ref = domRef || useRef()
 
   const setHeight = () =>
     _setHeight(ref.current.firstChild.clientHeight)

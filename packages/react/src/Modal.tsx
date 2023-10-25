@@ -4,7 +4,7 @@ import { SetState } from '@fernui/react-core-util'
 import { useModal } from '@fernui/react-util'
 
 export interface ModalProps {
-  innerRef?: any
+  domRef?: any
   active: boolean
   setActive: SetState<boolean>
   outerClass?: string
@@ -28,7 +28,7 @@ export interface ModalProps {
 }
 
 export default function Modal({
-  innerRef,
+  domRef,
   active,
   setActive,
   outerClass,
@@ -50,7 +50,7 @@ export default function Modal({
   ...props
 }: ModalProps) {
   const { ref } = useModal(active, setActive, {
-    ref: innerRef,
+    ref: domRef,
     openDelay,
     closeDelay,
     exitOnOutsideClick,

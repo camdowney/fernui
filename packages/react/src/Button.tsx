@@ -2,7 +2,7 @@ import React from 'react'
 import Icon, { IconProps } from './Icon'
 
 export interface ButtonProps {
-  innerRef?: any
+  domRef?: any
   as?: any
   link?: string
   children?: any
@@ -17,7 +17,7 @@ export interface ButtonProps {
 }
 
 export default function Button({
-  innerRef,
+  domRef,
   as,
   link,
   children,
@@ -34,7 +34,7 @@ export default function Button({
 
   return (
     <Shell
-      ref={innerRef}
+      ref={domRef}
       href={link}
       {...(blank && {
         target: '_blank',
