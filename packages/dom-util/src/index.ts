@@ -66,7 +66,7 @@ export const initScrollView = (offset = '999999px 0px -25% 0px') => {
   }, { offset })
 }
 
-export type Timestamp = { current: number }
+export type Timestamp = { value: number }
 export type TimelineCallbackProps = [time: Timestamp, root: Element | Document]
 export type TimelineCallback<T> = (...props: TimelineCallbackProps) => T
 export type TimelineEvent = [
@@ -76,15 +76,15 @@ export type TimelineEvent = [
 ]
 
 export const initTimeline = (timeline: TimelineEvent[], sectionSelector?: string) => {
-  let time = { current: 0 }
+  let time = { value: 0 }
 
   ;(sectionSelector ? document.querySelectorAll(sectionSelector) : [document])
     .forEach(section => {
       timeline.forEach(event => {
         const [eventTime, callback, carryOn] = event
 
-        time.current = carryOn ? (time.current + eventTime) : eventTime 
-        time.current = callback(time, section)
+        time.value = carryOn ? (time.value + eventTime) : eventTime 
+        time.value = callback(time, section)
       })
     })
 }
@@ -95,15 +95,15 @@ export const event = (
   ...[time, root]: TimelineCallbackProps
 ) => {
   callback(time, root)
-  return time.current
+  return time.value
 }
 
 export const animDelay = (selector: string, step: number) => event((time, root) => {
   root.querySelectorAll(selector).forEach((element: any) => {
-    element.style.animationDelay = `${time.current}ms`
-    time.current += step
+    element.style.animationDelay = `${time.value}ms`
+    time.value += step
   })
-  time.current -= step
+  time.value -= step
 })
 
 export const animLetters = (selector: string, step: number) => event((time, root) => {
@@ -113,13 +113,12 @@ export const animLetters = (selector: string, step: number) => event((time, root
     textNode.innerHTML = parseHTML(textNode.innerHTML).split(' ').map(word =>
       `<span class='split-letter-word' style='display: inline-flex;'>`
       + word.split('').map(letter => {
-        const html = `<div class='split-letter' style='display: inline-block; animation-delay: ${time.current}ms'>${letter}</div>`
-        time.current += step
+        const html = `<div class='split-letter' style='display: inline-block; animation-delay: ${time.value}ms'>${letter}</div>`
+        time.value += step
         return html
       }).join('')
       + `</span>`
     ).join(' ')
-
-    time.current -= step
   })
+  time.value -= step
 })
