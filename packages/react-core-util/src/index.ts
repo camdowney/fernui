@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, toDeepObject, cycle, stringify } from '@fernui/util'
+import { KeyObject, toDeepObject, cycle, stringify, objectHasValue, objectToURI } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
@@ -33,15 +33,18 @@ export interface FormState {
   isValid: boolean
   hasChanges: boolean
   pushChanges: () => void
+  useOnLoad: (callback: Function) => void
   useOnChange: (callback: Function) => void
 }
 
 export const useForm = ({
   defaultValues = {},
+  isLoading,
   disabled: disabledInit,
   exposed: exposedInit,
 }: {
   defaultValues?: KeyObject
+  isLoading?: boolean
   disabled?: boolean
   exposed?: boolean
 } = {}) => {
@@ -90,6 +93,16 @@ export const useForm = ({
   }
 
   // User-facing method
+  const useOnLoad = (callback: Function) => {
+    useEffectWhile(() => {
+      if (isLoading) return true
+      if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
+      
+      callback()
+    }, [isLoading, stringify(values)])
+  }
+
+  // User-facing method
   const useOnChange = (callback: Function) => {
     useEffect(() => {
       if (!hasChanges) return
@@ -121,7 +134,8 @@ export const useForm = ({
     fields, setFields,
     values, setValues,
     isValid,
-    hasChanges, pushChanges, useOnChange,
+    hasChanges, pushChanges,
+    useOnLoad, useOnChange,
   }
 
   return { context, ...context }
