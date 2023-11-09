@@ -77,7 +77,7 @@ export const useForm = ({
 
   // User-facing method
   const pushChanges = () => {
-    setFields(curr => getFieldsMap(curr, extractFieldValues(curr), false))
+    setValues(Object.fromEntries(extractFieldValues(fields)), false)
     setHasChanges(false)
   }
 
@@ -96,7 +96,7 @@ export const useForm = ({
 
     setModified(true)
     setHasChanges(true)
-  }, [fields])
+  }, [stringify(fields)])
 
   const context: FormState = {
     disabled, setDisabled,
