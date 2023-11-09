@@ -3,6 +3,15 @@ import { KeyObject, toDeepObject, cycle, stringify } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
+export const useEffectWhile = (callback: () => any, dependencies?: any[]) => {
+  const toggle = useRef(false)
+
+  useEffect(() => {
+    if (toggle.current) return
+    if (!callback()) toggle.current = true
+  }, dependencies)
+}
+
 export type FieldState = {
   value: any
   modified: boolean
@@ -22,9 +31,9 @@ export interface FormState {
   values: KeyObject
   setValues: (newValues: KeyObject) => void
   isValid: boolean
-  wasModified: boolean
   hasChanges: boolean
   pushChanges: () => void
+  useOnChange: (callback: Function) => void
 }
 
 export const useForm = ({
@@ -68,7 +77,6 @@ export const useForm = ({
   const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
 
   const [isValid, setValid] = useState(false)
-  const [wasModified, setModified] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
 
   // User-facing method
@@ -79,6 +87,16 @@ export const useForm = ({
   const pushChanges = () => {
     setValues(Object.fromEntries(extractFieldValues(fields)), false)
     setHasChanges(false)
+  }
+
+  // User-facing method
+  const useOnChange = (callback: Function) => {
+    useEffect(() => {
+      if (!hasChanges) return
+
+      callback()
+      pushChanges()
+    }, [hasChanges])
   }
 
   // Recalculate default values
@@ -94,7 +112,6 @@ export const useForm = ({
 
     if (!Array.from(fields).some(([_, state]) => state.modified)) return
 
-    setModified(true)
     setHasChanges(true)
   }, [stringify(fields)])
 
@@ -103,8 +120,8 @@ export const useForm = ({
     exposed, setExposed,
     fields, setFields,
     values, setValues,
-    isValid, wasModified,
-    hasChanges, pushChanges,
+    isValid,
+    hasChanges, pushChanges, useOnChange,
   }
 
   return { context, ...context }

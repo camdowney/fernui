@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { KeyObject, objectToURI, uriToObject } from '@fernui/util'
-import { TimelineEvent, initLazyLoad, initScrollView, initTimeline } from '@fernui/dom-util'
 import { SetState } from '@fernui/react-core-util'
 
 export const useListener = (
