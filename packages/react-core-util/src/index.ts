@@ -31,26 +31,39 @@ export interface FormState {
   values: KeyObject
   setValues: (newValues: KeyObject) => void
   isValid: boolean
-  isLoading: boolean
+  valuesLoading: boolean
   hasChanges: boolean
   pushChanges: () => void
+  onSubmit: ((e: any) => Promise<void>) | null
+  successCount: number
 }
 
-export const useForm = ({
-  defaultValues = {},
-  isLoading: isLoadingInit,
-  disabled: disabledInit,
-  exposed: exposedInit,
-  onLoad,
-  onChange,
-}: {
+export type FormEventHandlerProps<T = {}> = Pick<FormState, 'fields' | 'values' | 'isValid' | 'successCount'> & T
+export type FormErrorHandlerProps = FormEventHandlerProps<{ error: any }>
+export type FormEventHandler = (props: FormEventHandlerProps) => any
+export type FormErrorHandler = (props: FormErrorHandlerProps) => any
+
+export interface FormOptions {
   defaultValues?: KeyObject
   isLoading?: boolean
   disabled?: boolean
   exposed?: boolean
-  onLoad?: (props: { fields: FieldsMap, values: KeyObject, isValid: boolean }) => void
-  onChange?: (props: { fields: FieldsMap, values: KeyObject, isValid: boolean }) => void
-} = {}) => {
+  onLoad?: FormEventHandler
+  onChange?: FormEventHandler
+  onSubmit?: FormEventHandler
+  onError?: FormErrorHandler
+}
+
+export const useForm = ({
+  defaultValues = {},
+  isLoading,
+  disabled: disabledInit,
+  exposed: exposedInit,
+  onLoad,
+  onChange,
+  onSubmit: onSubmitInit,
+  onError,
+}: FormOptions = {}) => {
   // Internal method
   const extractFieldValues = (fields: FieldsMap) =>
     Array.from(fields).map(([name, state]) => [name, state.value])
@@ -83,8 +96,11 @@ export const useForm = ({
   const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
   
   const [isValid, setValid] = useState(false)
-  const [isLoading, setLoading] = useState(isLoadingInit ?? true)
+  const [valuesLoading, setValuesLoading] = useState(isLoading ?? true)
+  const [successCount, setSuccessCount] = useState(0)
   const [hasChanges, setHasChanges] = useState(false)
+
+  const onEventProps = { fields, values, isValid, successCount }
 
   // User-facing method
   const setValues = (newValues: KeyObject, newModified?: boolean) =>
@@ -96,21 +112,44 @@ export const useForm = ({
     setHasChanges(false)
   }
 
+  // Automatically passed to Form
+  const onSubmit = !onSubmitInit ? null : async (e: any) => {
+    if (e.preventDefault)
+      e.preventDefault()
+  
+    const { setExposed, setDisabled, isValid } = context
+  
+    setExposed(true)
+  
+    try {
+      if (!isValid)
+        throw Error('invalid')
+  
+      setDisabled(true)
+      await onSubmitInit(onEventProps)
+      setSuccessCount(curr => curr + 1)
+    }
+    catch (error: any) {
+      setDisabled(false)
+      if (onError) onError({ ...onEventProps, error })
+    }
+  }
+
   // Considered fully loaded when defaultValues and current values match
   useEffectWhile(() => {
-    if (isLoadingInit) return true
+    if (isLoading) return true
     if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
     
     if (onLoad)
-      onLoad({ fields, values, isValid })
+      onLoad(onEventProps)
 
-    setLoading(false)
-  }, [isLoadingInit, stringify(values)])
+    setValuesLoading(false)
+  }, [isLoading, stringify(values)])
 
   // Ensure changes are by user, not by reloading default values
   useEffect(() => {
     if (!hasChanges || !onChange) return
-    onChange({ fields, values, isValid })
+    onChange(onEventProps)
   }, [hasChanges, stringify(values)])
 
   // Recalculate default values
@@ -134,8 +173,9 @@ export const useForm = ({
     exposed, setExposed,
     fields, setFields,
     values, setValues,
-    isValid, isLoading,
+    isValid, valuesLoading,
     hasChanges, pushChanges,
+    onSubmit, successCount,
   }
 
   return { context, ...context }
@@ -192,34 +232,6 @@ export const useField = <T extends unknown>({
   }, [name])
 
   return { name, value: valueClean, setValue, disabled: disabledClean, showError }
-}
-
-export const handleSubmit = (
-  context: FormState,
-  callback: () => any,
-  onError?: (error: any) => any
-) => async (e: any) => {
-  if (e.preventDefault)
-    e.preventDefault()
-
-  const { setExposed, setDisabled, isValid } = context
-
-  setExposed(true)
-
-  try {
-    if (!isValid)
-      throw Error('invalid-input')
-
-    setDisabled(true)
-
-    await callback()
-  }
-  catch (error: any) {
-    setDisabled(false)
-
-    if (onError)
-      onError(error)
-  }
 }
 
 export interface ModalOptions {

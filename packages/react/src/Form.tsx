@@ -19,8 +19,10 @@ export default function Form({
   children,
   ...props
 }: FormProps) {
+  const { hasChanges, onSubmit } = context
+
   useListener('beforeunload', (e: any) => {
-    if (promptBeforeUnload && context.hasChanges) {
+    if (promptBeforeUnload && hasChanges) {
       e.preventDefault()
       e.returnValue = ''
     }
@@ -32,6 +34,7 @@ export default function Form({
         method='post'
         className={cn('fui-form', className)}
         noValidate
+        {...onSubmit && { onSubmit }}
         {...props}
       >
         {children}
