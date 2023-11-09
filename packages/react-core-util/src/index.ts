@@ -34,8 +34,6 @@ export interface FormState {
   isLoading: boolean
   hasChanges: boolean
   pushChanges: () => void
-  useOnLoad: (callback: Function) => void
-  useOnChange: (callback: Function) => void
 }
 
 export const useForm = ({
@@ -43,11 +41,15 @@ export const useForm = ({
   isLoading: isLoadingInit,
   disabled: disabledInit,
   exposed: exposedInit,
+  onLoad,
+  onChange,
 }: {
   defaultValues?: KeyObject
   isLoading?: boolean
   disabled?: boolean
   exposed?: boolean
+  onLoad?: (props: { fields: FieldsMap, values: KeyObject, isValid: boolean }) => void
+  onChange?: (props: { fields: FieldsMap, values: KeyObject, isValid: boolean }) => void
 } = {}) => {
   // Internal method
   const extractFieldValues = (fields: FieldsMap) =>
@@ -94,26 +96,22 @@ export const useForm = ({
     setHasChanges(false)
   }
 
-  // User-facing method
-  const useOnLoad = (callback: Function) => {
-    useEffectWhile(() => {
-      if (isLoadingInit) return true
-      if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
-      
-      callback()
-      setLoading(false)
-    }, [isLoadingInit, stringify(values)])
-  }
+  // Considered fully loaded when defaultValues and current values match
+  useEffectWhile(() => {
+    if (isLoadingInit) return true
+    if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
+    
+    if (onLoad)
+      onLoad({ fields, values, isValid })
 
-  // User-facing method
-  const useOnChange = (callback: Function) => {
-    useEffect(() => {
-      if (!hasChanges) return
+    setLoading(false)
+  }, [isLoadingInit, stringify(values)])
 
-      callback()
-      pushChanges()
-    }, [hasChanges])
-  }
+  // Ensure changes are by user, not by reloading default values
+  useEffect(() => {
+    if (!hasChanges || !onChange) return
+    onChange({ fields, values, isValid })
+  }, [hasChanges, stringify(values)])
 
   // Recalculate default values
   useEffect(() => {
@@ -138,7 +136,6 @@ export const useForm = ({
     values, setValues,
     isValid, isLoading,
     hasChanges, pushChanges,
-    useOnLoad, useOnChange,
   }
 
   return { context, ...context }
