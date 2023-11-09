@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react",
   "author": "@camdowney",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A library of unopinionated, extendable UI components for React.",
   "keywords": [
     "ui",
@@ -12,12 +12,12 @@
   "main": "./dist/index.js",
   "peerDependencies": {
     "@fernui/dom-util": "^1.4.1",
-    "@fernui/react-core-util": "^2.8.0",
-    "@fernui/react-util": "^2.4.0",
+    "@fernui/react-core-util": "^2.14.0",
+    "@fernui/react-util": "^2.5.1",
     "@fernui/util": "^3.3.0",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.32"
+    "@types/react": "^18.2.37"
   }
 }
