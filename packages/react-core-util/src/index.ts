@@ -31,6 +31,7 @@ export interface FormState {
   values: KeyObject
   setValues: (newValues: KeyObject) => void
   isValid: boolean
+  isLoading: boolean
   hasChanges: boolean
   pushChanges: () => void
   useOnLoad: (callback: Function) => void
@@ -39,7 +40,7 @@ export interface FormState {
 
 export const useForm = ({
   defaultValues = {},
-  isLoading,
+  isLoading: isLoadingInit,
   disabled: disabledInit,
   exposed: exposedInit,
 }: {
@@ -75,11 +76,12 @@ export const useForm = ({
 
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
-
+  
   const [fields, setFields] = useState<FieldsMap>(getFieldsMap(new Map(), defaultValues))
   const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
-
+  
   const [isValid, setValid] = useState(false)
+  const [isLoading, setLoading] = useState(isLoadingInit ?? true)
   const [hasChanges, setHasChanges] = useState(false)
 
   // User-facing method
@@ -95,11 +97,12 @@ export const useForm = ({
   // User-facing method
   const useOnLoad = (callback: Function) => {
     useEffectWhile(() => {
-      if (isLoading) return true
+      if (isLoadingInit) return true
       if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
       
       callback()
-    }, [isLoading, stringify(values)])
+      setLoading(false)
+    }, [isLoadingInit, stringify(values)])
   }
 
   // User-facing method
@@ -133,7 +136,7 @@ export const useForm = ({
     exposed, setExposed,
     fields, setFields,
     values, setValues,
-    isValid,
+    isValid, isLoading,
     hasChanges, pushChanges,
     useOnLoad, useOnChange,
   }
@@ -220,6 +223,53 @@ export const handleSubmit = (
     if (onError)
       onError(error)
   }
+}
+
+export interface ModalOptions {
+  ref?: any
+  onChange?: (ref: any) => void
+  openDelay?: number
+  closeDelay?: number
+  useListeners?: (ref: any) => void
+}
+
+export const useModal = (
+  active: boolean,
+  setActive: SetState<boolean>,
+  options: ModalOptions = {}
+) => {
+  const {
+    ref: refProp,
+    onChange,
+    openDelay,
+    closeDelay,
+    useListeners = () => {},
+  } = options
+
+  const ref = refProp || useRef()
+  const timer = useRef<any>() 
+
+  const setActiveTimer = (newActive: boolean, delay: number) =>
+    timer.current = setTimeout(() => setActive(newActive), delay)
+
+  useEffect(() => {
+    if (openDelay)
+      setActiveTimer(true, openDelay)
+  }, [])
+
+  useEffect(() => {
+    clearTimeout(timer.current)
+
+    if (onChange)
+      onChange(ref)
+      
+    if (active && closeDelay)
+      setActiveTimer(false, closeDelay)
+  }, [active])
+
+  useListeners(ref)
+
+  return { ref }
 }
 
 export const useRepeater = <T>(initialItems: T[] = []) => {

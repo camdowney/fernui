@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { KeyObject, objectToURI, uriToObject } from '@fernui/util'
-import { SetState } from '@fernui/react-core-util'
+import { ModalOptions, SetState, useModal as useModalInit } from '@fernui/react-core-util'
 
 export const useListener = (
   event: string,
@@ -93,59 +93,50 @@ export const useWindowResizeAnnouncer = () => {
   })
 }
 
+export interface ModalDomOptions extends ModalOptions {
+  exitOnOutsideClick?: boolean
+  exitOnEscape?: boolean
+  preventScroll?: boolean
+}
+
 export const useModal = (
   active: boolean,
   setActive: SetState<boolean>,
-  options?: {
-    ref?: any
-    openDelay?: number
-    closeDelay?: number
-    exitOnOutsideClick?: boolean
-    exitOnEscape?: boolean
-    preventScroll?: boolean
-  }
+  options: ModalDomOptions = {}
 ) => {
   const {
-    ref: refProp,
-    openDelay,
-    closeDelay,
+    onChange,
+    useListeners,
     exitOnOutsideClick,
     exitOnEscape,
-    preventScroll
-  } = options ?? {}
+    preventScroll,
+    ...rest
+  } = options
 
-  const ref = refProp || useRef()
-  const timer = useRef<any>() 
+  return useModalInit(active, setActive, {
+    ...rest,
+    onChange: ref => {
+      if (preventScroll && document)
+        document.body.style.overflow = active ? 'hidden' : 'auto'
 
-  const setActiveTimer = (newActive: boolean, delay: number) =>
-    timer.current = setTimeout(() => setActive(newActive), delay)
+      if (onChange)
+        onChange(ref)
+    },
+    useListeners: ref => {
+      useListener('keydown', (e: any) => {
+        if (active && !e.repeat && exitOnEscape && e.key && e.key.toLowerCase() === 'escape')
+          setActive(false)
+      })
+    
+      useListener('mouseup', (e: any) => {
+        if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
+          setTimeout(() => setActive(false), 0)
+      })
 
-  useEffect(() => {
-    if (openDelay)
-      setActiveTimer(true, openDelay)
-  }, [])
-
-  useEffect(() => {
-    clearTimeout(timer.current)
-
-    if (preventScroll && document)
-      document.body.style.overflow = active ? 'hidden' : 'auto'
-      
-    if (active && closeDelay)
-      setActiveTimer(false, closeDelay)
-  }, [active])
-
-  useListener('keydown', (e: any) => {
-    if (active && !e.repeat && exitOnEscape && e.key && e.key.toLowerCase() === 'escape')
-      setActive(false)
+      if (useListeners)
+        useListeners(active)
+    },
   })
-
-  useListener('mouseup', (e: any) => {
-    if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
-      setTimeout(() => setActive(false), 0)
-  })
-
-  return { ref }
 }
 
 export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
