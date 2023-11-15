@@ -1,4 +1,5 @@
-import { KeyObject, toDeepObject, cycle, stringify, objectHasValue, objectToURI } from '@fernui/util'
+import { getContext, onMount } from 'svelte'
+import { KeyObject, toDeepObject, cycle, objectHasValue, objectToURI } from '@fernui/util'
 
 export type FieldState = {
   value: any
@@ -14,6 +15,7 @@ export interface FormState {
   exposed: boolean
   fields: FieldsMap
   values: KeyObject
+  setValues: (newValues: KeyObject) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -73,27 +75,27 @@ export const createForm = ({
       return acc
     }, new Map(fieldsCurr))
 
-  const [disabled, setDisabled] = $state(disabledInit ?? false)
-  const [exposed, setExposed] = $state(exposedInit ?? false)
+  let disabled = $state(disabledInit ?? false)
+  let exposed = $state(exposedInit ?? false)
   
-  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(new Map(), defaultValues))
-  const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
+  let fields = $state(getFieldsMap(new Map(), defaultValues))
+  let values = $state(defaultValues)
   
-  const [isValid, setValid] = useState(false)
-  const [valuesLoading, setValuesLoading] = useState(isLoading ?? true)
-  const [successCount, setSuccessCount] = useState(0)
-  const [hasChanges, setHasChanges] = useState(false)
+  let isValid = $state(false)
+  let valuesLoading = $state(isLoading ?? true)
+  let successCount = $state(0)
+  let hasChanges = $state(false)
 
   const onEventProps = { fields, values, isValid, successCount }
 
   // User-facing method
   const setValues = (newValues: KeyObject, newModified?: boolean) =>
-    setFields(curr => getFieldsMap(curr, newValues, newModified))
+    fields = getFieldsMap(fields, newValues, newModified)
 
   // User-facing method
   const pushChanges = () => {
     setValues(Object.fromEntries(extractFieldValues(fields)), false)
-    setHasChanges(false)
+    hasChanges = false
   }
 
   // Automatically passed to Form
@@ -101,61 +103,59 @@ export const createForm = ({
     if (e.preventDefault)
       e.preventDefault()
   
-    const { setExposed, setDisabled, isValid } = context
-  
-    setExposed(true)
+    exposed = true
   
     try {
       if (!isValid)
         throw Error('invalid')
   
-      setDisabled(true)
+      disabled = true
       await onSubmitInit(onEventProps)
-      setSuccessCount(curr => curr + 1)
+      successCount += 1
     }
     catch (error: any) {
-      setDisabled(false)
+      disabled = false
       if (onError) onError({ ...onEventProps, error })
     }
   }
 
   // Considered fully loaded when defaultValues and current values match
-  useEffectWhile(() => {
-    if (isLoading) return true
-    if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
+  $: if (valuesLoading && (1 || isLoading || values)) {
+    if (isLoading) return
+    if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return
     
     if (onLoad)
       onLoad(onEventProps)
 
-    setValuesLoading(false)
-  }, [isLoading, stringify(values)])
+    valuesLoading = false
+  }
 
   // Ensure changes are by user, not by reloading default values
-  useEffect(() => {
+  $: if (1 || hasChanges || values) {
     if (!hasChanges || !onChange) return
     onChange(onEventProps)
-  }, [hasChanges, stringify(values)])
+  }
 
   // Recalculate default values
-  useEffect(() => {
+  $: if (1 || defaultValues) {
     if (defaultValues)
       setValues(defaultValues)
-  }, [stringify(defaultValues)])
+  }
 
   // Recalculate values when fields change
-  useEffect(() => {
-    setValuesRaw(getValuesDeep(fields))
-    setValid(Array.from(fields).every(([_, state]) => !state.error))
+  $: if (1 || fields) {
+    values = getValuesDeep(fields)
+    isValid = Array.from(fields).every(([_, state]) => !state.error)
 
     if (!Array.from(fields).some(([_, state]) => state.modified)) return
 
-    setHasChanges(true)
-  }, [stringify(fields)])
+    hasChanges = true
+  }
 
   const context: FormState = {
-    disabled, setDisabled,
-    exposed, setExposed,
-    fields, setFields,
+    disabled,
+    exposed,
+    fields,
     values, setValues,
     isValid, valuesLoading,
     hasChanges, pushChanges,
@@ -165,9 +165,7 @@ export const createForm = ({
   return { context, ...context }
 }
 
-export const FormContext = createContext<FormState | null>(null)
-
-export const useFormContext = () => useContext(FormContext) ?? useForm()
+export const getFormContext = (): FormState => getContext('form') ?? createForm()
 
 export const createField = <T extends unknown>({
   name,
@@ -182,7 +180,7 @@ export const createField = <T extends unknown>({
   validate?: ((newValue: T) => boolean) | null
   onChange?: (newValue: T) => void
 }) => {
-  const { disabled: formDisabled, exposed: formExposed, fields, setFields } = useFormContext()
+  let { disabled: formDisabled, exposed: formExposed, fields } = getFormContext()
 
   const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
@@ -198,28 +196,25 @@ export const createField = <T extends unknown>({
       validate,
     })
 
-    setFields(new Map(fields))
+    fields = fields
     if (onChange) onChange(newValue)
   }
 
-  // Handle manual value control
-  useEffect(() => setValue(value), [stringify(value)])
-
   // Set initial state and cleanup
-  useEffect(() => {
+  $: if (1 || name) {
     setValue(valueClean, false)
 
     return () => {
       fields.delete(name)
-      setFields(new Map(fields))
+      fields = fields
     }
-  }, [name])
+  }
 
   return { name, value: valueClean, setValue, disabled: disabledClean, showError }
 }
 
 export interface ModalOptions {
-  ref?: any
+  el?: any
   onChange?: (ref: any) => void
   openDelay?: number
   closeDelay?: number
@@ -228,60 +223,53 @@ export interface ModalOptions {
 
 export const createModal = (
   active: boolean,
-  setActive: SetState<boolean>,
   options: ModalOptions = {}
 ) => {
   const {
-    ref: refProp,
+    el: elProp,
     onChange,
     openDelay,
     closeDelay,
     useListeners = () => {},
   } = options
 
-  const ref = refProp || useRef()
-  const timer = useRef<any>() 
+  let el = elProp
+  let timer: any
 
   const setActiveTimer = (newActive: boolean, delay: number) =>
-    timer.current = setTimeout(() => setActive(newActive), delay)
+    timer = setTimeout(() => active = newActive, delay)
 
-  useEffect(() => {
+  onMount(() => {
     if (openDelay)
       setActiveTimer(true, openDelay)
-  }, [])
+  })
 
-  useEffect(() => {
-    clearTimeout(timer.current)
+  $: if (1 || active) {
+    clearTimeout(timer)
 
     if (onChange)
-      onChange(ref)
+      onChange(el)
       
     if (active && closeDelay)
       setActiveTimer(false, closeDelay)
-  }, [active])
+  }
 
-  useListeners(ref)
+  useListeners(el)
 
-  return { ref }
+  return el
 }
 
 export const createRepeater = <T>(initialItems: T[] = []) => {
-  const index = useRef(0)
-
-  const getKey = () =>
-    index.current++
-
-  const [items, setItems] = useState<[number, T][]>(
-    initialItems.map(item => [getKey(), item])
-  )
+  let key = 0
+  let items: [number, T][] = initialItems.map(item => [key++, item])
 
   const insert = (item: T, newIndex?: number) => {
     if (newIndex === undefined || newIndex < 0 || newIndex >= items.length)
-      items.push([getKey(), item])
+      items.push([key++, item])
     else
-      items.splice(newIndex, 0, [getKey(), item])
+      items.splice(newIndex, 0, [key++, item])
 
-    setItems(items.slice())
+    items = items
   }
 
   const remove = (index?: number) => {
@@ -290,7 +278,7 @@ export const createRepeater = <T>(initialItems: T[] = []) => {
     else
       items.splice(index, 1)
     
-    setItems(items.slice())
+    items = items
   }
 
   const update = (newItem: T | ((currentValue: T) => T), index: number) => {
@@ -301,21 +289,18 @@ export const createRepeater = <T>(initialItems: T[] = []) => {
       ? (newItem as any)(items[index][1])
       : newItem
 
-    setItems(items.slice())
+    items = items
   }
 
-  const reset = (newItems: T[]) => {
-    setItems(newItems.map(item => [getKey(), item]))
-  }
+  const reset = (newItems: T[]) =>
+    items = newItems.map(item => [key++, item])
 
   return { items, insert, remove, update, reset }
 }
 
 export interface LightboxControl {
   index: number
-  setIndex: SetState<number>
   active: boolean
-  setActive: SetState<boolean>
   open: (newIndex: number) => void
   previous: () => void
   next: () => void
@@ -331,25 +316,25 @@ export const createLightbox = (
     active?: boolean
   } = {}
 ) => {
-  const [index, setIndex] = useState(indexInit ?? 0)
-  const [active, setActive] = useState(activeInit ?? false)
+  let index = indexInit ?? 0
+  let active = activeInit ?? false
 
   const open = (newIndex: number) => {
-    setIndex(newIndex)
-    setActive(true)
+    index = newIndex
+    active = true
   }
 
   const previous = () => {
-    setIndex(cycle(numItems, index, -1))
-    setActive(true)
+    index = cycle(numItems, index, -1)
+    active = true
   }
 
   const next = () => {
-    setIndex(cycle(numItems, index, 1))
-    setActive(true)
+    index = cycle(numItems, index, 1)
+    active = true
   }
 
-  const control: LightboxControl = { index, setIndex, active, setActive, open, previous, next }
+  const control: LightboxControl = { index, active, open, previous, next }
 
   return { control, ...control }
 }

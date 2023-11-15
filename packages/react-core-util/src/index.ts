@@ -117,8 +117,6 @@ export const useForm = ({
     if (e.preventDefault)
       e.preventDefault()
   
-    const { setExposed, setDisabled, isValid } = context
-  
     setExposed(true)
   
     try {

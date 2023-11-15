@@ -1,17 +1,15 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "target": "esnext",
-    "rootDir": "src",
-    "outDir": "_dist",
-    "declaration": true,
-    "moduleResolution": "node",
-    "jsx": "react"
-  },
-  "include": ["src"]
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext"
+	}
 }
