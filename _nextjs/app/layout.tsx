@@ -2,7 +2,7 @@
 
 // import { useEffect } from 'react'
 // import { initLazyLoad, initScrollView } from '../../packages/react-util'
-import 'css/global.css'
+import 'global.css'
 
 export default ({
   children,
