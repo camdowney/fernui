@@ -234,7 +234,7 @@ export const createModal = (
   } = options
 
   let el = elProp
-  let timer: any
+  let timer = $state<NodeJS.Timeout>()
 
   const setActiveTimer = (newActive: boolean, delay: number) =>
     timer = setTimeout(() => active = newActive, delay)
@@ -260,8 +260,8 @@ export const createModal = (
 }
 
 export const createRepeater = <T>(initialItems: T[] = []) => {
-  let key = 0
-  let items: [number, T][] = initialItems.map(item => [key++, item])
+  let key = $state(0)
+  let items: [number, T][] = $state(initialItems.map(item => [key++, item]))
 
   const insert = (item: T, newIndex?: number) => {
     if (newIndex === undefined || newIndex < 0 || newIndex >= items.length)
@@ -316,8 +316,8 @@ export const createLightbox = (
     active?: boolean
   } = {}
 ) => {
-  let index = indexInit ?? 0
-  let active = activeInit ?? false
+  let index = $state(indexInit ?? 0)
+  let active = $state(activeInit ?? false)
 
   const open = (newIndex: number) => {
     index = newIndex
