@@ -29,7 +29,7 @@ export interface FormState {
   fields: FieldsMap
   setFields: SetState<FieldsMap>
   values: KeyObject
-  setValues: (newValues: KeyObject) => void
+  setValues: (newValues: KeyObject, newModified?: boolean, reset?: boolean) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -103,8 +103,8 @@ export const useForm = ({
   const onEventProps = { fields, values, isValid, successCount }
 
   // User-facing method
-  const setValues = (newValues: KeyObject, newModified?: boolean) =>
-    setFields(curr => getFieldsMap(curr, newValues, newModified))
+  const setValues = (newValues: KeyObject, newModified?: boolean, reset?: boolean) =>
+    setFields(curr => getFieldsMap(reset ? new Map() : curr, newValues, newModified))
 
   // User-facing method
   const pushChanges = () => {
@@ -153,17 +153,16 @@ export const useForm = ({
   // Recalculate default values
   useEffect(() => {
     if (defaultValues)
-      setFields(getFieldsMap(new Map(), defaultValues))
-  }, [defaultValues])
+      setValues(defaultValues, false, true)
+  }, [stringify(defaultValues)])
 
   // Recalculate values when fields change
   useEffect(() => {
     setValuesRaw(getValuesDeep(fields))
     setValid(Array.from(fields).every(([_, state]) => !state.error))
 
-    if (!Array.from(fields).some(([_, state]) => state.modified)) return
-
-    setHasChanges(true)
+    if (Array.from(fields).some(([_, state]) => state.modified))
+      setHasChanges(true)
   }, [stringify(fields)])
 
   const context: FormState = {
