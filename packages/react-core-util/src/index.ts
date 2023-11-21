@@ -153,8 +153,8 @@ export const useForm = ({
   // Recalculate default values
   useEffect(() => {
     if (defaultValues)
-      setValues(defaultValues)
-  }, [stringify(defaultValues)])
+      setFields(getFieldsMap(new Map(), defaultValues))
+  }, [defaultValues])
 
   // Recalculate values when fields change
   useEffect(() => {
