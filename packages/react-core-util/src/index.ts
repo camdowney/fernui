@@ -103,8 +103,10 @@ export const useForm = ({
   const onEventProps = { fields, values, isValid, successCount }
 
   // User-facing method
-  const setValues = (newValues: KeyObject, newModified?: boolean, reset?: boolean) =>
+  const setValues = (newValues: KeyObject, newModified?: boolean, reset?: boolean) => {
     setFields(curr => getFieldsMap(reset ? new Map() : curr, newValues, newModified))
+    if (newModified) setHasChanges(true)
+  }
 
   // User-facing method
   const pushChanges = () => {
