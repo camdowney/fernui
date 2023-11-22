@@ -3,15 +3,6 @@ import { KeyObject, toDeepObject, cycle, stringify, objectHasValue, objectToURI 
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export const useEffectWhile = (callback: () => any, dependencies?: any[]) => {
-  const toggle = useRef(false)
-
-  useEffect(() => {
-    if (toggle.current) return
-    if (!callback()) toggle.current = true
-  }, dependencies)
-}
-
 export type FieldState = {
   value: any
   modified: boolean
@@ -29,7 +20,7 @@ export interface FormState {
   fields: FieldsMap
   setFields: SetState<FieldsMap>
   values: KeyObject
-  setValues: (newValues: KeyObject, newModified?: boolean, reset?: boolean) => void
+  resetValues: (newValues: KeyObject, newModified?: boolean, reset?: boolean) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -59,40 +50,28 @@ export const useForm = ({
   isLoading,
   disabled: disabledInit,
   exposed: exposedInit,
-  onLoad,
-  onChange,
   onSubmit: onSubmitInit,
   onError,
 }: FormOptions = {}) => {
-  // Internal method
-  const extractFieldValues = (fields: FieldsMap) =>
-    Array.from(fields).map(([name, state]) => [name, state.value])
+  // For setting new / resetting fields
+  const defaultFieldState = { modified: false, error: false, validate: null }
 
-  // Internal method; values are calculated after fields
+  // Internal method; values are derived fields
   const getValuesDeep = (newFields: FieldsMap) =>
     toDeepObject(Object.fromEntries(
-      extractFieldValues(newFields).filter(([name]) => !name.startsWith('__config'))
+      Array.from(newFields)
+        .map(([name, state]) => [name, state.value])
+        .filter(([name]) => !name.startsWith('__config'))
     ))
 
   // Internal method; insert/replace new values in current fields
-  const getFieldsMap = (fieldsCurr: FieldsMap, newValues: KeyObject, newModified?: boolean) =>
-    Object.entries(newValues).reduce((acc, [key, value]) => {
-      const field = acc.get(key) ?? { modified: false, error: false, validate: null }
-
-      acc.set(key, {
-        ...field,
-        value,
-        ...(newModified !== undefined && { modified: newModified }),
-        ...(field.validate && { error: !field.validate(value) })
-      })
-
-      return acc
-    }, new Map(fieldsCurr))
+  const getFieldsMap = (newValues: KeyObject): FieldsMap =>
+    new Map(Object.entries(newValues).map(([name, value]) => [name, { ...defaultFieldState, value }]))
 
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
   
-  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(new Map(), defaultValues))
+  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(defaultValues))
   const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
   
   const [isValid, setValid] = useState(false)
@@ -100,19 +79,16 @@ export const useForm = ({
   const [successCount, setSuccessCount] = useState(0)
   const [hasChanges, setHasChanges] = useState(false)
 
+  const storedDefaultValues = useRef(stringify(defaultValues))
   const onEventProps = { fields, values, isValid, successCount }
 
   // User-facing method
-  const setValues = (newValues: KeyObject, newModified?: boolean, reset?: boolean) => {
-    setFields(curr => getFieldsMap(reset ? new Map() : curr, newValues, newModified))
-    if (newModified) setHasChanges(true)
-  }
+  const resetValues = (newValues: KeyObject) =>
+    setFields(getFieldsMap(newValues))
 
   // User-facing method
-  const pushChanges = () => {
-    setValues(Object.fromEntries(extractFieldValues(fields)), false)
-    setHasChanges(false)
-  }
+  const pushChanges = () =>
+    setFields(new Map(Array.from(fields).map(([name, state]) => [name, { ...state, modified: false }])))
 
   // Automatically passed to Form
   const onSubmit = !onSubmitInit ? null : async (e: any) => {
@@ -136,42 +112,45 @@ export const useForm = ({
   }
 
   // Considered fully loaded when defaultValues and current values match
-  useEffectWhile(() => {
-    if (isLoading) return true
-    if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return true
+  useEffect(() => {
+    if (isLoading || !valuesLoading) return
+    if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return
     
-    if (onLoad)
-      onLoad(onEventProps)
-
     setValuesLoading(false)
-  }, [isLoading, stringify(values)])
+  }, [isLoading, stringify(values), stringify(defaultValues)])
 
-  // Ensure changes are by user, not by reloading default values
+  // Watch default values
   useEffect(() => {
-    if (!hasChanges || !onChange) return
-    onChange(onEventProps)
-  }, [hasChanges, stringify(values)])
+    if (!defaultValues || storedDefaultValues.current === stringify(defaultValues)) return
+    
+    setFields(new Map(
+      Object.entries(defaultValues)
+        .map(([name, value]) => {
+          const field = fields.get(name)
 
-  // Recalculate default values
-  useEffect(() => {
-    if (defaultValues)
-      setValues(defaultValues, false, true)
-  }, [stringify(defaultValues)])
+          return [name, {
+            ...defaultFieldState,
+            ...field,
+            value,
+            ...field && field.validate && { error: !field.validate(value) },
+          }
+        ]
+      })
+    ))
+  }, [stringify(defaultValues), stringify(fields)])
 
-  // Recalculate values when fields change
+  // Watch fields
   useEffect(() => {
     setValuesRaw(getValuesDeep(fields))
-    setValid(Array.from(fields).every(([_, state]) => !state.error))
-
-    if (Array.from(fields).some(([_, state]) => state.modified))
-      setHasChanges(true)
+    setValid(!Array.from(fields).some(([_, state]) => state.error))
+    setHasChanges(Array.from(fields).some(([_, state]) => state.modified))
   }, [stringify(fields)])
 
   const context: FormState = {
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields,
-    values, setValues,
+    values, resetValues,
     isValid, valuesLoading,
     hasChanges, pushChanges,
     onSubmit, successCount,

@@ -7,46 +7,46 @@ settings:
 dependencies:
   '@fernui/dom-util':
     specifier: ^1.4.1
-    version: 1.4.2(@fernui/util@3.3.0)
+    version: 1.4.2(@fernui/util@3.5.0)
   '@fernui/react-core-util':
-    specifier: ^2.8.0
-    version: 2.14.0(@fernui/util@3.3.0)(react@18.2.0)
+    specifier: ^2.14.0
+    version: 2.21.0(@fernui/util@3.5.0)(react@18.2.0)
   '@fernui/react-util':
-    specifier: ^2.4.0
-    version: 2.5.1(@fernui/dom-util@1.4.2)(@fernui/react-core-util@2.14.0)(@fernui/util@3.3.0)(react@18.2.0)
+    specifier: ^2.5.1
+    version: 2.5.1(@fernui/dom-util@1.4.2)(@fernui/react-core-util@2.21.0)(@fernui/util@3.5.0)(react@18.2.0)
   '@fernui/util':
     specifier: ^3.3.0
-    version: 3.3.0
+    version: 3.5.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.37
-    version: 18.2.37
+    specifier: ^18.2.38
+    version: 18.2.38
 
 packages:
 
-  /@fernui/dom-util@1.4.2(@fernui/util@3.3.0):
+  /@fernui/dom-util@1.4.2(@fernui/util@3.5.0):
     resolution: {integrity: sha512-aANs/WvLc6THLy9U8hnB1NMlqO60MXBIU88BKU59G1IEiFswnQS0CffdOkCmgNP6Dc2JZc8rxyNY3pt2ycX05g==}
     peerDependencies:
       '@fernui/util': ^3.2.0
     dependencies:
-      '@fernui/util': 3.3.0
+      '@fernui/util': 3.5.0
     dev: false
 
-  /@fernui/react-core-util@2.14.0(@fernui/util@3.3.0)(react@18.2.0):
-    resolution: {integrity: sha512-Rc+xDFV4GGfQ18f5dVICK6iKr54iZiMTvgqLky0jjDTaWg/bjnnyTlDSluPbyxEP1DKQJvjcp6LuUAwJ0R0IuQ==}
+  /@fernui/react-core-util@2.21.0(@fernui/util@3.5.0)(react@18.2.0):
+    resolution: {integrity: sha512-OATV67EMdt9u2uR4QFhtjHlVDCU3Mg0iJsN1GOkQLT3diBzyui7K6Cg2EGwpiGbPNyaui0IvRoQjAw5F5G+oaQ==}
     peerDependencies:
       '@fernui/util': ^3.2.0
       react: ^18.2.0
     dependencies:
-      '@fernui/util': 3.3.0
+      '@fernui/util': 3.5.0
       react: 18.2.0
     dev: false
 
-  /@fernui/react-util@2.5.1(@fernui/dom-util@1.4.2)(@fernui/react-core-util@2.14.0)(@fernui/util@3.3.0)(react@18.2.0):
+  /@fernui/react-util@2.5.1(@fernui/dom-util@1.4.2)(@fernui/react-core-util@2.21.0)(@fernui/util@3.5.0)(react@18.2.0):
     resolution: {integrity: sha512-8owf/QWIlKZr2xajuVcLAaT+pOxJNj67cQUBnJqE9DLx0L5aNhwOceIn13D/sf8E4gMDhE0eQQsZbzAZuCkJlg==}
     peerDependencies:
       '@fernui/dom-util': ^1.4.0
@@ -54,30 +54,30 @@ packages:
       '@fernui/util': ^3.3.0
       react: ^18.2.0
     dependencies:
-      '@fernui/dom-util': 1.4.2(@fernui/util@3.3.0)
-      '@fernui/react-core-util': 2.14.0(@fernui/util@3.3.0)(react@18.2.0)
-      '@fernui/util': 3.3.0
+      '@fernui/dom-util': 1.4.2(@fernui/util@3.5.0)
+      '@fernui/react-core-util': 2.21.0(@fernui/util@3.5.0)(react@18.2.0)
+      '@fernui/util': 3.5.0
       react: 18.2.0
     dev: false
 
-  /@fernui/util@3.3.0:
-    resolution: {integrity: sha512-D++wsFHmg13GDhVvR6NaSGDcbYk61aEnZ+H//UKMU0OD69WFi4SlGq1Q8D9st0na/6thE93h90pGZx7DTp4nRA==}
+  /@fernui/util@3.5.0:
+    resolution: {integrity: sha512-bJLzGAYMSpWurg/mt1+V/1UUW9rpjTQJLuQPZT8Tt/IAVlCFEerxlNPynpx1aBK1fxK8jCJmCQ7bVDi9DBPyHw==}
     dev: false
 
-  /@types/prop-types@15.7.10:
-    resolution: {integrity: sha512-mxSnDQxPqsZxmeShFH+uwQ4kO4gcJcGahjjMFeLbKE95IAZiiZyiEepGZjtXJ7hN/yfu0bu9xN2ajcU0JcxX6A==}
+  /@types/prop-types@15.7.11:
+    resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: true
 
-  /@types/react@18.2.37:
-    resolution: {integrity: sha512-RGAYMi2bhRgEXT3f4B92WTohopH6bIXw05FuGlmJEnv/omEn190+QYEIYxIAuIBdKgboYYdVved2p1AxZVQnaw==}
+  /@types/react@18.2.38:
+    resolution: {integrity: sha512-cBBXHzuPtQK6wNthuVMV6IjHAFkdl/FOPFIlkd81/Cd1+IqkHu/A+w4g43kaQQoYHik/ruaQBDL72HyCy1vuMw==}
     dependencies:
-      '@types/prop-types': 15.7.10
-      '@types/scheduler': 0.16.6
+      '@types/prop-types': 15.7.11
+      '@types/scheduler': 0.16.7
       csstype: 3.1.2
     dev: true
 
-  /@types/scheduler@0.16.6:
-    resolution: {integrity: sha512-Vlktnchmkylvc9SnwwwozTv04L/e1NykF5vgoQ0XTmI8DD+wxfjQuHuvHS3p0r2jz2x2ghPs2h1FVeDirIteWA==}
+  /@types/scheduler@0.16.7:
+    resolution: {integrity: sha512-8g25Nl3AuB1KulTlSUsUhUo/oBgBU6XIXQ+XURpeioEbEJvkO7qI4vDfREv3vJYHHzqXjcAHvoJy4pTtSQNZtA==}
     dev: true
 
   /csstype@3.1.2:
