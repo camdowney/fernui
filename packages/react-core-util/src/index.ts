@@ -20,7 +20,7 @@ export interface FormState {
   fields: FieldsMap
   setFields: SetState<FieldsMap>
   values: KeyObject
-  resetValues: (newValues: KeyObject, newModified?: boolean, reset?: boolean) => void
+  resetValues: (newValues: KeyObject) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
