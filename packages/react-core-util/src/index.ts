@@ -20,7 +20,7 @@ export interface FormState {
   fields: FieldsMap
   setFields: SetState<FieldsMap>
   values: KeyObject
-  resetValues: (newValues: KeyObject) => void
+  reset: (newModified: boolean) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -64,14 +64,12 @@ export const useForm = ({
         .filter(([name]) => !name.startsWith('__config'))
     ))
 
-  // Internal method; insert/replace new values in current fields
-  const getFieldsMap = (newValues: KeyObject): FieldsMap =>
-    new Map(Object.entries(newValues).map(([name, value]) => [name, { ...defaultFieldState, value }]))
-
   const [disabled, setDisabled] = useState(disabledInit ?? false)
   const [exposed, setExposed] = useState(exposedInit ?? false)
   
-  const [fields, setFields] = useState<FieldsMap>(getFieldsMap(defaultValues))
+  const [fields, setFields] = useState<FieldsMap>(new Map(
+    Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
+  ))
   const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
   
   const [isValid, setValid] = useState(false)
@@ -79,16 +77,19 @@ export const useForm = ({
   const [successCount, setSuccessCount] = useState(0)
   const [hasChanges, setHasChanges] = useState(false)
 
-  const storedDefaultValues = useRef(stringify(defaultValues))
   const onEventProps = { fields, values, isValid, successCount }
 
   // User-facing method
-  const resetValues = (newValues: KeyObject) =>
-    setFields(getFieldsMap(newValues))
+  const pushChanges = () => {
+    setFields(new Map(Array.from(fields).map(([name, state]) => [name, { ...state, modified: false }])))
+    setHasChanges(false)
+  }
 
   // User-facing method
-  const pushChanges = () =>
-    setFields(new Map(Array.from(fields).map(([name, state]) => [name, { ...state, modified: false }])))
+  const reset = (newModified = true) =>
+    setFields(curr => new Map(
+      Array.from(curr).map(([name, state]) => [name, { ...state, modified: newModified, value: '' }])
+    ))
 
   // Automatically passed to Form
   const onSubmit = !onSubmitInit ? null : async (e: any) => {
@@ -111,18 +112,18 @@ export const useForm = ({
     }
   }
 
-  // Considered fully loaded when defaultValues and current values match
+  // Watch fields
   useEffect(() => {
-    if (isLoading || !valuesLoading) return
-    if (objectHasValue(defaultValues) && (objectToURI(defaultValues) !== objectToURI(values))) return
-    
-    setValuesLoading(false)
-  }, [isLoading, stringify(values), stringify(defaultValues)])
+    setValuesRaw(getValuesDeep(fields))
+    setValid(!Array.from(fields).some(([_, state]) => state.error))
+    if (Array.from(fields).some(([_, state]) => state.modified)) setHasChanges(true)
+  }, [stringify(fields)])
 
-  // Watch default values
+  // Watch defaultValues
   useEffect(() => {
-    if (!defaultValues || storedDefaultValues.current === stringify(defaultValues)) return
-    
+    if (isLoading) return
+    if (!objectHasValue(defaultValues) || objectToURI(defaultValues) === objectToURI(values)) return
+
     setFields(new Map(
       Object.entries(defaultValues)
         .map(([name, value]) => {
@@ -137,20 +138,20 @@ export const useForm = ({
         ]
       })
     ))
-  }, [stringify(defaultValues), stringify(fields)])
+  }, [isLoading, stringify(defaultValues)])
 
-  // Watch fields
-  useEffect(() => {
-    setValuesRaw(getValuesDeep(fields))
-    setValid(!Array.from(fields).some(([_, state]) => state.error))
-    setHasChanges(Array.from(fields).some(([_, state]) => state.modified))
-  }, [stringify(fields)])
+   // Considered fully loaded when defaultValues and current values match
+   useEffect(() => {
+    if (isLoading) return
+    if (objectHasValue(defaultValues) && objectToURI(defaultValues) !== objectToURI(values)) return
+    setValuesLoading(false)
+  }, [isLoading, stringify(defaultValues), stringify(values)])
 
   const context: FormState = {
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields,
-    values, resetValues,
+    values, reset,
     isValid, valuesLoading,
     hasChanges, pushChanges,
     onSubmit, successCount,
