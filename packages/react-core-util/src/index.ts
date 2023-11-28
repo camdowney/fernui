@@ -20,7 +20,7 @@ export interface FormState {
   fields: FieldsMap
   setFields: SetState<FieldsMap>
   values: KeyObject
-  reset: (newModified: boolean) => void
+  reset: (newModified?: boolean) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -53,10 +53,9 @@ export const useForm = ({
   onSubmit: onSubmitInit,
   onError,
 }: FormOptions = {}) => {
-  // For setting new / resetting fields
   const defaultFieldState = { modified: false, error: false, validate: null }
 
-  // Internal method; values are derived fields
+  // Internal method; values are derived from fields
   const getValuesDeep = (newFields: FieldsMap) =>
     toDeepObject(Object.fromEntries(
       Array.from(newFields)
