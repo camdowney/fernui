@@ -193,37 +193,41 @@ export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, opt
   return data
 }
 
-export const useURL = (options: {
-  dependencies?: any[]
-  onLoad?: ({ query, search }: { query: KeyObject, search: string }) => void
-} = {}) => {
-  const { dependencies = [], onLoad } = options ?? {}
+export const useURL = (options: { dependencies?: any[]} = {}) => {
+  const { dependencies = [] } = options
 
   const [query, setQuery] = useState<KeyObject>({})
+  const [protocol, setProtocol] = useState('')
+  const [host, setHost] = useState('')
+  const [path, setPath] = useState('')
   const [search, setSearch] = useState('?')
+  const [hash, setHash] = useState('')
   const [referrer, setReferrer] = useState('')
   const [isLoading, setLoading] = useState(true)
 
-  const loadQuery = () => {
-    const newSearch = window.location.search
-    const newQuery = uriToObject(newSearch)
-    
-    if (onLoad)
-      onLoad({ query: newQuery, search: newSearch })
-
-    setQuery(newQuery)
-    setSearch(newSearch)
+  // Set all values excluding referrer
+  const setAll = () => {
+    setQuery(uriToObject(window.location.search))
+    setProtocol(window.location.protocol)
+    setHost(window.location.host)
+    setPath(window.location.pathname)
+    setSearch(window.location.search)
+    setHash(window.location.hash)
   }
 
-  useEffect(loadQuery, dependencies)
+  // Watch deps
+  useEffect(setAll, dependencies)
 
+  // Init referrer
   useEffect(() => setReferrer(document.referrer), [])
 
+  // Considered loaded when values match window & document
   useEffect(() => {
-    if (search === window.location.search && referrer === document.referrer)
+    if (host === window.location.host && referrer === document.referrer)
       setLoading(false)
   }, [search, referrer])
 
+  // Push query or search params, refresh will update state
   const push = (queryOrSearch: KeyObject | string, refresh = false) => {
     if (typeof window === 'undefined') return
 
@@ -233,11 +237,10 @@ export const useURL = (options: {
 
     window.history.pushState(query, '', `?${objectToURI(query)}`)
 
-    if (refresh)
-      loadQuery()
+    if (refresh) setAll()
   }
 
-  return { query, search, referrer, push, isLoading }
+  return { query, protocol, host, path, search, hash, referrer, push, isLoading }
 }
 
 export const jsxToText = (element: React.ReactElement | string): string => {
