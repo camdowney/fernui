@@ -69,7 +69,10 @@ export default function Select({
     setQuadrantRaw([rect.top < window.innerHeight / 2, rect.left < window.innerWidth / 2])
   }
 
-  useEffect(setQuadrant, [])
+  useEffect(() => {
+    setQuadrant()
+    setTimeout(setQuadrant, 100)
+  }, [])
   useListener('resize', setQuadrant)
   useListener('scroll', setQuadrant)
 
