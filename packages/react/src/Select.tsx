@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { cn } from '@fernui/util'
-import { useField } from '@fernui/react-core-util'
+import { SetState, useField } from '@fernui/react-core-util'
+import { useListener } from '@fernui/react-util'
 import { angle } from './icons'
 import Error from './Error'
 import Icon from './Icon'
+import Dropdown from './Dropdown'
 
+export type Quadrant = [isTop: boolean, isLeft: boolean]
 export interface Option { label: string, value?: string }
 
 export interface SelectProps {
@@ -46,13 +49,31 @@ export default function Select({
   infoClass,
   ...props
 }: SelectProps) {
-  const { name, value, setValue, disabled, showError } = useField({
+  const { value, setValue, disabled, showError } = useField({
     name: nameProp ?? label ?? placeholder ?? '',
     value: valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label)),
     disabled: disabledProp,
     validate,
     onChange,
   })
+
+  const [quadrant, setQuadrantRaw] = useState<Quadrant>([true, true])
+  const [active, setActive] = useState(false)
+  const ref = useRef<any>()
+
+  const placeholderOrValue = (options.find(o => o.value === value) ?? {}).label || value || placeholder
+  const placeholderAndOptions = [...placeholder ? [{ label: placeholder, value: '' }] : [], ...options]
+
+  const setQuadrant = () => {
+    const rect = ref.current.getBoundingClientRect()
+    setQuadrantRaw([rect.top < window.innerHeight / 2, rect.left < window.innerWidth / 2])
+  }
+
+  useEffect(setQuadrant, [])
+  useListener('resize', setQuadrant)
+  useListener('scroll', setQuadrant)
+
+  const optionsProps = { active, setActive, setValue, placeholderAndOptions, quadrant }
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
@@ -64,32 +85,30 @@ export default function Select({
       }
 
       {/* Field */}
-      <div style={{ position: 'relative' }}>
-        <select
-          name={name}
-          value={value}
+      <span style={{ position: 'relative' }}>
+        {!quadrant[0] && <Options {...optionsProps} />}
+
+        {/* Selector */}
+        <button
+          ref={ref}
+          type='button'
+          onClick={() => setActive(curr => !curr)}
+          aria-label={label || placeholder || value}
           disabled={disabled}
-          aria-label={label || placeholder || name}
-          onChange={e => setValue(e.target.value)}
           className={cn('fui-select fui-field-block', fieldClass)}
-          style={{ ..._style(disabled), ...style }}
+          style={{ ..._style(disabled), ...style } as object}
           {...props}
         >
-          {placeholder && 
-            <option value=''>{placeholder}</option>
-          }
-          {options.map(option => 
-            <option value={option.value ?? option.label} key={option.label}>
-              {option.label}
-            </option>    
-          )}
-        </select>
-        <Icon
-          i={angle}
-          className='fui-select-icon'
-          style={_iconStyle}
-        />
-      </div>
+          {placeholderOrValue}
+          <Icon
+            i={angle}
+            className='fui-select-icon'
+            style={_iconStyle}
+          />
+        </button>
+
+        {quadrant[0] && <Options {...optionsProps} />}
+      </span>
 
       {/* Error */}
       {(error && showError) && (
@@ -106,8 +125,44 @@ export default function Select({
   )
 }
 
+const Options = ({
+  active,
+  setActive,
+  setValue,
+  placeholderAndOptions,
+  quadrant,
+}: {
+  active: boolean
+  setActive: SetState<boolean>
+  setValue: (newValue: string) => void
+  placeholderAndOptions: Option[]
+  quadrant: Quadrant
+}) => (
+  <Dropdown
+    active={active}
+    setActive={setActive}
+    className='fui-select-dropdown'
+    style={_dropdownStyle(quadrant)}
+  >
+    {placeholderAndOptions.map(option => 
+      <button
+        type='button'
+        onClick={() => {
+          setValue(option.value ?? option.label)
+          setActive(false)
+        }}
+        className='fui-select-option'
+        key={option.label}
+      >
+        {option.label}
+      </button>    
+    )}
+  </Dropdown>
+)
+
 const _style = (disabled: boolean) => ({
-  ...(!disabled && { cursor: 'pointer' })
+  textAlign: 'left',
+  ...!disabled && { cursor: 'pointer' },
 })
 
 const _iconStyle = {
@@ -117,3 +172,9 @@ const _iconStyle = {
   transform: 'translateY(-50%)',
   pointerEvents: 'none',
 }
+
+const _dropdownStyle = (quadrant: Quadrant) => ({
+  ...quadrant[0] ? { top: 0 } : { bottom: 0 },
+  ...quadrant[1] ? { left: 0 } : { right: 0 },
+  transformOrigin: (quadrant[0] ? 'top' : 'bottom') + (quadrant[1] ? ' left' : ' right')
+})
