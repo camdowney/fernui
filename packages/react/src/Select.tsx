@@ -7,7 +7,7 @@ import Error from './Error'
 import Icon from './Icon'
 import Modal from './Modal'
 
-export type Quadrant = [top: boolean, left: boolean]
+export type Quadrant = [top: boolean | null, left: boolean | null]
 export interface Option { label: string, value?: string }
 
 export interface SelectProps {
@@ -57,7 +57,7 @@ export default function Select({
     onChange,
   })
 
-  const [quadrant, setQuadrantRaw] = useState<Quadrant>([true, true])
+  const [quadrant, setQuadrantRaw] = useState<Quadrant>([null, null])
   const [active, setActive] = useState(false)
   const ref = useRef<any>()
 
@@ -66,7 +66,10 @@ export default function Select({
 
   const setQuadrant = () => {
     const rect = ref.current.getBoundingClientRect()
-    setQuadrantRaw([rect.top < window.innerHeight / 2, rect.left < window.innerWidth / 2])
+    setQuadrantRaw([
+      rect.top + rect.bottom < window.innerHeight,
+      rect.left + rect.right < window.innerWidth
+    ])
   }
 
   useEffect(setQuadrant, [active])
@@ -86,7 +89,7 @@ export default function Select({
 
       {/* Field */}
       <span style={{ position: 'relative' }}>
-        {!quadrant[0] && <Options {...optionsProps} />}
+        {quadrant[0] === false && <Options {...optionsProps} />}
 
         {/* Selector */}
         <button
@@ -107,7 +110,7 @@ export default function Select({
           />
         </button>
 
-        {quadrant[0] && <Options {...optionsProps} />}
+        {quadrant[0] === true && <Options {...optionsProps} />}
       </span>
 
       {/* Error */}
@@ -176,5 +179,5 @@ const _iconStyle = {
 const _dropdownStyle = (quadrant: Quadrant) => ({
   ...quadrant[0] ? { top: 0 } : { bottom: 0 },
   ...quadrant[1] ? { left: 0 } : { right: 0 },
-  transformOrigin: (quadrant[0] ? 'top' : 'bottom') + (quadrant[1] ? ' left' : ' right')
+  transformOrigin: (quadrant &&quadrant[0] ? 'top' : 'bottom') + (quadrant[1] ? ' left' : ' right')
 })
