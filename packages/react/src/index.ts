@@ -1,7 +1,6 @@
 export { default as Avatar, AvatarProps, Color, ColorMap } from  './Avatar'
 export { default as Button, ButtonProps } from './Button'
 export { default as Checkbox, CheckboxProps } from './Checkbox'
-export { default as Dropdown, DropdownProps } from './Dropdown'
 export { default as Error, ErrorProps } from './Error'
 export { default as Expand, ExpandProps } from './Expand'
 export { default as Form, FormProps } from './Form'

@@ -20,7 +20,7 @@ export const useListener = (
     
     root.addEventListener(event, callback, rest)
     return () => root.removeEventListener(event, callback, rest)
-  }, [event, callback, ...(dependencies ?? [])])
+  }, [event, callback, ...dependencies ?? []])
 }
 
 export const useLocalStorage = <T extends unknown>(key: string, fallbackValue: T) => {
@@ -257,7 +257,7 @@ export const jsxToText = (element: React.ReactElement | string): string => {
 
 export const buttonRoleProps = (options: { label?: string, tabIndex?: number, disabled?: boolean } = {}) => ({
   role: 'button',
-  ...(options.label && { 'aria-label': options.label }),
+  ...options.label && { 'aria-label': options.label },
   tabIndex: options.tabIndex ?? 0,
   'aria-disabled': options.disabled ?? false,
   style: { cursor: options.disabled ? 'auto' : 'pointer' },

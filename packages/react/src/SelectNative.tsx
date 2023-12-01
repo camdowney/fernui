@@ -107,7 +107,7 @@ export default function SelectNative({
 }
 
 const _style = (disabled: boolean) => ({
-  ...(!disabled && { cursor: 'pointer' })
+  ...!disabled && { cursor: 'pointer' },
 })
 
 const _iconStyle = {

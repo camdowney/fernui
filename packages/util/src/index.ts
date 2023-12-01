@@ -273,7 +273,7 @@ export const ping = {
         body: stringify(body),
         ...rest,
         headers: {
-          ...(typeof body === 'object' && { 'Content-Type': 'application/json' }),
+          ...typeof body === 'object' && { 'Content-Type': 'application/json' },
           ...headers,
         },
       })

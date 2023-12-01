@@ -83,7 +83,7 @@ export default function Select({
         {...props}
       >
         <Text
-          style={{ ...inputTextStyle, ...(!selectedOption ? placeholderStyle : {}) }}
+          style={{ ...inputTextStyle, ...!selectedOption ? placeholderStyle : {} }}
           {...inputTextProps}
         >
           {selectedOption ? selectedOption.label : placeholder}

@@ -8,6 +8,7 @@ export interface ModalProps {
   active: boolean
   setActive: SetState<boolean>
   outerClass?: string
+  outerStyle?: Object
   children?: any
   className?: string
   activeClass?: string
@@ -32,6 +33,7 @@ export default function Modal({
   active,
   setActive,
   outerClass,
+  outerStyle,
   children,
   className,
   activeClass = 'fui-modal-active',
@@ -62,10 +64,14 @@ export default function Modal({
     <span
       ref={ref}
       className={cn('fui-modal-outer', outerClass)}
+      style={outerStyle}
     >
       <div
         className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}
-        onClick={() => exitOnBgClick && setActive(false)}
+        onClick={e => {
+          e.preventDefault()
+          if (exitOnBgClick) setActive(false)
+        }}
         aria-hidden={!active}
         style={{ ..._bgStyle, ...bgStyle } as Object}
       />
@@ -90,7 +96,5 @@ const _bgStyle = {
 }
 
 const _style = (active: boolean | null) => ({
-  position: 'fixed',
-  overflowY: 'auto',
-  ...(active === null && { visibility : 'hidden !important' }),
+  ...active === null && { visibility : 'hidden !important' },
 })

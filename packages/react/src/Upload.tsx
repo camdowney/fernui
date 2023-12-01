@@ -172,12 +172,12 @@ export default function Upload({
             Accepts: <span dangerouslySetInnerHTML={{
               __html: [
                 acceptedFormats,
-                ...((minFileCount > 0 && maxFileCount < Infinity) ? [
+                ...(minFileCount > 0 && maxFileCount < Infinity) ? [
                   `${minFileCount} to ${maxFileCount} file${maxFileCount !== 1 ? 's' : ''}`,
                 ] : [
                   minFileCount > 0 && `${minFileCount} file${minFileCount !== 1 ? 's' : ''} min`,
                   maxFileCount < Infinity && `${maxFileCount} file${maxFileCount !== 1 ? 's' : ''} max`,
-                ]),
+                ],
                 maxFileSizeMB < Infinity && `${maxFileSizeMB}&nbsp;MB&nbsp;per&nbsp;file`,
                 maxTotalSizeMB < Infinity && `${maxTotalSizeMB}&nbsp;MB&nbsp;total`,
               ].filter(Boolean).join('; ')

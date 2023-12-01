@@ -5,9 +5,9 @@ import { useListener } from '@fernui/react-util'
 import { angle } from './icons'
 import Error from './Error'
 import Icon from './Icon'
-import Dropdown from './Dropdown'
+import Modal from './Modal'
 
-export type Quadrant = [isTop: boolean, isLeft: boolean]
+export type Quadrant = [top: boolean, left: boolean]
 export interface Option { label: string, value?: string }
 
 export interface SelectProps {
@@ -69,11 +69,8 @@ export default function Select({
     setQuadrantRaw([rect.top < window.innerHeight / 2, rect.left < window.innerWidth / 2])
   }
 
-  useEffect(() => {
-    setQuadrant()
-    setTimeout(setQuadrant, 100)
-  }, [])
-  useListener('resize', setQuadrant)
+  useEffect(setQuadrant, [active])
+  useListener('windowresize', setQuadrant)
   useListener('scroll', setQuadrant)
 
   const optionsProps = { active, setActive, setValue, placeholderAndOptions, quadrant }
@@ -99,7 +96,7 @@ export default function Select({
           aria-label={label || placeholder || value}
           disabled={disabled}
           className={cn('fui-select fui-field-block', fieldClass)}
-          style={{ ..._style(disabled), ...style } as object}
+          style={{ ..._style, ...style } as object}
           {...props}
         >
           {placeholderOrValue}
@@ -141,10 +138,11 @@ const Options = ({
   placeholderAndOptions: Option[]
   quadrant: Quadrant
 }) => (
-  <Dropdown
+  <Modal
     active={active}
     setActive={setActive}
-    className='fui-select-dropdown'
+    outerClass='fui-select-modal-outer'
+    className='fui-select-modal'
     style={_dropdownStyle(quadrant)}
   >
     {placeholderAndOptions.map(option => 
@@ -160,13 +158,12 @@ const Options = ({
         {option.label}
       </button>    
     )}
-  </Dropdown>
+  </Modal>
 )
 
-const _style = (disabled: boolean) => ({
+const _style = {
   textAlign: 'left',
-  ...!disabled && { cursor: 'pointer' },
-})
+}
 
 const _iconStyle = {
   position: 'absolute',

@@ -9,10 +9,10 @@ dependencies:
     specifier: ^1.4.1
     version: 1.4.2(@fernui/util@3.5.0)
   '@fernui/react-core-util':
-    specifier: ^3.0.0
+    specifier: ^3.2.1
     version: 3.2.1(@fernui/util@3.5.0)(react@18.2.0)
   '@fernui/react-util':
-    specifier: ^2.5.2
+    specifier: ^2.5.3
     version: 2.5.3(@fernui/dom-util@1.4.2)(@fernui/react-core-util@3.2.1)(@fernui/util@3.5.0)(react@18.2.0)
   '@fernui/util':
     specifier: ^3.5.0

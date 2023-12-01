@@ -23,7 +23,7 @@ export default function Image({
   return (
     <div
       className={cn('fui-image', className)}
-      style={{ ...style, ...(cover ? _coverStyle : _defaultStyle) } as Object}
+      style={{ ...style, ...cover ? _coverStyle : _defaultStyle } as Object}
     >
       <div className={cn(ratioClass)}>
         {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}

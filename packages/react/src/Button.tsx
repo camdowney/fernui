@@ -36,10 +36,10 @@ export default function Button({
     <Shell
       ref={domRef}
       href={link}
-      {...(blank && {
+      {...blank && {
         target: '_blank',
         rel: 'noopener noreferrer',
-      })}
+      }}
       aria-label={label || text}
       {...props}
     >
