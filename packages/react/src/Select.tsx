@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { cn } from '@fernui/util'
-import { SetState, useField } from '@fernui/react-core-util'
+import { useField } from '@fernui/react-core-util'
 import { useListener } from '@fernui/react-util'
 import { angle } from './icons'
 import Error from './Error'
 import Icon from './Icon'
 import Modal from './Modal'
 
-export type Quadrant = [top: boolean | null, left: boolean | null]
 export interface Option { label: string, value?: string }
 
 export interface SelectProps {
@@ -57,7 +56,7 @@ export default function Select({
     onChange,
   })
 
-  const [quadrant, setQuadrantRaw] = useState<Quadrant>([null, null])
+  const [isLeft, setLeft] = useState(true)
   const [active, setActive] = useState(false)
   const ref = useRef<any>()
 
@@ -66,17 +65,12 @@ export default function Select({
 
   const setQuadrant = () => {
     const rect = ref.current.getBoundingClientRect()
-    setQuadrantRaw([
-      rect.top + rect.bottom < window.innerHeight,
-      rect.left + rect.right < window.innerWidth
-    ])
+    setLeft(rect.left + rect.right < window.innerWidth)
   }
 
   useEffect(setQuadrant, [active])
   useListener('windowresize', setQuadrant)
   useListener('scroll', setQuadrant)
-
-  const optionsProps = { active, setActive, setValue, placeholderAndOptions, quadrant }
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
@@ -89,8 +83,6 @@ export default function Select({
 
       {/* Field */}
       <span style={{ position: 'relative' }}>
-        {quadrant[0] === false && <Options {...optionsProps} />}
-
         {/* Selector */}
         <button
           ref={ref}
@@ -110,7 +102,28 @@ export default function Select({
           />
         </button>
 
-        {quadrant[0] === true && <Options {...optionsProps} />}
+        {/* Options */}
+        <Modal
+          active={active}
+          setActive={setActive}
+          outerClass='fui-select-modal-outer'
+          className='fui-select-modal'
+          style={_dropdownStyle(isLeft)}
+        >
+          {placeholderAndOptions.map(option => 
+            <button
+              type='button'
+              onClick={() => {
+                setValue(option.value ?? option.label)
+                setActive(false)
+              }}
+              className='fui-select-option'
+              key={option.label}
+            >
+              {option.label}
+            </button>    
+          )}
+        </Modal>
       </span>
 
       {/* Error */}
@@ -128,42 +141,6 @@ export default function Select({
   )
 }
 
-const Options = ({
-  active,
-  setActive,
-  setValue,
-  placeholderAndOptions,
-  quadrant,
-}: {
-  active: boolean
-  setActive: SetState<boolean>
-  setValue: (newValue: string) => void
-  placeholderAndOptions: Option[]
-  quadrant: Quadrant
-}) => (
-  <Modal
-    active={active}
-    setActive={setActive}
-    outerClass='fui-select-modal-outer'
-    className='fui-select-modal'
-    style={_dropdownStyle(quadrant)}
-  >
-    {placeholderAndOptions.map(option => 
-      <button
-        type='button'
-        onClick={() => {
-          setValue(option.value ?? option.label)
-          setActive(false)
-        }}
-        className='fui-select-option'
-        key={option.label}
-      >
-        {option.label}
-      </button>    
-    )}
-  </Modal>
-)
-
 const _style = {
   textAlign: 'left',
 }
@@ -176,8 +153,8 @@ const _iconStyle = {
   pointerEvents: 'none',
 }
 
-const _dropdownStyle = (quadrant: Quadrant) => ({
-  ...quadrant[0] ? { top: 0 } : { bottom: 0 },
-  ...quadrant[1] ? { left: 0 } : { right: 0 },
-  transformOrigin: (quadrant &&quadrant[0] ? 'top' : 'bottom') + (quadrant[1] ? ' left' : ' right')
+const _dropdownStyle = (isLeft: boolean) => ({
+  top: 0,
+  ...isLeft ? { left: 0 } : { right: 0 },
+  transformOrigin: `top ${isLeft ? 'left' : 'right'}`,
 })
