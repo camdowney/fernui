@@ -56,12 +56,12 @@ export default function Select({
     onChange,
   })
 
-  const [isLeft, setLeft] = useState(true)
-  const [active, setActive] = useState(false)
-  const ref = useRef<any>()
-
   const placeholderOrValue = (options.find(o => o.value === value) ?? {}).label || value || placeholder
   const placeholderAndOptions = [...placeholder ? [{ label: placeholder, value: '' }] : [], ...options]
+
+  const [isLeft, setLeft] = useState<boolean | null>(null)
+  const [active, setActive] = useState(false)
+  const ref = useRef<any>()
 
   const setQuadrant = () => {
     const rect = ref.current.getBoundingClientRect()
@@ -103,27 +103,29 @@ export default function Select({
         </button>
 
         {/* Options */}
-        <Modal
-          active={active}
-          setActive={setActive}
-          outerClass='fui-select-modal-outer'
-          className='fui-select-modal'
-          style={_dropdownStyle(isLeft)}
-        >
-          {placeholderAndOptions.map(option => 
-            <button
-              type='button'
-              onClick={() => {
-                setValue(option.value ?? option.label)
-                setActive(false)
-              }}
-              className='fui-select-option'
-              key={option.label}
-            >
-              {option.label}
-            </button>    
-          )}
-        </Modal>
+        {isLeft !== null && (
+          <Modal
+            active={active}
+            setActive={setActive}
+            outerClass='fui-select-modal-outer'
+            className='fui-select-modal'
+            style={_dropdownStyle(isLeft)}
+          >
+            {placeholderAndOptions.map(option => 
+              <button
+                type='button'
+                onClick={() => {
+                  setValue(option.value ?? option.label)
+                  setActive(false)
+                }}
+                className='fui-select-option'
+                key={option.label}
+              >
+                {option.label}
+              </button>    
+            )}
+          </Modal>
+        )}
       </span>
 
       {/* Error */}
