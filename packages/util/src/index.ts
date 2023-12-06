@@ -91,7 +91,7 @@ export const objectHasValue = (obj?: any) =>
 export const hasSimilarValue = (value1: string, value2: string) =>
   (value1 ?? '').toLowerCase().includes((value2 ?? '').toLowerCase())
 
-export const searchByKeys = <T extends KeyObject>(items: T[], keys: string[], value: string) =>
+export const searchByKeys = <T extends KeyObject>(items: T[], value: string, keys: string[] = []) =>
   !keys ? items : items.filter(item => keys.some(key => hasSimilarValue(item[key], value)))
 
 export const sortByKey = <T extends KeyObject>(
@@ -124,7 +124,7 @@ export const filterByKeys = <T extends KeyObject>(items: T[], filters: KeyObject
 
   return items.filter(item =>
     Object.entries(filters).some(([key, value]) =>
-      [null, undefined, '@ignore', item[key]].includes(value)
+      [null, undefined, item[key]].includes(value)
     )
   )
 }
@@ -240,7 +240,7 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
     const res = await fetchCallback()
     const text = await res.text()
 
-    let data = {}
+    let data: any = {}
 
     try {
       data = JSON.parse(text)
@@ -254,7 +254,7 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
   catch (error) {
     return {
       res: new Response(null, { status: 400 }),
-      data: { error } as Object,
+      data: { error },
     }
   }
 }
