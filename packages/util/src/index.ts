@@ -201,7 +201,7 @@ export const htmail = (nodes: HTMailNode[]) => {
     const t = e(tag)
     const c = typeof children === 'string' ? e(children) : children.map(nodeToHTML).join('')
 
-    return `<${t} style='margin:0;padding:${pt}px ${pr}px ${pb}px ${pl}px;${bold ? 'font-weight: bold;' : ''}${link ? 'display: inline-block;' : ''}' ${link ? `href='${e(link)}' target='_blank' rel='noopener noreferrer'` : ''}>${c}</${t}> `
+    return `<${t} style='margin:0;padding:0;border:solid transparent;border-width:${pt}px ${pr}px ${pb}px ${pl}px;${bold ? 'font-weight: bold;' : ''}${link ? 'display: inline-block;' : ''}' ${link ? `href='${e(link)}' target='_blank' rel='noopener noreferrer'` : ''}>${c}</${t}> `
   }
 
   return nodes.map(nodeToHTML).join('')
@@ -212,7 +212,7 @@ export const formEntriesToHTML = (
   options?: {
     heading?: string
     signature?: string
-    safePaths?: string[],
+    safePaths?: string[]
   }
 ) => {
   const { heading, signature, safePaths } = { safePaths: [], ...options }
@@ -224,19 +224,20 @@ export const formEntriesToHTML = (
       .map(([name, value]) => [
         'span',
         [
-          ['p', name.replace(/\*/g, '').trim() + ':', { pt: 14, bold: true }],
+          ['p', name.replace(/\*/g, '').trim() + ':', { pt: 12, bold: true }],
           ...toArray(value).map((v, i) => [
             'p',
-            safePaths.some(path => v.includes(path))
-              ? [['a', v.split(safePaths.find(p => v.includes(p))).pop(), { link: v }]]
-              : value === 'true' ? 'Yes'
-              : value === 'false' ? 'No'
-              : value,
-            { pt: i > 0 ? 3 : 1 }
-          ] satisfies HTMailNode)
+            [
+              ['span', '• ', { pr: 2 }],
+              safePaths.some(path => v.includes(path))
+                ? ['a', v.split(safePaths.find(p => v.includes(p))).pop(), { link: v }]
+                : ['span', value === 'true' ? 'Yes' : value === 'false' ? 'No' : value]
+            ],
+            { pt: i > 0 ? 3 : 1, pl: 4 }
+          ] satisfies HTMailNode),
         ]
       ] satisfies HTMailNode),
-    ['p', signature, { pt: 20 }],
+    ['p', signature, { pt: 18 }],
   ])
 }
 
