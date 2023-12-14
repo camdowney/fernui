@@ -5,14 +5,14 @@ export interface MailHeaderData {
   cc?: string | string[]
   bcc?: string | string[]
   replyTo?: string | string[]
-  subject: string
+  subject?: string
 }
 
 export type MailHeaders = MailHeaderData | ((values: KeyObject) => MailHeaderData)
 
 export interface MailData extends MailHeaderData {
   from: string
-  html: string
+  html?: string
   text?: string
 }
 
