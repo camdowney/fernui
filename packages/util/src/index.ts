@@ -248,6 +248,55 @@ export const promisify = async (callback: Function) =>
       .catch((err: any) => reject(err.result))
   })
 
+export const createStopwatch = () => {
+  let isActive = false
+  let startTime = 0
+  let storedTime = 0
+
+  const start = () => {
+    isActive = true
+    startTime += Date.now() - storedTime
+  }
+
+  const reset = () => {
+    isActive = false
+    startTime = 0
+    storedTime = 0
+  }
+
+  const pause = () => {
+    isActive = false
+    storedTime = Date.now()
+  }
+
+  const time = () =>
+    (isActive ? Date.now() : storedTime) - startTime
+
+  return { start, reset, pause, time, isActive }
+}
+
+
+export const throttle = (callback: () => any, delay = 0, runLast = true) => {
+  let last = 0
+  let timeoutId: any
+
+  const runCallback = () => {
+    last = new Date().getTime()
+    callback()
+  }
+
+  return () => {
+    const elapsed = new Date().getTime() - last
+
+    clearTimeout(timeoutId)
+
+    if (elapsed >= delay)
+      runCallback()
+    else if (runLast)
+      timeoutId = setTimeout(runCallback, delay - elapsed)
+  }
+}
+
 export const handlePingResponse = async (fetchCallback: () => Promise<Response>) => {
   try {
     const res = await fetchCallback()
