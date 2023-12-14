@@ -3,6 +3,7 @@
   "scripts": {
     "b-icons": "cd ./packages/icons && tsc",
     "b-util": "cd ./packages/util && tsc",
+    "b-api-util": "cd ./packages/api-util && tsc",
     "b-dom-util": "cd ./packages/dom-util && tsc",
     "b-react-core-util": "cd ./packages/react-core-util && tsc",
     "b-react-util": "cd ./packages/react-util && tsc",
@@ -11,7 +12,7 @@
     "b-react-native": "cd ./packages/react-native && tsc",
     "b-svelte-util": "cd ./packages/svelte-util && tsc",
     "b-svelte": "cd ./packages/svelte && tsc",
-    "build": "pnpm b-util && rollup -c"
+    "build": "pnpm b-api-util && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",
