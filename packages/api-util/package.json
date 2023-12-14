@@ -1,7 +1,7 @@
 {
   "name": "@fernui/api-util",
   "author": "@camdowney",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library of general-purpose utilities for working with APIs.",
   "keywords": [
     "api",
