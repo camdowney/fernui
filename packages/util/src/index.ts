@@ -75,8 +75,8 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
 export const toNumber = (value: any) =>
   Number(isNaN(value) ? String(value).replace(/[^0-9.]/g, '') : value)
 
-export const toArray = (value: any) =>
-  Array.isArray(value) ? value : [value]
+export const toArray = <T>(value: T | T[] | undefined) =>
+  value === undefined ? [] : Array.isArray(value) ? value : [value]
 
 export const callIfFunction = <T>(value: T, ...params: any[]) =>
   typeof value === 'function' ? value(...params) : value
@@ -230,7 +230,7 @@ export const formEntriesToHTML = (
             [
               ['span', '• ', { pr: 2 }],
               safePaths.some(path => v.includes(path))
-                ? ['a', v.split(safePaths.find(p => v.includes(p))).pop(), { link: v }]
+                ? ['a', v.split(safePaths.find(p => v.includes(p)) ?? '').pop(), { link: v }]
                 : ['span', value === 'true' ? 'Yes' : value === 'false' ? 'No' : value]
             ],
             { pt: i > 0 ? 3 : 1, pl: 4 }
