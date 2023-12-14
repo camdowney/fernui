@@ -1,4 +1,4 @@
-export interface KeyObject { [key: string]: any }
+export interface KeyObject <T = any>{ [key: string]: T }
 
 export const cycle = (range: number, currentIndex: number, direction: 1 | -1) =>
   direction === -1
