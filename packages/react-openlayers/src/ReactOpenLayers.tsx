@@ -6,7 +6,6 @@ import { easeOut } from 'ol/easing'
 import { containsCoordinate, extend } from 'ol/extent'
 import { Tile } from 'ol/layer'
 import { OSM } from 'ol/source'
-import 'ol/ol.css'
 
 export interface MapMarker {
   id: string
