@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { KeyObject, objectToURI, uriToObject } from '@fernui/util'
+import { getUniqueFileName, KeyObject, objectToURI, toArray, uriToObject } from '@fernui/util'
+import { UploadData } from '@fernui/api-util'
+import { fileToBase64 } from '@fernui/dom-util'
 import { ModalOptions, SetState, useModal as useModalInit } from '@fernui/react-core-util'
 
 export const useListener = (
@@ -269,3 +271,22 @@ export const buttonRoleProps = (options: { label?: string, tabIndex?: number, di
     }
   },
 })
+
+export const cleanFormValuesWithFiles = async (valuesInit: KeyObject, uploadURL: string) => {
+  const values = Object.entries(structuredClone(valuesInit))
+  const files: UploadData[] = []
+
+  await Promise.all(
+    values.map(([_, value], i) =>
+      toArray(value)
+        .filter(v => v instanceof File)
+        .map(async (file, j) => {
+          const name = getUniqueFileName(file.name, j)
+          values[i][1][j] = uploadURL + name
+          files.push({ name, data: await fileToBase64(file) })
+        })
+    ).flat()
+  )
+
+  return { values, files }
+}
