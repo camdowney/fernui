@@ -25,7 +25,7 @@ const reactConfig = path => ({
   plugins: [
     babel({
       babelHelpers: 'bundled',
-      presets: ['@babel/preset-react']
+      presets: ['@babel/preset-react'],
     }),
     terser(),
     typescript(),
@@ -38,7 +38,7 @@ const svelteConfig = path => ({
   plugins: [
     babel({
       babelHelpers: 'bundled',
-      presets: ['@babel/preset-svelte']
+      presets: ['@babel/preset-svelte'],
     }),
     terser(),
     typescript(),
