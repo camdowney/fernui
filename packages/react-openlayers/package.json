@@ -1,0 +1,26 @@
+{
+  "name": "@fernui/react-openlayers",
+  "author": "@camdowney",
+  "version": "1.0.0",
+  "description": "An opinionated, out-of-the-box solution for working with OpenLayers in React.",
+  "keywords": [
+    "ui",
+    "javascript",
+    "react",
+    "openlayers"
+  ],
+  "main": "./dist/index.js",
+  "peerDependencies": {
+    "@fernui/dom-util": "^1.4.1",
+    "@fernui/react-core-util": "^3.2.1",
+    "@fernui/react-util": "^2.5.3",
+    "@fernui/util": "^3.5.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.45"
+  },
+  "dependencies": {
+    "ol": "^8.2.0"
+  }
+}

@@ -8,11 +8,12 @@
     "b-react-core-util": "cd ./packages/react-core-util && tsc",
     "b-react-util": "cd ./packages/react-util && tsc",
     "b-react": "cd ./packages/react && tsc",
+    "b-react-openlayers": "cd ./packages/react-openlayers && tsc",
     "b-react-native-util": "cd ./packages/react-native-util && tsc",
     "b-react-native": "cd ./packages/react-native && tsc",
     "b-svelte-util": "cd ./packages/svelte-util && tsc",
     "b-svelte": "cd ./packages/svelte && tsc",
-    "build": "pnpm b-react-util && rollup -c"
+    "build": "pnpm b-react-openlayers && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",
