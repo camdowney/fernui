@@ -1,4 +1,4 @@
-export interface KeyObject { [key: string]: any }
+export interface KeyObject <T = any>{ [key: string]: T }
 
 export const cycle = (range: number, currentIndex: number, direction: 1 | -1) =>
   direction === -1
@@ -75,8 +75,8 @@ export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true
 export const toNumber = (value: any) =>
   Number(isNaN(value) ? String(value).replace(/[^0-9.]/g, '') : value)
 
-export const toArray = (value: any) =>
-  Array.isArray(value) ? value : [value]
+export const toArray = <T>(value: T | T[] | undefined) =>
+  value === undefined ? [] : Array.isArray(value) ? value : [value]
 
 export const callIfFunction = <T>(value: T, ...params: any[]) =>
   typeof value === 'function' ? value(...params) : value
@@ -91,7 +91,7 @@ export const objectHasValue = (obj?: any) =>
 export const hasSimilarValue = (value1: string, value2: string) =>
   (value1 ?? '').toLowerCase().includes((value2 ?? '').toLowerCase())
 
-export const searchByKeys = <T extends KeyObject>(items: T[], keys: string[], value: string) =>
+export const searchByKeys = <T extends KeyObject>(items: T[], value: string, keys: string[] = []) =>
   !keys ? items : items.filter(item => keys.some(key => hasSimilarValue(item[key], value)))
 
 export const sortByKey = <T extends KeyObject>(
@@ -124,7 +124,7 @@ export const filterByKeys = <T extends KeyObject>(items: T[], filters: KeyObject
 
   return items.filter(item =>
     Object.entries(filters).some(([key, value]) =>
-      [null, undefined, '@ignore', item[key]].includes(value)
+      [null, undefined, item[key]].includes(value)
     )
   )
 }
@@ -177,55 +177,68 @@ export const toDeepObject = (obj: any): KeyObject => {
   return Object.entries(objectClean).reduce(concat, {}) ?? {}
 }
 
+export type HTMailNode = [
+  tag: string,
+  children?: string | HTMailNode[],
+  atts?: {
+    pt?: number
+    pr?: number
+    pb?: number
+    pl?: number
+    bold?: boolean
+    link?: string
+  }
+]
+
+export const htmail = (nodes: HTMailNode[]) => {
+  const nodeToHTML = ([tag, children, atts]: HTMailNode): string => {
+    if (children === undefined) return ''
+    if (tag === 'br') return '<br>'
+
+    const { pt, pr, pb, pl, bold, link } = { ...{ pt: 0, pr: 0, pb: 0, pl: 0 }, ...atts }
+
+    const e = escapeHTML
+    const t = e(tag)
+    const c = typeof children === 'string' ? e(children) : children.map(nodeToHTML).join('')
+
+    return `<${t} style='margin:0;padding:0;border:solid transparent;border-width:${pt}px ${pr}px ${pb}px ${pl}px;${bold ? 'font-weight: bold;' : ''}${link ? 'display: inline-block;' : ''}' ${link ? `href='${e(link)}' target='_blank' rel='noopener noreferrer'` : ''}>${c}</${t}> `
+  }
+
+  return nodes.map(nodeToHTML).join('')
+}
+
 export const formEntriesToHTML = (
-  formEntries: [any, any][],
-  options: {
+  formEntries: [string, string][],
+  options?: {
     heading?: string
-    signature?: string | false
-    uploadPath?: string,
-  } = {}
+    signature?: string
+    safePaths?: string[]
+  }
 ) => {
-  const getHeadingHTML = (children: string) =>
-    `<h3 style='margin: 0;'>${children}</h3> `
+  const { heading, signature, safePaths } = { safePaths: [], ...options }
 
-  const getSignatureHTML = (children: string) =>
-    `<p style='font-style: italic; padding: 18px 0 0 0; margin: 0;'>${children}</p>`
-
-  const getBoldHTML = (children: string) =>
-    `<span style='font-weight: bold;'>${children}:</span> `
-
-  const getLinkHTML = (children: string) =>
-    `<a style='margin: 0;' href='${children}' target='_blank' rel='noopener noreferrer'>${
-      (options.uploadPath && children.includes(options.uploadPath))
-        ? children.split('/').pop()
-        : children
-    }</a> `
-
-  const getListHTML = (children: string[], options: { pt?: number } = {}) =>
-    `<ul style='padding: ${options.pt ?? 12}px 0 0 24px; margin: 0;'>${
-      children.map((child, i) =>
-        `<li style='padding: ${i < 1 ? '0' : '12'}px 0 0 0; margin: 0;'>${child}</li> `
-      ).join('')
-    }</ul> `
-
-  return (options.heading ? getHeadingHTML(options.heading) : '')
-    + getListHTML(
-        formEntries
-          .filter(([name]) => !name.startsWith('__config'))
-          .map(([name, value]) =>
-            `${
-              getBoldHTML(escapeHTML(name.replace(/\*/g, '')))
-            }<br>${
-              Array.isArray(value) ? getListHTML(
-                value.map(v => v.startsWith('http') ? getLinkHTML(v) : v)
-              , { pt: 6 })
-              : value === true ? 'Yes' 
-              : value === false ? 'No'
-              : escapeHTML(value)
-            }`
-          )
-      )
-    + (options.signature ? getSignatureHTML(options.signature) : '')
+  return htmail([
+    ['h3', heading],
+    ...formEntries
+      .filter(([name]) => !name.startsWith('__config'))
+      .map(([name, value]) => [
+        'span',
+        [
+          ['p', name.replace(/\*/g, '').trim() + ':', { pt: 12, bold: true }],
+          ...toArray(value).map((v, i) => [
+            'p',
+            [
+              ['span', '• ', { pr: 2 }],
+              safePaths.some(path => v.includes(path))
+                ? ['a', v.split(safePaths.find(p => v.includes(p)) ?? '').pop(), { link: v }]
+                : ['span', value === 'true' ? 'Yes' : value === 'false' ? 'No' : value]
+            ],
+            { pt: i > 0 ? 3 : 1, pl: 4 }
+          ] satisfies HTMailNode),
+        ]
+      ] satisfies HTMailNode),
+    ['p', signature, { pt: 18 }],
+  ])
 }
 
 export const promisify = async (callback: Function) =>
@@ -235,12 +248,61 @@ export const promisify = async (callback: Function) =>
       .catch((err: any) => reject(err.result))
   })
 
+export const createStopwatch = () => {
+  let isActive = false
+  let startTime = 0
+  let storedTime = 0
+
+  const start = () => {
+    isActive = true
+    startTime += Date.now() - storedTime
+  }
+
+  const reset = () => {
+    isActive = false
+    startTime = 0
+    storedTime = 0
+  }
+
+  const pause = () => {
+    isActive = false
+    storedTime = Date.now()
+  }
+
+  const time = () =>
+    (isActive ? Date.now() : storedTime) - startTime
+
+  return { start, reset, pause, time, isActive }
+}
+
+
+export const throttle = (callback: () => any, delay = 0, runLast = true) => {
+  let last = 0
+  let timeoutId: any
+
+  const runCallback = () => {
+    last = new Date().getTime()
+    callback()
+  }
+
+  return () => {
+    const elapsed = new Date().getTime() - last
+
+    clearTimeout(timeoutId)
+
+    if (elapsed >= delay)
+      runCallback()
+    else if (runLast)
+      timeoutId = setTimeout(runCallback, delay - elapsed)
+  }
+}
+
 export const handlePingResponse = async (fetchCallback: () => Promise<Response>) => {
   try {
     const res = await fetchCallback()
     const text = await res.text()
 
-    let data = {}
+    let data: any = {}
 
     try {
       data = JSON.parse(text)
@@ -254,7 +316,7 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
   catch (error) {
     return {
       res: new Response(null, { status: 400 }),
-      data: { error } as Object,
+      data: { error },
     }
   }
 }

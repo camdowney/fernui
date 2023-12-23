@@ -23,7 +23,7 @@ export default function Image({
   return (
     <div
       className={cn('fui-image', className)}
-      style={{ ...style, ...cover ? _coverStyle : _defaultStyle } as Object}
+      style={{ ...style, ...cover && _coverStyle } as Object}
     >
       <div className={cn(ratioClass)}>
         {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}
@@ -35,12 +35,6 @@ export default function Image({
       </div>
     </div>
   )
-}
-
-const _defaultStyle = {
-  overflow: 'hidden',
-  position: 'relative',
-  display: 'block',
 }
 
 const _coverStyle = {

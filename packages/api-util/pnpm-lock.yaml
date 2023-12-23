@@ -1,0 +1,16 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@fernui/util':
+    specifier: ^3.7.2
+    version: 3.7.2
+
+packages:
+
+  /@fernui/util@3.7.2:
+    resolution: {integrity: sha512-7z0ZSM2EjOYt2KRKAVIPkZQGP921MyrJ2kQrRSNkm9u+0n+/R1zlNLrpWrJV1Ugnhph26n06Oc1RI1SOoMelqw==}
+    dev: false

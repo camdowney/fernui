@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
-import { useListener } from '@fernui/react-util'
 import { angle } from './icons'
 import Error from './Error'
 import Icon from './Icon'
@@ -59,18 +58,8 @@ export default function Select({
   const placeholderOrValue = (options.find(o => o.value === value) ?? {}).label || value || placeholder
   const placeholderAndOptions = [...placeholder ? [{ label: placeholder, value: '' }] : [], ...options]
 
-  const [isLeft, setLeft] = useState<boolean | null>(null)
   const [active, setActive] = useState(false)
   const ref = useRef<any>()
-
-  const setQuadrant = () => {
-    const rect = ref.current.getBoundingClientRect()
-    setLeft(rect.left + rect.right < window.innerWidth)
-  }
-
-  useEffect(setQuadrant, [active])
-  useListener('windowresize', setQuadrant)
-  useListener('scroll', setQuadrant)
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
@@ -103,29 +92,27 @@ export default function Select({
         </button>
 
         {/* Options */}
-        {isLeft !== null && (
-          <Modal
-            active={active}
-            setActive={setActive}
-            outerClass='fui-select-modal-outer'
-            className='fui-select-modal'
-            style={_dropdownStyle(isLeft)}
-          >
-            {placeholderAndOptions.map(option => 
-              <button
-                type='button'
-                onClick={() => {
-                  setValue(option.value ?? option.label)
-                  setActive(false)
-                }}
-                className='fui-select-option'
-                key={option.label}
-              >
-                {option.label}
-              </button>    
-            )}
-          </Modal>
-        )}
+        <Modal
+          active={active}
+          setActive={setActive}
+          outerClass='fui-select-modal-outer'
+          className='fui-select-modal'
+          style={{ top: 0 }}
+        >
+          {placeholderAndOptions.map(option => 
+            <button
+              type='button'
+              onClick={() => {
+                setValue(option.value ?? option.label)
+                setActive(false)
+              }}
+              className='fui-select-option'
+              key={option.label}
+            >
+              {option.label}
+            </button>
+          )}
+        </Modal>
       </span>
 
       {/* Error */}
@@ -154,9 +141,3 @@ const _iconStyle = {
   transform: 'translateY(-50%)',
   pointerEvents: 'none',
 }
-
-const _dropdownStyle = (isLeft: boolean) => ({
-  top: 0,
-  ...isLeft ? { left: 0 } : { right: 0 },
-  transformOrigin: `top ${isLeft ? 'left' : 'right'}`,
-})
