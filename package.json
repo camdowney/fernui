@@ -11,7 +11,7 @@
     "b-react-native": "cd ./packages/react-native && tsc",
     "b-svelte-util": "cd ./packages/svelte-util && tsc",
     "b-svelte": "cd ./packages/svelte && tsc",
-    "build": "pnpm b-react && rollup -c"
+    "build": "pnpm b-dom-util && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

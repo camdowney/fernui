@@ -89,7 +89,7 @@ export const initTimeline = (timeline: TimelineEvent[], sectionSelector?: string
     })
 }
 
-export const event = (
+export const createTimelineEvent = (
   callback: TimelineCallback<void>
 ) => (
   ...[time, root]: TimelineCallbackProps
@@ -98,27 +98,29 @@ export const event = (
   return time.value
 }
 
-export const animDelay = (selector: string, step: number) => event((time, root) => {
-  root.querySelectorAll(selector).forEach((element: any) => {
-    element.style.animationDelay = `${time.value}ms`
-    time.value += step
+export const animDelay = (selector: string, step: number) =>
+  createTimelineEvent((time, root) => {
+    root.querySelectorAll(selector).forEach((element: any) => {
+      element.style.animationDelay = `${time.value}ms`
+      time.value += step
+    })
+    time.value -= step
   })
-  time.value -= step
-})
 
-export const animLetters = (selector: string, step: number) => event((time, root) => {
-  root.querySelectorAll(selector).forEach(textNode => {
-    if (textNode.innerHTML.includes('split-letter-word')) return
+export const animLetters = (selector: string, step: number) =>
+  createTimelineEvent((time, root) => {
+    root.querySelectorAll(selector).forEach(textNode => {
+      if (textNode.innerHTML.includes('split-letter-word')) return
 
-    textNode.innerHTML = parseHTML(textNode.innerHTML).split(' ').map(word =>
-      `<span class='split-letter-word' style='display: inline-flex;'>`
-      + word.split('').map(letter => {
-        const html = `<div class='split-letter' style='display: inline-block; animation-delay: ${time.value}ms'>${letter}</div>`
-        time.value += step
-        return html
-      }).join('')
-      + `</span>`
-    ).join(' ')
+      textNode.innerHTML = parseHTML(textNode.innerHTML.replace(/\s+/g, ' ').trim()).split(' ').map(word =>
+        `<span class='split-letter-word' style='display: inline-flex;'>`
+        + word.split('').map(letter => {
+          const html = `<div class='split-letter' style='display: inline-block; animation-delay: ${time.value}ms'>${letter}</div>`
+          time.value += step
+          return html
+        }).join('')
+        + `</span>`
+      ).join(' ')
+    })
+    time.value -= step
   })
-  time.value -= step
-})
