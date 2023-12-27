@@ -115,12 +115,14 @@ export const useForm = ({
   useEffect(() => {
     setValuesRaw(getValuesDeep(fields))
     setValid(!Array.from(fields).some(([_, state]) => state.error))
-
-    if (!Array.from(fields).some(([_, state]) => state.modified)) return
-    
-    setHasChanges(true)
-    if (onChange) onChange(onEventProps)
+    if (Array.from(fields).some(([_, state]) => state.modified)) setHasChanges(true)
   }, [stringify(fields)])
+
+  // Watch values
+  useEffect(() => {
+    if (valuesLoading) return
+    if (onChange) onChange(onEventProps)
+  }, [stringify(values)])
 
   // Watch defaultValues
   useEffect(() => {
