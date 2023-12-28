@@ -39,7 +39,6 @@ export interface FormOptions {
   isLoading?: boolean
   disabled?: boolean
   exposed?: boolean
-  onChange?: FormEventHandler
   onSubmit?: FormEventHandler
   onError?: FormErrorHandler
 }
@@ -49,7 +48,6 @@ export const useForm = ({
   isLoading,
   disabled: disabledInit,
   exposed: exposedInit,
-  onChange,
   onSubmit: onSubmitInit,
   onError,
 }: FormOptions = {}) => {
@@ -117,12 +115,6 @@ export const useForm = ({
     setValid(!Array.from(fields).some(([_, state]) => state.error))
     if (Array.from(fields).some(([_, state]) => state.modified)) setHasChanges(true)
   }, [stringify(fields)])
-
-  // Watch values
-  useEffect(() => {
-    if (valuesLoading) return
-    if (onChange) onChange(onEventProps)
-  }, [stringify(values)])
 
   // Watch defaultValues
   useEffect(() => {
