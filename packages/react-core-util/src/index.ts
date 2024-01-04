@@ -29,7 +29,8 @@ export interface FormState {
   successCount: number
 }
 
-export type FormEventHandlerProps<T = {}> = Pick<FormState, 'fields' | 'values' | 'isValid' | 'successCount'> & T
+export type FormEventProps = 'fields' | 'values' | 'isValid' | 'hasChanges' | 'successCount'
+export type FormEventHandlerProps<T = {}> = Pick<FormState, FormEventProps> & T
 export type FormErrorHandlerProps = FormEventHandlerProps<{ error: any }>
 export type FormEventHandler = (props: FormEventHandlerProps) => any
 export type FormErrorHandler = (props: FormErrorHandlerProps) => any
@@ -71,10 +72,10 @@ export const useForm = ({
   
   const [isValid, setValid] = useState(false)
   const [valuesLoading, setValuesLoading] = useState(isLoading ?? true)
-  const [successCount, setSuccessCount] = useState(0)
   const [hasChanges, setHasChanges] = useState(false)
+  const [successCount, setSuccessCount] = useState(0)
 
-  const onEventProps = { fields, values, isValid, successCount }
+  const onEventProps = { fields, values, isValid, hasChanges, successCount }
 
   // User-facing method
   const pushChanges = () => {
