@@ -29,11 +29,9 @@ export interface FormState {
   successCount: number
 }
 
-export type FormEventProps = 'fields' | 'values' | 'isValid' | 'hasChanges' | 'successCount'
-export type FormEventHandlerProps<T = {}> = Pick<FormState, FormEventProps> & T
-export type FormErrorHandlerProps = FormEventHandlerProps<{ error: any }>
+export type FormEventProps = 'fields' | 'values' | 'isValid' | 'hasChanges' | 'pushChanges' | 'successCount' | 'reset'
+export type FormEventHandlerProps = Pick<FormState, FormEventProps> & { error: any }
 export type FormEventHandler = (props: FormEventHandlerProps) => any
-export type FormErrorHandler = (props: FormErrorHandlerProps) => any
 
 export interface FormOptions {
   defaultValues?: KeyObject
@@ -41,7 +39,7 @@ export interface FormOptions {
   disabled?: boolean
   exposed?: boolean
   onSubmit?: FormEventHandler
-  onError?: FormErrorHandler
+  onError?: FormEventHandler
 }
 
 export const useForm = ({
@@ -75,8 +73,6 @@ export const useForm = ({
   const [hasChanges, setHasChanges] = useState(false)
   const [successCount, setSuccessCount] = useState(0)
 
-  const onEventProps = { fields, values, isValid, hasChanges, successCount }
-
   // User-facing method
   const pushChanges = () => {
     setFields(new Map(Array.from(fields).map(([name, state]) => [name, { ...state, modified: false }])))
@@ -88,6 +84,9 @@ export const useForm = ({
     setFields(curr => new Map(
       Array.from(curr).map(([name, state]) => [name, { ...state, modified: newModified, value: '' }])
     ))
+
+  // Passed to all form events
+  const onEventProps = { fields, values, isValid, hasChanges, pushChanges, successCount, reset, error: null }
 
   // Automatically passed to Form
   const onSubmit = !onSubmitInit ? null : async (e: any) => {
