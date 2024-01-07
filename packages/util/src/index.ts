@@ -297,7 +297,20 @@ export const throttle = (callback: () => any, delay = 0, runLast = true) => {
   }
 }
 
-export const handlePingResponse = async (fetchCallback: () => Promise<Response>) => {
+export const res = (
+  status: number,
+  response?: {
+    body?: KeyObject | null
+    headers?: KeyObject
+    [init: string]: any
+  }
+) =>
+  new Response(
+    (response && response.body) ? JSON.stringify(response.body) : null,
+    { status, ...response && { headers: response.headers, ...response.init } }
+  )
+  
+export const handlePingRequest = async (fetchCallback: () => Promise<Response>) => {
   try {
     const res = await fetchCallback()
     const text = await res.text()
@@ -308,7 +321,7 @@ export const handlePingResponse = async (fetchCallback: () => Promise<Response>)
       data = JSON.parse(text)
     }
     catch (error) {
-      data = { text }
+      data = text ? { text } : null
     }
 
     return { res, data }
@@ -329,7 +342,7 @@ export const ping = {
   post: async (url: string, request?: PingRequest) => {
     const { body, headers, ...rest } = request ?? {}
 
-    return await handlePingResponse(async () =>
+    return await handlePingRequest(async () =>
       await fetch(url, {
         method: 'POST',
         body: stringify(body),
@@ -342,7 +355,7 @@ export const ping = {
     )
   },
   get: async (url: string, request?: PingRequest) => {
-    return await handlePingResponse(async () =>
+    return await handlePingRequest(async () =>
       await fetch(url, {
         method: 'GET',
         ...request,
