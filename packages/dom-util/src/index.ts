@@ -66,6 +66,15 @@ export const initScrollView = (offset = '999999px 0px -25% 0px') => {
   }, { offset })
 }
 
+export const initWindowResizeAnnouncer = () => {
+  window.addEventListener('resize', () => {
+    window.dispatchEvent(new Event('windowresize', {
+      bubbles: false,
+      cancelable: false,
+    }))
+  })
+}
+
 export type Timestamp = { value: number }
 export type TimelineCallbackProps = [time: Timestamp, root: Element | Document]
 export type TimelineCallback<T> = (...props: TimelineCallbackProps) => T
