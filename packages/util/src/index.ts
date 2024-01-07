@@ -309,11 +309,11 @@ export const res = (
     (response && response.body) ? JSON.stringify(response.body) : null,
     { status, ...response && { headers: response.headers, ...response.init } }
   )
-  
+
 export const handlePingRequest = async (fetchCallback: () => Promise<Response>) => {
   try {
-    const res = await fetchCallback()
-    const text = await res.text()
+    const response = await fetchCallback()
+    const text = await response.text()
 
     let data: any = {}
 
@@ -324,11 +324,11 @@ export const handlePingRequest = async (fetchCallback: () => Promise<Response>) 
       data = text ? { text } : null
     }
 
-    return { res, data }
+    return { response, data }
   }
   catch (error) {
     return {
-      res: new Response(null, { status: 400 }),
+      response: new Response(null, { status: 400 }),
       data: { error },
     }
   }
