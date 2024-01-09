@@ -44,7 +44,7 @@ export default function Avatar({
   ) : firstLetter ? (
     <div
       className={cn('fui-avatar', className)}
-      style={_letterStyle(firstLetter, colors)}
+      style={styles.letter(firstLetter, colors)}
       {...nonImageProps}
     >
       {firstLetter}
@@ -58,9 +58,11 @@ export default function Avatar({
   )
 }
 
-const _letterStyle = (firstLetter: string, colors: ColorMap) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: colors(firstLetter),
-})
+const styles = {
+  letter: (firstLetter: string, colors: ColorMap) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors(firstLetter),
+  }),
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@fernui/util'
+import { cn, oc } from '@fernui/util'
 import { SetState } from '@fernui/react-core-util'
 import { useModal } from '@fernui/react-util'
 
@@ -73,12 +73,12 @@ export default function Modal({
           if (exitOnBgClick) setActive(false)
         }}
         aria-hidden={!active}
-        style={{ ..._bgStyle, ...bgStyle } as Object}
+        style={oc(styles.bg, bgStyle)}
       />
       <div
         className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
         aria-hidden={!active}
-        style={{ ..._style(active), ...style } as Object}
+        style={oc(styles.modal(active), style)}
         {...props}
       >
         {children}
@@ -87,14 +87,15 @@ export default function Modal({
   )
 }
 
-const _bgStyle = {
-  position: 'fixed',
-  top: '-50%',
-  bottom: '-50%',
-  left: '-50%',
-  right: '-50%',
+const styles = {
+  modal: (active: boolean | null) => ({
+    ...active === null && { visibility : 'hidden !important' },
+  }),
+  bg: {
+    position: 'fixed',
+    top: '-50%',
+    bottom: '-50%',
+    left: '-50%',
+    right: '-50%',
+  },
 }
-
-const _style = (active: boolean | null) => ({
-  ...active === null && { visibility : 'hidden !important' },
-})

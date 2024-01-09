@@ -49,7 +49,7 @@ export default function Checkbox({
   return (
     <div className={cn('fui-field', showError && 'fui-field-invalid', className)}>
       {/* Field */}
-      <label style={_outerStyle}>
+      <label style={styles.outer}>
         <input
           type='checkbox'
           name={name}
@@ -58,11 +58,11 @@ export default function Checkbox({
           aria-label={label || name}
           onChange={e => setValue(e.target.value)}
           className={cn('fui-checkbox', fieldClass)}
-          style={_style}
+          style={styles.field}
           {...props}
         />
-        <div className='fui-check-box' style={_iconOuterStyle}>
-          <Icon i={check} className='fui-check-icon' style={_iconStyle} />
+        <div className='fui-check-box' style={styles.iconOuter}>
+          <Icon i={check} className='fui-check-icon' style={styles.icon} />
         </div>
         {label &&
           <div className={cn('fui-field-label', labelClass)}>
@@ -86,25 +86,24 @@ export default function Checkbox({
   )
 }
 
-const _outerStyle = {
-  display: 'flex',
-  cursor: 'pointer',
-}
-
-const _style = {
-  width: 0,
-  height: 0,
-  outlineWidth: '0 !important',
-}
-
-const _iconOuterStyle = {
-  flexShrink: 0,
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
-const _iconStyle = {
-  position: 'relative',
-  display: 'block',
+const styles = {
+  outer: {
+    display: 'flex',
+    cursor: 'pointer',
+  },
+  field: {
+    width: 0,
+    height: 0,
+    outlineWidth: '0 !important',
+  },
+  iconOuter: {
+    flexShrink: 0,
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    position: 'relative',
+    display: 'block',
+  },
 }

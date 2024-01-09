@@ -1,66 +1,80 @@
 import React from 'react'
-import { cn } from '@fernui/util'
-import ImageRaw, { ImageRawProps } from './ImageRaw'
+import { cn, oc } from '@fernui/util'
 
-export interface ImageProps extends ImageRawProps {
+export interface ImageProps {
+  domRef?: any
+  src?: string
+  lazySrc?: string
+  alt?: string
+  scale?: number
+  cover?: boolean
+  placeholder?: any
   className?: string
   style?: Object
   ratioClass?: string
   innerClass?: string
-  placeholder?: any
-  cover?: boolean
+  [props: string]: any
 }
 
 export default function Image({
+  domRef,
+  src,
+  lazySrc,
+  alt,
+  scale,
+  cover,
+  placeholder,
   className,
   style,
   ratioClass,
   innerClass,
-  placeholder,
-  cover,
   ...props
 }: ImageProps) {
   return (
     <div
+      ref={domRef}
       className={cn('fui-image', className)}
-      style={{ ...style, ...cover && _coverStyle } as Object}
+      style={oc(cover ? styles.cover : styles.outer, style)}
+      {...props}
     >
       <div className={cn(ratioClass)}>
-        {placeholder ?? <div className='fui-placeholder' style={_placeholderStyle as Object} />}
-        <ImageRaw
-          className={innerClass}
-          style={_imageStyle}
-          {...props}
+        {placeholder ?? <div className='fui-placeholder' style={oc(styles.placeholder)} />}
+
+        <div
+          style={oc(styles.image, src && { backgroundImage: `url(${src})` })}
+          data-lazy-bg={lazySrc}
+          data-lazy-scale={lazySrc ? scale : undefined}
+          className={cn(innerClass)}
         />
       </div>
     </div>
   )
 }
 
-const _coverStyle = {
-  overflow: 'hidden',
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-}
-
-const _placeholderStyle = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-  backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
-}
-
-const _imageStyle = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  objectPosition: 'center',
+const styles = {
+  outer: {
+    position: 'relative',
+  },
+  cover: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  placeholder: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
+  },
+  image: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
 }

@@ -7,10 +7,10 @@ settings:
 dependencies:
   '@fernui/util':
     specifier: ^3.2.0
-    version: 3.2.0
+    version: 3.11.0
 
 packages:
 
-  /@fernui/util@3.2.0:
-    resolution: {integrity: sha512-O6dBN0hz3njh//nids2ViJ2u96WzM2MDQuqWSFxbZvMqCYyZGLhzqt6xomVS81kDs0xuDIjQObht02l5wN14ww==}
+  /@fernui/util@3.11.0:
+    resolution: {integrity: sha512-xxw4SyUZxSDJ7mbFq7o/qXb09ZhU/RO4jL+E67Sd+FUJpCV0y83iMajehReo0HvoozA6tlDNNtydDVQGoAGtpA==}
     dev: false

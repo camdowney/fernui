@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@fernui/util'
+import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
 import { angle } from './icons'
 import Error from './Error'
@@ -72,7 +72,7 @@ export default function SelectNative({
           aria-label={label || placeholder || name}
           onChange={e => setValue(e.target.value)}
           className={cn('fui-select-native fui-field-block', fieldClass)}
-          style={{ ..._style(disabled), ...style }}
+          style={oc(styles.field(disabled), style)}
           {...props}
         >
           {placeholder && 
@@ -87,7 +87,7 @@ export default function SelectNative({
         <Icon
           i={angle}
           className='fui-select-icon'
-          style={_iconStyle}
+          style={styles.icon}
         />
       </div>
 
@@ -106,14 +106,15 @@ export default function SelectNative({
   )
 }
 
-const _style = (disabled: boolean) => ({
-  ...!disabled && { cursor: 'pointer' },
-})
-
-const _iconStyle = {
-  position: 'absolute',
-  top: '50%',
-  right: 0,
-  transform: 'translateY(-50%)',
-  pointerEvents: 'none',
+const styles = {
+  field: (disabled: boolean) => ({
+    ...!disabled && { cursor: 'pointer' },
+  }),
+  icon: {
+    position: 'absolute',
+    top: '50%',
+    right: 0,
+    transform: 'translateY(-50%)',
+    pointerEvents: 'none',
+  },
 }

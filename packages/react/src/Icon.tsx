@@ -1,4 +1,5 @@
 import React from 'react'
+import { oc } from '@fernui/util'
 
 export interface IconProps {
   i: { children: string }
@@ -11,14 +12,16 @@ export default function Icon({ i, style, ...props }: IconProps) {
 
   return (
     <svg
-      style={{ ..._style, ...style }}
+      style={oc(styles.icon, style)}
       dangerouslySetInnerHTML={{ __html: children }}
-      {...{ ...rest, ...props}}
+      {...oc(rest, props)}
     />
   )
 }
 
-const _style = {
-  flexShrink: 0,
-  fill: 'currentcolor',
+const styles = {
+  icon: {
+    flexShrink: 0,
+    fill: 'currentcolor',
+  },
 }

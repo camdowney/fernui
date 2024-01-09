@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { cn } from '@fernui/util'
+import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
 import { angle } from './icons'
 import Error from './Error'
@@ -80,14 +80,14 @@ export default function Select({
           aria-label={label || placeholder || value}
           disabled={disabled}
           className={cn('fui-select fui-field-block', fieldClass)}
-          style={{ ..._style, ...style } as object}
+          style={oc(styles.field, style)}
           {...props}
         >
           {placeholderOrValue}
           <Icon
             i={angle}
             className='fui-select-icon'
-            style={_iconStyle}
+            style={styles.icon}
           />
         </button>
 
@@ -130,14 +130,15 @@ export default function Select({
   )
 }
 
-const _style = {
-  textAlign: 'left',
-}
-
-const _iconStyle = {
-  position: 'absolute',
-  top: '50%',
-  right: 0,
-  transform: 'translateY(-50%)',
-  pointerEvents: 'none',
+const styles = {
+  field: {
+    textAlign: 'left',
+  },
+  icon: {
+    position: 'absolute',
+    top: '50%',
+    right: 0,
+    transform: 'translateY(-50%)',
+    pointerEvents: 'none',
+  },
 }

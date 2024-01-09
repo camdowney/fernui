@@ -30,7 +30,7 @@ export default function Expand({
     <div
       ref={ref}
       className={cn('fui-expand', className)}
-      style={_style(active, height)}
+      style={styles.expand(active, height)}
       tabIndex={active ? undefined : -1}
       {...props}
     >
@@ -41,8 +41,10 @@ export default function Expand({
   )
 }
 
-const _style = (active: boolean, height: number) => ({
-  overflow: 'hidden',
-  maxHeight: active ? height + 'px' : 0,
-  transitionProperty: 'max-height',
-})
+const styles = {
+  expand: (active: boolean, height: number) => ({
+    overflow: 'hidden',
+    maxHeight: active ? height + 'px' : 0,
+    transitionProperty: 'max-height',
+  }),
+}

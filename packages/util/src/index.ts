@@ -36,20 +36,23 @@ export const slugify = (str: string) => {
     .replace(/-+$/, '') // Trim - from end of text
   }
 
-export const cn = (...classes: (string | { [key: string]: string } | any)[]) => {
+export const cn = (...classes: (string | { [key: string]: string } | false | null | undefined)[]) => {
   let classesStr = ''
 
   classes.filter(Boolean).forEach(_class => {
     if (typeof _class === 'string')
       return classesStr += _class + ' '
 
-    Object.entries(_class)
+    Object.entries(_class as any)
       .filter(([key, value]) => Boolean(value) && !classesStr.includes(key))
       .forEach(([_, value]) => classesStr += value + ' ')
   })
 
   return classesStr.trim()
 }
+
+export const oc = (...objects: (Object | false | null | undefined)[]) =>
+  objects.filter(Boolean).reduce((acc, object) => ({ ...acc as any, ...object }), {}) as Object
 
 export const capitalize = (str: string) =>
   (str && str.length > 0) ? (str[0].toLocaleUpperCase() + str.substring(1)) : ''
@@ -209,14 +212,16 @@ export const htmail = (nodes: HTMailNode[]) => {
 
 export const formEntriesToHTML = (
   formEntries: [string, string][],
-  options?: {
+  {
+    heading,
+    signature,
+    safePaths = [],
+  }: {
     heading?: string
     signature?: string
     safePaths?: string[]
-  }
+  } = {}
 ) => {
-  const { heading, signature, safePaths } = { safePaths: [], ...options }
-
   return htmail([
     ['h3', heading],
     ...formEntries
