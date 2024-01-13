@@ -149,7 +149,7 @@ export const animDelay = (selector: string, step: number) =>
     time.value -= step
   })
 
-export const animDelayLetter = (selector: string, step: number) =>
+export const animDelayLetters = (selector: string, step: number) =>
   createTimelineEvent((time, root) => {
     root.querySelectorAll(selector).forEach(textNode => {
       if (textNode.innerHTML.includes('split-letter-word')) return
