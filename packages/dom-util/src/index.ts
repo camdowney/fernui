@@ -105,8 +105,7 @@ export const initWindowResizeAnnouncer = () => {
   })
 }
 
-export type Timestamp = { value: number }
-export type TimelineCallbackProps = [time: Timestamp, root: Element | Document]
+export type TimelineCallbackProps = [time: { value: number }, root: Element | Document]
 export type TimelineCallback<T> = (...props: TimelineCallbackProps) => T
 export type TimelineEvent = [
   time: number,
@@ -137,28 +136,30 @@ export const createTimelineEvent = (
   return time.value
 }
 
-export const animDelay = (selector: string, step: number) =>
+export const animStep = (selector: string, step: number) =>
   createTimelineEvent((time, root) => {
     root.querySelectorAll(selector).forEach((element: any) => {
-      element.style.animationDelay = `${time.value}ms`
+      const newElement = element.cloneNode(true)
+
+      newElement.style.animationDelay = `${time.value}ms`
+      element.replaceWith(newElement)
+    
       time.value += step
     })
     time.value -= step
   })
 
-export const animLetters = (selector: string, step: number) =>
+export const animStepLetter = (selector: string, step: number) =>
   createTimelineEvent((time, root) => {
     root.querySelectorAll(selector).forEach(textNode => {
       if (textNode.innerHTML.includes('split-letter-word')) return
 
       textNode.innerHTML = parseHTML(textNode.innerHTML.replace(/\s+/g, ' ').trim()).split(' ').map(word =>
-        `<span class='split-letter-word' style='display: inline-flex;'>`
-        + word.split('').map(letter => {
-          const html = `<div class='split-letter' style='display: inline-block; animation-delay: ${time.value}ms'>${letter}</div>`
+        `<span class='anim-step-word' style='display: inline-flex;'>${word.split('').map(letter => {
+          const html = `<div class='anim-step-letter' style='display: inline-block; animation-delay: ${time.value}ms;'>${letter}</div>`
           time.value += step
           return html
-        }).join('')
-        + `</span>`
+        }).join('')}</span>`
       ).join(' ')
     })
     time.value -= step
