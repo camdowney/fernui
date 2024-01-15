@@ -10,6 +10,12 @@ export type FieldState = {
   validate: ((newValue: any) => boolean) | null
 }
 
+export type SetFieldState = <T>(name: string, state: {
+  value: T
+  modified: boolean
+  validate: ((newValue: T) => boolean) | null
+}) => void
+
 export type FieldsMap = Map<string, FieldState>
 
 export interface FormState {
@@ -21,6 +27,7 @@ export interface FormState {
   setFields: SetState<FieldsMap>
   values: KeyObject
   reset: (newModified?: boolean) => void
+  setField: SetFieldState
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -85,6 +92,18 @@ export const useForm = ({
       Array.from(curr).map(([name, state]) => [name, { ...state, modified: newModified, value: '' }])
     ))
 
+  // User-facing method
+  const setField: SetFieldState = (name, { value, modified = true, validate = null }) => {
+    fields.set(name, {
+      value,
+      modified,
+      error: validate ? !validate(value) : false,
+      validate,
+    })
+
+    setFields(new Map(fields))
+  }
+
   // Passed to all form events
   const onEventProps = { fields, values, isValid, hasChanges, pushChanges, successCount, reset, error: null }
 
@@ -148,7 +167,7 @@ export const useForm = ({
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields,
-    values, reset,
+    values, reset, setField,
     isValid, valuesLoading,
     hasChanges, pushChanges,
     onSubmit, successCount,
@@ -174,7 +193,7 @@ export const useField = <T extends unknown>({
   validate?: ((newValue: T) => boolean) | null
   onChange?: (newValue: T) => void
 }) => {
-  const { disabled: formDisabled, exposed: formExposed, fields, setFields } = useFormContext()
+  const { disabled: formDisabled, exposed: formExposed, fields, setFields, setField } = useFormContext()
 
   const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
@@ -183,14 +202,7 @@ export const useField = <T extends unknown>({
 
   // User-facing method; also used by the component
   const setValue = (newValue: T, newModified = true) => {
-    fields.set(name, {
-      value: newValue,
-      modified: newModified,
-      error: validate ? !validate(newValue) : false,
-      validate,
-    })
-
-    setFields(new Map(fields))
+    setField(name, { value: newValue, modified: newModified, validate })
     if (onChange) onChange(newValue)
   }
 
