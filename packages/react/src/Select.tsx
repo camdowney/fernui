@@ -21,6 +21,8 @@ export interface SelectProps {
   labelClass?: string
   fieldClass?: string
   style?: Object
+  icon?: any
+  iconClass?: string
   error?: string
   errorClass?: string
   info?: any
@@ -41,6 +43,8 @@ export default function Select({
   labelClass,
   fieldClass,
   style,
+  icon,
+  iconClass,
   error = 'Please complete this field.',
   errorClass,
   info,
@@ -84,11 +88,13 @@ export default function Select({
           {...props}
         >
           {placeholderOrValue}
-          <Icon
-            i={angle}
-            className='fui-select-icon'
-            style={styles.icon}
-          />
+          {icon ?? (
+            <Icon
+              i={angle}
+              className={cn('fui-select-icon', iconClass)}
+              style={styles.icon}
+            />
+          )}
         </button>
 
         {/* Options */}

@@ -20,6 +20,8 @@ export interface SelectNativeProps {
   labelClass?: string
   fieldClass?: string
   style?: Object
+  icon?: any
+  iconClass?: string
   error?: string
   errorClass?: string
   info?: any
@@ -40,6 +42,8 @@ export default function SelectNative({
   labelClass,
   fieldClass,
   style,
+  icon,
+  iconClass,
   error = 'Please complete this field.',
   errorClass,
   info,
@@ -84,11 +88,13 @@ export default function SelectNative({
             </option>    
           )}
         </select>
-        <Icon
-          i={angle}
-          className='fui-select-icon'
-          style={styles.icon}
-        />
+        {icon ?? (
+          <Icon
+            i={angle}
+            className={cn('fui-select-icon', iconClass)}
+            style={styles.icon}
+          />
+        )}
       </div>
 
       {/* Error */}
