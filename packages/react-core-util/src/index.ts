@@ -12,8 +12,8 @@ export type FieldState = {
 
 export type SetFieldState = <T>(name: string, state: {
   value: T
-  modified: boolean
-  validate: ((newValue: T) => boolean) | null
+  modified?: boolean
+  validate?: ((newValue: T) => boolean) | null
 }) => void
 
 export type FieldsMap = Map<string, FieldState>
