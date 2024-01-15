@@ -28,6 +28,7 @@ export interface FormState {
   values: KeyObject
   reset: (newModified?: boolean) => void
   setField: SetFieldState
+  removeField: (name: string) => void
   isValid: boolean
   valuesLoading: boolean
   hasChanges: boolean
@@ -104,6 +105,12 @@ export const useForm = ({
     setFields(new Map(fields))
   }
 
+  // User-facing method
+  const removeField = (name: string) => {
+    fields.delete(name)
+    setFields(new Map(fields))
+  }
+
   // Passed to all form events
   const onEventProps = { fields, values, isValid, hasChanges, pushChanges, successCount, reset, error: null }
 
@@ -167,7 +174,8 @@ export const useForm = ({
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields,
-    values, reset, setField,
+    values, reset,
+    setField, removeField,
     isValid, valuesLoading,
     hasChanges, pushChanges,
     onSubmit, successCount,
@@ -193,7 +201,7 @@ export const useField = <T extends unknown>({
   validate?: ((newValue: T) => boolean) | null
   onChange?: (newValue: T) => void
 }) => {
-  const { disabled: formDisabled, exposed: formExposed, fields, setFields, setField } = useFormContext()
+  const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = useFormContext()
 
   const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
@@ -212,11 +220,7 @@ export const useField = <T extends unknown>({
   // Set initial state and cleanup
   useEffect(() => {
     setValue(valueClean, false)
-
-    return () => {
-      fields.delete(name)
-      setFields(new Map(fields))
-    }
+    return () => removeField(name)
   }, [name])
 
   return { name, value: valueClean, setValue, disabled: disabledClean, showError }
