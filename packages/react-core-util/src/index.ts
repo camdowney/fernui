@@ -46,7 +46,6 @@ export interface FormOptions {
   isLoading?: boolean
   initialDisabled?: boolean
   initialExposed?: boolean
-  transformValues?: <T>(value: T) => T
   onSubmit?: FormEventHandler
   onError?: FormEventHandler
 }
@@ -56,7 +55,6 @@ export const useForm = ({
   isLoading,
   initialDisabled,
   initialExposed,
-  transformValues = value => value,
   onSubmit: onSubmitInit,
   onError,
 }: FormOptions = {}) => {
@@ -98,7 +96,7 @@ export const useForm = ({
   // User-facing method
   const setField: SetFieldState = (name, { value, modified = true, validate = null }) => {
     fields.set(name, {
-      value: transformValues(value),
+      value,
       modified,
       error: validate ? !validate(value) : false,
       validate,
