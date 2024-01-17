@@ -44,8 +44,9 @@ export type FormEventHandler = (props: FormEventHandlerProps) => any
 export interface FormOptions {
   defaultValues?: KeyObject
   isLoading?: boolean
-  disabled?: boolean
-  exposed?: boolean
+  initialDisabled?: boolean
+  initialExposed?: boolean
+  transformValues?: <T>(value: T) => T
   onSubmit?: FormEventHandler
   onError?: FormEventHandler
 }
@@ -53,8 +54,9 @@ export interface FormOptions {
 export const useForm = ({
   defaultValues = {},
   isLoading,
-  disabled: disabledInit,
-  exposed: exposedInit,
+  initialDisabled,
+  initialExposed,
+  transformValues = value => value,
   onSubmit: onSubmitInit,
   onError,
 }: FormOptions = {}) => {
@@ -68,8 +70,8 @@ export const useForm = ({
         .filter(([name]) => !name.startsWith('__config'))
     ))
 
-  const [disabled, setDisabled] = useState(disabledInit ?? false)
-  const [exposed, setExposed] = useState(exposedInit ?? false)
+  const [disabled, setDisabled] = useState(initialDisabled ?? false)
+  const [exposed, setExposed] = useState(initialExposed ?? false)
   
   const [fields, setFields] = useState<FieldsMap>(new Map(
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
@@ -96,7 +98,7 @@ export const useForm = ({
   // User-facing method
   const setField: SetFieldState = (name, { value, modified = true, validate = null }) => {
     fields.set(name, {
-      value,
+      value: transformValues(value),
       modified,
       error: validate ? !validate(value) : false,
       validate,
