@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react-core-util",
   "author": "@camdowney",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "A library of general-purpose utility functions for React and React Native.",
   "keywords": [
     "ui",
@@ -16,6 +16,6 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.47"
+    "@types/react": "^18.2.48"
   }
 }
