@@ -23,6 +23,8 @@ export interface SelectProps {
   style?: Object
   icon?: any
   iconClass?: string
+  modalClass?: string
+  optionClass?: string
   error?: string
   errorClass?: string
   info?: any
@@ -45,6 +47,8 @@ export default function Select({
   style,
   icon,
   iconClass,
+  modalClass,
+  optionClass,
   error = 'Please complete this field.',
   errorClass,
   info,
@@ -102,7 +106,7 @@ export default function Select({
           active={active}
           setActive={setActive}
           outerClass='fui-select-modal-outer'
-          className='fui-select-modal'
+          className={cn('fui-select-modal', modalClass)}
           style={{ top: 0 }}
         >
           {placeholderAndOptions.map(option => 
@@ -112,7 +116,7 @@ export default function Select({
                 setValue(option.value ?? option.label)
                 setActive(false)
               }}
-              className='fui-select-option'
+              className={cn('fui-select-option', optionClass)}
               key={option.label}
             >
               {option.label}
