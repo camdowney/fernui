@@ -1,0 +1,58 @@
+Arguments: 
+  /Users/ralphhaynes/.nvm/versions/node/v18.18.0/bin/node /usr/local/Cellar/yarn/1.22.11/libexec/bin/yarn.js publish
+
+PATH: 
+  /Users/ralphhaynes/.nvm/versions/node/v18.18.0/bin:/usr/local/opt/icu4c/sbin:/usr/local/opt/icu4c/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/ralphhaynes/.nvm/versions/node/v18.18.0/bin:/usr/local/opt/icu4c/sbin:/usr/local/opt/icu4c/bin
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  18.18.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.22.11/libexec/lib/cli.js:137023:13)
+      at Interface.emit (node:events:517:28)
+      at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1132:18)
+      at ReadStream.onkeypress (node:internal/readline/interface:271:20)
+      at ReadStream.emit (node:events:517:28)
+      at emitKeys (node:internal/readline/utils:357:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+      at ReadStream.emit (node:events:517:28)
+      at addChunk (node:internal/streams/readable:335:12)
+
+npm manifest: 
+  {
+    "name": "@fernui/react",
+    "author": "@camdowney",
+    "version": "4.10.0",
+    "description": "A library of unopinionated, extendable UI components for React.",
+    "keywords": [
+      "ui",
+      "javascript",
+      "components",
+      "react"
+    ],
+    "main": "./dist/index.js",
+    "peerDependencies": {
+      "@fernui/dom-util": "^1.7.2",
+      "@fernui/react-core-util": "^3.10.0",
+      "@fernui/react-util": "^2.6.0",
+      "@fernui/util": "^3.11.0",
+      "react": "^18.2.0"
+    },
+    "devDependencies": {
+      "@types/react": "^18.2.48"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

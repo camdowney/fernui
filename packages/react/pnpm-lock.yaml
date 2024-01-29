@@ -6,10 +6,10 @@ settings:
 
 dependencies:
   '@fernui/dom-util':
-    specifier: ^1.6.0
+    specifier: ^1.7.2
     version: 1.7.2(@fernui/util@3.11.0)
   '@fernui/react-core-util':
-    specifier: ^3.6.0
+    specifier: ^3.10.0
     version: 3.10.0(@fernui/util@3.11.0)(react@18.2.0)
   '@fernui/react-util':
     specifier: ^2.6.0

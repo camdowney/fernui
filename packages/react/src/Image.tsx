@@ -68,7 +68,7 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundImage: 'linear-gradient(to right, #e0e0e0, #c0c0c0)',
+    backgroundImage: 'linear-gradient(to bottom right, #e0e0e0, #c0c0c0)',
   },
   image: {
     position: 'absolute',
