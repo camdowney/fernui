@@ -11,7 +11,7 @@
     "b-react-openlayers": "cd ./packages/react-openlayers && tsc",
     "b-react-native-util": "cd ./packages/react-native-util && tsc",
     "b-react-native": "cd ./packages/react-native && tsc",
-    "build": "pnpm b-react && rollup -c"
+    "build": "pnpm b-react-core-util && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

@@ -43,7 +43,7 @@ export type FormEventHandler = (props: FormEventHandlerProps) => any
 
 export interface FormOptions {
   defaultValues?: KeyObject
-  isLoading?: boolean
+  defaultValuesLoading?: boolean
   initialDisabled?: boolean
   initialExposed?: boolean
   onSubmit?: FormEventHandler
@@ -52,7 +52,7 @@ export interface FormOptions {
 
 export const useForm = ({
   defaultValues = {},
-  isLoading,
+  defaultValuesLoading = false,
   initialDisabled,
   initialExposed,
   onSubmit: onSubmitInit,
@@ -60,30 +60,23 @@ export const useForm = ({
 }: FormOptions = {}) => {
   const defaultFieldState = { modified: false, error: false, validate: null }
 
-  // Internal method; values are derived from fields
-  const getValuesDeep = (newFields: FieldsMap) =>
-    toDeepObject(Object.fromEntries(
-      Array.from(newFields)
-        .map(([name, state]) => [name, state.value])
-        .filter(([name]) => !name.startsWith('__config'))
-    ))
-
   const [disabled, setDisabled] = useState(initialDisabled ?? false)
   const [exposed, setExposed] = useState(initialExposed ?? false)
   
   const [fields, setFields] = useState<FieldsMap>(new Map(
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
-  const [values, setValuesRaw] = useState<KeyObject>(defaultValues)
+  const [values, setValues] = useState<KeyObject>(defaultValues)
+  const savedValues = useRef(objectToURI(defaultValues))
   
   const [isValid, setValid] = useState(false)
-  const [valuesLoading, setValuesLoading] = useState(isLoading ?? true)
+  const [valuesLoading, setValuesLoading] = useState(defaultValuesLoading)
   const [hasChanges, setHasChanges] = useState(false)
   const [successCount, setSuccessCount] = useState(0)
 
   // User-facing method
   const pushChanges = () => {
-    setFields(new Map(Array.from(fields).map(([name, state]) => [name, { ...state, modified: false }])))
+    savedValues.current = objectToURI(values)
     setHasChanges(false)
   }
 
@@ -135,40 +128,39 @@ export const useForm = ({
     }
   }
 
+  // Diff defaultValues and values
+  useEffect(() => {
+    if (defaultValuesLoading || !valuesLoading) return
+
+    savedValues.current = objectToURI(values)
+
+    Object.entries(defaultValues).forEach(([name, value]) => {
+      const field = fields.get(name)
+
+      fields.set(name, {
+        ...defaultFieldState,
+        ...field,
+        value,
+        ...field && field.validate && { error: !field.validate(value) },
+      })
+    })
+
+    setFields(new Map(fields))
+    setValuesLoading(false)
+  }, [defaultValuesLoading, stringify(defaultValues)])
+
   // Watch fields
   useEffect(() => {
-    setValuesRaw(getValuesDeep(fields))
-    setValid(!Array.from(fields).some(([_, state]) => state.error))
-    if (Array.from(fields).some(([_, state]) => state.modified)) setHasChanges(true)
-  }, [stringify(fields)])
-
-  // Watch defaultValues
-  useEffect(() => {
-    if (isLoading) return
-    if (!objectHasValue(defaultValues) || objectToURI(defaultValues) === objectToURI(values)) return
-
-    setFields(new Map(
-      Object.entries(defaultValues)
-        .map(([name, value]) => {
-          const field = fields.get(name)
-
-          return [name, {
-            ...defaultFieldState,
-            ...field,
-            value,
-            ...field && field.validate && { error: !field.validate(value) },
-          }
-        ]
-      })
+    const newValues = toDeepObject(Object.fromEntries(
+      Array.from(fields)
+        .map(([name, state]) => [name, state.value])
+        .filter(([name]) => !name.startsWith('__config'))
     ))
-  }, [isLoading, stringify(defaultValues)])
 
-   // Considered fully loaded when defaultValues and current values match
-   useEffect(() => {
-    if (isLoading) return
-    if (objectHasValue(defaultValues) && objectToURI(defaultValues) !== objectToURI(values)) return
-    setValuesLoading(false)
-  }, [isLoading, stringify(defaultValues), stringify(values)])
+    setValues(newValues)
+    setValid(!Array.from(fields).some(([_, state]) => state.error))
+    setHasChanges(!valuesLoading && objectToURI(newValues) !== savedValues.current)
+  }, [stringify(fields)])
 
   const context: FormState = {
     disabled, setDisabled,

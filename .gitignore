@@ -4,4 +4,4 @@ dist/
 _dist/
 .env
 .rollup.cache
-tsconfig.tsbuildinfo
+yarn-error.log
