@@ -1,38 +1,24 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
-import { angle } from './icons'
+import { angle } from './_icons'
+import { FieldProps } from './_types'
 import Error from './Error'
 import Icon from './Icon'
 
 export interface OptionNative { label: string, value?: string }
 
-export interface SelectNativeProps {
-  name?: string
-  value?: string
+export interface SelectNativeProps extends FieldProps<string> {
   options: OptionNative[]
-  onChange?: (newValue: string) => void
-  validate?: (newValue: string) => boolean
-  placeholder?: string
-  disabled?: boolean
-  className?: string
-  label?: string
-  labelClass?: string
-  fieldClass?: string
-  style?: Object
   icon?: any
   iconClass?: string
-  error?: string
-  errorClass?: string
-  info?: any
-  infoClass?: string
-  [props: string]: any
 }
 
 export default function SelectNative({
+  domRef,
+  context,
   name: nameProp,
   value: valueProp,
-  options,
   onChange,
   validate = () => true,
   placeholder,
@@ -42,15 +28,19 @@ export default function SelectNative({
   labelClass,
   fieldClass,
   style,
-  icon,
-  iconClass,
   error = 'Please complete this field.',
   errorClass,
   info,
   infoClass,
+  options,
+  icon,
+  iconClass,
   ...props
 }: SelectNativeProps) {
+  const ref = domRef || useRef()
+
   const { name, value, setValue, disabled, showError } = useField({
+    context,
     name: nameProp ?? label ?? placeholder ?? '',
     value: valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label)),
     disabled: disabledProp,
@@ -70,6 +60,7 @@ export default function SelectNative({
       {/* Field */}
       <div style={{ position: 'relative' }}>
         <select
+          ref={ref}
           name={name}
           value={value}
           disabled={disabled}

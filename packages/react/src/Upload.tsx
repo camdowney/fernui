@@ -1,41 +1,26 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
 import { buttonRoleProps } from '@fernui/react-util'
+import { FieldProps } from './_types'
 import Error from './Error'
 
 const BYTES_PER_MB = 1_000_000
 
-export interface UploadProps {
-  name?: string
-  value?: File[]
-  onChange?: (newValue: File[]) => void
+export interface UploadProps extends FieldProps<File[]> {
   acceptedFormats?: string
   maxFileSizeMB?: number
   maxTotalSizeMB?: number
   minFileCount?: number
   maxFileCount?: number
-  disabled?: boolean
-  className?: string
-  label?: string
-  labelClass?: string
-  fieldClass?: string
-  error?: string
-  errorClass?: string
-  info?: any
-  infoClass?: string
-  [props: string]: any
 }
 
 export default function Upload({
+  domRef,
+  context,
   name: nameProp,
   value: valueProp = [],
   onChange,
-  acceptedFormats,
-  maxFileSizeMB = Infinity,
-  maxTotalSizeMB = Infinity,
-  minFileCount = 0,
-  maxFileCount = Infinity,
   placeholder = 'Select or drop file(s)',
   disabled: disabledProp,
   className,
@@ -46,8 +31,15 @@ export default function Upload({
   errorClass,
   info,
   infoClass,
+  acceptedFormats,
+  maxFileSizeMB = Infinity,
+  maxTotalSizeMB = Infinity,
+  minFileCount = 0,
+  maxFileCount = Infinity,
   ...props
 }: UploadProps) {
+  const ref = domRef || useRef()
+
   const validate = (files: File[]) =>
     files.length >= minFileCount
     && files.length <= maxFileCount
@@ -56,6 +48,7 @@ export default function Upload({
     && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMB * BYTES_PER_MB
 
   const { value, setValue, disabled, showError } = useField({
+    context,
     name: nameProp ?? label ?? placeholder ?? '',
     value: valueProp,
     disabled: disabledProp,
@@ -118,6 +111,7 @@ export default function Upload({
 
       {/* Field */}
       <div
+        ref={ref}
         onClick={onClick}
         onDragEnter={() => setDragging(true)}
         onDragLeave={() => setDragging(false)}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@fernui/util'
-import { warning } from './icons'
+import { warning } from './_icons'
 import Icon from './Icon'
 
 export interface ErrorProps {

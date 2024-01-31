@@ -1,28 +1,16 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
-import { check } from './icons'
+import { check } from './_icons'
+import { FieldProps } from './_types'
 import Error from './Error'
 import Icon from './Icon'
 
-export interface CheckboxProps {
-  name?: string
-  value?: string
-  onChange?: (e: any) => any
-  validate?: (newValue: string) => boolean
-  disabled?: boolean
-  className?: string
-  label?: string
-  labelClass?: string
-  fieldClass?: string
-  error?: string
-  errorClass?: string
-  info?: any
-  infoClass?: string
-  [props: string]: any
-}
+export interface CheckboxProps extends FieldProps<string> {}
 
 export default function Checkbox({
+  context,
+  domRef,
   name: nameProp,
   value: valueProp = 'false',
   onChange,
@@ -38,7 +26,10 @@ export default function Checkbox({
   infoClass,
   ...props
 }: CheckboxProps) {
+  const ref = domRef || useRef()
+
   const { name, value, setValue, disabled, showError } = useField({
+    context,
     name: nameProp ?? label ?? '',
     value: valueProp,
     disabled: disabledProp,
@@ -51,6 +42,7 @@ export default function Checkbox({
       {/* Field */}
       <label style={styles.outer}>
         <input
+          ref={ref}
           type='checkbox'
           name={name}
           checked={value === 'true'}

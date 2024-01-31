@@ -1,8 +1,13 @@
 import React from 'react'
-import { useField } from '@fernui/react-core-util'
+import { FormState, useField } from '@fernui/react-core-util'
 
-export default function Honeypot() {
+export interface HoneypotProps {
+  context?: FormState
+}
+
+export default function Honeypot({ context }: HoneypotProps) {
   const { name, setValue } = useField({
+    context,
     name: '__config-hp',
     value: '',
     validate: newValue => !newValue,

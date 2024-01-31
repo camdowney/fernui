@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { cn } from '@fernui/util'
-import { profile } from './icons'
+import { profile } from './_icons'
 import Image, { ImageProps } from './Image'
 import Icon from './Icon'
 

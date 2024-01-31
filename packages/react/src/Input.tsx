@@ -1,26 +1,14 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
+import { FieldProps } from './_types'
 import Error from './Error'
 
-export interface InputProps {
-  name?: string
-  value?: string
-  onChange?: (newValue: string) => void
-  validate?: (newValue: string) => boolean
-  disabled?: boolean
-  className?: string
-  label?: string
-  labelClass?: string
-  fieldClass?: string
-  error?: string
-  errorClass?: string
-  info?: any
-  infoClass?: string
-  [props: string]: any
-}
+export interface InputProps extends FieldProps<string> {}
 
 export default function Input({
+  domRef,
+  context,
   name: nameProp,
   value: valueProp = '',
   onChange,
@@ -37,7 +25,10 @@ export default function Input({
   infoClass,
   ...props
 }: InputProps) {
+  const ref = domRef || useRef()
+
   const { name, value, setValue, disabled, showError } = useField({
+    context,
     name: nameProp ?? label ?? placeholder ?? '',
     value: valueProp,
     disabled: disabledProp,
@@ -56,6 +47,7 @@ export default function Input({
 
       {/* Field */}
       <input
+        ref={ref}
         name={name}
         value={value}
         placeholder={placeholder}

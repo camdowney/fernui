@@ -1,36 +1,22 @@
 import React, { useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
+import { FieldProps } from './_types'
 import Error from './Error'
 
-export interface TextAreaProps {
-  domRef?: any
-  name?: string
-  value?: string
-  onChange?: (newValue: string) => void
-  validate?: (newValue: string) => boolean
-  disabled?: boolean
+export interface TextAreaProps extends FieldProps<string> {
   autoResize?: boolean
-  className?: string
-  label?: string
-  labelClass?: string
-  fieldClass?: string
-  error?: string
-  errorClass?: string
-  info?: any
-  infoClass?: string
-  [props: string]: any
 }
 
 export default function TextArea({
   domRef,
+  context,
   name: nameProp,
   value: valueProp = '',
   onChange,
   validate = () => true,
   placeholder,
   disabled: disabledProp,
-  autoResize,
   className,
   label,
   labelClass,
@@ -39,26 +25,25 @@ export default function TextArea({
   errorClass,
   info,
   infoClass,
+  autoResize,
   ...props
 }: TextAreaProps) {
   const ref = domRef || useRef()
 
-  const onChangeAndResize = (value: any) => {
-    if (onChange) onChange(value)
-    if (autoResize) adjustHeight(ref.current)
-  }
-
   const { name, value, setValue, disabled, showError } = useField({
+    context,
     name: nameProp ?? label ?? placeholder ?? '',
     value: valueProp,
     disabled: disabledProp,
     validate,
-    onChange: onChangeAndResize,
+    onChange: value => {
+      if (onChange) onChange(value)
+      if (autoResize) adjustHeight(ref.current)
+    },
   })
 
   useEffect(() => {
-    if (valueProp && autoResize)
-      adjustHeight(ref.current)
+    if (valueProp && autoResize) adjustHeight(ref.current)
   }, [])
 
   return (

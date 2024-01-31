@@ -10,10 +10,10 @@ dependencies:
     version: 1.7.2(@fernui/util@3.11.0)
   '@fernui/react-core-util':
     specifier: ^3.10.0
-    version: 3.10.0(@fernui/util@3.11.0)(react@18.2.0)
+    version: 3.14.0(@fernui/util@3.11.0)(react@18.2.0)
   '@fernui/react-util':
     specifier: ^2.6.0
-    version: 2.6.0(@fernui/api-util@1.0.1)(@fernui/dom-util@1.7.2)(@fernui/react-core-util@3.10.0)(@fernui/util@3.11.0)(react@18.2.0)
+    version: 2.6.0(@fernui/api-util@1.0.1)(@fernui/dom-util@1.7.2)(@fernui/react-core-util@3.14.0)(@fernui/util@3.11.0)(react@18.2.0)
   '@fernui/util':
     specifier: ^3.11.0
     version: 3.11.0
@@ -44,8 +44,8 @@ packages:
       '@fernui/util': 3.11.0
     dev: false
 
-  /@fernui/react-core-util@3.10.0(@fernui/util@3.11.0)(react@18.2.0):
-    resolution: {integrity: sha512-pIIdxk6/m/K7xnTlUSSrEubZDDr/hN+b5H+hJMJpWAJzt5RCnXYn8Vr8RpT3sxn/DZQ1ZHmpiLPe12d4Q0hV/Q==}
+  /@fernui/react-core-util@3.14.0(@fernui/util@3.11.0)(react@18.2.0):
+    resolution: {integrity: sha512-UinE3ExOg9zHikp7vwlbuXLOuaLD2X194O24yyphQK6XehSYXrqYcdLo+g1QSVHbt5ZxNiZACXatt7Qx49ReQg==}
     peerDependencies:
       '@fernui/util': ^3.11.0
       react: ^18.2.0
@@ -54,7 +54,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@fernui/react-util@2.6.0(@fernui/api-util@1.0.1)(@fernui/dom-util@1.7.2)(@fernui/react-core-util@3.10.0)(@fernui/util@3.11.0)(react@18.2.0):
+  /@fernui/react-util@2.6.0(@fernui/api-util@1.0.1)(@fernui/dom-util@1.7.2)(@fernui/react-core-util@3.14.0)(@fernui/util@3.11.0)(react@18.2.0):
     resolution: {integrity: sha512-J1dK32hE5wEAbmu6zqvJoM1JbG0Ah2ECSrw6wJIfoxxSF4jPv2ezeESOJh5SC4MbHHpO25IKSwuAP99K3fwn9Q==}
     peerDependencies:
       '@fernui/api-util': ^1.0.1
@@ -65,7 +65,7 @@ packages:
     dependencies:
       '@fernui/api-util': 1.0.1(@fernui/util@3.11.0)
       '@fernui/dom-util': 1.7.2(@fernui/util@3.11.0)
-      '@fernui/react-core-util': 3.10.0(@fernui/util@3.11.0)(react@18.2.0)
+      '@fernui/react-core-util': 3.14.0(@fernui/util@3.11.0)(react@18.2.0)
       '@fernui/util': 3.11.0
       react: 18.2.0
     dev: false

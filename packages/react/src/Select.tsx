@@ -1,41 +1,27 @@
 import React, { useRef, useState } from 'react'
 import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
-import { angle } from './icons'
+import { angle } from './_icons'
+import { FieldProps } from './_types'
 import Error from './Error'
 import Icon from './Icon'
 import Modal from './Modal'
 
 export interface Option { label: string, value?: string }
 
-export interface SelectProps {
-  name?: string
-  value?: string
+export interface SelectProps extends FieldProps<string> {
   options: Option[]
-  onChange?: (newValue: string) => void
-  validate?: (newValue: string) => boolean
-  placeholder?: string
-  disabled?: boolean
-  className?: string
-  label?: string
-  labelClass?: string
-  fieldClass?: string
-  style?: Object
   icon?: any
   iconClass?: string
   modalClass?: string
   optionClass?: string
-  error?: string
-  errorClass?: string
-  info?: any
-  infoClass?: string
-  [props: string]: any
 }
 
 export default function Select({
+  domRef,
+  context,
   name: nameProp,
   value: valueProp,
-  options,
   onChange,
   validate = () => true,
   placeholder,
@@ -45,17 +31,21 @@ export default function Select({
   labelClass,
   fieldClass,
   style,
-  icon,
-  iconClass,
-  modalClass,
-  optionClass,
   error = 'Please complete this field.',
   errorClass,
   info,
   infoClass,
+  options,
+  icon,
+  iconClass,
+  modalClass,
+  optionClass,
   ...props
 }: SelectProps) {
+  const ref = domRef || useRef()
+
   const { value, setValue, disabled, showError } = useField({
+    context,
     name: nameProp ?? label ?? placeholder ?? '',
     value: valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label)),
     disabled: disabledProp,
@@ -67,7 +57,6 @@ export default function Select({
   const placeholderAndOptions = [...placeholder ? [{ label: placeholder, value: '' }] : [], ...options]
 
   const [active, setActive] = useState(false)
-  const ref = useRef<any>()
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>

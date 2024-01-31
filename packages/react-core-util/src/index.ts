@@ -181,26 +181,28 @@ export const FormContext = createContext<FormState | null>(null)
 export const useFormContext = () => useContext(FormContext) ?? useForm()
 
 export const useField = <T extends unknown>({
+  context,
   name,
   value,
   disabled: disabledInit,
   validate = null,
   onChange,
 }: {
+  context?: FormState
   name: string
   value: T
   disabled?: boolean
   validate?: ((newValue: T) => boolean) | null
   onChange?: (newValue: T) => void
 }) => {
-  const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = useFormContext()
+  const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = context ?? useFormContext()
 
   const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
   const disabledClean = disabledInit ?? formDisabled
   const showError = field.error && (field.modified || formExposed)
 
-  // User-facing method; also used by the component
+  // User-facing method; should be used by component
   const setValue = (newValue: T, newModified = true) => {
     setField(name, { value: newValue, modified: newModified, validate })
     if (onChange) onChange(newValue)
