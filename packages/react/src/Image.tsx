@@ -4,8 +4,6 @@ import { cn, oc } from '@fernui/util'
 export interface ImageProps {
   domRef?: any
   src?: string
-  lazySrc?: string
-  lazySize?: number
   alt?: string
   cover?: boolean
   placeholder?: any
@@ -13,14 +11,13 @@ export interface ImageProps {
   style?: Object
   ratioClass?: string
   innerClass?: string
+  innerProps: Object
   [props: string]: any
 }
 
 export default function Image({
   domRef,
   src,
-  lazySrc,
-  lazySize,
   alt,
   cover,
   placeholder,
@@ -28,6 +25,7 @@ export default function Image({
   style,
   ratioClass,
   innerClass,
+  innerProps,
   ...props
 }: ImageProps) {
   return (
@@ -42,9 +40,8 @@ export default function Image({
 
         <div
           style={oc(styles.image, src && { backgroundImage: `url(${src})` })}
-          data-lazy-bg={lazySrc}
-          data-lazy-size={lazySize}
           className={cn(innerClass)}
+          {...innerProps}
         />
       </div>
     </div>
