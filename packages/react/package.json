@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react",
   "author": "@camdowney",
-  "version": "4.10.0",
+  "version": "4.11.0",
   "description": "A library of unopinionated, extendable UI components for React.",
   "keywords": [
     "ui",
@@ -18,6 +18,6 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.48"
+    "@types/react": "^18.2.57"
   }
 }
