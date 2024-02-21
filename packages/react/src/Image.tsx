@@ -5,8 +5,8 @@ export interface ImageProps {
   domRef?: any
   src?: string
   lazySrc?: string
+  lazySize?: number
   alt?: string
-  scale?: number
   cover?: boolean
   placeholder?: any
   className?: string
@@ -20,8 +20,8 @@ export default function Image({
   domRef,
   src,
   lazySrc,
+  lazySize,
   alt,
-  scale,
   cover,
   placeholder,
   className,
@@ -43,7 +43,7 @@ export default function Image({
         <div
           style={oc(styles.image, src && { backgroundImage: `url(${src})` })}
           data-lazy-bg={lazySrc}
-          data-lazy-scale={lazySrc ? scale : undefined}
+          data-lazy-size={lazySize}
           className={cn(innerClass)}
         />
       </div>
@@ -75,6 +75,6 @@ const styles = {
     width: '100%',
     height: '100%',
     backgroundSize: 'cover',
-    backgroundPosition: 'center',
+    backgroundPosition: 'center center',
   },
 }
