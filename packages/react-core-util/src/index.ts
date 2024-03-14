@@ -1,7 +1,57 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, toDeepObject, cycle, stringify, objectHasValue, objectToURI } from '@fernui/util'
+import { KeyObject, toDeepObject, cycle, stringify, objectToURI } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
+
+export const usePromise = <T extends unknown>(callback: () => Promise<T>, initialValue?: T) => {
+  const [data, setData] = useState<T | undefined>(initialValue)
+
+  useEffect(() => {
+    (async () => {
+      setData(await callback())
+    })()
+  }, [])
+
+  return data
+}
+
+export const useDebounce = (props: {
+  callback: () => any
+  delay: number
+  deps: any[]
+  isWaiting?: boolean
+  skipFirstDebounce?: boolean
+}) => {
+  const { callback, delay, deps, isWaiting, skipFirstDebounce } = props
+
+  const skipFirst = useRef(skipFirstDebounce ?? false)
+  const [isLoading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let timeoutID: any
+
+    (async () => {
+      if (isWaiting) return
+      
+      if (skipFirst.current) {
+        skipFirst.current = false
+        await callback()
+        return setLoading(false)
+      }
+  
+      setLoading(true)
+  
+      timeoutID = setTimeout(async () => {
+        await callback()
+        setLoading(false)
+      }, delay)
+    })()
+
+    return () => clearTimeout(timeoutID)
+  }, [...deps, delay, isWaiting])
+
+  return isLoading
+}
 
 export type FieldState = {
   value: any
@@ -30,7 +80,7 @@ export interface FormState {
   setField: SetFieldState
   removeField: (name: string) => void
   isValid: boolean
-  valuesLoading: boolean
+  isLoading: boolean
   hasChanges: boolean
   pushChanges: () => void
   onSubmit: ((e: any) => Promise<void>) | null
@@ -43,7 +93,7 @@ export type FormEventHandler = (props: FormEventHandlerProps) => any
 
 export interface FormOptions {
   defaultValues?: KeyObject
-  defaultValuesLoading?: boolean
+  isWaiting?: boolean
   initialDisabled?: boolean
   initialExposed?: boolean
   onSubmit?: FormEventHandler
@@ -52,7 +102,7 @@ export interface FormOptions {
 
 export const useForm = ({
   defaultValues = {},
-  defaultValuesLoading = false,
+  isWaiting = false,
   initialDisabled,
   initialExposed,
   onSubmit: onSubmitInit,
@@ -70,7 +120,7 @@ export const useForm = ({
   const savedValues = useRef(objectToURI(defaultValues))
   
   const [isValid, setValid] = useState(false)
-  const [valuesLoading, setValuesLoading] = useState(defaultValuesLoading)
+  const [isLoading, setLoading] = useState(isWaiting)
   const [hasChanges, setHasChanges] = useState(false)
   const [successCount, setSuccessCount] = useState(0)
 
@@ -130,7 +180,7 @@ export const useForm = ({
 
   // Diff defaultValues and values
   useEffect(() => {
-    if (defaultValuesLoading || !valuesLoading) return
+    if (isWaiting || !isLoading) return
 
     savedValues.current = objectToURI(values)
 
@@ -146,8 +196,8 @@ export const useForm = ({
     })
 
     setFields(new Map(fields))
-    setValuesLoading(false)
-  }, [defaultValuesLoading, stringify(defaultValues)])
+    setLoading(false)
+  }, [isWaiting, stringify(defaultValues)])
 
   // Watch fields
   useEffect(() => {
@@ -159,7 +209,7 @@ export const useForm = ({
 
     setValues(newValues)
     setValid(!Array.from(fields).some(([_, state]) => state.error))
-    setHasChanges(!valuesLoading && objectToURI(newValues) !== savedValues.current)
+    setHasChanges(!isLoading && objectToURI(newValues) !== savedValues.current)
   }, [stringify(fields)])
 
   const context: FormState = {
@@ -168,7 +218,7 @@ export const useForm = ({
     fields, setFields,
     values, reset,
     setField, removeField,
-    isValid, valuesLoading,
+    isValid, isLoading,
     hasChanges, pushChanges,
     onSubmit, successCount,
   }

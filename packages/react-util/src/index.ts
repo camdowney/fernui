@@ -25,23 +25,23 @@ export const useListener = (
   }, [event, callback, ...dependencies ?? []])
 }
 
-export const useLocalStorage = <T extends unknown>(key: string, fallbackValue: T) => {
-  const [data, setData] = useState<T>(fallbackValue)
-  const loaded = useRef(false)
+export const useLocalStorage = (key: string, fallbackValue?: string) => {
+  const [value, setValue] = useState(fallbackValue)
+  const isLoading = useRef(true)
 
   useEffect(() => {
-    const stored = localStorage.getItem(key)
-    if (stored) setData(JSON.parse(stored))
-    loaded.current = true
+    const loadedValue = localStorage.getItem(key)
+    setValue(loadedValue ?? fallbackValue ?? '')
+    isLoading.current = false
   }, [])
 
-  const setDataAndStore = (newValue: T) => {
-    if (!loaded.current) return
-    localStorage.setItem(key, JSON.stringify(newValue))
-    setData(newValue)
+  const setValueAndStore = (newValue: string) => {
+    if (isLoading.current) return
+    localStorage.setItem(key, newValue)
+    setValue(newValue)
   }
 
-  return [data, setDataAndStore] as const
+  return [value, setValueAndStore] as const
 }
 
 export const useScreen = (mode: 'min' | 'max' = 'min') => {
