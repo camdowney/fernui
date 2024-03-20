@@ -5,28 +5,28 @@ export const cycle = (range: number, currentIndex: number, direction: 1 | -1) =>
     ? (currentIndex > 0 ? currentIndex - 1 : range - 1)
     : (currentIndex < range - 1 ? currentIndex + 1 : 0)
 
-export const chunk = <T>(arr: T[], chunkSize: number): T[][] => {
-  if (!Array.isArray(arr)) return []
-  if (!chunkSize || chunkSize < 1) return [arr]
+export const chunk = <T>(arrayValue: T[], chunkSize: number): T[][] => {
+  if (!Array.isArray(arrayValue)) return []
+  if (!chunkSize || chunkSize < 1) return [arrayValue]
 
   const chunks: T[][] = []
 
-  for (let i = 0; i < arr.length; i += chunkSize)
-    chunks.push(arr.slice(i, i + chunkSize))
+  for (let i = 0; i < arrayValue.length; i += chunkSize)
+    chunks.push(arrayValue.slice(i, i + chunkSize))
 
   return chunks
 }
 
-export const isEmail = (str: string) =>
-	/^\S+@\S+\.\S+$/.test(str || '')
+export const isEmail = (stringValue: string) =>
+	/^\S+@\S+\.\S+$/.test(stringValue || '')
 
 // Courtesy of https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
-export const slugify = (str: string) => {
+export const slugify = (stringValue: string) => {
   const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìıİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
   const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
   const p = new RegExp(a.split('').join('|'), 'g')
   
-  return str.toString().toLowerCase()
+  return stringValue.toString().toLowerCase()
     .replace(/\s+/g, '-') // Replace spaces with -
     .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
     .replace(/&/g, '-and-') // Replace & with 'and'
@@ -54,25 +54,47 @@ export const cn = (...classes: (string | { [key: string]: string } | false | nul
 export const oc = (...objects: (Object | false | null | undefined)[]) =>
   objects.filter(Boolean).reduce((acc, object) => ({ ...acc as any, ...object }), {}) as Object
 
-export const capitalize = (str: string) =>
-  (str && str.length > 0) ? (str[0].toLocaleUpperCase() + str.substring(1)) : ''
+export const capitalize = (stringValue: string) =>
+  (stringValue && stringValue.length > 0) ? (stringValue[0].toLocaleUpperCase() + stringValue.substring(1)) : ''
 
 export const stringify = (value: any) =>
   value instanceof Map ? JSON.stringify(Array.from(value.entries()))
     : value === Object(value) ? JSON.stringify(value)
     : String(value)
 
-export const escapeHTML = (str: string) =>
-  (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+export const escapeHTML = (stringValue: string) =>
+  (stringValue || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim()
 
-export const removeHTML = (str: string) =>
-  (str || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+export const removeHTML = (stringValue: string) =>
+  (stringValue || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-export const getExcerpt = (str: string, charLimit: number, appendEllipsis = true) => {
-  if (!str) return ''
-  if (!charLimit || str.length <= charLimit) return str
-  return escapeHTML(str).substring(0, charLimit).split(' ').slice(0, -1).join(' ') + (appendEllipsis ? '...' : '')
+export const getExcerpt = (
+  stringValue: string,
+  charLimit: number,
+  {
+    ellipsis,
+    breakWords = true,
+  }: {
+    ellipsis?: 'append' | 'fit'
+    breakWords?: boolean
+  } = {}
+) => {
+  if (!stringValue) return ''
+  if (!charLimit || stringValue.length <= charLimit) return stringValue
+
+  let newValue = escapeHTML(stringValue).substring(0, charLimit)
+  
+  if (!breakWords)
+    newValue = newValue.split(' ').slice(0, -1).join(' ')
+
+  if (ellipsis === 'append')
+    return newValue + '...'
+
+  if (ellipsis === 'fit')
+    return newValue.substring(0, newValue.length - 3) + '...'
+
+  return newValue
 }
 
 export const toNumber = (value: any) =>
@@ -88,49 +110,54 @@ export const getUniqueFileName = (fileName: string, index = -1) =>
   `${slugify(fileName.split('.').slice(0, -1).join('.'))
   }-${Date.now().toString(36)}${index >= 0 ? `-${index}` : ''}.${fileName.split('.').pop()}`
 
-export const objectHasValue = (obj?: any) =>
-  !!obj && typeof obj === 'object' && Object.keys(obj).length > 0
+export const objectIsNotEmpty = (objectValue?: object) =>
+  !!objectValue && typeof objectValue === 'object' && Object.keys(objectValue).length > 0
 
-export const hasSimilarValue = (value1: string, value2: string) =>
-  (value1 ?? '').toLowerCase().includes((value2 ?? '').toLowerCase())
-
-export const searchByKeys = <T extends KeyObject>(items: T[], value: string, keys: string[] = []) =>
-  !keys ? items : items.filter(item => keys.some(key => hasSimilarValue(item[key], value)))
-
-export const sortByKey = <T extends KeyObject>(
-  items: T[],
-  key: string,
-  options?: {
-    numeric?: boolean
-    order?: 'asc' | 'desc' | '' | false
-  }
-) => {
-  const { numeric, order } = options || { order: 'asc' }
-
-  if (!order) return items
-
-  const orderDesc = order === 'desc'
-
-  const normalizeValue = (value: T) =>
-    numeric ? toNumber(value) : value
-
-  return Array.from(items)
-    .sort((item1, item2) => 
-      normalizeValue(item1[key]) <= normalizeValue(item2[key])
-        ? (orderDesc ? 1 : -1)
-        : (orderDesc ? -1 : 1)
-    )
+export const withoutFirst = <T extends unknown>(arrayValue: T[], valueToExclude: T) => {
+  const index = arrayValue.indexOf(valueToExclude)
+  return index === -1 ? arrayValue : arrayValue.filter((_, i) => i !== index)
 }
 
-export const filterByKeys = <T extends KeyObject>(items: T[], filters: KeyObject) => {
-  if (Object.entries(filters).length < 1) return items
+export const containsIgnoreCase = (baseString: string, searchString: string) =>
+  (baseString ?? '').toLowerCase().includes((searchString ?? '').toLowerCase())
 
-  return items.filter(item =>
-    Object.entries(filters).some(([key, value]) =>
-      [null, undefined, item[key]].includes(value)
-    )
-  )
-}
+// export const searchByKeys = <T extends KeyObject>(objects: T[], value: string, keys: string[] = []) =>
+//   !keys ? objects : objects.filter(object => keys.some(key => stringIncludesIgnoreCase(object[key], value)))
+
+// export const sortByKey = <T extends KeyObject>(
+//   objects: T[],
+//   key: string,
+//   options?: {
+//     numeric?: boolean
+//     order?: 'asc' | 'desc' | '' | false
+//   }
+// ) => {
+//   const { numeric, order } = options || { order: 'asc' }
+
+//   if (!order) return objects
+
+//   const orderDesc = order === 'desc'
+
+//   const normalizeValue = (value: T) =>
+//     numeric ? toNumber(value) : value
+
+//   return Array.from(objects)
+//     .sort((object1, object2) => 
+//       normalizeValue(object1[key]) <= normalizeValue(object2[key])
+//         ? (orderDesc ? 1 : -1)
+//         : (orderDesc ? -1 : 1)
+//     )
+// }
+
+// export const filterByKeys = <T extends KeyObject>(objects: T[], filters: KeyObject) => {
+//   if (Object.entries(filters).length < 1) return objects
+
+//   return objects.filter(object =>
+//     Object.entries(filters).some(([key, value]) =>
+//       [null, undefined, object[key]].includes(value)
+//     )
+//   )
+// }
 
 export const getFacebookShareLink = (url: string) =>
   'https://www.facebook.com/sharer/sharer.php?u=' + (url || '')
