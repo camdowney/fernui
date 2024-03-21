@@ -3,27 +3,39 @@ import { KeyObject, toDeepObject, cycle, stringify, objectToURI } from '@fernui/
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export const usePromise = <T>(callback: () => Promise<T>, initialValue: T) => {
-  const [data, setData] = useState<T>(initialValue)
+export const usePromise = <T>({
+  callback,
+  defaultValue,
+  dependencies = [],
+}: {
+  callback: () => Promise<T>
+  defaultValue: T
+  dependencies?: any[]
+}) => {
+  const [data, setData] = useState<T>(defaultValue)
 
   useEffect(() => {
     (async () => {
       setData(await callback())
     })()
-  }, [])
+  }, dependencies)
 
   return data
 }
 
-export const useDebounce = (props: {
+export const useDebounce = ({
+  callback,
+  delay,
+  dependencies,
+  isWaiting,
+  skipFirstDebounce,
+}: {
   callback: () => any
   delay: number
-  deps: any[]
+  dependencies: any[]
   isWaiting?: boolean
   skipFirstDebounce?: boolean
 }) => {
-  const { callback, delay, deps, isWaiting, skipFirstDebounce } = props
-
   const skipFirst = useRef(skipFirstDebounce ?? false)
   const [isLoading, setLoading] = useState(true)
 
@@ -48,7 +60,7 @@ export const useDebounce = (props: {
     })()
 
     return () => clearTimeout(timeoutID)
-  }, [...deps, delay, isWaiting])
+  }, [...dependencies, delay, isWaiting])
 
   return isLoading
 }
