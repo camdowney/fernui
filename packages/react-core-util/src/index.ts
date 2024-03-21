@@ -3,8 +3,8 @@ import { KeyObject, toDeepObject, cycle, stringify, objectToURI } from '@fernui/
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export const usePromise = <T extends unknown>(callback: () => Promise<T>, initialValue?: T) => {
-  const [data, setData] = useState<T | undefined>(initialValue)
+export const usePromise = <T>(callback: () => Promise<T>, initialValue: T) => {
+  const [data, setData] = useState<T>(initialValue)
 
   useEffect(() => {
     (async () => {
@@ -230,7 +230,7 @@ export const FormContext = createContext<FormState | null>(null)
 
 export const useFormContext = () => useContext(FormContext) ?? useForm()
 
-export const useField = <T extends unknown>({
+export const useField = <T>({
   context,
   name,
   value,

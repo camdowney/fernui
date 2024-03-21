@@ -7,28 +7,28 @@ settings:
 dependencies:
   '@fernui/util':
     specifier: ^3.11.0
-    version: 3.11.0
+    version: 3.12.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.66
-    version: 18.2.66
+    specifier: ^18.2.67
+    version: 18.2.67
 
 packages:
 
-  /@fernui/util@3.11.0:
-    resolution: {integrity: sha512-xxw4SyUZxSDJ7mbFq7o/qXb09ZhU/RO4jL+E67Sd+FUJpCV0y83iMajehReo0HvoozA6tlDNNtydDVQGoAGtpA==}
+  /@fernui/util@3.12.0:
+    resolution: {integrity: sha512-wNS55vBS15+ApLDlC/Zac/7G/pKj3x3tkwI/lBVdNWZCgo3NRKuv2H7QcPNZ+LEcsL1zf/U7wziqZ0/T71DMaQ==}
     dev: false
 
   /@types/prop-types@15.7.11:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: true
 
-  /@types/react@18.2.66:
-    resolution: {integrity: sha512-OYTmMI4UigXeFMF/j4uv0lBBEbongSgptPrHBxqME44h9+yNov+oL6Z3ocJKo0WyXR84sQUNeyIp9MRfckvZpg==}
+  /@types/react@18.2.67:
+    resolution: {integrity: sha512-vkIE2vTIMHQ/xL0rgmuoECBCkZFZeHr49HeWSc24AptMbNRo7pwSBvj73rlJJs9fGKj0koS+V7kQB1jHS0uCgw==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
