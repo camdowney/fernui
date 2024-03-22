@@ -27,7 +27,7 @@ export const usePromise = <T>({
     })()
   }, [isWaiting, ...dependencies])
 
-  return [data, isLoading]
+  return [data, isLoading] as const
 }
 
 export const useDebounce = ({
