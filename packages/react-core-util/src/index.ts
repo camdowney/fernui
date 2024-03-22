@@ -7,20 +7,27 @@ export const usePromise = <T>({
   callback,
   defaultValue,
   dependencies = [],
+  isWaiting,
 }: {
   callback: () => Promise<T>
   defaultValue: T
   dependencies?: any[]
+  isWaiting?: boolean
 }) => {
   const [data, setData] = useState<T>(defaultValue)
+  const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
-    (async () => {
-      setData(await callback())
-    })()
-  }, dependencies)
+    if (isWaiting) return
 
-  return data
+    (async () => {
+      if (!isLoading) setLoading(true)
+      setData(await callback())
+      setLoading(false)
+    })()
+  }, [isWaiting, ...dependencies])
+
+  return [data, isLoading]
 }
 
 export const useDebounce = ({
