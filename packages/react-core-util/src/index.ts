@@ -178,9 +178,9 @@ export const useForm = ({
 
   // Automatically passed to Form
   const onSubmit = !onSubmitInit ? null : async (e: any) => {
-    if (e.preventDefault)
-      e.preventDefault()
-  
+    if (e.preventDefault) e.preventDefault()
+    if (disabled) return
+
     setExposed(true)
   
     try {
