@@ -36,12 +36,12 @@ export default function Modal({
   outerStyle,
   children,
   className,
-  activeClass = 'fui-modal-active',
-  inactiveClass = 'fui-modal-inactive',
+  activeClass,
+  inactiveClass,
   style,
   bgClass,
-  bgActiveClass = 'fui-modal-bg-active',
-  bgInactiveClass = 'fui-modal-bg-inactive',
+  bgActiveClass,
+  bgInactiveClass,
   bgStyle,
   openDelay = 0,
   closeDelay = 0,
@@ -67,7 +67,12 @@ export default function Modal({
       style={outerStyle}
     >
       <div
-        className={cn('fui-modal-bg', active ? bgActiveClass : bgInactiveClass, bgClass)}
+        className={cn(
+          'fui-modal-bg',
+          `fui-modal-bg-${active ? '' : 'in'}active`,
+          active ? bgActiveClass : bgInactiveClass,
+          bgClass
+        )}
         onClick={e => {
           e.preventDefault()
           if (exitOnBgClick) setActive(false)
@@ -76,7 +81,12 @@ export default function Modal({
         style={oc(styles.bg, bgStyle)}
       />
       <div
-        className={cn('fui-modal', active ? activeClass : inactiveClass, className)}
+        className={cn(
+          'fui-modal', 
+          `fui-modal-${active ? '' : 'in'}active`,
+          active ? activeClass : inactiveClass,
+          className
+        )}
         aria-hidden={!active}
         style={oc(styles.modal(active), style)}
         {...props}
