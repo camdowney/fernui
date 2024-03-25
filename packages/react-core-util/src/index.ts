@@ -1,5 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, useRef } from 'react'
-import { KeyObject, toDeepObject, cycle, stringify, objectToURI } from '@fernui/util'
+import { KeyObject, toDeepObject, cycle, stringify, objectToUri } from '@fernui/util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
@@ -136,7 +136,7 @@ export const useForm = ({
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
   const [values, setValues] = useState<KeyObject>(defaultValues)
-  const savedValues = useRef(objectToURI(defaultValues))
+  const savedValues = useRef(objectToUri(defaultValues))
   
   const [isValid, setValid] = useState(false)
   const [isLoading, setLoading] = useState(isWaiting)
@@ -145,7 +145,7 @@ export const useForm = ({
 
   // User-facing method
   const pushChanges = () => {
-    savedValues.current = objectToURI(values)
+    savedValues.current = objectToUri(values)
     setHasChanges(false)
   }
 
@@ -201,7 +201,7 @@ export const useForm = ({
   useEffect(() => {
     if (isWaiting || !isLoading) return
 
-    savedValues.current = objectToURI(values)
+    savedValues.current = objectToUri(values)
 
     Object.entries(defaultValues).forEach(([name, value]) => {
       const field = fields.get(name)
@@ -228,7 +228,7 @@ export const useForm = ({
 
     setValues(newValues)
     setValid(!Array.from(fields).some(([_, state]) => state.error))
-    setHasChanges(!isLoading && objectToURI(newValues) !== savedValues.current)
+    setHasChanges(!isLoading && objectToUri(newValues) !== savedValues.current)
   }, [stringify(fields)])
 
   const context: FormState = {

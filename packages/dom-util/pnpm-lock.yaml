@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   '@fernui/util':
-    specifier: ^3.11.0
-    version: 3.11.0
+    specifier: ^4.0.0
+    version: 4.0.0
 
 packages:
 
-  /@fernui/util@3.11.0:
-    resolution: {integrity: sha512-xxw4SyUZxSDJ7mbFq7o/qXb09ZhU/RO4jL+E67Sd+FUJpCV0y83iMajehReo0HvoozA6tlDNNtydDVQGoAGtpA==}
+  /@fernui/util@4.0.0:
+    resolution: {integrity: sha512-wxtSP9x9TbfKClS8SECX+6sIjbrTROD4Q9r1MnVVhFwPkgRCvB+ecF1mMkrPRvtNYrhAj20aVlj7hZDK4CAQOA==}
     dev: false

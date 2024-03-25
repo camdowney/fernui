@@ -4,8 +4,8 @@ export const st = (selector: string, smooth?: boolean) =>
   (document.querySelector(selector) ?? document.body)
     .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
 
-export const navigateBack = (path?: string) => {
-  if (!path || document.referrer.endsWith(path) || document.referrer.includes(`${path}?`))
+export const navigateBackToPath = (path: string) => {
+  if (document.referrer.endsWith(path) || document.referrer.includes(`${path}?`))
     return window.history.back()
 
   window.location.href = path
@@ -29,7 +29,7 @@ export const downloadFile = ({
   link.click()
 }
 
-export const parseHTML = (str: string) => {
+export const parseHtml = (str: string) => {
   const element = document.createElement('div')
   element.innerHTML = String(str).replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '')
   return element.textContent ?? ''
@@ -161,7 +161,7 @@ export const animDelayLetters = (selector: string, step: number) =>
     root.querySelectorAll(selector).forEach(textNode => {
       if (textNode.innerHTML.includes('split-letter-word')) return
 
-      textNode.innerHTML = parseHTML(textNode.innerHTML.replace(/\s+/g, ' ').trim()).split(' ').map(word =>
+      textNode.innerHTML = parseHtml(textNode.innerHTML.replace(/\s+/g, ' ').trim()).split(' ').map(word =>
         `<span class='anim-delay-word' style='display: inline-flex;'>${word.split('').map(letter => {
           const html = `<div class='anim-delay-letter' style='display: inline-block; animation-delay: ${time.value}ms;'>${letter}</div>`
           time.value += step

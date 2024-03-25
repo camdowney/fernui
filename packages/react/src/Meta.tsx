@@ -26,7 +26,7 @@ export default function Meta({
   themeColor,
   children,
 }: MetaProps) {
-  const description = getExcerpt(desc ?? '', 155, false)
+  const description = getExcerpt(desc ?? '', 155)
   const Shell = as
 
   return (

@@ -6,82 +6,72 @@ settings:
 
 dependencies:
   '@fernui/dom-util':
-    specifier: ^1.7.2
-    version: 1.7.2(@fernui/util@3.11.0)
+    specifier: ^2.0.0
+    version: 2.0.0(@fernui/util@4.0.0)
   '@fernui/react-core-util':
-    specifier: ^3.14.0
-    version: 3.14.0(@fernui/util@3.11.0)(react@18.2.0)
+    specifier: ^4.0.0
+    version: 4.0.0(@fernui/util@4.0.0)(react@18.2.0)
   '@fernui/react-util':
-    specifier: ^2.6.0
-    version: 2.6.0(@fernui/api-util@1.0.1)(@fernui/dom-util@1.7.2)(@fernui/react-core-util@3.14.0)(@fernui/util@3.11.0)(react@18.2.0)
+    specifier: ^3.0.0
+    version: 3.0.0(@fernui/dom-util@2.0.0)(@fernui/react-core-util@4.0.0)(@fernui/util@4.0.0)(react@18.2.0)
   '@fernui/util':
-    specifier: ^3.11.0
-    version: 3.11.0
+    specifier: ^4.0.0
+    version: 4.0.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.57
-    version: 18.2.57
+    specifier: ^18.2.70
+    version: 18.2.70
 
 packages:
 
-  /@fernui/api-util@1.0.1(@fernui/util@3.11.0):
-    resolution: {integrity: sha512-HzgKRT1fOvPi0OqnIMyjtpyvBdw8G6sH9Zb7ZINSl7xU+qmz6lf48+3WCgIOkSySiCoy6zzBQ9k8RAEEI1vD/Q==}
+  /@fernui/dom-util@2.0.0(@fernui/util@4.0.0):
+    resolution: {integrity: sha512-wxYeH1Mhiy7YmAhVWuiMe13isTYqu5Fp1i9QYQqiX06kRWXbHZbjL6LaDQAVj0tk5FlOvLbZW8+ShzR1Lbu21g==}
     peerDependencies:
-      '@fernui/util': ^3.7.2
+      '@fernui/util': ^4.0.0
     dependencies:
-      '@fernui/util': 3.11.0
+      '@fernui/util': 4.0.0
     dev: false
 
-  /@fernui/dom-util@1.7.2(@fernui/util@3.11.0):
-    resolution: {integrity: sha512-MiYLz3OZj5Bl8zRREeC080mY40HRvOzxWyb2fnF36FngrUX+IuB3YqH2fQduOuo6q7L1lK4ZSKHho3xjgRGu/Q==}
+  /@fernui/react-core-util@4.0.0(@fernui/util@4.0.0)(react@18.2.0):
+    resolution: {integrity: sha512-V3C6xQdcwwKEC0+cnqp8FaDp6+f+KoUMjUeNwrFE4DTHu+Q3SR9fbIChR8n4RR+fVxpuORGSexLdy+WloQQEeQ==}
     peerDependencies:
-      '@fernui/util': ^3.11.0
-    dependencies:
-      '@fernui/util': 3.11.0
-    dev: false
-
-  /@fernui/react-core-util@3.14.0(@fernui/util@3.11.0)(react@18.2.0):
-    resolution: {integrity: sha512-UinE3ExOg9zHikp7vwlbuXLOuaLD2X194O24yyphQK6XehSYXrqYcdLo+g1QSVHbt5ZxNiZACXatt7Qx49ReQg==}
-    peerDependencies:
-      '@fernui/util': ^3.11.0
+      '@fernui/util': ^4.0.0
       react: ^18.2.0
     dependencies:
-      '@fernui/util': 3.11.0
+      '@fernui/util': 4.0.0
       react: 18.2.0
     dev: false
 
-  /@fernui/react-util@2.6.0(@fernui/api-util@1.0.1)(@fernui/dom-util@1.7.2)(@fernui/react-core-util@3.14.0)(@fernui/util@3.11.0)(react@18.2.0):
-    resolution: {integrity: sha512-J1dK32hE5wEAbmu6zqvJoM1JbG0Ah2ECSrw6wJIfoxxSF4jPv2ezeESOJh5SC4MbHHpO25IKSwuAP99K3fwn9Q==}
+  /@fernui/react-util@3.0.0(@fernui/dom-util@2.0.0)(@fernui/react-core-util@4.0.0)(@fernui/util@4.0.0)(react@18.2.0):
+    resolution: {integrity: sha512-thBXp+doK1VpVCDL0Cfa/BkFP1VdXK4ac7Ct0oTmM9gJ+YrJUc0zuiVpaB+j5xNrNFSr+xGf5w42uQSFAQxOMg==}
     peerDependencies:
-      '@fernui/api-util': ^1.0.1
-      '@fernui/dom-util': ^1.4.0
-      '@fernui/react-core-util': ^3.0.0
-      '@fernui/util': ^3.5.0
+      '@fernui/dom-util': ^2.0.0
+      '@fernui/react-core-util': ^4.0.0
+      '@fernui/util': ^4.0.0
       react: ^18.2.0
     dependencies:
-      '@fernui/api-util': 1.0.1(@fernui/util@3.11.0)
-      '@fernui/dom-util': 1.7.2(@fernui/util@3.11.0)
-      '@fernui/react-core-util': 3.14.0(@fernui/util@3.11.0)(react@18.2.0)
-      '@fernui/util': 3.11.0
+      '@fernui/dom-util': 2.0.0(@fernui/util@4.0.0)
+      '@fernui/react-core-util': 4.0.0(@fernui/util@4.0.0)(react@18.2.0)
+      '@fernui/util': 4.0.0
       react: 18.2.0
     dev: false
 
-  /@fernui/util@3.11.0:
-    resolution: {integrity: sha512-xxw4SyUZxSDJ7mbFq7o/qXb09ZhU/RO4jL+E67Sd+FUJpCV0y83iMajehReo0HvoozA6tlDNNtydDVQGoAGtpA==}
+  /@fernui/util@4.0.0:
+    resolution: {integrity: sha512-wxtSP9x9TbfKClS8SECX+6sIjbrTROD4Q9r1MnVVhFwPkgRCvB+ecF1mMkrPRvtNYrhAj20aVlj7hZDK4CAQOA==}
     dev: false
 
-  /@types/prop-types@15.7.11:
-    resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
+  /@types/prop-types@15.7.12:
+    resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
     dev: true
 
-  /@types/react@18.2.57:
-    resolution: {integrity: sha512-ZvQsktJgSYrQiMirAN60y4O/LRevIV8hUzSOSNB6gfR3/o3wCBFQx3sPwIYtuDMeiVgsSS3UzCV26tEzgnfvQw==}
+  /@types/react@18.2.70:
+    resolution: {integrity: sha512-hjlM2hho2vqklPhopNkXkdkeq6Lv8WSZTpr7956zY+3WS5cfYUewtCzsJLsbW5dEv3lfSeQ4W14ZFeKC437JRQ==}
     dependencies:
-      '@types/prop-types': 15.7.11
+      '@types/prop-types': 15.7.12
       '@types/scheduler': 0.16.8
       csstype: 3.1.3
     dev: true

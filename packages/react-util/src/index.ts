@@ -1,27 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { getUniqueFileName, KeyObject, objectToURI, toArray, uriToObject } from '@fernui/util'
-import { UploadData } from '@fernui/api-util'
+import { getUniqueFileName, KeyObject, objectToUri, toArray, uriToObject } from '@fernui/util'
 import { fileToBase64 } from '@fernui/dom-util'
 import { ModalOptions, SetState, useModal as useModalInit } from '@fernui/react-core-util'
 
 export const useListener = (
   event: string,
   callback: Function,
-  options?: {
+  {
+    element,
+    dependencies,
+    ...eventListenerProps
+  }: {
     element?: any
     dependencies?: any[]
-    [props: string]: any
-  }
+    [eventListenerProps: string]: any
+  } = {}
 ) => {
-  const { element, dependencies, ...rest } = options ?? {}
-
   useEffect(() => {
     const root = element === 'document' ? document
       : element ? (element.current || element)
       : window
     
-    root.addEventListener(event, callback, rest)
-    return () => root.removeEventListener(event, callback, rest)
+    root.addEventListener(event, callback, eventListenerProps)
+    return () => root.removeEventListener(event, callback, eventListenerProps)
   }, [event, callback, ...dependencies ?? []])
 }
 
@@ -195,7 +196,7 @@ export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, opt
   return data
 }
 
-export const useURL = (options: { dependencies?: any[]} = {}) => {
+export const useUrl = (options: { dependencies?: any[]} = {}) => {
   const { dependencies = [] } = options
 
   const [query, setQuery] = useState<KeyObject>({})
@@ -237,7 +238,7 @@ export const useURL = (options: { dependencies?: any[]} = {}) => {
       ? queryOrSearch
       : uriToObject(queryOrSearch)
 
-    window.history.pushState(query, '', `?${objectToURI(query)}`)
+    window.history.pushState(query, '', `?${objectToUri(query)}`)
 
     if (refresh) setAll()
   }
@@ -272,7 +273,12 @@ export const buttonRoleProps = (options: { label?: string, tabIndex?: number, di
   },
 })
 
-export const cleanFormValuesWithFiles = async (valuesInit: KeyObject, uploadURL: string) => {
+export interface UploadData {
+  name: string
+  data: string
+}
+
+export const destructFormValuesAndFiles = async (valuesInit: KeyObject, uploadURL: string) => {
   const values = Object.entries(structuredClone(valuesInit))
   const files: UploadData[] = []
 

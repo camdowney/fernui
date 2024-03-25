@@ -62,11 +62,11 @@ export const stringify = (value: any) =>
     : value === Object(value) ? JSON.stringify(value)
     : String(value)
 
-export const escapeHTML = (stringValue: string) =>
+export const escapeHtml = (stringValue: string) =>
   (stringValue || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim()
 
-export const removeHTML = (stringValue: string) =>
+export const removeHtml = (stringValue: string) =>
   (stringValue || '').replace(/<\/[^>]+>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
 export const getExcerpt = (
@@ -83,7 +83,7 @@ export const getExcerpt = (
   if (!stringValue) return ''
   if (!charLimit || stringValue.length <= charLimit) return stringValue
 
-  let newValue = escapeHTML(stringValue).substring(0, charLimit)
+  let newValue = escapeHtml(stringValue).substring(0, charLimit)
   
   if (!breakWords)
     newValue = newValue.split(' ').slice(0, -1).join(' ')
@@ -108,7 +108,7 @@ export const callIfFunction = <T>(value: T, ...params: any[]) =>
 
 export const getUniqueFileName = (fileName: string, index = -1) =>
   `${slugify(fileName.split('.').slice(0, -1).join('.'))
-  }-${Date.now().toString(36)}${index >= 0 ? `-${index}` : ''}.${fileName.split('.').pop()}`
+  }-${Date.now()}${index >= 0 ? `-${index}` : ''}.${fileName.split('.').pop()}`
 
 export const objectIsNotEmpty = (objectValue?: object) =>
   !!objectValue && typeof objectValue === 'object' && Object.keys(objectValue).length > 0
@@ -174,7 +174,7 @@ export const uriToObject = (uri: string) =>
     )
   )
 
-export const objectToURI = (object: {}) =>
+export const objectToUri = (object: {}) =>
   Object.entries(object)
     .map(([key, value]: any) => `${encodeURIComponent(key)}=${encodeURIComponent(stringify(value))}`)
     .sort()
@@ -207,9 +207,9 @@ export const toDeepObject = (obj: any): KeyObject => {
   return Object.entries(objectClean).reduce(concat, {}) ?? {}
 }
 
-export type HTMailNode = [
+export type SimpleHtmlNode = [
   tag: string,
-  children?: string | HTMailNode[],
+  children?: string | SimpleHtmlNode[],
   atts?: {
     pt?: number
     pr?: number
@@ -220,14 +220,14 @@ export type HTMailNode = [
   }
 ]
 
-export const htmail = (nodes: HTMailNode[]) => {
-  const nodeToHTML = ([tag, children, atts]: HTMailNode): string => {
+export const generateSimpleHtml = (nodes: SimpleHtmlNode[]) => {
+  const nodeToHTML = ([tag, children, atts]: SimpleHtmlNode): string => {
     if (children === undefined) return ''
     if (tag === 'br') return '<br>'
 
     const { pt, pr, pb, pl, bold, link } = { ...{ pt: 0, pr: 0, pb: 0, pl: 0 }, ...atts }
 
-    const e = escapeHTML
+    const e = escapeHtml
     const t = e(tag)
     const c = typeof children === 'string' ? e(children) : children.map(nodeToHTML).join('')
 
@@ -237,7 +237,7 @@ export const htmail = (nodes: HTMailNode[]) => {
   return nodes.map(nodeToHTML).join('')
 }
 
-export const formEntriesToHTML = (
+export const formEntriesToHtml = (
   formEntries: [string, string][],
   {
     heading,
@@ -249,7 +249,7 @@ export const formEntriesToHTML = (
     safePaths?: string[]
   } = {}
 ) => {
-  return htmail([
+  return generateSimpleHtml([
     ['h3', heading],
     ...formEntries
       .filter(([name]) => !name.startsWith('__config'))
@@ -266,9 +266,9 @@ export const formEntriesToHTML = (
                 : ['span', value === 'true' ? 'Yes' : value === 'false' ? 'No' : value]
             ],
             { pt: i > 0 ? 3 : 1, pl: 4 }
-          ] satisfies HTMailNode),
+          ] satisfies SimpleHtmlNode),
         ]
-      ] satisfies HTMailNode),
+      ] satisfies SimpleHtmlNode),
     ['p', signature, { pt: 18 }],
   ])
 }
@@ -331,15 +331,19 @@ export const throttle = (callback: () => any, delay = 0, runLast = true) => {
 
 export const res = (
   status: number,
-  response?: {
+  {
+    body,
+    headers,
+    ...init
+  }: {
     body?: KeyObject | null
     headers?: KeyObject
     [init: string]: any
-  }
+  } = {}
 ) =>
   new Response(
-    (response && response.body) ? JSON.stringify(response.body) : null,
-    { status, ...response && { headers: response.headers, ...response.init } }
+    body ? JSON.stringify(body) : null,
+    { status, headers, ...init }
   )
 
 export const handlePingRequest = async (fetchCallback: () => Promise<Response>) => {
