@@ -76,23 +76,20 @@ export const getExcerpt = (
     ellipsis,
     breakWords = true,
   }: {
-    ellipsis?: 'append' | 'fit'
+    ellipsis?: boolean
     breakWords?: boolean
   } = {}
 ) => {
   if (!stringValue) return ''
   if (!charLimit || stringValue.length <= charLimit) return stringValue
 
-  let newValue = escapeHtml(stringValue).substring(0, charLimit)
+  let newValue = escapeHtml(stringValue).substring(0, charLimit).trim()
   
-  if (!breakWords)
+  if (!breakWords && newValue.length > charLimit)
     newValue = newValue.split(' ').slice(0, -1).join(' ')
 
-  if (ellipsis === 'append')
-    return newValue + '...'
-
-  if (ellipsis === 'fit')
-    return newValue.substring(0, newValue.length - 3) + '...'
+  if (ellipsis)
+    newValue += '...'
 
   return newValue
 }
