@@ -3,31 +3,40 @@ import { KeyObject, toDeepObject, cycle, stringify, objectToUri } from '@fernui/
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
-export const usePromise = <T>({
+export const useComplexState = <T>({
   callback,
   defaultValue,
   dependencies = [],
   isWaiting,
+  ignoreSubsequentLoads,
 }: {
-  callback: () => Promise<T>
+  callback?: (previousValue: T) => T | Promise<T>
   defaultValue: T
   dependencies?: any[]
   isWaiting?: boolean
+  ignoreSubsequentLoads?: boolean
 }) => {
-  const [data, setData] = useState<T>(defaultValue)
+  const [data, setDataInit] = useState<T>(defaultValue)
   const [isLoading, setLoading] = useState(true)
+  const loaded = useRef(false)
+
+  const setData = (newValue?: T | Promise<T>) => {
+    (async () => {
+      if (!isLoading && !(ignoreSubsequentLoads && loaded.current))
+        setLoading(true)
+
+      setDataInit((await newValue) ?? (callback ? (await callback(data)) : defaultValue))
+      loaded.current = true
+
+      if (isLoading) setLoading(false)
+    })()
+  }
 
   useEffect(() => {
-    if (isWaiting) return
-
-    (async () => {
-      if (!isLoading) setLoading(true)
-      setData(await callback())
-      setLoading(false)
-    })()
+    if (!isWaiting && callback) setData()
   }, [isWaiting, ...dependencies])
 
-  return [data, isLoading] as const
+  return [data, setData, isLoading] as const
 }
 
 export const useDebounce = ({
