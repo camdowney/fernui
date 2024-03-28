@@ -59,7 +59,10 @@ export default function Select({
   const [active, setActive] = useState(false)
 
   return (
-    <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>
+    <label
+      className={cn('fui-field', showError && 'fui-field-invalid', className)}
+      style={{ position: 'relative' }}
+    >
       {/* Label */}
       {label &&
         <div className={cn('fui-field-label', labelClass)}>
@@ -67,52 +70,49 @@ export default function Select({
         </div>
       }
 
-      {/* Field */}
-      <span style={{ position: 'relative' }}>
-        {/* Selector */}
-        <button
-          ref={ref}
-          type='button'
-          onClick={() => setActive(curr => !curr)}
-          aria-label={label || placeholder || value}
-          disabled={disabled}
-          className={cn('fui-select fui-field-block', fieldClass)}
-          style={oc(styles.field, style)}
-          {...props}
-        >
-          {placeholderOrValue}
-          {icon ?? (
-            <Icon
-              i={angle}
-              className={cn('fui-select-icon', iconClass)}
-              style={styles.icon}
-            />
-          )}
-        </button>
+      {/* Selector */}
+      <button
+        ref={ref}
+        type='button'
+        onClick={() => setActive(curr => !curr)}
+        aria-label={label || placeholder || value}
+        disabled={disabled}
+        className={cn('fui-select fui-field-block', fieldClass)}
+        style={oc(styles.field, style)}
+        {...props}
+      >
+        {placeholderOrValue}
+        {icon ?? (
+          <Icon
+            i={angle}
+            className={cn('fui-select-icon', iconClass)}
+            style={styles.icon}
+          />
+        )}
+      </button>
 
-        {/* Options */}
-        <Modal
-          active={active}
-          setActive={setActive}
-          outerClass='fui-select-modal-outer'
-          className={cn('fui-select-modal', modalClass)}
-          style={{ top: 0 }}
-        >
-          {placeholderAndOptions.map(option => 
-            <button
-              type='button'
-              onClick={() => {
-                setValue(option.value ?? option.label)
-                setActive(false)
-              }}
-              className={cn('fui-select-option', optionClass)}
-              key={option.label}
-            >
-              {option.label}
-            </button>
-          )}
-        </Modal>
-      </span>
+      {/* Options */}
+      <Modal
+        active={active}
+        setActive={setActive}
+        outerClass='fui-select-modal-outer'
+        className={cn('fui-select-modal', modalClass)}
+        style={{ top: 0 }}
+      >
+        {placeholderAndOptions.map(option => 
+          <button
+            type='button'
+            onClick={() => {
+              setValue(option.value ?? option.label)
+              setActive(false)
+            }}
+            className={cn('fui-select-option', optionClass)}
+            key={option.label}
+          >
+            {option.label}
+          </button>
+        )}
+      </Modal>
 
       {/* Error */}
       {(error && showError) && (
