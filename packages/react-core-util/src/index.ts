@@ -102,7 +102,7 @@ export interface FormState {
   exposed: boolean
   setExposed: SetState<boolean>
   fields: FieldsMap
-  setFields: SetState<FieldsMap>
+  setFields: (newValue: FieldsMap) => void
   values: KeyObject
   reset: (newModified?: boolean) => void
   setField: SetFieldState
@@ -141,7 +141,7 @@ export const useForm = ({
   const [disabled, setDisabled] = useState(initialDisabled ?? false)
   const [exposed, setExposed] = useState(initialExposed ?? false)
   
-  const [fields, setFields] = useState<FieldsMap>(new Map(
+  const [fields, setFieldsInit] = useState<FieldsMap>(new Map(
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
   const [values, setValues] = useState<KeyObject>(defaultValues)
@@ -153,6 +153,22 @@ export const useForm = ({
   const [successCount, setSuccessCount] = useState(0)
 
   // User-facing method
+  const setFields = (newFields: FieldsMap) => {
+    setFieldsInit(newFields)
+    setValid(!Array.from(fields).some(([_, state]) => state.error))
+
+    const newValues = toDeepObject(Object.fromEntries(
+      Array.from(newFields)
+        .map(([name, state]) => [name, state.value])
+        .filter(([name]) => !name.startsWith('__config'))
+    ))
+
+    setValues(newValues)
+    setHasChanges(!isLoading && objectToUri(newValues) !== savedValues.current)
+    savedValues.current = objectToUri(newValues)
+  }
+
+  // User-facing method
   const pushChanges = () => {
     savedValues.current = objectToUri(values)
     setHasChanges(false)
@@ -160,8 +176,9 @@ export const useForm = ({
 
   // User-facing method
   const reset = (newModified = true) =>
-    setFields(curr => new Map(
-      Array.from(curr).map(([name, state]) => [name, { ...state, modified: newModified, value: '' }])
+    setFields(new Map(
+      Array.from(fields)
+        .map(([name, state]) => [name, { ...state, modified: newModified, value: '' }])
     ))
 
   // User-facing method
@@ -206,11 +223,9 @@ export const useForm = ({
     }
   }
 
-  // Diff defaultValues and values
+  // Populate fields from defaultValues while loading
   useEffect(() => {
     if (isWaiting || !isLoading) return
-
-    savedValues.current = objectToUri(values)
 
     Object.entries(defaultValues).forEach(([name, value]) => {
       const field = fields.get(name)
@@ -224,21 +239,18 @@ export const useForm = ({
     })
 
     setFields(new Map(fields))
-    setLoading(false)
-  }, [isWaiting, stringify(defaultValues)])
+  }, [isWaiting, objectToUri(defaultValues)])
 
-  // Watch fields
+  // Comprehensively check if loading is complete
   useEffect(() => {
-    const newValues = toDeepObject(Object.fromEntries(
-      Array.from(fields)
-        .map(([name, state]) => [name, state.value])
-        .filter(([name]) => !name.startsWith('__config'))
-    ))
+    if (isWaiting || !isLoading) return
 
-    setValues(newValues)
-    setValid(!Array.from(fields).some(([_, state]) => state.error))
-    setHasChanges(!isLoading && objectToUri(newValues) !== savedValues.current)
-  }, [stringify(fields)])
+    const allDefaultValuesLoaded = Object.entries(defaultValues)
+      .every(([name, value]) => objectToUri(values[name]) === objectToUri(value))
+
+    if (allDefaultValuesLoaded)
+      setLoading(false)
+  }, [isWaiting, objectToUri(defaultValues), objectToUri(values)])
 
   const context: FormState = {
     disabled, setDisabled,
