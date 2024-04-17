@@ -83,7 +83,7 @@ export const getExcerpt = (
   if (!stringValue) return ''
   if (!charLimit || stringValue.length <= charLimit) return stringValue
 
-  let newValue = escapeHtml(stringValue).substring(0, charLimit).trim()
+  let newValue = stringValue.trim().substring(0, charLimit).trim()
   
   if (!breakWords && newValue.length > charLimit)
     newValue = newValue.split(' ').slice(0, -1).join(' ')
