@@ -22,13 +22,13 @@ export const useComplexState = <T>({
 
   const setData = (newValue?: T | Promise<T>) => {
     (async () => {
-      if (!isLoading && !(ignoreSubsequentLoads && loaded.current))
+      if (!(ignoreSubsequentLoads && loaded.current))
         setLoading(true)
 
       setDataInit((await newValue) ?? (callback ? (await callback(data)) : defaultValue))
+      
       loaded.current = true
-
-      if (isLoading) setLoading(false)
+      setLoading(false)
     })()
   }
 

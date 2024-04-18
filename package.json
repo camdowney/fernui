@@ -1,16 +1,16 @@
 {
   "name": "fernui",
   "scripts": {
-    "b-icons": "cd ./packages/icons && tsc",
-    "b-util": "cd ./packages/util && tsc",
-    "b-dom-util": "cd ./packages/dom-util && tsc",
-    "b-react-core-util": "cd ./packages/react-core-util && tsc",
-    "b-react-util": "cd ./packages/react-util && tsc",
-    "b-react": "cd ./packages/react && tsc",
-    "b-react-openlayers": "cd ./packages/react-openlayers && tsc",
-    "b-react-native-util": "cd ./packages/react-native-util && tsc",
-    "b-react-native": "cd ./packages/react-native && tsc",
-    "build": "pnpm b-util && rollup -c"
+    "build-icons": "cd ./packages/icons && tsc",
+    "build-util": "cd ./packages/util && tsc",
+    "build-dom-util": "cd ./packages/dom-util && tsc",
+    "build-react-core-util": "cd ./packages/react-core-util && tsc",
+    "build-react-util": "cd ./packages/react-util && tsc",
+    "build-react": "cd ./packages/react && tsc",
+    "build-react-openlayers": "cd ./packages/react-openlayers && tsc",
+    "build-react-native-util": "cd ./packages/react-native-util && tsc",
+    "build-react-native": "cd ./packages/react-native && tsc",
+    "build": "pnpm build-react-core-util && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",
