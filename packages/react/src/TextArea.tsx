@@ -64,7 +64,7 @@ export default function TextArea({
         readOnly={disabled}
         aria-label={label || placeholder || name}
         onChange={e => setValue(e.target.value)}
-        className={cn('fui-textarea fui-field-block', fieldClass)}
+        className={cn('fui-textarea fui-field-block', autoResize && 'fui-textarea-auto-resize', fieldClass)}
         {...props}
       />
 
