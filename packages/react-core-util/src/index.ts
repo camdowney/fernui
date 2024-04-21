@@ -104,7 +104,7 @@ export interface FormState {
   fields: FieldsMap
   setFields: (newValue: FieldsMap) => void
   values: KeyObject
-  reset: (newModified?: boolean) => void
+  reset: (resetModifiedAndExposed?: boolean) => void
   setField: SetFieldState
   removeField: (name: string) => void
   isValid: boolean
@@ -129,7 +129,7 @@ export const useForm = ({
   isWaiting = false,
   initialDisabled,
   initialExposed,
-  onSubmit: onSubmitInit,
+  onSubmit: onSubmitProp,
   onError,
 }: FormOptions = {}) => {
   const defaultFieldState = { modified: false, validate: () => true, error: false }
@@ -151,7 +151,7 @@ export const useForm = ({
   // User-facing method
   const setFields = (newFields: FieldsMap) => {
     setFieldsInit(newFields)
-    setValid(!Array.from(fields).some(([_, state]) => state.error))
+    setValid(Array.from(newFields).every(([_, state]) => !state.error))
 
     const newValues = toDeepObject(Object.fromEntries(
       Array.from(newFields)
@@ -171,16 +171,19 @@ export const useForm = ({
   }
 
   // User-facing method
-  const reset = (newModified = true) =>
+  const reset = (resetModifiedAndExposed = true) => {
+    if (resetModifiedAndExposed) setExposed(false)
+
     setFields(new Map(
       Array.from(fields)
         .map(([name, state]) => [name, {
-          ...state,
-          modified: newModified,
-          error: !state.validate(''),
           value: '',
+          modified: !resetModifiedAndExposed,
+          validate: state.validate,
+          error: !state.validate(''),
         }])
     ))
+  }
 
   // User-facing method
   const setField: SetFieldState = (name, { value, modified = true, validate: validateProp }) => {
@@ -203,7 +206,7 @@ export const useForm = ({
   }
 
   // Automatically passed to Form
-  const onSubmit = !onSubmitInit ? null : async (e: any) => {
+  const onSubmit = !onSubmitProp ? null : async (e: any) => {
     if (e.preventDefault) e.preventDefault()
     if (disabled) return
 
@@ -214,7 +217,7 @@ export const useForm = ({
         throw Error('invalid')
   
       setDisabled(true)
-      await onSubmitInit()
+      await onSubmitProp()
       setSuccessCount(curr => curr + 1)
     }
     catch (error: any) {
