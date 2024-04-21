@@ -84,14 +84,14 @@ export const useDebounce = ({
 export type FieldState = {
   value: any
   modified: boolean
+  validate: (newValue: any) => boolean
   error: boolean
-  validate: ((newValue: any) => boolean) | null
 }
 
 export type SetFieldState = <T>(name: string, state: {
   value: T
   modified?: boolean
-  validate?: ((newValue: T) => boolean) | null
+  validate?: ((newValue: T) => boolean)
 }) => void
 
 export type FieldsMap = Map<string, FieldState>
@@ -115,17 +115,13 @@ export interface FormState {
   successCount: number
 }
 
-export type FormEventProps = 'fields' | 'values' | 'isValid' | 'hasChanges' | 'pushChanges' | 'successCount' | 'reset'
-export type FormEventHandlerProps = Pick<FormState, FormEventProps> & { error: any }
-export type FormEventHandler = (props: FormEventHandlerProps) => any
-
 export interface FormOptions {
   defaultValues?: KeyObject
   isWaiting?: boolean
   initialDisabled?: boolean
   initialExposed?: boolean
-  onSubmit?: FormEventHandler
-  onError?: FormEventHandler
+  onSubmit?: () => any
+  onError?: (error: any) => any
 }
 
 export const useForm = ({
@@ -136,7 +132,7 @@ export const useForm = ({
   onSubmit: onSubmitInit,
   onError,
 }: FormOptions = {}) => {
-  const defaultFieldState = { modified: false, error: false, validate: null }
+  const defaultFieldState = { modified: false, validate: () => true, error: false }
 
   const [disabled, setDisabled] = useState(initialDisabled ?? false)
   const [exposed, setExposed] = useState(initialExposed ?? false)
@@ -178,16 +174,23 @@ export const useForm = ({
   const reset = (newModified = true) =>
     setFields(new Map(
       Array.from(fields)
-        .map(([name, state]) => [name, { ...state, modified: newModified, value: '' }])
+        .map(([name, state]) => [name, {
+          ...state,
+          modified: newModified,
+          error: !state.validate(''),
+          value: '',
+        }])
     ))
 
   // User-facing method
-  const setField: SetFieldState = (name, { value, modified = true, validate = null }) => {
+  const setField: SetFieldState = (name, { value, modified = true, validate: validateProp }) => {
+    const validate = validateProp ?? (fields.get(name) ?? {}).validate ?? (() => true)
+
     fields.set(name, {
       value,
       modified,
-      error: validate ? !validate(value) : false,
       validate,
+      error: !validate(value),
     })
 
     setFields(new Map(fields))
@@ -198,9 +201,6 @@ export const useForm = ({
     fields.delete(name)
     setFields(new Map(fields))
   }
-
-  // Passed to all form events
-  const onEventProps = { fields, values, isValid, hasChanges, pushChanges, successCount, reset, error: null }
 
   // Automatically passed to Form
   const onSubmit = !onSubmitInit ? null : async (e: any) => {
@@ -214,12 +214,12 @@ export const useForm = ({
         throw Error('invalid')
   
       setDisabled(true)
-      await onSubmitInit(onEventProps)
+      await onSubmitInit()
       setSuccessCount(curr => curr + 1)
     }
     catch (error: any) {
       setDisabled(false)
-      if (onError) onError({ ...onEventProps, error })
+      if (onError) onError(error)
     }
   }
 
@@ -275,14 +275,14 @@ export const useField = <T>({
   name,
   value,
   disabled: disabledInit,
-  validate = null,
+  validate,
   onChange,
 }: {
   context?: FormState
   name: string
   value: T
   disabled?: boolean
-  validate?: ((newValue: T) => boolean) | null
+  validate?: (newValue: T) => boolean
   onChange?: (newValue: T) => void
 }) => {
   const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = context ?? useFormContext()
