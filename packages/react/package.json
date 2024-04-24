@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react",
   "author": "@camdowney",
-  "version": "5.1.2",
+  "version": "5.2.0",
   "description": "A library of unopinionated, extendable UI components for React.",
   "keywords": [
     "ui",
@@ -12,6 +12,7 @@
   "main": "./dist/index.js",
   "peerDependencies": {
     "@fernui/dom-util": "^2.0.0",
+    "@fernui/icons": "^3.0.0",
     "@fernui/react-core-util": "^4.2.2",
     "@fernui/react-util": "^3.0.0",
     "@fernui/util": "^4.0.2",
