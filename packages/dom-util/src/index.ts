@@ -77,7 +77,7 @@ export const initLazyLoad = ({
   const offsetStr = `${offset} ${offset} ${offset} ${offset}`
 
   onIntersect({
-    selector: '[data-lazy-src]',
+    selector: '[data-lazy-src]:not([src])',
     callback: (element: HTMLImageElement) => {
       element.src = transformSrc(element.dataset.lazySrc ?? '', element)
     },
@@ -85,7 +85,7 @@ export const initLazyLoad = ({
   })
 
   onIntersect({
-    selector: '[data-lazy-bg]',
+    selector: '[data-lazy-bg]:not([style*="background-image"])',
     callback: (element: HTMLImageElement) => {
       element.style.backgroundImage = `url(${transformSrc(element.dataset.lazyBg ?? '', element)})`
     },

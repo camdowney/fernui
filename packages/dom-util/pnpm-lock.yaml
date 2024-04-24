@@ -1,16 +1,22 @@
-lockfileVersion: '6.0'
+lockfileVersion: '9.0'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@fernui/util':
-    specifier: ^4.0.0
-    version: 4.0.0
+importers:
+
+  .:
+    dependencies:
+      '@fernui/util':
+        specifier: ^4.0.0
+        version: 4.0.2
 
 packages:
 
-  /@fernui/util@4.0.0:
-    resolution: {integrity: sha512-wxtSP9x9TbfKClS8SECX+6sIjbrTROD4Q9r1MnVVhFwPkgRCvB+ecF1mMkrPRvtNYrhAj20aVlj7hZDK4CAQOA==}
-    dev: false
+  '@fernui/util@4.0.2':
+    resolution: {integrity: sha512-QIRdjbj/bygw1i+wUbdHnEj35LUbz908LGybA8xhLCSazfY2DHel8hhy3yowXhb2sKaYKMJtFJ3JGAPivPzdfQ==}
+
+snapshots:
+
+  '@fernui/util@4.0.2': {}
