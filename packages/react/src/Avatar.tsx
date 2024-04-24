@@ -8,8 +8,8 @@ export type Color = string
 export type ColorMap = (letter: string) => Color
 
 export interface AvatarProps {
-  src?: string
-  title?: any
+  src?: string | null | false
+  title?: string | null | false
   colors?: ColorMap
   imageOnlyProps: ImageProps
   initialOnlyProps: Object
@@ -30,10 +30,10 @@ export default function Avatar({
   const firstLetter = title ? title.substring(0, 1).toUpperCase() : null
   const [validSrc, setValidSrc] = useState(!!src)
 
-  return validSrc ? (
+  return (src && validSrc) ? (
     <Image
-      src={src}
-      alt={title}
+      src={src || ''}
+      alt={title || ''}
       className={cn('fui-avatar', className)}
       onError={() => setValidSrc(false)}
       {...props}
