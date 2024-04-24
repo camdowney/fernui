@@ -11,9 +11,9 @@ export interface AvatarProps {
   src?: string | null | false
   title?: string | null | false
   colors?: ColorMap
-  imageOnlyProps: ImageProps
-  initialOnlyProps: Object
-  iconOnlyProps: Object
+  imageOnlyProps?: ImageProps
+  initialOnlyProps?: Object
+  iconOnlyProps?: Object
   [props: string]: any
 }
 
