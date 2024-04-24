@@ -7,31 +7,28 @@ import Icon from './Icon'
 export type Color = string
 export type ColorMap = (letter: string) => Color
 
-const defaultColors: ColorMap = letter => (
-  'JWHF'.includes(letter) ? '#bb2e94' :   // red
-  'SLEIQM'.includes(letter) ? '#7d2b9c' : // purple
-  'DRVYOP'.includes(letter) ? '#2d4baf' : // blue
-  'CKZXG'.includes(letter) ? '#1c7963' :  // aqua
-  '#469310'                               // green 
-)
-
-export interface AvatarProps extends ImageProps {
+export interface AvatarProps {
+  src?: string
   title?: any
-  src?: any
   colors?: ColorMap
+  imageOnlyProps: ImageProps
+  initialOnlyProps: Object
+  iconOnlyProps: Object
   [props: string]: any
 }
 
 export default function Avatar({
-  title,
   src,
+  title,
   colors = defaultColors,
   className,
+  imageOnlyProps,
+  initialOnlyProps,
+  iconOnlyProps,
   ...props
 }: AvatarProps) {
   const firstLetter = title ? title.substring(0, 1).toUpperCase() : null
   const [validSrc, setValidSrc] = useState(!!src)
-  const { as, innerClass, placeholder, cover, lazy, ...nonImageProps } = props
 
   return validSrc ? (
     <Image
@@ -40,12 +37,14 @@ export default function Avatar({
       className={cn('fui-avatar', className)}
       onError={() => setValidSrc(false)}
       {...props}
+      {...imageOnlyProps}
     />
   ) : firstLetter ? (
     <div
       className={cn('fui-avatar', className)}
       style={styles.letter(firstLetter, colors)}
-      {...nonImageProps}
+      {...props}
+      {...initialOnlyProps}
     >
       {firstLetter}
     </div>
@@ -53,7 +52,8 @@ export default function Avatar({
     <Icon
       i={profile}
       className={cn('fui-avatar', className)}
-      {...nonImageProps}
+      {...props}
+      {...iconOnlyProps}
     />
   )
 }
@@ -66,3 +66,11 @@ const styles = {
     backgroundColor: colors(firstLetter),
   }),
 }
+
+const defaultColors: ColorMap = letter => (
+  'JWHF'.includes(letter) ? '#bb2e94' :   // red
+  'SLEIQM'.includes(letter) ? '#7d2b9c' : // purple
+  'DRVYOP'.includes(letter) ? '#2d4baf' : // blue
+  'CKZXG'.includes(letter) ? '#1c7963' :  // aqua
+  '#469310'                               // green 
+)
