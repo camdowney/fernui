@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
+import { angleIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-core-util'
-import { angle } from './_icons'
 import { FieldProps } from './_types'
 import Error from './Error'
 import Icon from './Icon'
@@ -84,7 +84,7 @@ export default function Select({
         {placeholderOrValue}
         {icon ?? (
           <Icon
-            i={angle}
+            data={angleIcon}
             className={cn('fui-select-icon', iconClass)}
             style={styles.icon}
           />

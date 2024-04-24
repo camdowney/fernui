@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn, oc } from '@fernui/util'
+import { coverStyle } from './_styles'
 
 export interface ImageProps {
   domRef?: any
@@ -32,7 +33,7 @@ export default function Image({
     <div
       ref={domRef}
       className={cn('fui-image', className)}
-      style={oc(cover ? styles.cover : styles.outer, style)}
+      style={oc(cover ? coverStyle : styles.outer, style)}
       {...props}
     >
       <div className={cn(ratioClass)}>
@@ -51,13 +52,6 @@ export default function Image({
 const styles = {
   outer: {
     position: 'relative',
-  },
-  cover: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
   },
   placeholder: {
     position: 'absolute',

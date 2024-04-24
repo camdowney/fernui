@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { cn } from '@fernui/util'
-import { profile } from './_icons'
+import React from 'react'
+import { profileIcon } from '@fernui/icons'
+import { cn, oc } from '@fernui/util'
+import { coverStyle } from './_styles'
 import Image, { ImageProps } from './Image'
 import Icon from './Icon'
 
@@ -8,57 +9,67 @@ export type Color = string
 export type ColorMap = (letter: string) => Color
 
 export interface AvatarProps {
-  src?: string | null | false
+  domRef?: any
   title?: string | null | false
   colors?: ColorMap
-  imageOnlyProps?: ImageProps
-  initialOnlyProps?: Object
-  iconOnlyProps?: Object
+  hasImage?: boolean
+  className?: string
+  style?: Object
+  iconProps?: Object
+  letterProps?: Object
+  imageProps?: ImageProps
   [props: string]: any
 }
 
 export default function Avatar({
-  src,
+  domRef,
   title,
   colors = defaultColors,
+  hasImage,
   className,
-  imageOnlyProps,
-  initialOnlyProps,
-  iconOnlyProps,
+  style,
+  iconProps,
+  letterProps,
+  imageProps,
   ...props
 }: AvatarProps) {
-  const firstLetter = title ? title.substring(0, 1).toUpperCase() : null
-  const [validSrc, setValidSrc] = useState(!!src)
+  const letter = title ? title.substring(0, 1).toUpperCase() : null
 
-  return (src && validSrc) ? (
-    <Image
-      src={src || ''}
-      alt={title || ''}
-      className={cn('fui-avatar', className)}
-      onError={() => setValidSrc(false)}
-      {...props}
-      {...imageOnlyProps}
-    />
-  ) : firstLetter ? (
+  return (
     <div
+      ref={domRef}
       className={cn('fui-avatar', className)}
-      style={styles.letter(firstLetter, colors)}
+      style={oc(styles.outer, style)}
       {...props}
-      {...initialOnlyProps}
     >
-      {firstLetter}
+      {!letter ? (
+        <Icon
+          data={profileIcon}
+          {...iconProps}
+          style={oc(coverStyle, (iconProps ?? {} as any).style)}
+        />
+      ) : (
+        <div
+          {...letterProps}
+          style={oc(coverStyle, styles.letter(letter, colors), (letterProps ?? {} as any).style)}
+        >
+          {letter}
+        </div>
+      )}
+      <Image
+        {...imageProps}
+        alt={title || undefined}
+        style={oc(!hasImage && { display: 'none' }, (imageProps ?? {}).style)}
+        cover
+      />
     </div>
-  ) : (
-    <Icon
-      i={profile}
-      className={cn('fui-avatar', className)}
-      {...props}
-      {...iconOnlyProps}
-    />
   )
 }
 
 const styles = {
+  outer: {
+    position: 'relative',
+  },
   letter: (firstLetter: string, colors: ColorMap) => ({
     display: 'flex',
     justifyContent: 'center',
