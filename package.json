@@ -10,7 +10,7 @@
     "build-react-openlayers": "cd ./packages/react-openlayers && tsc",
     "build-react-native-util": "cd ./packages/react-native-util && tsc",
     "build-react-native": "cd ./packages/react-native && tsc",
-    "build": "pnpm build-dom-util && rollup -c"
+    "build": "pnpm build-react-util && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

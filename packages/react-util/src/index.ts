@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getUniqueFileName, KeyObject, objectToUri, toArray, uriToObject } from '@fernui/util'
-import { fileToBase64 } from '@fernui/dom-util'
-import { ModalOptions, SetState, useModal as useModalInit } from '@fernui/react-core-util'
+import { fileToBase64, initLazyLoad } from '@fernui/dom-util'
+import { ModalOptions, SetState, useComplexState, useModal as useModalInit } from '@fernui/react-core-util'
 
 export const useListener = (
   event: string,
@@ -246,6 +246,21 @@ export const useUrl = (options: { dependencies?: any[]} = {}) => {
   return { query, protocol, host, path, search, hash, referrer, push, isLoading }
 }
 
+export const useBreadcrumbs = (excludePages: number[] = []) => {
+  const [breadcrumbs] = useComplexState({
+    callback: () => {
+      const parts = window.location.pathname.split('/').slice(1)
+
+      return parts
+        .map((_, i) => '/' + parts.slice(0, i + 1).join('/'))
+        .filter((_, i) => !excludePages.includes(i))
+    },
+    defaultValue: [],
+  })
+
+  return breadcrumbs
+}
+
 export const jsxToText = (element: React.ReactElement | string): string => {
   if (!element) return ''
   if (typeof element === 'string') return element.trim()
@@ -295,4 +310,63 @@ export const destructFormValuesAndFiles = async (valuesInit: KeyObject, uploadUR
   )
 
   return { values, files }
+}
+
+export const createLazyResizer = ({
+  outputDir,
+  noResizeSrcPatterns = [],
+  sizes = [640, 1024, 1536, 2000],
+  placeholderSize = 40,
+  scale = 1,
+}: {
+  outputDir: string
+  noResizeSrcPatterns?: RegExp[]
+  sizes?: number[]
+  placeholderSize?: number
+  scale?: number
+}) => {
+
+  const getResizeSrc = (src: string, element?: HTMLImageElement) => {
+    if ([...noResizeSrcPatterns, /^http/].some(pattern => src.match(pattern)))
+      return src
+  
+    const sizeRendered = element ? Math.max(element.scrollWidth, element.scrollHeight) : Infinity
+    const sizeAdjusted = sizeRendered * scale
+    const sizeClean = sizes.find(size => sizeAdjusted < size) ?? sizes.slice(-1)
+  
+    return `${outputDir}/${sizeClean}${src}`
+  }
+
+  return {
+    /**
+     * Returns the most optimally-sized image for an element from an existing folder of resized images.
+     * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
+     * @param element (HTMLImageElement?) If undefined, the largest available image will be returned.
+     */
+    getResizeSrc,
+    /**
+     * Attaches scroll listeners to all existing Images prepared by getLazyResizeImageProps.
+     */
+    initLazyResize: () => initLazyLoad({ transformSrc: getResizeSrc }),
+    /**
+     * Allows Image components to be lazy-loaded and resized; requires initLazyResize to have been run.
+     * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
+     * @param lazy (boolean?) If not true, the largest available image will be immediately loaded.
+     */
+    getLazyResizeImageProps: (src = '', lazy?: boolean) =>
+      lazy ? {
+        placeholderStyle: {
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundImage: `url(${outputDir}/${placeholderSize}${src}) !important`,
+        },
+        innerProps: {
+          'data-lazy-bg': src,
+          'data-lazy-loaded': false,
+        },
+      }
+      : {
+        src: getResizeSrc(src),
+      },
+  }
 }
