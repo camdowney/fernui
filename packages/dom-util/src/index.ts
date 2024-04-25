@@ -76,21 +76,37 @@ export const initLazyLoad = ({
 } = {}) => {
   const offsetStr = `${offset} ${offset} ${offset} ${offset}`
 
-  onIntersect({
-    selector: '[data-lazy-src]:not([data-lazy-loaded])',
-    callback: (element: HTMLImageElement) => {
-      element.src = transformSrc(element.dataset.lazySrc ?? '', element)
+  const lazyLoad = (isBackground: boolean) => (element: HTMLImageElement) => {
+    const resizeSrc = transformSrc(element.dataset[isBackground ? 'lazyBg' : 'lazySrc'] ?? '', element)
+
+    if (isBackground)
+      element.style.backgroundImage = `url(${resizeSrc})`
+    else
+      element.src = resizeSrc
+
+    element.dataset.lazyTransformed = 'true'
+    
+    const img = new Image()
+    img.src = resizeSrc
+
+    const loaded = () =>
       element.dataset.lazyLoaded = 'true'
-    },
+
+    if (img.complete)
+      loaded()
+    else
+      img.onload = loaded
+  }
+
+  onIntersect({
+    selector: '[data-lazy-src]:not([data-lazy-transformed])',
+    callback: lazyLoad,
     offset: offsetStr,
   })
 
   onIntersect({
-    selector: '[data-lazy-bg]:not([data-lazy-loaded])',
-    callback: (element: HTMLImageElement) => {
-      element.style.backgroundImage = `url(${transformSrc(element.dataset.lazyBg ?? '', element)})`
-      element.dataset.lazyLoaded = 'true'
-    },
+    selector: '[data-lazy-bg]:not([data-lazy-transformed])',
+    callback: lazyLoad,
     offset: offsetStr,
   })
 }

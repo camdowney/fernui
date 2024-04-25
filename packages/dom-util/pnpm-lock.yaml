@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@fernui/util':
-        specifier: ^4.0.0
+        specifier: ^4.0.2
         version: 4.0.2
 
 packages:

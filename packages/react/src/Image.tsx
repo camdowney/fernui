@@ -8,6 +8,8 @@ export interface ImageProps {
   alt?: string
   cover?: boolean
   placeholder?: any
+  placeholderClass?: string
+  placeholderStyle?: Object
   className?: string
   style?: Object
   ratioClass?: string
@@ -22,6 +24,8 @@ export default function Image({
   alt,
   cover,
   placeholder,
+  placeholderClass,
+  placeholderStyle,
   className,
   style,
   ratioClass,
@@ -37,7 +41,12 @@ export default function Image({
       {...props}
     >
       <div className={cn(ratioClass)}>
-        {placeholder ?? <div className='fui-placeholder' style={oc(styles.placeholder)} />}
+        {placeholder ?? (
+          <div
+            className={cn('fui-placeholder', placeholderClass)}
+            style={oc(styles.placeholder, placeholderStyle)}
+          />
+        )}
 
         <div
           className={cn(innerClass)}
