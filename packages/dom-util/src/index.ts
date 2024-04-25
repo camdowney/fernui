@@ -148,10 +148,17 @@ export const createTimelineEvent = (
 export const animDelay = (selector: string, step: number) =>
   createTimelineEvent((time, root) => {
     root.querySelectorAll(selector).forEach((element: any) => {
-      const newElement = element.cloneNode(true)
+      const hasListeners = element.querySelectorAll('[data-has-listener],[data-lazy-src],[data-lazy-bg]').length > 0
 
-      newElement.style.animationDelay = `${time.value}ms`
-      element.replaceWith(newElement)
+      // Replacing leads to better animation timing, but destroys listeners
+      if (!hasListeners) {
+        const newElement = element.cloneNode(true)
+        newElement.style.animationDelay = `${time.value}ms`
+        element.replaceWith(newElement)
+      }
+      else {
+        element.style.animationDelay = `${time.value}ms`
+      }
     
       time.value += step
     })
