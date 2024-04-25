@@ -54,9 +54,9 @@ const config = (path, { flavor }) => [
 
 export default [
   // ...config('icons', { flavor: 'vanilla' }),
-  ...config('image-core', { flavor: 'vanilla' }),
+  // ...config('image-core', { flavor: 'vanilla' }),
   // ...config('util', { flavor: 'vanilla' }),
-  // ...config('dom-util', { flavor: 'vanilla' }),
+  ...config('dom-util', { flavor: 'vanilla' }),
   // ...config('react-core-util', { flavor: 'vanilla' }),
   // ...config('react-util', { flavor: 'vanilla' }),
   // ...config('react', { flavor: 'react' }),

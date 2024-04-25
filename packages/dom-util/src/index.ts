@@ -4,13 +4,6 @@ export const st = (selector: string, smooth?: boolean) =>
   (document.querySelector(selector) ?? document.body)
     .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
 
-export const navigateBackToPath = (path: string) => {
-  if (document.referrer.endsWith(path) || document.referrer.includes(`${path}?`))
-    return window.history.back()
-
-  window.location.href = path
-}
-
 export const downloadFile = ({
   name,
   content,
