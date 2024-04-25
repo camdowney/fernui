@@ -40,9 +40,9 @@ export default function Image({
         {placeholder ?? <div className='fui-placeholder' style={oc(styles.placeholder)} />}
 
         <div
-          style={oc(styles.image, src && { backgroundImage: `url(${src})` })}
           className={cn(innerClass)}
           {...innerProps}
+          style={oc(styles.image, src && { backgroundImage: `url(${src})` }, (innerProps ?? {} as any).style)}
         />
       </div>
     </div>
