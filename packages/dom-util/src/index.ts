@@ -67,50 +67,6 @@ export const onIntersect = ({
   })
 }
 
-export const initLazyLoad = ({
-  transformSrc = src => src,
-  offset = '750px',
-}: {
-  transformSrc?: (src: string, element: HTMLImageElement) => string
-  offset?: string
-} = {}) => {
-  const offsetStr = `${offset} ${offset} ${offset} ${offset}`
-
-  const lazyLoad = (isBackground: boolean) => (element: HTMLImageElement) => {
-    const resizeSrc = transformSrc(element.dataset[isBackground ? 'lazyBg' : 'lazySrc'] ?? '', element)
-
-    if (isBackground)
-      element.style.backgroundImage = `url(${resizeSrc})`
-    else
-      element.src = resizeSrc
-
-    element.dataset.lazyTransformed = 'true'
-    
-    const img = new Image()
-    img.src = resizeSrc
-
-    const loaded = () =>
-      element.dataset.lazyLoaded = 'true'
-
-    if (img.complete)
-      loaded()
-    else
-      img.onload = loaded
-  }
-
-  onIntersect({
-    selector: '[data-lazy-src]:not([data-lazy-transformed])',
-    callback: lazyLoad(false),
-    offset: offsetStr,
-  })
-
-  onIntersect({
-    selector: '[data-lazy-bg]:not([data-lazy-transformed])',
-    callback: lazyLoad(true),
-    offset: offsetStr,
-  })
-}
-
 export const initScrollView = (offset = '999999px 0px -25% 0px') => {
   onIntersect({
     selector: '.scroll-view',
