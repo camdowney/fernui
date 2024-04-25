@@ -325,7 +325,6 @@ export const createLazyResizer = ({
   placeholderSize?: number
   scale?: number
 }) => {
-
   const getResizeSrc = (src: string, element?: HTMLImageElement) => {
     if ([...noResizeSrcPatterns, /^http/].some(pattern => src.match(pattern)))
       return src
