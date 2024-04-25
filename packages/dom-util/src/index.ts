@@ -100,13 +100,13 @@ export const initLazyLoad = ({
 
   onIntersect({
     selector: '[data-lazy-src]:not([data-lazy-transformed])',
-    callback: lazyLoad,
+    callback: lazyLoad(false),
     offset: offsetStr,
   })
 
   onIntersect({
     selector: '[data-lazy-bg]:not([data-lazy-transformed])',
-    callback: lazyLoad,
+    callback: lazyLoad(true),
     offset: offsetStr,
   })
 }
