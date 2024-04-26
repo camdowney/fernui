@@ -14,7 +14,7 @@ export interface LazyResizeDomFactoryProps {
 /**
  * Factory for lazy-load and resize functionality.
  */
-export const getLazyResizeDomMethods = ({
+export const getLazyResizeDomUtils = ({
   outputDir,
   noResizeSrcPatterns = [],
   sizes = [640, 1024, 1536, 2000],
@@ -109,7 +109,7 @@ export const getLazyResizeDomMethods = ({
  * Does not modify the input images.
  */
 export const resizeLocalImages = ({
-  sizes = [640, 1024, 1536, 2000],
+  sizes = [40, 640, 1024, 1536, 2000],
   quality = 0.5,
   inputDir = './input',
   outputDir = './output',
