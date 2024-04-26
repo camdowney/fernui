@@ -1,7 +1,7 @@
 {
   "name": "@fernui/image-core",
   "author": "@camdowney",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A library of image lazy-loading and resizing functions for JavaScript.",
   "keywords": [
     "ui",
