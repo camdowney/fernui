@@ -9,13 +9,13 @@ importers:
   .:
     dependencies:
       '@fernui/image-core':
-        specifier: ^1.0.4
-        version: 1.0.4
+        specifier: ^1.0.5
+        version: 1.0.5
       '@fernui/util':
         specifier: ^4.0.2
         version: 4.0.2
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.0
         version: 18.3.0
     devDependencies:
       '@types/react':
@@ -30,8 +30,8 @@ packages:
   '@fernui/dom-util@2.2.0':
     resolution: {integrity: sha512-d7rBBXk6bo5RN7j8N+rmV7npc+LMo9byYZ41ekv+7IKSZCtd+9mogONZTSiFTQ0CnwD6dm+y8iqvlAlPid7vfQ==}
 
-  '@fernui/image-core@1.0.4':
-    resolution: {integrity: sha512-QWb8o26roQa9xzKbbI/tYVv56CfzxNeLmoI/iCHgUkYc+J1yii3HAmZz9+V75nrB+Qtc4QDLeoqcC4toxJ6TjA==}
+  '@fernui/image-core@1.0.5':
+    resolution: {integrity: sha512-0/BO2SqSwF1eiLzhMZYOBNaRgA7sroiPIXU35h/3wQnqDW89pxBaQiRIn5NNAN62021//FTUtJuiJoPDGG8VHA==}
 
   '@fernui/util@4.0.2':
     resolution: {integrity: sha512-QIRdjbj/bygw1i+wUbdHnEj35LUbz908LGybA8xhLCSazfY2DHel8hhy3yowXhb2sKaYKMJtFJ3JGAPivPzdfQ==}
@@ -223,7 +223,7 @@ snapshots:
     dependencies:
       '@fernui/util': 4.0.2
 
-  '@fernui/image-core@1.0.4':
+  '@fernui/image-core@1.0.5':
     dependencies:
       '@fernui/dom-util': 2.2.0
       sharp: 0.33.3
