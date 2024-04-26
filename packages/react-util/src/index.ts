@@ -1,7 +1,465 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { getUniqueFileName, KeyObject, objectToUri, toArray, uriToObject } from '@fernui/util'
-import { fileToBase64, initLazyLoad } from '@fernui/dom-util'
-import { ModalOptions, SetState, useComplexState, useModal as useModalInit } from '@fernui/react-core-util'
+import React, { useEffect, useRef, useState, Dispatch, SetStateAction, createContext, useContext } from 'react'
+import { getUniqueFileName, KeyObject, objectToUri, toArray, uriToObject, toDeepObject, cycle, stringify } from '@fernui/util'
+import { fileToBase64 } from '@fernui/dom-util'
+
+export type SetState<T> = Dispatch<SetStateAction<T>>
+
+export const useComplexState = <T>({
+  callback,
+  defaultValue,
+  dependencies = [],
+  isWaiting,
+  ignoreSubsequentLoads,
+}: {
+  callback?: (previousValue: T) => T | Promise<T>
+  defaultValue: T
+  dependencies?: any[]
+  isWaiting?: boolean
+  ignoreSubsequentLoads?: boolean
+}) => {
+  const [data, setDataInit] = useState<T>(defaultValue)
+  const [isLoading, setLoading] = useState(true)
+  const loaded = useRef(false)
+
+  const setData = (newValue?: T | Promise<T>) => {
+    (async () => {
+      if (!(ignoreSubsequentLoads && loaded.current))
+        setLoading(true)
+
+      setDataInit((await newValue) ?? (callback ? (await callback(data)) : defaultValue))
+      
+      loaded.current = true
+      setLoading(false)
+    })()
+  }
+
+  useEffect(() => {
+    if (!isWaiting && callback) setData()
+  }, [isWaiting, ...dependencies])
+
+  return [data, setData, isLoading] as const
+}
+
+export const useDebounce = ({
+  callback,
+  delay,
+  dependencies,
+  isWaiting,
+  skipFirstDebounce,
+}: {
+  callback: () => any
+  delay: number
+  dependencies: any[]
+  isWaiting?: boolean
+  skipFirstDebounce?: boolean
+}) => {
+  const skipFirst = useRef(skipFirstDebounce ?? false)
+  const [isLoading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let timeoutID: any
+
+    (async () => {
+      if (isWaiting) return
+      
+      if (skipFirst.current) {
+        skipFirst.current = false
+        await callback()
+        return setLoading(false)
+      }
+  
+      setLoading(true)
+  
+      timeoutID = setTimeout(async () => {
+        await callback()
+        setLoading(false)
+      }, delay)
+    })()
+
+    return () => clearTimeout(timeoutID)
+  }, [...dependencies, delay, isWaiting])
+
+  return isLoading
+}
+
+export type FieldState = {
+  value: any
+  modified: boolean
+  validate: (newValue: any) => boolean
+  error: boolean
+}
+
+export type SetFieldState = <T>(name: string, state: {
+  value: T
+  modified?: boolean
+  validate?: ((newValue: T) => boolean)
+}) => void
+
+export type FieldsMap = Map<string, FieldState>
+
+export interface FormState {
+  disabled: boolean
+  setDisabled: SetState<boolean>
+  exposed: boolean
+  setExposed: SetState<boolean>
+  fields: FieldsMap
+  setFields: (newValue: FieldsMap) => void
+  values: KeyObject
+  reset: (resetModifiedAndExposed?: boolean) => void
+  setField: SetFieldState
+  removeField: (name: string) => void
+  isValid: boolean
+  isLoading: boolean
+  hasChanges: boolean
+  pushChanges: () => void
+  onSubmit: ((e: any) => Promise<void>) | null
+  successCount: number
+}
+
+export interface FormOptions {
+  defaultValues?: KeyObject
+  isWaiting?: boolean
+  initialDisabled?: boolean
+  initialExposed?: boolean
+  onSubmit?: () => any
+  onError?: (error: any) => any
+}
+
+export const useForm = ({
+  defaultValues = {},
+  isWaiting = false,
+  initialDisabled,
+  initialExposed,
+  onSubmit: onSubmitProp,
+  onError,
+}: FormOptions = {}) => {
+  const defaultFieldState = { modified: false, validate: () => true, error: false }
+
+  const [disabled, setDisabled] = useState(initialDisabled ?? false)
+  const [exposed, setExposed] = useState(initialExposed ?? false)
+  
+  const [fields, setFieldsInit] = useState<FieldsMap>(new Map(
+    Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
+  ))
+  const [values, setValues] = useState<KeyObject>(defaultValues)
+  const savedValues = useRef(objectToUri(defaultValues))
+  
+  const [isValid, setValid] = useState(false)
+  const [isLoading, setLoading] = useState(isWaiting)
+  const [hasChanges, setHasChanges] = useState(false)
+  const [successCount, setSuccessCount] = useState(0)
+
+  // User-facing method
+  const setFields = (newFields: FieldsMap) => {
+    setFieldsInit(newFields)
+    setValid(Array.from(newFields).every(([_, state]) => !state.error))
+
+    const newValues = toDeepObject(Object.fromEntries(
+      Array.from(newFields)
+        .map(([name, state]) => [name, state.value])
+        .filter(([name]) => !name.startsWith('__config'))
+    ))
+
+    setValues(newValues)
+    setHasChanges(!isLoading && objectToUri(newValues) !== savedValues.current)
+    savedValues.current = objectToUri(newValues)
+  }
+
+  // User-facing method
+  const pushChanges = () => {
+    savedValues.current = objectToUri(values)
+    setHasChanges(false)
+  }
+
+  // User-facing method
+  const reset = (resetModifiedAndExposed = true) => {
+    if (resetModifiedAndExposed) setExposed(false)
+
+    setFields(new Map(
+      Array.from(fields)
+        .map(([name, state]) => [name, {
+          value: '',
+          modified: !resetModifiedAndExposed,
+          validate: state.validate,
+          error: !state.validate(''),
+        }])
+    ))
+  }
+
+  // User-facing method
+  const setField: SetFieldState = (name, { value, modified = true, validate: validateProp }) => {
+    const validate = validateProp ?? (fields.get(name) ?? {}).validate ?? (() => true)
+
+    fields.set(name, {
+      value,
+      modified,
+      validate,
+      error: !validate(value),
+    })
+
+    setFields(new Map(fields))
+  }
+
+  // User-facing method
+  const removeField = (name: string) => {
+    fields.delete(name)
+    setFields(new Map(fields))
+  }
+
+  // Automatically passed to Form
+  const onSubmit = !onSubmitProp ? null : async (e: any) => {
+    if (e.preventDefault) e.preventDefault()
+    if (disabled) return
+
+    setExposed(true)
+  
+    try {
+      if (!isValid)
+        throw Error('invalid')
+  
+      setDisabled(true)
+      await onSubmitProp()
+      setSuccessCount(curr => curr + 1)
+    }
+    catch (error: any) {
+      setDisabled(false)
+      if (onError) onError(error)
+    }
+  }
+
+  // Populate fields from defaultValues while loading
+  useEffect(() => {
+    if (isWaiting || !isLoading) return
+
+    Object.entries(defaultValues).forEach(([name, value]) => {
+      const field = fields.get(name)
+
+      fields.set(name, {
+        ...defaultFieldState,
+        ...field,
+        value,
+        ...field && field.validate && { error: !field.validate(value) },
+      })
+    })
+
+    setFields(new Map(fields))
+  }, [isWaiting, objectToUri(defaultValues)])
+
+  // Comprehensively check if loading is complete
+  useEffect(() => {
+    if (isWaiting || !isLoading) return
+
+    const allDefaultValuesLoaded = Object.entries(defaultValues)
+      .every(([name, value]) => objectToUri(values[name]) === objectToUri(value))
+
+    if (allDefaultValuesLoaded)
+      setLoading(false)
+  }, [isWaiting, objectToUri(defaultValues), objectToUri(values)])
+
+  const context: FormState = {
+    disabled, setDisabled,
+    exposed, setExposed,
+    fields, setFields,
+    values, reset,
+    setField, removeField,
+    isValid, isLoading,
+    hasChanges, pushChanges,
+    onSubmit, successCount,
+  }
+
+  return { context, ...context }
+}
+
+export const FormContext = createContext<FormState | null>(null)
+
+export const useFormContext = () => useContext(FormContext) ?? useForm()
+
+export const useField = <T>({
+  context,
+  name,
+  value,
+  disabled: disabledInit,
+  validate,
+  onChange,
+}: {
+  context?: FormState
+  name: string
+  value: T
+  disabled?: boolean
+  validate?: (newValue: T) => boolean
+  onChange?: (newValue: T) => void
+}) => {
+  const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = context ?? useFormContext()
+
+  const field = fields.get(name) ?? { value, modified: false, error: false }
+  const valueClean = field.value as T
+  const disabledClean = disabledInit ?? formDisabled
+  const showError = field.error && (field.modified || formExposed)
+
+  // User-facing method; should be used by component
+  const setValue = (newValue: T, newModified = true) => {
+    setField(name, { value: newValue, modified: newModified, validate })
+    if (onChange) onChange(newValue)
+  }
+
+  // Handle manual value control
+  useEffect(() => setValue(value), [stringify(value)])
+
+  // Set initial state and cleanup
+  useEffect(() => {
+    setValue(valueClean, false)
+    return () => removeField(name)
+  }, [name])
+
+  return { name, value: valueClean, setValue, disabled: disabledClean, showError }
+}
+
+export const useModal = (
+  active: boolean,
+  setActive: SetState<boolean>,
+  {
+    ref: refProp,
+    onChange,
+    openDelay,
+    closeDelay,
+    exitOnOutsideClick,
+    exitOnEscape,
+    preventScroll,
+  }: {
+    ref?: any
+    onChange?: (ref: any) => void
+    openDelay?: number
+    closeDelay?: number
+    exitOnOutsideClick?: boolean
+    exitOnEscape?: boolean
+    preventScroll?: boolean
+  } = {}
+) => {
+  const ref = refProp || useRef()
+  const timer = useRef<any>() 
+
+  const setActiveTimer = (newActive: boolean, delay: number) =>
+    timer.current = setTimeout(() => setActive(newActive), delay)
+
+  useEffect(() => {
+    if (openDelay)
+      setActiveTimer(true, openDelay)
+  }, [])
+
+  useEffect(() => {
+    clearTimeout(timer.current)
+
+    if (preventScroll && document)
+      document.body.style.overflow = active ? 'hidden' : 'auto'
+
+    if (onChange)
+      onChange(ref)
+      
+    if (active && closeDelay)
+      setActiveTimer(false, closeDelay)
+  }, [active])
+
+  useListener('keydown', (e: any) => {
+    if (active && !e.repeat && exitOnEscape && e.key && e.key.toLowerCase() === 'escape')
+      setActive(false)
+  })
+
+  useListener('mouseup', (e: any) => {
+    if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
+      setTimeout(() => setActive(false), 0)
+  })
+
+  return { ref }
+}
+
+export const useRepeater = <T>(initialItems: T[] = []) => {
+  const index = useRef(0)
+
+  const getKey = () =>
+    index.current++
+
+  const [items, setItems] = useState<[number, T][]>(
+    initialItems.map(item => [getKey(), item])
+  )
+
+  const insert = (item: T, newIndex?: number) => {
+    if (newIndex === undefined || newIndex < 0 || newIndex >= items.length)
+      items.push([getKey(), item])
+    else
+      items.splice(newIndex, 0, [getKey(), item])
+
+    setItems(items.slice())
+  }
+
+  const remove = (index?: number) => {
+    if (index === undefined || index < 0 || index > items.length - 1)
+      items.pop()
+    else
+      items.splice(index, 1)
+    
+    setItems(items.slice())
+  }
+
+  const update = (newItem: T | ((currentValue: T) => T), index: number) => {
+    if (index < 0 || index >= items.length)
+      return
+
+    items[index][1] = typeof newItem === 'function'
+      ? (newItem as any)(items[index][1])
+      : newItem
+
+    setItems(items.slice())
+  }
+
+  const reset = (newItems: T[]) => {
+    setItems(newItems.map(item => [getKey(), item]))
+  }
+
+  return { items, insert, remove, update, reset }
+}
+
+export interface LightboxControl {
+  index: number
+  setIndex: SetState<number>
+  active: boolean
+  setActive: SetState<boolean>
+  open: (newIndex: number) => void
+  previous: () => void
+  next: () => void
+}
+
+export const useLightbox = (
+  numItems: number,
+  {
+    index: indexInit,
+    active: activeInit
+  }: {
+    index?: number
+    active?: boolean
+  } = {}
+) => {
+  const [index, setIndex] = useState(indexInit ?? 0)
+  const [active, setActive] = useState(activeInit ?? false)
+
+  const open = (newIndex: number) => {
+    setIndex(newIndex)
+    setActive(true)
+  }
+
+  const previous = () => {
+    setIndex(cycle(numItems, index, -1))
+    setActive(true)
+  }
+
+  const next = () => {
+    setIndex(cycle(numItems, index, 1))
+    setActive(true)
+  }
+
+  const control: LightboxControl = { index, setIndex, active, setActive, open, previous, next }
+
+  return { control, ...control }
+}
 
 export const useListener = (
   event: string,
@@ -93,52 +551,6 @@ export const useWindowResizeAnnouncer = () => {
       bubbles: false,
       cancelable: false
     }))
-  })
-}
-
-export interface ModalDomOptions extends ModalOptions {
-  exitOnOutsideClick?: boolean
-  exitOnEscape?: boolean
-  preventScroll?: boolean
-}
-
-export const useModal = (
-  active: boolean,
-  setActive: SetState<boolean>,
-  options: ModalDomOptions = {}
-) => {
-  const {
-    onChange,
-    useListeners,
-    exitOnOutsideClick,
-    exitOnEscape,
-    preventScroll,
-    ...rest
-  } = options
-
-  return useModalInit(active, setActive, {
-    ...rest,
-    onChange: ref => {
-      if (preventScroll && document)
-        document.body.style.overflow = active ? 'hidden' : 'auto'
-
-      if (onChange)
-        onChange(ref)
-    },
-    useListeners: ref => {
-      useListener('keydown', (e: any) => {
-        if (active && !e.repeat && exitOnEscape && e.key && e.key.toLowerCase() === 'escape')
-          setActive(false)
-      })
-    
-      useListener('mouseup', (e: any) => {
-        if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
-          setTimeout(() => setActive(false), 0)
-      })
-
-      if (useListeners)
-        useListeners(active)
-    },
   })
 }
 
@@ -310,62 +722,4 @@ export const destructFormValuesAndFiles = async (valuesInit: KeyObject, uploadUR
   )
 
   return { values, files }
-}
-
-export const createLazyResizer = ({
-  outputDir,
-  noResizeSrcPatterns = [],
-  sizes = [640, 1024, 1536, 2000],
-  placeholderSize = 40,
-  scale = 1,
-}: {
-  outputDir: string
-  noResizeSrcPatterns?: RegExp[]
-  sizes?: number[]
-  placeholderSize?: number
-  scale?: number
-}) => {
-  const getResizeSrc = (src: string, element?: HTMLImageElement) => {
-    if ([...noResizeSrcPatterns, /^http/].some(pattern => src.match(pattern)))
-      return src
-  
-    const sizeRendered = element ? Math.max(element.scrollWidth, element.scrollHeight) : Infinity
-    const sizeAdjusted = sizeRendered * scale
-    const sizeClean = sizes.find(size => sizeAdjusted < size) ?? sizes.slice(-1)
-  
-    return `${outputDir}/${sizeClean}${src}`
-  }
-
-  return {
-    /**
-     * Returns the most optimally-sized image for an element from an existing folder of resized images.
-     * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
-     * @param element (HTMLImageElement?) If undefined, the largest available image will be returned.
-     */
-    getResizeSrc,
-    /**
-     * Attaches scroll listeners to all existing Images prepared by getLazyResizeImageProps.
-     */
-    initLazyResize: () => initLazyLoad({ transformSrc: getResizeSrc }),
-    /**
-     * Allows Image components to be lazy-loaded and resized; requires initLazyResize to have been run.
-     * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
-     * @param lazy (boolean?) If not true, the largest available image will be immediately loaded.
-     */
-    getLazyResizeImageProps: (src = '', lazy?: boolean) =>
-      lazy ? {
-        placeholderStyle: {
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundImage: `url(${outputDir}/${placeholderSize}${src}) !important`,
-        },
-        innerProps: {
-          'data-lazy-bg': src,
-          'data-lazy-loaded': false,
-        },
-      }
-      : {
-        src: getResizeSrc(src),
-      },
-  }
 }

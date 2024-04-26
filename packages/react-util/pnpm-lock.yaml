@@ -9,11 +9,8 @@ importers:
   .:
     dependencies:
       '@fernui/dom-util':
-        specifier: ^2.1.1
-        version: 2.1.1(@fernui/util@4.0.2)
-      '@fernui/react-core-util':
-        specifier: ^4.2.2
-        version: 4.2.2(@fernui/util@4.0.2)(react@18.3.0)
+        specifier: ^2.2.0
+        version: 2.2.0
       '@fernui/util':
         specifier: ^4.0.2
         version: 4.0.2
@@ -27,16 +24,8 @@ importers:
 
 packages:
 
-  '@fernui/dom-util@2.1.1':
-    resolution: {integrity: sha512-WlzSGPVIXwIzfywWJHgBAOjwoupXwMKvyY2dbavLJC7hKBZeXoBzDKzSUJCm7x3apm3mjzdf9drJEUio03t8og==}
-    peerDependencies:
-      '@fernui/util': ^4.0.2
-
-  '@fernui/react-core-util@4.2.2':
-    resolution: {integrity: sha512-4AsxnUaRPe3SQQXUsYTVsAjGNiNacU8Q7wZLlat+OIO59n1W9ZsDie9b7Ik3Ht+7+wAP0Nw4PQT4TJou/ZAyLA==}
-    peerDependencies:
-      '@fernui/util': ^4.0.2
-      react: ^18.2.0
+  '@fernui/dom-util@2.2.0':
+    resolution: {integrity: sha512-d7rBBXk6bo5RN7j8N+rmV7npc+LMo9byYZ41ekv+7IKSZCtd+9mogONZTSiFTQ0CnwD6dm+y8iqvlAlPid7vfQ==}
 
   '@fernui/util@4.0.2':
     resolution: {integrity: sha512-QIRdjbj/bygw1i+wUbdHnEj35LUbz908LGybA8xhLCSazfY2DHel8hhy3yowXhb2sKaYKMJtFJ3JGAPivPzdfQ==}
@@ -63,14 +52,9 @@ packages:
 
 snapshots:
 
-  '@fernui/dom-util@2.1.1(@fernui/util@4.0.2)':
+  '@fernui/dom-util@2.2.0':
     dependencies:
       '@fernui/util': 4.0.2
-
-  '@fernui/react-core-util@4.2.2(@fernui/util@4.0.2)(react@18.3.0)':
-    dependencies:
-      '@fernui/util': 4.0.2
-      react: 18.3.0
 
   '@fernui/util@4.0.2': {}
 
