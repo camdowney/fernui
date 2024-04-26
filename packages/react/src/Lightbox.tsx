@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@fernui/util'
-import { LightboxControl } from '@fernui/react-core-util'
+import { LightboxControl } from '@fernui/react-util'
 import { useListener } from '@fernui/react-util'
 import Modal, { ModalProps } from './Modal'
 

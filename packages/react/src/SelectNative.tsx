@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { angleIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
-import { useField } from '@fernui/react-core-util'
+import { useField } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 import Icon from './Icon'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@fernui/util'
-import { FormState, FormContext } from '@fernui/react-core-util'
+import { FormState, FormContext } from '@fernui/react-util'
 import { useListener } from '@fernui/react-util'
 import Honeypot from './Honeypot'
 

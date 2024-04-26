@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn, oc } from '@fernui/util'
-import { SetState } from '@fernui/react-core-util'
+import { SetState } from '@fernui/react-util'
 import { useModal } from '@fernui/react-util'
 
 export interface ModalProps {

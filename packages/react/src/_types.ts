@@ -1,4 +1,4 @@
-import { FormState } from '@fernui/react-core-util'
+import { FormState } from '@fernui/react-util'
 
 export interface FieldProps<T> {
   domRef?: any

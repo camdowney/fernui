@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
-import { useField } from '@fernui/react-core-util'
+import { useField } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 

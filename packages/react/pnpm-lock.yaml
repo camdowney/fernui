@@ -9,50 +9,38 @@ importers:
   .:
     dependencies:
       '@fernui/dom-util':
-        specifier: ^2.0.0
-        version: 2.0.3(@fernui/util@4.0.2)
+        specifier: ^2.2.0
+        version: 2.2.0
       '@fernui/icons':
         specifier: ^3.0.0
         version: 3.0.0
-      '@fernui/react-core-util':
-        specifier: ^4.2.2
-        version: 4.2.2(@fernui/util@4.0.2)(react@18.2.0)
       '@fernui/react-util':
-        specifier: ^3.0.0
-        version: 3.0.0(@fernui/dom-util@2.0.3(@fernui/util@4.0.2))(@fernui/react-core-util@4.2.2(@fernui/util@4.0.2)(react@18.2.0))(@fernui/util@4.0.2)(react@18.2.0)
+        specifier: ^3.2.0
+        version: 3.2.0(@fernui/dom-util@2.2.0)(@fernui/util@4.0.2)(react@18.3.0)
       '@fernui/util':
         specifier: ^4.0.2
         version: 4.0.2
       react:
         specifier: ^18.2.0
-        version: 18.2.0
+        version: 18.3.0
     devDependencies:
       '@types/react':
-        specifier: ^18.2.79
-        version: 18.2.79
+        specifier: ^18.3.0
+        version: 18.3.0
 
 packages:
 
-  '@fernui/dom-util@2.0.3':
-    resolution: {integrity: sha512-XmngF7yN2kscYL+ZKkcPZnbZWUZYJsF7D+GAZGytD1kwkjCfJHDJUhTGZ+CpxsJUOGs3oA9WmTu2XqpBiDIWdw==}
-    peerDependencies:
-      '@fernui/util': ^4.0.2
+  '@fernui/dom-util@2.2.0':
+    resolution: {integrity: sha512-d7rBBXk6bo5RN7j8N+rmV7npc+LMo9byYZ41ekv+7IKSZCtd+9mogONZTSiFTQ0CnwD6dm+y8iqvlAlPid7vfQ==}
 
   '@fernui/icons@3.0.0':
     resolution: {integrity: sha512-rb8Dbt2ONX42OWxG3pUz/AH1SQ5FhG2b59oz1FaxGE87R/xVLSJ39CuXuhUNcSKg41Oges90oNuPDoB9CkIviw==}
 
-  '@fernui/react-core-util@4.2.2':
-    resolution: {integrity: sha512-4AsxnUaRPe3SQQXUsYTVsAjGNiNacU8Q7wZLlat+OIO59n1W9ZsDie9b7Ik3Ht+7+wAP0Nw4PQT4TJou/ZAyLA==}
+  '@fernui/react-util@3.2.0':
+    resolution: {integrity: sha512-6w/pD3oBPgtsJkqRdw5pv4ksuIsBazpQBOoHEJN5okz/kJJE83x3svyLq18wF2kbx4x9iTw01xDlRqjPgaeoAQ==}
     peerDependencies:
+      '@fernui/dom-util': ^2.2.0
       '@fernui/util': ^4.0.2
-      react: ^18.2.0
-
-  '@fernui/react-util@3.0.0':
-    resolution: {integrity: sha512-thBXp+doK1VpVCDL0Cfa/BkFP1VdXK4ac7Ct0oTmM9gJ+YrJUc0zuiVpaB+j5xNrNFSr+xGf5w42uQSFAQxOMg==}
-    peerDependencies:
-      '@fernui/dom-util': ^2.0.0
-      '@fernui/react-core-util': ^4.0.0
-      '@fernui/util': ^4.0.0
       react: ^18.2.0
 
   '@fernui/util@4.0.2':
@@ -61,8 +49,8 @@ packages:
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
 
-  '@types/react@18.2.79':
-    resolution: {integrity: sha512-RwGAGXPl9kSXwdNTafkOEuFrTBD5SA2B3iEB96xi8+xu5ddUa/cpvyVCSNn+asgLCTHkb5ZxN8gbuibYJi4s1w==}
+  '@types/react@18.3.0':
+    resolution: {integrity: sha512-DiUcKjzE6soLyln8NNZmyhcQjVv+WsUIFSqetMN0p8927OztKT4VTfFTqsbAi5oAGIcgOmOajlfBqyptDDjZRw==}
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
@@ -74,35 +62,29 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
-  react@18.2.0:
-    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
+  react@18.3.0:
+    resolution: {integrity: sha512-RPutkJftSAldDibyrjuku7q11d3oy6wKOyPe5K1HA/HwwrXcEqBdHsLypkC2FFYjP7bPUa6gbzSBhw4sY2JcDg==}
     engines: {node: '>=0.10.0'}
 
 snapshots:
 
-  '@fernui/dom-util@2.0.3(@fernui/util@4.0.2)':
+  '@fernui/dom-util@2.2.0':
     dependencies:
       '@fernui/util': 4.0.2
 
   '@fernui/icons@3.0.0': {}
 
-  '@fernui/react-core-util@4.2.2(@fernui/util@4.0.2)(react@18.2.0)':
+  '@fernui/react-util@3.2.0(@fernui/dom-util@2.2.0)(@fernui/util@4.0.2)(react@18.3.0)':
     dependencies:
+      '@fernui/dom-util': 2.2.0
       '@fernui/util': 4.0.2
-      react: 18.2.0
-
-  '@fernui/react-util@3.0.0(@fernui/dom-util@2.0.3(@fernui/util@4.0.2))(@fernui/react-core-util@4.2.2(@fernui/util@4.0.2)(react@18.2.0))(@fernui/util@4.0.2)(react@18.2.0)':
-    dependencies:
-      '@fernui/dom-util': 2.0.3(@fernui/util@4.0.2)
-      '@fernui/react-core-util': 4.2.2(@fernui/util@4.0.2)(react@18.2.0)
-      '@fernui/util': 4.0.2
-      react: 18.2.0
+      react: 18.3.0
 
   '@fernui/util@4.0.2': {}
 
   '@types/prop-types@15.7.12': {}
 
-  '@types/react@18.2.79':
+  '@types/react@18.3.0':
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3
@@ -115,6 +97,6 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  react@18.2.0:
+  react@18.3.0:
     dependencies:
       loose-envify: 1.4.0

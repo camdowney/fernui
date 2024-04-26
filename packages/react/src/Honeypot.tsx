@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormState, useField } from '@fernui/react-core-util'
+import { FormState, useField } from '@fernui/react-util'
 
 export interface HoneypotProps {
   context?: FormState
