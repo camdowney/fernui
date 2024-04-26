@@ -5,7 +5,7 @@ import { onIntersect } from '@fernui/dom-util'
 /**
  * Factory for lazy-load and resize functionality.
  */
-export const createLazyResizer = ({
+export const getLazyResizeDomMethods = ({
   outputDir,
   noResizeSrcPatterns = [],
   sizes = [640, 1024, 1536, 2000],
@@ -41,7 +41,7 @@ export const createLazyResizer = ({
    * with data-lazy-src and data-lazy-resize attributes.
    * Should be called on page load and whenever new images are added to the DOM.
    */
-  const initLazyResize = () => {  
+  const attachLazyResizeHandlers = () => {  
     const lazyLoad = (isBackground: boolean) => (element: HTMLImageElement) => {
       const dataSrc = element.dataset[isBackground ? 'lazyBg' : 'lazySrc'] ?? ''
       const resizeSrc = getResizeSrc(dataSrc, element)
@@ -86,11 +86,11 @@ export const createLazyResizer = ({
    * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
    * @param lazy (boolean?) If not true, the largest available image will be immediately loaded.
    */
-  const getLazyResizeImageAttributes = (src = '', lazy?: boolean) =>
+  const getLazyResizeAttributes = (src = '', lazy?: boolean) =>
     lazy ? {
-      'background-image': `url(${outputDir}/${placeholderSize}${src}) !important`,
-      'data-lazy-bg': src,
-      'data-lazy-loaded': false,
+      placeholderSrc: `${outputDir}/${placeholderSize}${src}`,
+      dataLazySrc: src,
+      dataLazyLoaded: false,
     }
     : {
       src: getResizeSrc(src),
@@ -98,8 +98,8 @@ export const createLazyResizer = ({
 
   return {
     getResizeSrc,
-    initLazyResize,
-    getLazyResizeImageAttributes,
+    attachLazyResizeHandlers,
+    getLazyResizeAttributes,
   }
 }
 
