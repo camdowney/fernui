@@ -1,7 +1,7 @@
 {
   "name": "fernui",
   "scripts": {
-    "build": "cd ./packages/image-core && tsc && cd ../../ && rollup -c"
+    "build": "cd ./packages/react-image && tsc && cd ../../ && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

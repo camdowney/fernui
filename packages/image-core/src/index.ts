@@ -2,6 +2,15 @@ import fs from 'fs'
 import sharp from 'sharp'
 import { onIntersect } from '@fernui/dom-util'
 
+export interface LazyResizeDomFactoryProps {
+  outputDir: string
+  noResizeSrcPatterns?: RegExp[]
+  sizes?: number[]
+  placeholderSize?: number
+  scale?: number
+  intersectOffset?: string
+}
+
 /**
  * Factory for lazy-load and resize functionality.
  */
@@ -12,14 +21,7 @@ export const getLazyResizeDomMethods = ({
   placeholderSize = 40,
   scale = 1,
   intersectOffset = '750px',
-}: {
-  outputDir: string
-  noResizeSrcPatterns?: RegExp[]
-  sizes?: number[]
-  placeholderSize?: number
-  scale?: number
-  intersectOffset?: string
-}) => {
+}: LazyResizeDomFactoryProps) => {
   /**
    * Returns the most optimally-sized image for an element from an existing folder of resized images.
    * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
@@ -38,7 +40,7 @@ export const getLazyResizeDomMethods = ({
 
   /**
    * Attaches scroll listeners to lazy-load and resize all existing images 
-   * with data-lazy-src and data-lazy-resize attributes.
+   * with data-lazy-src and data-lazy-bg attributes.
    * Should be called on page load and whenever new images are added to the DOM.
    */
   const attachLazyResizeHandlers = () => {  
@@ -82,7 +84,6 @@ export const getLazyResizeDomMethods = ({
 
   /**
    * Returns the necessary attributes for an image to be lazy-loaded and resized.
-   * Requires initLazyResize to have been run.
    * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
    * @param lazy (boolean?) If not true, the largest available image will be immediately loaded.
    */

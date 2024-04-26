@@ -1,4 +1,5 @@
 export { FieldProps } from './_types'
+export { default as Avatar, AvatarProps, Color, ColorMap } from  './Avatar'
 export { default as Button, ButtonProps } from './Button'
 export { default as Checkbox, CheckboxProps } from './Checkbox'
 export { default as Error, ErrorProps } from './Error'

@@ -1,39 +1,34 @@
 import React from 'react'
-import { profileIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
 import { coverStyle } from './_styles'
-import Image, { ImageProps } from './Image'
-import Icon from './Icon'
 
 export type Color = string
 export type ColorMap = (letter: string) => Color
 
 export interface AvatarProps {
   domRef?: any
+  src?: string
   title?: string | null | false
   colors?: ColorMap
-  hasImage?: boolean
   className?: string
   style?: Object
-  iconProps?: Object
   letterProps?: Object
-  imageProps?: ImageProps
+  imageProps?: Object
   [props: string]: any
 }
 
 export default function Avatar({
   domRef,
+  src,
   title,
   colors = defaultColors,
-  hasImage,
   className,
   style,
-  iconProps,
   letterProps,
   imageProps,
   ...props
 }: AvatarProps) {
-  const letter = title ? title.substring(0, 1).toUpperCase() : null
+  const letter = title ? title.substring(0, 1).toUpperCase() : '?'
 
   return (
     <div
@@ -42,26 +37,23 @@ export default function Avatar({
       style={oc(styles.outer, style)}
       {...props}
     >
-      {!letter ? (
-        <Icon
-          data={profileIcon}
-          {...iconProps}
-          style={oc(coverStyle, (iconProps ?? {} as any).style)}
-        />
-      ) : (
+      <div
+        {...letterProps}
+        style={oc(coverStyle, styles.letter(letter, colors), (letterProps ?? {} as any).style)}
+      >
+        {letter}
+      </div>
+      {src && (
         <div
-          {...letterProps}
-          style={oc(coverStyle, styles.letter(letter, colors), (letterProps ?? {} as any).style)}
-        >
-          {letter}
-        </div>
+          aria-label='title || letter'
+          {...imageProps}
+          style={oc(
+            styles.image,
+            { backgroundImage: `url(${src})` },
+            (imageProps ?? {} as any).style
+          )}
+        />
       )}
-      <Image
-        {...imageProps}
-        alt={title || undefined}
-        style={oc(!hasImage && { display: 'none' }, (imageProps ?? {}).style)}
-        cover
-      />
     </div>
   )
 }
@@ -76,6 +68,13 @@ const styles = {
     alignItems: 'center',
     backgroundColor: colors(firstLetter),
   }),
+  image: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+  },
 }
 
 const defaultColors: ColorMap = letter => (

@@ -1,24 +1,23 @@
 {
-  "name": "@fernui/react",
+  "name": "@fernui/react-image",
   "author": "@camdowney",
-  "version": "5.2.2",
-  "description": "A library of unopinionated, extendable UI components for React.",
+  "version": "1.0.0",
+  "description": "A library of utilities for lazy-loading and resizing images in React.",
   "keywords": [
     "ui",
     "javascript",
-    "components",
+    "images",
+    "lazy-load",
+    "resize",
     "react"
   ],
   "main": "./dist/index.js",
-  "peerDependencies": {
-    "@fernui/dom-util": "^2.0.3",
-    "@fernui/icons": "^3.0.0",
-    "@fernui/react-core-util": "^4.2.2",
-    "@fernui/react-util": "^3.0.0",
+  "dependencies": {
+    "@fernui/image-core": "^1.0.4",
     "@fernui/util": "^4.0.2",
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.79"
+    "@types/react": "^18.3.0"
   }
 }
