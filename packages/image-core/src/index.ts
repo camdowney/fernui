@@ -1,5 +1,3 @@
-import fs from 'fs'
-import sharp from 'sharp'
 import { onIntersect } from '@fernui/dom-util'
 
 export interface LazyResizeDomFactoryProps {
@@ -108,12 +106,15 @@ export const getLazyResizeDomUtils = ({
  * Resizes all images in an input directory into an output directory with subdirectories for an array of sizes.
  * Does not modify the input images.
  */
-export const resizeLocalImages = ({
+export const resizeLocalImages = async ({
   sizes = [40, 640, 1024, 1536, 2000],
   quality = 0.5,
   inputDir = './input',
   outputDir = './output',
 }) => {
+  const { default: fs } = await import('fs')
+  const { default: sharp } = await import('sharp')
+
   if (fs.existsSync(outputDir))
     fs.rmSync(outputDir, { recursive: true })
   
