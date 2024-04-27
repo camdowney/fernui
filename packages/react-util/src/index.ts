@@ -250,7 +250,7 @@ export const useForm = ({
     if (isWaiting || !isLoading) return
 
     const allDefaultValuesLoaded = Object.entries(defaultValues)
-      .every(([name, value]) => objectToUri(values[name]) === objectToUri(value))
+      .every(([name, value]) => values[name] !== undefined && objectToUri(values[name]) === objectToUri(value))
 
     if (allDefaultValuesLoaded)
       setLoading(false)
