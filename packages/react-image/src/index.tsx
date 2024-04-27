@@ -8,7 +8,6 @@ export interface ImageProps {
   alt?: string
   lazy?: boolean
   cover?: boolean
-  placeholder?: any
   placeholderClass?: string
   placeholderStyle?: Object
   className?: string
@@ -40,7 +39,6 @@ export const getLazyResizeDomUtils = ({
     alt,
     lazy = true,
     cover,
-    placeholder,
     placeholderClass,
     placeholderStyle,
     className,
@@ -63,17 +61,15 @@ export const getLazyResizeDomUtils = ({
       >
         <div className={cn(ratioClass)}>
           {/* Placeholder */}
-          {placeholder ?? (
-            <div
-              className={cn('fui-placeholder', placeholderClass)}
-              style={oc(
-                styles.cover,
-                styles.placeholder,
-                lazy && { backgroundImage: `url(${placeholderSrc})` },
-                placeholderStyle,
-              )}
-            />
-          )}
+          <div
+            className={cn('fui-image-placeholder', placeholderClass)}
+            style={oc(
+              styles.cover,
+              styles.placeholder,
+              lazy && { backgroundImage: `url(${placeholderSrc})` },
+              placeholderStyle,
+            )}
+          />
 
           {/* Image */}
           <div

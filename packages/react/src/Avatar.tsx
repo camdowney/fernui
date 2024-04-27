@@ -14,6 +14,8 @@ export interface AvatarProps {
   style?: Object
   letterProps?: Object
   imageProps?: Object
+  placeholderClass?: string
+  placeholderStyle?: Object
   [props: string]: any
 }
 
@@ -26,6 +28,8 @@ export default function Avatar({
   style,
   letterProps,
   imageProps,
+  placeholderClass,
+  placeholderStyle,
   ...props
 }: AvatarProps) {
   const letter = title ? title.substring(0, 1).toUpperCase() : '?'
@@ -37,22 +41,35 @@ export default function Avatar({
       style={oc(styles.outer, style)}
       {...props}
     >
+      {/* Placeholder */}
       <div
-        {...letterProps}
-        style={oc(coverStyle, styles.letter(letter, colors), (letterProps ?? {} as any).style)}
-      >
-        {letter}
-      </div>
-      {src && (
+        className={cn('fui-avatar-placeholder', placeholderClass)}
+        style={oc(coverStyle, placeholderStyle)}
+      />
+
+      {/* Image / letter */}
+      {src ? (
         <div
-          aria-label='title || letter'
+          aria-label={title || letter}
           {...imageProps}
           style={oc(
+            coverStyle,
             styles.image,
             { backgroundImage: `url(${src})` },
             (imageProps ?? {} as any).style
           )}
         />
+      ) : (
+        <div
+          {...letterProps}
+          style={oc(
+            coverStyle,
+            styles.letter(letter, colors),
+            (letterProps ?? {} as any).style)
+          }
+        >
+          {letter}
+        </div>
       )}
     </div>
   )
@@ -69,9 +86,6 @@ const styles = {
     backgroundColor: colors(firstLetter),
   }),
   image: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
   },
