@@ -38,16 +38,18 @@ export const fileToBase64 = async (file: File): Promise<string> =>
 
 export const onIntersect = ({
   selector,
+  elements,
   callback,
   offset = '0px 0px 0px 0px',
   fireOnce = true,
 }: {
-  selector: string
+  selector?: string
+  elements?: Element[]
   callback: (element: any) => any
   offset?: string
   fireOnce?: boolean
 }) => {
-  document.querySelectorAll(selector).forEach(element => {
+  (elements ?? document.querySelectorAll(selector ?? '')).forEach(element => {
     (new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return

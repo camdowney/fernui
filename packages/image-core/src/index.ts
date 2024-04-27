@@ -7,6 +7,8 @@ export interface LazyResizeDomFactoryProps {
   placeholderSize?: number
   scale?: number
   intersectOffset?: string
+  lazySrcElements?: Element[]
+  lazyBgElements?: Element[]
 }
 
 /**
@@ -19,6 +21,8 @@ export const getLazyResizeDomUtils = ({
   placeholderSize = 40,
   scale = 1,
   intersectOffset = '750px',
+  lazySrcElements,
+  lazyBgElements,
 }: LazyResizeDomFactoryProps) => {
   /**
    * Returns the most optimally-sized image for an element from an existing folder of resized images.
@@ -69,12 +73,14 @@ export const getLazyResizeDomUtils = ({
   
     onIntersect({
       selector: '[data-lazy-src]:not([data-lazy-transformed])',
+      elements: lazySrcElements,
       callback: lazyLoad(false),
       offset: offsetStr,
     })
   
     onIntersect({
       selector: '[data-lazy-bg]:not([data-lazy-transformed])',
+      elements: lazyBgElements,
       callback: lazyLoad(true),
       offset: offsetStr,
     })
