@@ -12,21 +12,21 @@ export const useComplexState = <T>({
   ignoreSubsequentLoads,
 }: {
   defaultValue: T
-  callback?: (previousValue: T) => T | Promise<T>
+  callback?: (currentValue: T) => T | Promise<T>
   dependencies?: any[]
   isWaiting?: boolean
   ignoreSubsequentLoads?: boolean
 }) => {
-  const [data, setDataInit] = useState<T>(defaultValue)
+  const [data, setData] = useState<T>(defaultValue)
   const [isLoading, setLoading] = useState(true)
   const loaded = useRef(false)
 
-  const setData = (newValue?: T | Promise<T>) => {
+  const setDataAsync = (newValue?: T) => {
     (async () => {
       if (!ignoreSubsequentLoads)
         setLoading(true)
 
-      setDataInit((await newValue) ?? (callback ? (await callback(data)) : defaultValue))
+      setData(newValue ?? (callback ? (await callback(data)) : defaultValue))
       
       loaded.current = true
       setLoading(false)
@@ -34,10 +34,10 @@ export const useComplexState = <T>({
   }
 
   useEffect(() => {
-    if (!isWaiting && callback) setData()
+    if (!isWaiting && callback) setDataAsync()
   }, [isWaiting, ...dependencies])
 
-  return [data, setData, isLoading] as const
+  return [data, setDataAsync, isLoading] as const
 }
 
 export const useDebounce = ({
@@ -138,7 +138,7 @@ export const useForm = ({
   const [disabled, setDisabled] = useState(defaultDisabled ?? false)
   const [exposed, setExposed] = useState(defaultExposed ?? false)
   
-  const [fields, setFieldsInit] = useState<FieldsMap>(new Map(
+  const [fields, setFields] = useState<FieldsMap>(new Map(
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
   const [values, setValues] = useState<KeyObject>(defaultValues)
@@ -150,8 +150,8 @@ export const useForm = ({
   const [successCount, setSuccessCount] = useState(0)
 
   // User-facing method
-  const setFields = (newFields: FieldsMap) => {
-    setFieldsInit(newFields)
+  const setFieldsAndUpdateValues = (newFields: FieldsMap) => {
+    setFields(newFields)
     setValid(Array.from(newFields).every(([_, state]) => !state.error))
 
     const newValues = toDeepObject(Object.fromEntries(
@@ -175,7 +175,7 @@ export const useForm = ({
   const reset = (resetModifiedAndExposed = true) => {
     if (resetModifiedAndExposed) setExposed(false)
 
-    setFields(new Map(
+    setFieldsAndUpdateValues(new Map(
       Array.from(fields)
         .map(([name, state]) => [name, {
           value: '',
@@ -197,13 +197,13 @@ export const useForm = ({
       error: !validate(value),
     })
 
-    setFields(new Map(fields))
+    setFieldsAndUpdateValues(new Map(fields))
   }
 
   // User-facing method
   const removeField = (name: string) => {
     fields.delete(name)
-    setFields(new Map(fields))
+    setFieldsAndUpdateValues(new Map(fields))
   }
 
   // Automatically passed to Form
@@ -242,7 +242,7 @@ export const useForm = ({
       })
     })
 
-    setFields(new Map(fields))
+    setFieldsAndUpdateValues(new Map(fields))
   }, [isWaiting, objectToUri(defaultValues)])
 
   // Comprehensively check if loading is complete
@@ -259,7 +259,7 @@ export const useForm = ({
   const context: FormState = {
     disabled, setDisabled,
     exposed, setExposed,
-    fields, setFields,
+    fields, setFields: setFieldsAndUpdateValues,
     values, reset,
     setField, removeField,
     isValid, isLoading,
@@ -278,7 +278,7 @@ export const useField = <T>({
   context,
   name,
   value,
-  disabled: disabledInit,
+  disabled: disabledProp,
   validate,
   onChange,
 }: {
@@ -293,7 +293,7 @@ export const useField = <T>({
 
   const field = fields.get(name) ?? { value, modified: false, error: false }
   const valueClean = field.value as T
-  const disabledClean = disabledInit ?? formDisabled
+  const disabledClean = disabledProp ?? formDisabled
   const showError = field.error && (field.modified || formExposed)
 
   // User-facing method; should be used by component
@@ -431,15 +431,15 @@ export interface LightboxControl {
 export const useLightbox = (
   numItems: number,
   {
-    index: indexInit,
-    active: activeInit
+    index: indexProp,
+    active: activeProp
   }: {
     index?: number
     active?: boolean
   } = {}
 ) => {
-  const [index, setIndex] = useState(indexInit ?? 0)
-  const [active, setActive] = useState(activeInit ?? false)
+  const [index, setIndex] = useState(indexProp ?? 0)
+  const [active, setActive] = useState(activeProp ?? false)
 
   const open = (newIndex: number) => {
     setIndex(newIndex)
@@ -701,21 +701,21 @@ export interface UploadData {
   data: string
 }
 
-export const destructFormValuesAndFiles = async (valuesInit: KeyObject, uploadURL: string) => {
-  const values = Object.entries(structuredClone(valuesInit))
+export const destructFormValuesAndFiles = async (values: KeyObject, uploadURL: string) => {
+  const valuesArray = Object.entries(structuredClone(values))
   const files: UploadData[] = []
 
   await Promise.all(
-    values.map(([_, value], i) =>
+    valuesArray.map(([_, value], i) =>
       toArray(value)
         .filter(v => v instanceof File)
         .map(async (file, j) => {
           const name = getUniqueFileName(file.name, j)
-          values[i][1][j] = uploadURL + name
+          valuesArray[i][1][j] = uploadURL + name
           files.push({ name, data: await fileToBase64(file) })
         })
     ).flat()
   )
 
-  return { values, files }
+  return { values: valuesArray, files }
 }
