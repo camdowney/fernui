@@ -5,14 +5,14 @@ import { fileToBase64 } from '@fernui/dom-util'
 export type SetState<T> = Dispatch<SetStateAction<T>>
 
 export const useComplexState = <T>({
-  callback,
   defaultValue,
+  callback,
   dependencies = [],
   isWaiting,
   ignoreSubsequentLoads,
 }: {
-  callback?: (previousValue: T) => T | Promise<T>
   defaultValue: T
+  callback?: (previousValue: T) => T | Promise<T>
   dependencies?: any[]
   isWaiting?: boolean
   ignoreSubsequentLoads?: boolean
@@ -23,7 +23,7 @@ export const useComplexState = <T>({
 
   const setData = (newValue?: T | Promise<T>) => {
     (async () => {
-      if (!(ignoreSubsequentLoads && loaded.current))
+      if (!ignoreSubsequentLoads)
         setLoading(true)
 
       setDataInit((await newValue) ?? (callback ? (await callback(data)) : defaultValue))
@@ -119,8 +119,8 @@ export interface FormState {
 export interface FormOptions {
   defaultValues?: KeyObject
   isWaiting?: boolean
-  initialDisabled?: boolean
-  initialExposed?: boolean
+  defaultDisabled?: boolean
+  defaultExposed?: boolean
   onSubmit?: () => any
   onError?: (error: any) => any
 }
@@ -128,15 +128,15 @@ export interface FormOptions {
 export const useForm = ({
   defaultValues = {},
   isWaiting = false,
-  initialDisabled,
-  initialExposed,
+  defaultDisabled,
+  defaultExposed,
   onSubmit: onSubmitProp,
   onError,
 }: FormOptions = {}) => {
   const defaultFieldState = { modified: false, validate: () => true, error: false }
 
-  const [disabled, setDisabled] = useState(initialDisabled ?? false)
-  const [exposed, setExposed] = useState(initialExposed ?? false)
+  const [disabled, setDisabled] = useState(defaultDisabled ?? false)
+  const [exposed, setExposed] = useState(defaultExposed ?? false)
   
   const [fields, setFieldsInit] = useState<FieldsMap>(new Map(
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
@@ -305,7 +305,7 @@ export const useField = <T>({
   // Handle manual value control
   useEffect(() => setValue(value), [stringify(value)])
 
-  // Set initial state and cleanup
+  // Set default state and cleanup
   useEffect(() => {
     setValue(valueClean, false)
     return () => removeField(name)
@@ -372,14 +372,14 @@ export const useModal = (
   return { ref }
 }
 
-export const useRepeater = <T>(initialItems: T[] = []) => {
+export const useRepeater = <T>(defaultItems: T[] = []) => {
   const index = useRef(0)
 
   const getKey = () =>
     index.current++
 
   const [items, setItems] = useState<[number, T][]>(
-    initialItems.map(item => [getKey(), item])
+    defaultItems.map(item => [getKey(), item])
   )
 
   const insert = (item: T, newIndex?: number) => {
@@ -554,15 +554,20 @@ export const useWindowResizeAnnouncer = () => {
   })
 }
 
-export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, options?: {
-  initialValue?: T
+export const useRefresh = <T>({
+  defaultValue,
+  callback,
+  interval = 60000,
+  onSuccess,
+  onError,
+}: {
+  defaultValue: T
+  callback: (currentValue: T) => T | Promise<T>
   interval?: number
   onSuccess?: (newValue: T, oldValue: T) => any
   onError?: (error: any) => any
 }): T => {
-  const { initialValue = null as T, interval = 60000, onSuccess, onError } = options ?? {}
-
-  const [data, setData] = useState(initialValue)
+  const [data, setData] = useState(defaultValue)
   let intervalId: any
   let skippedRefresh = false
 
@@ -608,54 +613,37 @@ export const useRefresh = <T>(callback: (currentValue: T) => T | Promise<T>, opt
   return data
 }
 
-export const useUrl = (options: { dependencies?: any[]} = {}) => {
-  const { dependencies = [] } = options
+export const useUrl = (dependencies?: any[]) => {
+  const [urlData, setUrlData] = useState({
+    query: {},
+    protocol: '',
+    host: '',
+    pathname: '',
+    search: '?',
+    hash: '',
+    referrer: '',
+  })
 
-  const [query, setQuery] = useState<KeyObject>({})
-  const [protocol, setProtocol] = useState('')
-  const [host, setHost] = useState('')
-  const [path, setPath] = useState('')
-  const [search, setSearch] = useState('?')
-  const [hash, setHash] = useState('')
-  const [referrer, setReferrer] = useState('')
   const [isLoading, setLoading] = useState(true)
 
-  // Set all values excluding referrer
-  const setAll = () => {
-    setQuery(uriToObject(window.location.search))
-    setProtocol(window.location.protocol)
-    setHost(window.location.host)
-    setPath(window.location.pathname)
-    setSearch(window.location.search)
-    setHash(window.location.hash)
-  }
-
-  // Watch deps
-  useEffect(setAll, dependencies)
-
-  // Init referrer
-  useEffect(() => setReferrer(document.referrer), [])
-
-  // Considered loaded when values match window & document
   useEffect(() => {
-    if (host === window.location.host && referrer === document.referrer)
+    setUrlData({
+      query: uriToObject(window.location.search),
+      protocol: window.location.protocol,
+      host: window.location.host,
+      pathname: window.location.pathname,
+      search: window.location.search,
+      hash: window.location.hash,
+      referrer: document.referrer,
+    })
+  }, [...(dependencies ?? [])])
+
+  useEffect(() => {
+    if (urlData.host === window.location.host)
       setLoading(false)
-  }, [search, referrer])
+  }, [urlData])
 
-  // Push query or search params, refresh will update state
-  const push = (queryOrSearch: KeyObject | string, refresh = false) => {
-    if (typeof window === 'undefined') return
-
-    const query = typeof queryOrSearch === 'object'
-      ? queryOrSearch
-      : uriToObject(queryOrSearch)
-
-    window.history.pushState(query, '', `?${objectToUri(query)}`)
-
-    if (refresh) setAll()
-  }
-
-  return { query, protocol, host, path, search, hash, referrer, push, isLoading }
+  return [location, isLoading] as const
 }
 
 export const useBreadcrumbs = (excludePages: number[] = []) => {
@@ -685,12 +673,20 @@ export const jsxToText = (element: React.ReactElement | string): string => {
   return jsxToText(children)
 }
 
-export const buttonRoleProps = (options: { label?: string, tabIndex?: number, disabled?: boolean } = {}) => ({
+export const buttonRoleProps = ({
+  label,
+  tabIndex,
+  disabled
+}: {
+  label?: string
+  tabIndex?: number
+  disabled?: boolean
+} = {}) => ({
   role: 'button',
-  ...options.label && { 'aria-label': options.label },
-  tabIndex: options.tabIndex ?? 0,
-  'aria-disabled': options.disabled ?? false,
-  style: { cursor: options.disabled ? 'auto' : 'pointer' },
+  ...label && { 'aria-label': label },
+  tabIndex: tabIndex ?? 0,
+  'aria-disabled': disabled ?? false,
+  style: { cursor: disabled ? 'auto' : 'pointer' },
   onKeyDown: (e: any) => {
     if (['Enter', 'Spacebar', ' '].indexOf(e.key) >= 0) {
       e.preventDefault()
