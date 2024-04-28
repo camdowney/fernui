@@ -1,4 +1,4 @@
-import { stringify } from '@fernui/util'
+import { KeyObject, objectToUri, stringify, uriToObject } from '@fernui/util'
 
 export const st = (selector: string, smooth?: boolean) =>
   (document.querySelector(selector) ?? document.body)
@@ -26,6 +26,14 @@ export const parseHtml = (str: string) => {
   const element = document.createElement('div')
   element.innerHTML = String(str).replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '')
   return element.textContent ?? ''
+}
+
+export const pushSearchParams = (searchParams: KeyObject | string) => {
+  const query = typeof searchParams === 'object'
+    ? searchParams
+    : uriToObject(searchParams)
+
+  window.history.pushState(query, '', `?${objectToUri(query)}`)
 }
 
 export const fileToBase64 = async (file: File): Promise<string> =>
