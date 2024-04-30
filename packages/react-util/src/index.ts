@@ -1,44 +1,8 @@
 import React, { useEffect, useRef, useState, Dispatch, SetStateAction, createContext, useContext } from 'react'
-import { getUniqueFileName, KeyObject, objectToUri, toArray, uriToObject, toDeepObject, cycle, stringify } from '@fernui/util'
+import { getUniqueFileName, KeyObject, objectToUri, toArray, uriToObject, toDeepObject, cycle } from '@fernui/util'
 import { fileToBase64 } from '@fernui/dom-util'
 
 export type SetState<T> = Dispatch<SetStateAction<T>>
-
-export const useComplexState = <T>({
-  defaultValue,
-  callback,
-  dependencies = [],
-  isWaiting,
-  ignoreSubsequentLoads,
-}: {
-  defaultValue: T
-  callback?: (currentValue: T) => T | Promise<T>
-  dependencies?: any[]
-  isWaiting?: boolean
-  ignoreSubsequentLoads?: boolean
-}) => {
-  const [data, setData] = useState<T>(defaultValue)
-  const [isLoading, setLoading] = useState(true)
-  const loaded = useRef(false)
-
-  const setDataAsync = (newValue?: T) => {
-    (async () => {
-      if (!ignoreSubsequentLoads)
-        setLoading(true)
-
-      setData(newValue ?? (callback ? (await callback(data)) : defaultValue))
-      
-      loaded.current = true
-      setLoading(false)
-    })()
-  }
-
-  useEffect(() => {
-    if (!isWaiting && callback) setDataAsync()
-  }, [isWaiting, ...dependencies])
-
-  return [data, setDataAsync, isLoading] as const
-}
 
 export const useDebounce = ({
   callback,
@@ -109,7 +73,7 @@ export interface FormState {
   setField: SetFieldState
   removeField: (name: string) => void
   isValid: boolean
-  isLoading: boolean
+  // isLoading: boolean
   hasChanges: boolean
   pushChanges: (newValues?: KeyObject) => void
   onSubmit: ((e: any) => Promise<void>) | null
@@ -117,8 +81,8 @@ export interface FormState {
 }
 
 export interface FormOptions {
-  values?: KeyObject
-  isWaiting?: boolean
+  defaultValues?: KeyObject
+  // isWaiting?: boolean
   defaultDisabled?: boolean
   defaultExposed?: boolean
   onChange?: (newState: Pick<FormState, 'fields' | 'values' | 'isValid' | 'pushChanges'>) => any
@@ -127,8 +91,8 @@ export interface FormOptions {
 }
 
 export const useForm = ({
-  values: valuesProp = {},
-  isWaiting = false,
+  defaultValues = {},
+  // isWaiting = false,
   defaultDisabled,
   defaultExposed,
   onChange,
@@ -141,13 +105,13 @@ export const useForm = ({
   const [exposed, setExposed] = useState(defaultExposed ?? false)
   
   const [fields, setFields] = useState<FieldsMap>(new Map(
-    Object.entries(valuesProp).map(([name, value]) => [name, { ...defaultFieldState, value }])
+    Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
-  const [values, setValues] = useState<KeyObject>(valuesProp)
-  const savedValuesString = useRef(objectToUri(valuesProp))
+  const [values, setValues] = useState<KeyObject>(defaultValues)
+  const savedValuesString = useRef(objectToUri(defaultValues))
   
   const [isValid, setValid] = useState(false)
-  const [isLoading, setLoading] = useState(isWaiting)
+  // const [isLoading, setLoading] = useState(isWaiting)
   const [hasChanges, setHasChanges] = useState(false)
   const [successCount, setSuccessCount] = useState(0)
 
@@ -216,7 +180,19 @@ export const useForm = ({
 
   // User-facing method
   const removeField = (name: string) => {
-    fields.delete(name)
+    const defaultValue = defaultValues[name]
+    const validate = (fields.get(name) ?? {}).validate ?? (() => true)
+
+    if (defaultValue)
+      fields.set(name, {
+        value: defaultValue,
+        modified: false,
+        validate,
+        error: !validate(defaultValue),
+      })
+    else
+      fields.delete(name)
+
     setFieldsAndUpdateValues(new Map(fields))
   }
 
@@ -241,34 +217,37 @@ export const useForm = ({
     }
   }
 
-  // Populate fields from valuesProp
-  useEffect(() => {
-    if (isWaiting) return
+  // This introducies a lot of complexities. It seems best to avoid this and instead manually 
+  // setField for any values that are not static and can't be passed in through defaultValues.
+  
+  // Populate fields from defaultValues
+  // useEffect(() => {
+  //   if (isWaiting) return
 
-    Object.entries(valuesProp).forEach(([name, value]) => {
-      const field = fields.get(name)
+  //   Object.entries(defaultValues).forEach(([name, value]) => {
+  //     const field = fields.get(name)
 
-      fields.set(name, {
-        ...defaultFieldState,
-        ...field,
-        value,
-        ...field && field.validate && { error: !field.validate(value) },
-      })
-    })
+  //     fields.set(name, {
+  //       ...defaultFieldState,
+  //       ...field,
+  //       value,
+  //       ...field && field.validate && { error: !field.validate(value) },
+  //     })
+  //   })
 
-    setFieldsAndUpdateValues(new Map(fields))
-  }, [isWaiting, objectToUri(valuesProp)])
+  //   setFieldsAndUpdateValues(new Map(fields))
+  // }, [isWaiting, objectToUri(defaultValues)])
 
   // Comprehensively check if loading is complete
-  useEffect(() => {
-    if (isWaiting || !isLoading) return
+  // useEffect(() => {
+  //   if (isWaiting || !isLoading) return
 
-    const allDefaultValuesLoaded = Object.entries(valuesProp)
-      .every(([name, value]) => values[name] !== undefined && objectToUri(values[name]) === objectToUri(value))
+  //   const allDefaultValuesLoaded = Object.entries(defaultValues)
+  //     .every(([name, value]) => values[name] !== undefined && objectToUri(values[name]) === objectToUri(value))
 
-    if (allDefaultValuesLoaded)
-      setLoading(false)
-  }, [isWaiting, objectToUri(valuesProp), objectToUri(values)])
+  //   if (allDefaultValuesLoaded)
+  //     setLoading(false)
+  // }, [isWaiting, objectToUri(defaultValues), objectToUri(values)])
 
   const context: FormState = {
     disabled, setDisabled,
@@ -276,7 +255,7 @@ export const useForm = ({
     fields, setFields: setFieldsAndUpdateValues,
     values, reset,
     setField, removeField,
-    isValid, isLoading,
+    isValid, // isLoading,
     hasChanges, pushChanges,
     onSubmit, successCount,
   }
@@ -291,21 +270,21 @@ export const useFormContext = () => useContext(FormContext) ?? useForm()
 export const useField = <T>({
   context,
   name,
-  value,
+  defaultValue,
   disabled: disabledProp,
   validate,
   onChange,
 }: {
   context?: FormState
   name: string
-  value: T
+  defaultValue: T
   disabled?: boolean
   validate?: (newValue: T) => boolean
   onChange?: (newValue: T) => any
 }) => {
   const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = context ?? useFormContext()
 
-  const field = fields.get(name) ?? { value, modified: false, error: false }
+  const field = fields.get(name) ?? { value: defaultValue, modified: false, error: false }
   const valueClean = field.value as T
   const disabledClean = disabledProp ?? formDisabled
   const showError = field.error && (field.modified || formExposed)
@@ -315,9 +294,6 @@ export const useField = <T>({
     setField(name, { value: newValue, modified: newModified, validate })
     if (onChange) onChange(newValue)
   }
-
-  // Handle manual value control
-  useEffect(() => setValue(value), [stringify(value)])
 
   // Set default state and cleanup
   useEffect(() => {
@@ -660,17 +636,18 @@ export const useUrl = (dependencies?: any[]) => {
   return [location, isLoading] as const
 }
 
-export const useBreadcrumbs = (excludePages: number[] = []) => {
-  const [breadcrumbs] = useComplexState({
-    callback: () => {
-      const parts = window.location.pathname.split('/').slice(1)
+export const useBreadcrumbs = (excludeIndexes: number[] = []) => {
+  const [breadcrumbs, setBreadcrumbs] = useState<string[]>([])
 
-      return parts
+  useEffect(() => {
+    const parts = window.location.pathname.split('/').slice(1)
+
+    setBreadcrumbs(
+      parts
         .map((_, i) => '/' + parts.slice(0, i + 1).join('/'))
-        .filter((_, i) => !excludePages.includes(i))
-    },
-    defaultValue: [],
-  })
+        .filter((_, i) => !excludeIndexes.includes(i))
+    )
+  }, [])
 
   return breadcrumbs
 }

@@ -21,7 +21,7 @@ export default function Select({
   domRef,
   context,
   name: nameProp,
-  value: valueProp,
+  defaultValue,
   onChange,
   validate = () => true,
   placeholder,
@@ -47,7 +47,7 @@ export default function Select({
   const { value, setValue, disabled, showError } = useField({
     context,
     name: nameProp ?? label ?? placeholder ?? '',
-    value: valueProp ?? (placeholder ? '' : (options[0].value ?? options[0].label)),
+    defaultValue: defaultValue ?? (placeholder ? '' : (options[0].value ?? options[0].label)),
     disabled: disabledProp,
     validate,
     onChange,

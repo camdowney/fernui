@@ -12,7 +12,7 @@ export default function TextArea({
   domRef,
   context,
   name: nameProp,
-  value: valueProp = '',
+  defaultValue = '',
   onChange,
   validate = () => true,
   placeholder,
@@ -33,7 +33,7 @@ export default function TextArea({
   const { name, value, setValue, disabled, showError } = useField({
     context,
     name: nameProp ?? label ?? placeholder ?? '',
-    value: valueProp,
+    defaultValue,
     disabled: disabledProp,
     validate,
     onChange: value => {
@@ -43,7 +43,7 @@ export default function TextArea({
   })
 
   useEffect(() => {
-    if (valueProp && autoResize) adjustHeight(ref.current)
+    if (defaultValue && autoResize) adjustHeight(ref.current)
   }, [])
 
   return (

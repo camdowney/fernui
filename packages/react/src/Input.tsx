@@ -10,7 +10,7 @@ export default function Input({
   domRef,
   context,
   name: nameProp,
-  value: valueProp = '',
+  defaultValue = '',
   onChange,
   validate = () => true,
   placeholder,
@@ -30,7 +30,7 @@ export default function Input({
   const { name, value, setValue, disabled, showError } = useField({
     context,
     name: nameProp ?? label ?? placeholder ?? '',
-    value: valueProp,
+    defaultValue,
     disabled: disabledProp,
     validate,
     onChange,

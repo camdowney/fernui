@@ -12,7 +12,7 @@ export default function Checkbox({
   context,
   domRef,
   name: nameProp,
-  value: valueProp = 'false',
+  defaultValue = 'false',
   onChange,
   validate = () => true,
   disabled: disabledProp,
@@ -31,7 +31,7 @@ export default function Checkbox({
   const { name, value, setValue, disabled, showError } = useField({
     context,
     name: nameProp ?? label ?? '',
-    value: valueProp,
+    defaultValue,
     disabled: disabledProp,
     validate,
     onChange,

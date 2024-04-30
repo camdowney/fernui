@@ -9,7 +9,7 @@ export default function Honeypot({ context }: HoneypotProps) {
   const { name, setValue } = useField({
     context,
     name: '__config-hp',
-    value: '',
+    defaultValue: '',
     validate: newValue => !newValue,
   })
 

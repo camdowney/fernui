@@ -19,7 +19,7 @@ export default function Upload({
   domRef,
   context,
   name: nameProp,
-  value: valueProp = [],
+  defaultValue = [],
   onChange,
   placeholder = 'Select or drop file(s)',
   disabled: disabledProp,
@@ -50,7 +50,7 @@ export default function Upload({
   const { value, setValue, disabled, showError } = useField({
     context,
     name: nameProp ?? label ?? placeholder ?? '',
-    value: valueProp,
+    defaultValue,
     disabled: disabledProp,
     validate,
     onChange,
