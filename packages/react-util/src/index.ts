@@ -160,7 +160,8 @@ export const useForm = ({
         .filter(([name]) => !name.startsWith('__config'))
     ))
     const newValuesString = objectToUri(newValues)
-    const newHasChanges = !isLoading && newValuesString !== savedValuesString.current
+    const newHasChanges = Array.from(newFields).some(([_, state]) => state.modified)
+      && newValuesString !== savedValuesString.current
 
     setFields(newFields)
     setValid(newValid)
