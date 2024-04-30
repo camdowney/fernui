@@ -111,25 +111,27 @@ export interface FormState {
   isValid: boolean
   isLoading: boolean
   hasChanges: boolean
-  pushChanges: () => void
+  pushChanges: (newValues?: KeyObject) => void
   onSubmit: ((e: any) => Promise<void>) | null
   successCount: number
 }
 
 export interface FormOptions {
-  defaultValues?: KeyObject
+  values?: KeyObject
   isWaiting?: boolean
   defaultDisabled?: boolean
   defaultExposed?: boolean
+  onChange?: (newState: Pick<FormState, 'fields' | 'values' | 'isValid' | 'pushChanges'>) => any
   onSubmit?: () => any
   onError?: (error: any) => any
 }
 
 export const useForm = ({
-  defaultValues = {},
+  values: valuesProp = {},
   isWaiting = false,
   defaultDisabled,
   defaultExposed,
+  onChange,
   onSubmit: onSubmitProp,
   onError,
 }: FormOptions = {}) => {
@@ -139,10 +141,10 @@ export const useForm = ({
   const [exposed, setExposed] = useState(defaultExposed ?? false)
   
   const [fields, setFields] = useState<FieldsMap>(new Map(
-    Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
+    Object.entries(valuesProp).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
-  const [values, setValues] = useState<KeyObject>(defaultValues)
-  const savedValues = useRef(objectToUri(defaultValues))
+  const [values, setValues] = useState<KeyObject>(valuesProp)
+  const savedValuesString = useRef(objectToUri(valuesProp))
   
   const [isValid, setValid] = useState(false)
   const [isLoading, setLoading] = useState(isWaiting)
@@ -151,23 +153,34 @@ export const useForm = ({
 
   // User-facing method
   const setFieldsAndUpdateValues = (newFields: FieldsMap) => {
-    setFields(newFields)
-    setValid(Array.from(newFields).every(([_, state]) => !state.error))
-
+    const newValid = Array.from(newFields).every(([_, state]) => !state.error)
     const newValues = toDeepObject(Object.fromEntries(
       Array.from(newFields)
         .map(([name, state]) => [name, state.value])
         .filter(([name]) => !name.startsWith('__config'))
     ))
+    const newValuesString = objectToUri(newValues)
+    const newHasChanges = !isLoading && newValuesString !== savedValuesString.current
 
+    setFields(newFields)
+    setValid(newValid)
     setValues(newValues)
-    setHasChanges(!isLoading && objectToUri(newValues) !== savedValues.current)
-    savedValues.current = objectToUri(newValues)
+    savedValuesString.current = newValuesString
+    setHasChanges(newHasChanges)
+
+    // Subscription callbacks are more efficient than useEffect
+    if (newHasChanges && onChange)
+      onChange({
+        fields: newFields,
+        values: newValues,
+        isValid: newValid,
+        pushChanges: () => pushChanges(newValues),
+      })
   }
 
   // User-facing method
-  const pushChanges = () => {
-    savedValues.current = objectToUri(values)
+  const pushChanges = (newValues?: KeyObject) => {
+    savedValuesString.current = objectToUri(newValues ?? values)
     setHasChanges(false)
   }
 
@@ -227,11 +240,11 @@ export const useForm = ({
     }
   }
 
-  // Populate fields from defaultValues while loading
+  // Populate fields from valuesProp
   useEffect(() => {
-    if (isWaiting || !isLoading) return
+    if (isWaiting) return
 
-    Object.entries(defaultValues).forEach(([name, value]) => {
+    Object.entries(valuesProp).forEach(([name, value]) => {
       const field = fields.get(name)
 
       fields.set(name, {
@@ -243,18 +256,18 @@ export const useForm = ({
     })
 
     setFieldsAndUpdateValues(new Map(fields))
-  }, [isWaiting, objectToUri(defaultValues)])
+  }, [isWaiting, objectToUri(valuesProp)])
 
   // Comprehensively check if loading is complete
   useEffect(() => {
     if (isWaiting || !isLoading) return
 
-    const allDefaultValuesLoaded = Object.entries(defaultValues)
+    const allDefaultValuesLoaded = Object.entries(valuesProp)
       .every(([name, value]) => values[name] !== undefined && objectToUri(values[name]) === objectToUri(value))
 
     if (allDefaultValuesLoaded)
       setLoading(false)
-  }, [isWaiting, objectToUri(defaultValues), objectToUri(values)])
+  }, [isWaiting, objectToUri(valuesProp), objectToUri(values)])
 
   const context: FormState = {
     disabled, setDisabled,
@@ -287,7 +300,7 @@ export const useField = <T>({
   value: T
   disabled?: boolean
   validate?: (newValue: T) => boolean
-  onChange?: (newValue: T) => void
+  onChange?: (newValue: T) => any
 }) => {
   const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = context ?? useFormContext()
 
