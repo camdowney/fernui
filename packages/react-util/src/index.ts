@@ -207,8 +207,6 @@ export const useForm = ({
       if (!isValid)
         throw Error('invalid')
   
-      setDisabled(true)
-
       await onSubmitProp()
       setSuccessCount(curr => curr + 1)
     }
