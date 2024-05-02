@@ -1,8 +1,11 @@
 import { KeyObject, objectToUri, stringify, uriToObject } from '@fernui/util'
 
-export const st = (selector: string, smooth?: boolean) =>
+export const st = (selector: string, smooth = false, alignY: 'start' | 'center' | 'end' = 'start') =>
   (document.querySelector(selector) ?? document.body)
-    .scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
+    .scrollIntoView({
+      behavior: smooth ? 'smooth' : 'auto',
+      block: alignY,
+    })
 
 export const downloadFile = ({
   name,
