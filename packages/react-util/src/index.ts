@@ -80,12 +80,14 @@ export interface FormState {
   successCount: number
 }
 
+export type FormOnChangeProps = Pick<FormState, 'fields' | 'values' | 'isValid' | 'pushChanges'>
+
 export interface FormOptions {
   defaultValues?: KeyObject
   // isWaiting?: boolean
   defaultDisabled?: boolean
   defaultExposed?: boolean
-  onChange?: (newState: Pick<FormState, 'fields' | 'values' | 'isValid' | 'pushChanges'>) => any
+  onChange?: (newState: FormOnChangeProps) => any
   onSubmit?: () => any
   onError?: (error: any) => any
 }
@@ -116,7 +118,7 @@ export const useForm = ({
   const [successCount, setSuccessCount] = useState(0)
 
   // User-facing method
-  const setFieldsAndUpdateValues = (newFields: FieldsMap) => {
+  const setFieldsAndUpdateValues = (newFields: FieldsMap, forceChange = false) => {
     const newValid = Array.from(newFields).every(([_, state]) => !state.error)
     const newValues = toDeepObject(Object.fromEntries(
       Array.from(newFields)
@@ -134,7 +136,7 @@ export const useForm = ({
     setHasChanges(newHasChanges)
 
     // Subscription callbacks are more efficient than useEffect
-    if (newHasChanges && onChange)
+    if (onChange && (newHasChanges || forceChange))
       onChange({
         fields: newFields,
         values: newValues,
@@ -161,7 +163,7 @@ export const useForm = ({
           validate: state.validate,
           error: !state.validate(''),
         }])
-    ))
+    ), true)
   }
 
   // User-facing method
