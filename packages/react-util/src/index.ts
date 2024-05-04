@@ -125,14 +125,12 @@ export const useForm = ({
         .map(([name, state]) => [name, state.value])
         .filter(([name]) => !name.startsWith('__config'))
     ))
-    const newValuesString = objectToUri(newValues)
     const newHasChanges = Array.from(newFields).some(([_, state]) => state.modified)
-      && newValuesString !== savedValuesString.current
+      && objectToUri(newValues) !== savedValuesString.current
 
     setFields(newFields)
     setValid(newValid)
     setValues(newValues)
-    savedValuesString.current = newValuesString
     setHasChanges(newHasChanges)
 
     // Subscription callbacks are more efficient than useEffect
