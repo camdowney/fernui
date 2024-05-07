@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@fernui/dom-util':
         specifier: ^2.2.1
-        version: 2.2.1(@fernui/util@4.0.2)
+        version: 2.3.1(@fernui/util@4.0.2)
       sharp:
         specifier: ^0.33.3
         version: 0.33.3
@@ -20,8 +20,8 @@ packages:
   '@emnapi/runtime@1.1.1':
     resolution: {integrity: sha512-3bfqkzuR1KLx57nZfjr2NLnFOobvyS0aTszaEGCGqmYMVDRaGvgIZbjGSV/MHSSmLgQ/b9JFHQ5xm5WRZYd+XQ==}
 
-  '@fernui/dom-util@2.2.1':
-    resolution: {integrity: sha512-t8VpNwbtjlqhVB2f5b+JocbUCFYK1MmfHK9RPi5MYpusvyG+/pD/qdYx2w2WW4PI4pF+dFlQC82A7oiGaBL5MQ==}
+  '@fernui/dom-util@2.3.1':
+    resolution: {integrity: sha512-WvypPlxVS6jKhgUhAE7I0LePhGazfFryzh04NMmR9xxFVYCTLADadlrwpjnILm+zAJpXXwT9ISlDNVNaLDIrcw==}
     peerDependencies:
       '@fernui/util': ^4.0.2
 
@@ -191,7 +191,7 @@ snapshots:
       tslib: 2.6.2
     optional: true
 
-  '@fernui/dom-util@2.2.1(@fernui/util@4.0.2)':
+  '@fernui/dom-util@2.3.1(@fernui/util@4.0.2)':
     dependencies:
       '@fernui/util': 4.0.2
 

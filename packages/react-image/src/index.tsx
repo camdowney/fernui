@@ -8,6 +8,7 @@ export interface ImageProps {
   alt?: string
   lazy?: boolean
   cover?: boolean
+  placeholderSrc?: string
   placeholderClass?: string
   placeholderStyle?: Object
   className?: string
@@ -24,14 +25,11 @@ export const getLazyResizeDomUtils = ({
   ...rest
 }: LazyResizeDomFactoryProps) => {
   const {
+    isResizable,
     getResizeSrc,
     attachLazyResizeHandlers,
     getLazyResizeAttributes,
-  } = _getLazyResizeDomUtils({
-    outputDir,
-    placeholderSize,
-    ...rest
-  })
+  } = _getLazyResizeDomUtils({ outputDir, placeholderSize, ...rest })
 
   const Image = ({
     domRef,
@@ -39,6 +37,7 @@ export const getLazyResizeDomUtils = ({
     alt,
     lazy = true,
     cover,
+    placeholderSrc: placeholderSrcProp,
     placeholderClass,
     placeholderStyle,
     className,
@@ -48,7 +47,14 @@ export const getLazyResizeDomUtils = ({
     innerProps,
     ...props
   }: ImageProps) => {
-    const { src, dataLazySrc, dataLazyLoaded, placeholderSrc } = getLazyResizeAttributes(srcRaw, lazy)
+    const {
+      src,
+      dataLazySrc,
+      dataLazyLoaded,
+      placeholderSrc: placeholderSrcLazy,
+    }: any = getLazyResizeAttributes(srcRaw, lazy)
+
+    const placeholderSrc = placeholderSrcProp ?? placeholderSrcLazy
 
     useEffect(() => attachLazyResizeHandlers(), [])
 
@@ -66,7 +72,7 @@ export const getLazyResizeDomUtils = ({
             style={oc(
               styles.cover,
               styles.placeholder,
-              lazy && { backgroundImage: `url(${placeholderSrc})` },
+              placeholderSrc && { backgroundImage: `url(${placeholderSrc})` },
               placeholderStyle,
             )}
           />
@@ -92,6 +98,7 @@ export const getLazyResizeDomUtils = ({
   }
 
   return {
+    isResizable,
     getResizeSrc,
     attachLazyResizeHandlers,
     getLazyResizeAttributes,

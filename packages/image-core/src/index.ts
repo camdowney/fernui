@@ -25,13 +25,20 @@ export const getLazyResizeDomUtils = ({
   lazyBgElements,
 }: LazyResizeDomFactoryProps) => {
   /**
+   * Based on whether or not a given src starts with http or matches any of the noResizeSrcPatterns.
+   * @param src (string)
+   * @returns (boolean)
+   */
+  const isResizable = (src: string) =>
+    !([...noResizeSrcPatterns, /^http/].some(pattern => src.match(pattern)))
+
+  /**
    * Returns the most optimally-sized image for an element from an existing folder of resized images.
    * @param src (string) Should match an existing resized image given the structure /[outputDir]/[size]/[src]
    * @param element (HTMLImageElement?) If undefined, the largest available image will be returned.
    */
   const getResizeSrc = (src: string, element?: HTMLImageElement) => {
-    if ([...noResizeSrcPatterns, /^http/].some(pattern => src.match(pattern)))
-      return src
+    if (!isResizable(src)) return src
   
     const sizeRendered = element ? Math.max(element.scrollWidth, element.scrollHeight) : Infinity
     const sizeAdjusted = sizeRendered * scale
@@ -93,7 +100,7 @@ export const getLazyResizeDomUtils = ({
    */
   const getLazyResizeAttributes = (src = '', lazy?: boolean) =>
     lazy ? {
-      placeholderSrc: `${outputDir}/${placeholderSize}${src}`,
+      ...isResizable(src) && { placeholderSrc: `${outputDir}/${placeholderSize}${src}` },
       dataLazySrc: src,
       dataLazyLoaded: false,
     }
@@ -102,6 +109,7 @@ export const getLazyResizeDomUtils = ({
     }
 
   return {
+    isResizable,
     getResizeSrc,
     attachLazyResizeHandlers,
     getLazyResizeAttributes,
