@@ -685,13 +685,15 @@ export const getButtonRoleProps = ({
   },
 })
 
+export type FormValue = [name: string, value: any]
+
 export interface UploadFile {
   name: string
   data: string
 }
 
 export const splitFormValuesAndFiles = async (values: KeyObject, uploadURL: string) => {
-  const valuesArray = Object.entries(structuredClone(values))
+  const valuesArray: FormValue[] = Object.entries(structuredClone(values))
   const files: UploadFile[] = []
 
   await Promise.all(
@@ -706,5 +708,5 @@ export const splitFormValuesAndFiles = async (values: KeyObject, uploadURL: stri
     ).flat()
   )
 
-  return { values: valuesArray, files }
+  return [valuesArray, files] as const
 }
