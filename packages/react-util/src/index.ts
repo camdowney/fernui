@@ -662,7 +662,7 @@ export const jsxToText = (element: React.ReactElement | string): string => {
   return jsxToText(children)
 }
 
-export const buttonRoleProps = ({
+export const getButtonRoleProps = ({
   label,
   tabIndex,
   disabled
@@ -685,14 +685,14 @@ export const buttonRoleProps = ({
   },
 })
 
-export interface UploadData {
+export interface UploadFile {
   name: string
   data: string
 }
 
-export const destructFormValuesAndFiles = async (values: KeyObject, uploadURL: string) => {
+export const splitFormValuesAndFiles = async (values: KeyObject, uploadURL: string) => {
   const valuesArray = Object.entries(structuredClone(values))
-  const files: UploadData[] = []
+  const files: UploadFile[] = []
 
   await Promise.all(
     valuesArray.map(([_, value], i) =>
