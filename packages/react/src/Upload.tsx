@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useState } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-util'
-import { buttonRoleProps } from '@fernui/react-util'
+import { getButtonRoleProps } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 
@@ -117,7 +117,7 @@ export default function Upload({
         onDragLeave={() => setDragging(false)}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        {...buttonRoleProps({ label: placeholder, disabled })}
+        {...getButtonRoleProps({ label: placeholder, disabled })}
         className={cn(
           'fui-upload fui-field-block',
           value.length < 1 && 'fui-upload-empty',
@@ -138,7 +138,7 @@ export default function Upload({
                   e.stopPropagation()
                   removeFile(i)
                 }}
-                {...buttonRoleProps({ label: 'Remove upload', disabled })}
+                {...getButtonRoleProps({ label: 'Remove upload', disabled })}
                 className='fui-upload-remove'
               >
                 Remove
