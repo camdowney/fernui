@@ -305,24 +305,25 @@ export const createStopwatch = () => {
 }
 
 
-export const throttle = (callback: () => any, delay = 0, runLast = true) => {
-  let last = 0
+export const throttle = (callback: () => any, delayMilliseconds: number) => {
+  let lastRanTimestamp = 0
   let timeoutId: any
 
   const runCallback = () => {
-    last = new Date().getTime()
+    lastRanTimestamp = new Date().getTime()
     callback()
   }
 
   return () => {
-    const elapsed = new Date().getTime() - last
+    const elapsedMilliseconds = new Date().getTime() - lastRanTimestamp
+    const remainingMilliseconds = delayMilliseconds - elapsedMilliseconds
 
     clearTimeout(timeoutId)
 
-    if (elapsed >= delay)
+    if (remainingMilliseconds <= 0)
       runCallback()
-    else if (runLast)
-      timeoutId = setTimeout(runCallback, delay - elapsed)
+    else
+      timeoutId = setTimeout(runCallback, remainingMilliseconds)
   }
 }
 

@@ -6,42 +6,77 @@ export type SetState<T> = Dispatch<SetStateAction<T>>
 
 export const useDebounce = ({
   callback,
-  delay,
+  delayMilliseconds,
   dependencies,
-  isWaiting,
-  skipFirstDebounce,
+  skipFirstDebounce: skipFirstDebounceProp,
 }: {
   callback: () => any
-  delay: number
+  delayMilliseconds: number
   dependencies: any[]
-  isWaiting?: boolean
   skipFirstDebounce?: boolean
 }) => {
-  const skipFirst = useRef(skipFirstDebounce ?? false)
+  const skipFirstDebounce = useRef(skipFirstDebounceProp ?? false)
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
-    let timeoutID: any
+    let timeoutId: any
 
     (async () => {
-      if (isWaiting) return
-      
-      if (skipFirst.current) {
-        skipFirst.current = false
+      if (skipFirstDebounce.current) {
+        skipFirstDebounce.current = false
         await callback()
         return setLoading(false)
       }
   
       setLoading(true)
   
-      timeoutID = setTimeout(async () => {
+      timeoutId = setTimeout(async () => {
         await callback()
         setLoading(false)
-      }, delay)
+      }, delayMilliseconds)
     })()
 
-    return () => clearTimeout(timeoutID)
-  }, [...dependencies, delay, isWaiting])
+    return () => clearTimeout(timeoutId)
+  }, [...dependencies, delayMilliseconds])
+
+  return isLoading
+}
+
+export const useThrottle = ({
+  callback,
+  delayMilliseconds,
+  dependencies,
+}: {
+  callback: () => any
+  delayMilliseconds: number
+  dependencies: any[]
+}) => {
+  const lastRanTimestamp = useRef(0)
+  const [isLoading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let timeoutId: any
+  
+    (async () => {
+      const runCallback = async () => {
+        lastRanTimestamp.current = new Date().getTime()
+        await callback()
+        setLoading(false)
+      }
+    
+      const elapsedMilliseconds = new Date().getTime() - lastRanTimestamp.current
+      const remainingMilliseconds = delayMilliseconds - elapsedMilliseconds
+  
+      clearTimeout(timeoutId)
+  
+      if (remainingMilliseconds <= 0)
+        await runCallback()
+      else
+        timeoutId = setTimeout(runCallback, remainingMilliseconds)
+    })()
+
+    return () => clearTimeout(timeoutId)
+  }, [...dependencies, delayMilliseconds])
 
   return isLoading
 }
@@ -68,12 +103,11 @@ export interface FormState {
   setExposed: SetState<boolean>
   fields: FieldsMap
   setFields: (newValue: FieldsMap) => void
-  values: KeyObject
   reset: (resetModifiedAndExposed?: boolean) => void
   setField: SetFieldState
   removeField: (name: string) => void
+  values: KeyObject
   isValid: boolean
-  // isLoading: boolean
   hasChanges: boolean
   pushChanges: (newValues?: KeyObject) => void
   onSubmit: ((e: any) => Promise<void>) | null
@@ -84,7 +118,6 @@ export type FormOnChangeProps = Pick<FormState, 'fields' | 'values' | 'isValid' 
 
 export interface FormOptions {
   defaultValues?: KeyObject
-  // isWaiting?: boolean
   defaultDisabled?: boolean
   defaultExposed?: boolean
   onChange?: (newState: FormOnChangeProps) => any
@@ -94,7 +127,6 @@ export interface FormOptions {
 
 export const useForm = ({
   defaultValues = {},
-  // isWaiting = false,
   defaultDisabled,
   defaultExposed,
   onChange,
@@ -113,7 +145,6 @@ export const useForm = ({
   const savedValuesString = useRef(objectToUri(defaultValues))
   
   const [isValid, setValid] = useState(false)
-  // const [isLoading, setLoading] = useState(isWaiting)
   const [hasChanges, setHasChanges] = useState(false)
   const [successCount, setSuccessCount] = useState(0)
 
@@ -215,45 +246,12 @@ export const useForm = ({
     }
   }
 
-  // This introducies a lot of complexities. It seems best to avoid this and instead manually 
-  // setField for any values that are not static and can't be passed in through defaultValues.
-  
-  // Populate fields from defaultValues
-  // useEffect(() => {
-  //   if (isWaiting) return
-
-  //   Object.entries(defaultValues).forEach(([name, value]) => {
-  //     const field = fields.get(name)
-
-  //     fields.set(name, {
-  //       ...defaultFieldState,
-  //       ...field,
-  //       value,
-  //       ...field && field.validate && { error: !field.validate(value) },
-  //     })
-  //   })
-
-  //   setFieldsAndUpdateValues(new Map(fields))
-  // }, [isWaiting, objectToUri(defaultValues)])
-
-  // Comprehensively check if loading is complete
-  // useEffect(() => {
-  //   if (isWaiting || !isLoading) return
-
-  //   const allDefaultValuesLoaded = Object.entries(defaultValues)
-  //     .every(([name, value]) => values[name] !== undefined && objectToUri(values[name]) === objectToUri(value))
-
-  //   if (allDefaultValuesLoaded)
-  //     setLoading(false)
-  // }, [isWaiting, objectToUri(defaultValues), objectToUri(values)])
-
   const context: FormState = {
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields: setFieldsAndUpdateValues,
-    values, reset,
-    setField, removeField,
-    isValid, // isLoading,
+    reset, setField, removeField,
+    values, isValid,
     hasChanges, pushChanges,
     onSubmit, successCount,
   }
@@ -308,30 +306,30 @@ export const useModal = (
   {
     ref: refProp,
     onChange,
-    openDelay,
-    closeDelay,
+    openDelayMilliseconds,
+    closeDelayMilliseconds,
     exitOnOutsideClick,
     exitOnEscape,
     preventScroll,
   }: {
     ref?: any
     onChange?: (ref: any) => void
-    openDelay?: number
-    closeDelay?: number
+    openDelayMilliseconds?: number
+    closeDelayMilliseconds?: number
     exitOnOutsideClick?: boolean
     exitOnEscape?: boolean
     preventScroll?: boolean
   } = {}
 ) => {
   const ref = refProp || useRef()
-  const timer = useRef<any>() 
+  const timer = useRef<any>()
 
-  const setActiveTimer = (newActive: boolean, delay: number) =>
-    timer.current = setTimeout(() => setActive(newActive), delay)
+  const setActiveTimer = (newActive: boolean, delayMilliseconds: number) =>
+    timer.current = setTimeout(() => setActive(newActive), delayMilliseconds)
 
   useEffect(() => {
-    if (openDelay)
-      setActiveTimer(true, openDelay)
+    if (openDelayMilliseconds)
+      setActiveTimer(true, openDelayMilliseconds)
   }, [])
 
   useEffect(() => {
@@ -343,8 +341,8 @@ export const useModal = (
     if (onChange)
       onChange(ref)
       
-    if (active && closeDelay)
-      setActiveTimer(false, closeDelay)
+    if (active && closeDelayMilliseconds)
+      setActiveTimer(false, closeDelayMilliseconds)
   }, [active])
 
   useListener('keydown', (e: any) => {
