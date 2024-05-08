@@ -18,8 +18,8 @@ export interface ModalProps {
   bgActiveClass?: string
   bgInactiveClass?: string
   bgStyle?: Object
-  openDelay?: number
-  closeDelay?: number
+  openDelayMilliseconds?: number
+  closeDelayMilliseconds?: number
   exitOnBgClick?: boolean
   exitOnOutsideClick?: boolean
   exitOnEscape?: boolean
@@ -43,8 +43,8 @@ export default function Modal({
   bgActiveClass,
   bgInactiveClass,
   bgStyle,
-  openDelay = 0,
-  closeDelay = 0,
+  openDelayMilliseconds = 0,
+  closeDelayMilliseconds = 0,
   exitOnBgClick = true,
   exitOnOutsideClick = true,
   exitOnEscape = true,
@@ -53,8 +53,8 @@ export default function Modal({
 }: ModalProps) {
   const { ref } = useModal(active, setActive, {
     ref: domRef,
-    openDelay,
-    closeDelay,
+    openDelayMilliseconds,
+    closeDelayMilliseconds,
     exitOnOutsideClick,
     exitOnEscape,
     preventScroll,

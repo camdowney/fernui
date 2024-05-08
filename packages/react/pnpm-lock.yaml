@@ -9,17 +9,17 @@ importers:
   .:
     dependencies:
       '@fernui/dom-util':
-        specifier: ^2.3.0
-        version: 2.3.1(@fernui/util@4.0.2)
+        specifier: ^2.3.1
+        version: 2.3.1(@fernui/util@4.0.3)
       '@fernui/icons':
         specifier: ^3.0.0
         version: 3.0.0
       '@fernui/react-util':
-        specifier: ^3.4.4
-        version: 3.5.2(@fernui/dom-util@2.3.1(@fernui/util@4.0.2))(@fernui/util@4.0.2)(react@18.3.1)
+        specifier: ^3.6.0
+        version: 3.6.0(@fernui/dom-util@2.3.1(@fernui/util@4.0.3))(@fernui/util@4.0.3)(react@18.3.1)
       '@fernui/util':
-        specifier: ^4.0.2
-        version: 4.0.2
+        specifier: ^4.0.3
+        version: 4.0.3
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -38,15 +38,15 @@ packages:
   '@fernui/icons@3.0.0':
     resolution: {integrity: sha512-rb8Dbt2ONX42OWxG3pUz/AH1SQ5FhG2b59oz1FaxGE87R/xVLSJ39CuXuhUNcSKg41Oges90oNuPDoB9CkIviw==}
 
-  '@fernui/react-util@3.5.2':
-    resolution: {integrity: sha512-LHTL7+PcvMN/TdIKL5jZX8LKAsI2nMPl+uynnb4MAE1p/8dWYAd+Kehv6lOPVwK+nU8B19ecF0aeDp0+USTKbA==}
+  '@fernui/react-util@3.6.0':
+    resolution: {integrity: sha512-8Y7a9XtHLPq5ypqOo0brSYxRU8XByFfvPwfomzySQ+MaEyN9kv0cDF1zPDpPLgBXWxpHI5G4bK/3+TBFUXmerQ==}
     peerDependencies:
       '@fernui/dom-util': ^2.3.1
       '@fernui/util': ^4.0.2
       react: ^18.3.1
 
-  '@fernui/util@4.0.2':
-    resolution: {integrity: sha512-QIRdjbj/bygw1i+wUbdHnEj35LUbz908LGybA8xhLCSazfY2DHel8hhy3yowXhb2sKaYKMJtFJ3JGAPivPzdfQ==}
+  '@fernui/util@4.0.3':
+    resolution: {integrity: sha512-0jRPXyLA4KhVQ+9bdap0DpXPcQPWuha4kDhLPAR+ikcinMWr+XQD8hx1rRqrCwyglqUpED7mZq6OTH3SmJ0gzg==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -70,19 +70,19 @@ packages:
 
 snapshots:
 
-  '@fernui/dom-util@2.3.1(@fernui/util@4.0.2)':
+  '@fernui/dom-util@2.3.1(@fernui/util@4.0.3)':
     dependencies:
-      '@fernui/util': 4.0.2
+      '@fernui/util': 4.0.3
 
   '@fernui/icons@3.0.0': {}
 
-  '@fernui/react-util@3.5.2(@fernui/dom-util@2.3.1(@fernui/util@4.0.2))(@fernui/util@4.0.2)(react@18.3.1)':
+  '@fernui/react-util@3.6.0(@fernui/dom-util@2.3.1(@fernui/util@4.0.3))(@fernui/util@4.0.3)(react@18.3.1)':
     dependencies:
-      '@fernui/dom-util': 2.3.1(@fernui/util@4.0.2)
-      '@fernui/util': 4.0.2
+      '@fernui/dom-util': 2.3.1(@fernui/util@4.0.3)
+      '@fernui/util': 4.0.3
       react: 18.3.1
 
-  '@fernui/util@4.0.2': {}
+  '@fernui/util@4.0.3': {}
 
   '@types/prop-types@15.7.12': {}
 
