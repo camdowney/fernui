@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react-image",
   "author": "@camdowney",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A library of utilities for lazy-loading and resizing images in React.",
   "keywords": [
     "ui",

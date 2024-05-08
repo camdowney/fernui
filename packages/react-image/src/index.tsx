@@ -2,6 +2,14 @@ import React, { useEffect } from 'react'
 import { cn, oc } from '@fernui/util'
 import { type LazyResizeDomFactoryProps, getLazyResizeDomUtils as _getLazyResizeDomUtils } from '@fernui/image-core'
 
+export interface PlaceholderProps {
+  src?: string
+  lazy?: boolean
+  className?: string
+  style?: Object
+  [props: string]: any
+}
+
 export interface ImageProps {
   domRef?: any
   src?: string
@@ -15,7 +23,8 @@ export interface ImageProps {
   style?: Object
   ratioClass?: string
   innerClass?: string
-  innerProps?: Object
+  imageClass?: string
+  imageProps?: Object
   before?: any
   after?: any
   [props: string]: any
@@ -33,9 +42,35 @@ export const getLazyResizeDomUtils = ({
     getLazyResizeAttributes,
   } = _getLazyResizeDomUtils({ outputDir, placeholderSize, ...rest })
 
+  const Placeholder = ({
+    src,
+    lazy = true,
+    className,
+    style,
+    ...props
+  }: PlaceholderProps) => {
+    const { placeholderSrc }: any = getLazyResizeAttributes(src, lazy)
+
+    return (
+      <div
+        {...props}
+        className={cn(
+          'fui-image-placeholder',
+          className,
+        )}
+        style={oc(
+          styles.cover,
+          styles.placeholder,
+          placeholderSrc && { backgroundImage: `url(${placeholderSrc})` },
+          style,
+        )}
+      />
+    )
+  }
+
   const Image = ({
     domRef,
-    src: srcRaw,
+    src: srcProp,
     alt,
     lazy = true,
     cover,
@@ -46,19 +81,13 @@ export const getLazyResizeDomUtils = ({
     style,
     ratioClass,
     innerClass,
-    innerProps,
+    imageClass,
+    imageProps,
     before,
     after,
     ...props
   }: ImageProps) => {
-    const {
-      src,
-      dataLazySrc,
-      dataLazyLoaded,
-      placeholderSrc: placeholderSrcLazy,
-    }: any = getLazyResizeAttributes(srcRaw, lazy)
-
-    const placeholderSrc = placeholderSrcProp ?? placeholderSrcLazy
+    const { src, dataLazySrc, dataLazyLoaded }: any = getLazyResizeAttributes(srcProp, lazy)
 
     useEffect(() => attachLazyResizeHandlers(), [])
 
@@ -70,19 +99,11 @@ export const getLazyResizeDomUtils = ({
         {...props}
       >
         <div className={cn(ratioClass)}>
-          {/* Placeholder */}
-          <div
-            className={cn(
-              'fui-image-placeholder',
-              innerClass,
-              placeholderClass,
-            )}
-            style={oc(
-              styles.cover,
-              styles.placeholder,
-              placeholderSrc && { backgroundImage: `url(${placeholderSrc})` },
-              placeholderStyle,
-            )}
+          <Placeholder
+            src={placeholderSrcProp ?? srcProp}
+            lazy={lazy}
+            className={cn(innerClass, placeholderClass)}
+            style={placeholderStyle}
           />
 
           {before}
@@ -94,12 +115,12 @@ export const getLazyResizeDomUtils = ({
               'data-lazy-bg': dataLazySrc,
               'data-lazy-loaded': dataLazyLoaded,
             }}
-            {...innerProps}
-            className={cn(innerClass, (innerProps ?? {} as any).className)}
+            {...imageProps}
+            className={cn(innerClass, imageClass, (imageProps ?? {} as any).className)}
             style={oc(
               styles.image,
               !lazy && { backgroundImage: `url(${src})` },
-              (innerProps ?? {} as any).style)
+              (imageProps ?? {} as any).style)
             }
           />
 
@@ -115,6 +136,7 @@ export const getLazyResizeDomUtils = ({
     attachLazyResizeHandlers,
     getLazyResizeAttributes,
     Image,
+    Placeholder,
   }
 }
 
