@@ -1,11 +1,20 @@
-import React, { useEffect, useRef } from 'react'
-import { cn, createStopwatch, stringify, throttle } from '@fernui/util'
+import React, { useEffect, useRef, useState } from 'react'
 import { Map, Overlay, View } from 'ol'
-import { fromLonLat, transform } from 'ol/proj'
-import { easeOut } from 'ol/easing'
-import { containsCoordinate, extend } from 'ol/extent'
-import { Tile } from 'ol/layer'
-import { OSM } from 'ol/source'
+import { easeOut } from 'ol/easing.js'
+import { containsCoordinate, extend } from 'ol/extent.js'
+import { fromLonLat, transform } from 'ol/proj.js'
+import { OSM } from 'ol/source.js'
+import { Tile } from 'ol/layer.js'
+import { cn, oc, stringify, throttle } from '@fernui/util'
+import { useThrottle } from '@fernui/react-util'
+
+export const useMap = <T extends unknown>(items: T[]) => {
+  const [hovered, setHovered] = useState<T | null>(null)
+  const [idsInView, setIdsInView] = useState<number[] | null>(null)
+  const itemsInView = items.filter((_, i) => !idsInView || idsInView.some(id => id === i))
+
+  return { setIdsInView, itemsInView, hovered, setHovered }
+}
 
 export interface MapMarker {
   id: string
@@ -14,7 +23,7 @@ export interface MapMarker {
   label?: string
 }
 
-export default function Component<T extends MapMarker>({
+export const ReactOpenLayers = <T extends MapMarker>({
   center,
   zoom = 1,
   animationDuration = 500,
@@ -32,7 +41,7 @@ export default function Component<T extends MapMarker>({
   children?: (marker: T) => any
   markerClass?: string
   [props: string]: any
-}) {
+}) => {
   const mapRef = useRef<any>(null)
   const markersRef = useRef<any>([])
   const map = useRef<any>()
@@ -42,8 +51,6 @@ export default function Component<T extends MapMarker>({
   const zoomStored = useRef(zoom)
 
   const extentStored = useRef('')
-  const fitTimeoutId = useRef<any>()
-  const stopwatch = useRef(createStopwatch())
   const loaded = useRef(false)
 
   // Init map
@@ -93,24 +100,31 @@ export default function Component<T extends MapMarker>({
     map.current.getOverlays().clear()
 
     markers
-      .map((m, i) => ({ d: m, i }))
-      .sort((l, r) => l.d.latitude > r.d.latitude ? 1 : -1)
-      .forEach(m =>
+      .map((marker, i) => ({ ...marker, id: i }))
+      .sort((l, r) => l.latitude > r.latitude ? 1 : -1)
+      .forEach(marker =>
         map.current.addOverlay(new Overlay({
-          id: m.i,
-          position: fromLonLat([m.d.longitude, m.d.latitude]),
+          id: marker.id,
+          position: fromLonLat([marker.longitude, marker.latitude]),
           positioning: 'center-center',
-          element: markersRef.current[m.i],
+          element: markersRef.current[marker.id],
           className: 'fui-map-loaded',
           stopEvent: false,
         }))
       )
-    
-    fit()
+
+    if (!loaded.current)
+      fitViewToMarkers()
+
     if (onAdjust) onAdjust(null)
   }, [markers])
 
-  // Retrieve the extent of current map markers
+  useThrottle({
+    callback: () => fitViewToMarkers(),
+    delayMilliseconds: animationDuration,
+    dependencies: [markers],
+  })
+
   const getExtent = () => {
     let extent: any = null
 
@@ -128,38 +142,22 @@ export default function Component<T extends MapMarker>({
     return extent
   }
 
-  // Get marker extent and fit markers to screen
-  const fit = () => {
+  const fitViewToMarkers = () => {
     if (center) return
 
     const extent = getExtent()
 
     if (!extent || stringify(extent) === extentStored.current) return
 
-    clearTimeout(fitTimeoutId.current)
-    
-    if (stopwatch.current.time() < 1 || stopwatch.current.time() >= animationDuration)
-      fitMarkers(extent)
-    else
-      fitTimeoutId.current = setTimeout(() => fitMarkers(extent), animationDuration - stopwatch.current.time())
-  }
-
-  // Fit markers to screen
-  const fitMarkers = (extent: any) => {
-    const duration = loaded.current ? animationDuration : 0
-    extentStored.current = stringify(extent)
-    loaded.current = true
-
-    stopwatch.current.reset()
-    stopwatch.current.start()
-
     map.current.getView().fit(extent, {
       size: map.current.getSize(),
-      duration,
+      duration: loaded.current ? animationDuration : 0,
     })
+
+    extentStored.current = stringify(extent)
+    loaded.current = true
   }
 
-  // Get all overlays currently in view
   const setOverlaysInView = () => {
     if (!onAdjust) return
 
@@ -179,10 +177,13 @@ export default function Component<T extends MapMarker>({
     >
       <div
         className='fui-map-loading'
-        style={_coverStyle as Object}
+        style={oc(styles.cover)}
       />
 
-      <div ref={mapRef} style={_coverStyle as Object}>
+      <div
+        ref={mapRef}
+        style={oc(styles.cover)}
+      >
         {markers.map((marker, index) =>
           <span key={marker.id}>
             <span ref={(el: any) => markersRef.current[index] = el}>
@@ -201,10 +202,12 @@ export default function Component<T extends MapMarker>({
   )
 }
 
-const _coverStyle = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  width: '100%',
-  height: '100%',
+const styles = {
+  cover: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
 }

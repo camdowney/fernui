@@ -3,9 +3,16 @@ import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 
-const baseConfig = path => ({
+const typeConfig = (path, format = 'cjs') => ({
+  input: [`./packages/${path}/_dist/index.d.ts`],
+  output: [{ file: `./packages/${path}/dist/index.d.ts`, format }],
+  plugins: [dts()],
+})
+
+
+const baseConfig = (path, format = 'cjs') => ({
   input: [`./packages/${path}/_dist/index.js`],
-  output: [{ dir: `./packages/${path}/dist`, format: 'cjs' }],
+  output: [{ dir: `./packages/${path}/dist`, format }],
 })
 
 const vanillaConfig = path => ({
@@ -13,14 +20,8 @@ const vanillaConfig = path => ({
   plugins: [terser(), typescript()],
 })
 
-const typeConfig = path => ({
-  input: [`./packages/${path}/_dist/index.d.ts`],
-  output: [{ file: `./packages/${path}/dist/index.d.ts`, format: 'cjs' }],
-  plugins: [dts()],
-})
-
-const reactConfig = path => ({
-  ...baseConfig(path),
+const reactConfig = (path, format) => ({
+  ...baseConfig(path, format),
   external: ['react'],
   plugins: [
     babel({
@@ -32,8 +33,8 @@ const reactConfig = path => ({
   ]
 })
 
-const svelteConfig = path => ({
-  ...baseConfig(path),
+const svelteConfig = (path, format) => ({
+  ...baseConfig(path, format),
   external: ['svelte'],
   plugins: [
     babel({
@@ -45,11 +46,11 @@ const svelteConfig = path => ({
   ]
 })
 
-const config = (path, { flavor }) => [
-  typeConfig(path),
-  flavor === 'react' ? reactConfig(path)
-    : flavor === 'svelte' ? svelteConfig(path)
-    : vanillaConfig(path),
+const config = (path, { flavor, format }) => [
+  typeConfig(path, format),
+  flavor === 'react' ? reactConfig(path, format)
+    : flavor === 'svelte' ? svelteConfig(path, format)
+    : vanillaConfig(path, format),
 ]
 
 export default [
@@ -57,8 +58,8 @@ export default [
   // ...config('util', { flavor: 'vanilla' }),
   // ...config('dom-util', { flavor: 'vanilla' }),
   // ...config('image-core', { flavor: 'vanilla' }),
-  ...config('react-util', { flavor: 'vanilla' }),
+  // ...config('react-util', { flavor: 'vanilla' }),
   // ...config('react-image', { flavor: 'react' }),
   // ...config('react', { flavor: 'react' }),
-  // ...config('react-openlayers', { flavor: 'react' }),
+  ...config('react-openlayers', { flavor: 'react', format: 'es' }),
 ]
