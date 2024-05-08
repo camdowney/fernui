@@ -72,7 +72,11 @@ export const getLazyResizeDomUtils = ({
         <div className={cn(ratioClass)}>
           {/* Placeholder */}
           <div
-            className={cn('fui-image-placeholder', placeholderClass)}
+            className={cn(
+              'fui-image-placeholder',
+              innerClass,
+              placeholderClass,
+            )}
             style={oc(
               styles.cover,
               styles.placeholder,
@@ -90,8 +94,8 @@ export const getLazyResizeDomUtils = ({
               'data-lazy-bg': dataLazySrc,
               'data-lazy-loaded': dataLazyLoaded,
             }}
-            className={cn(innerClass)}
             {...innerProps}
+            className={cn(innerClass, (innerProps ?? {} as any).className)}
             style={oc(
               styles.image,
               !lazy && { backgroundImage: `url(${src})` },
