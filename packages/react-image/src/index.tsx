@@ -25,8 +25,7 @@ export interface ImageProps {
   innerClass?: string
   imageClass?: string
   imageProps?: Object
-  before?: any
-  after?: any
+  children?: any
   [props: string]: any
 }
 
@@ -83,8 +82,7 @@ export const getLazyResizeDomUtils = ({
     innerClass,
     imageClass,
     imageProps,
-    before,
-    after,
+    children,
     ...props
   }: ImageProps) => {
     const { src, dataLazySrc, dataLazyLoaded }: any = getLazyResizeAttributes(srcProp, lazy)
@@ -106,8 +104,6 @@ export const getLazyResizeDomUtils = ({
             style={placeholderStyle}
           />
 
-          {before}
-
           {/* Image */}
           <div
             {...alt ? { 'aria-label': alt } : { 'role': 'presentation' }}
@@ -124,7 +120,7 @@ export const getLazyResizeDomUtils = ({
             }
           />
 
-          {after}
+          {children}
         </div>
       </div>
     )

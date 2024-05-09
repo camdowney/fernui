@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@fernui/dom-util':
-        specifier: ^2.2.1
-        version: 2.3.1(@fernui/util@4.0.2)
+        specifier: ^2.3.1
+        version: 2.3.1(@fernui/util@4.0.3)
       '@fernui/image-core':
-        specifier: ^1.0.5
-        version: 1.1.0(@fernui/dom-util@2.3.1(@fernui/util@4.0.2))(sharp@0.33.3)
+        specifier: ^1.1.0
+        version: 1.1.0(@fernui/dom-util@2.3.1(@fernui/util@4.0.3))(sharp@0.33.3)
       '@fernui/util':
         specifier: ^4.0.2
-        version: 4.0.2
+        version: 4.0.3
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -41,8 +41,8 @@ packages:
       '@fernui/dom-util': ^2.3.1
       sharp: ^0.33.3
 
-  '@fernui/util@4.0.2':
-    resolution: {integrity: sha512-QIRdjbj/bygw1i+wUbdHnEj35LUbz908LGybA8xhLCSazfY2DHel8hhy3yowXhb2sKaYKMJtFJ3JGAPivPzdfQ==}
+  '@fernui/util@4.0.3':
+    resolution: {integrity: sha512-0jRPXyLA4KhVQ+9bdap0DpXPcQPWuha4kDhLPAR+ikcinMWr+XQD8hx1rRqrCwyglqUpED7mZq6OTH3SmJ0gzg==}
 
   '@img/sharp-darwin-arm64@0.33.3':
     resolution: {integrity: sha512-FaNiGX1MrOuJ3hxuNzWgsT/mg5OHG/Izh59WW2mk1UwYHUwtfbhk5QNKYZgxf0pLOhx9ctGiGa2OykD71vOnSw==}
@@ -194,16 +194,12 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
-  lru-cache@6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
-
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
 
-  semver@7.6.0:
-    resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
+  semver@7.6.1:
+    resolution: {integrity: sha512-f/vbBsu+fOiYt+lmwZV0rVwJScl46HppnOA1ZvIuBWKOTlllpyJ3bfVax76/OrhCH38dyxoDIA8K7uB963IYgA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -217,9 +213,6 @@ packages:
   tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
-  yallist@4.0.0:
-    resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
-
 snapshots:
 
   '@emnapi/runtime@1.1.1':
@@ -227,16 +220,16 @@ snapshots:
       tslib: 2.6.2
     optional: true
 
-  '@fernui/dom-util@2.3.1(@fernui/util@4.0.2)':
+  '@fernui/dom-util@2.3.1(@fernui/util@4.0.3)':
     dependencies:
-      '@fernui/util': 4.0.2
+      '@fernui/util': 4.0.3
 
-  '@fernui/image-core@1.1.0(@fernui/dom-util@2.3.1(@fernui/util@4.0.2))(sharp@0.33.3)':
+  '@fernui/image-core@1.1.0(@fernui/dom-util@2.3.1(@fernui/util@4.0.3))(sharp@0.33.3)':
     dependencies:
-      '@fernui/dom-util': 2.3.1(@fernui/util@4.0.2)
+      '@fernui/dom-util': 2.3.1(@fernui/util@4.0.3)
       sharp: 0.33.3
 
-  '@fernui/util@4.0.2': {}
+  '@fernui/util@4.0.3': {}
 
   '@img/sharp-darwin-arm64@0.33.3':
     optionalDependencies:
@@ -348,23 +341,17 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  lru-cache@6.0.0:
-    dependencies:
-      yallist: 4.0.0
-
   react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
 
-  semver@7.6.0:
-    dependencies:
-      lru-cache: 6.0.0
+  semver@7.6.1: {}
 
   sharp@0.33.3:
     dependencies:
       color: 4.2.3
       detect-libc: 2.0.3
-      semver: 7.6.0
+      semver: 7.6.1
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.33.3
       '@img/sharp-darwin-x64': 0.33.3
@@ -392,5 +379,3 @@ snapshots:
 
   tslib@2.6.2:
     optional: true
-
-  yallist@4.0.0: {}
