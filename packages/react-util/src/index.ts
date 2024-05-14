@@ -88,11 +88,13 @@ export type FieldState = {
   error: boolean
 }
 
-export type SetFieldState = <T>(name: string, state: {
+export type NewFieldState<T> = {
   value: T
   modified?: boolean
   validate?: ((newValue: T) => boolean)
-}) => void
+}
+
+export type SetFieldState = <T>(name: string, state: NewFieldState<T>, triggerUpdate?: boolean) => void
 
 export type FieldsMap = Map<string, FieldState>
 
@@ -103,7 +105,7 @@ export interface FormState {
   setExposed: SetState<boolean>
   fields: FieldsMap
   setFields: (newValue: FieldsMap) => void
-  reset: (resetModifiedAndExposed?: boolean) => void
+  resetFields: (resetModifiedAndExposed?: boolean) => void
   setField: SetFieldState
   removeField: (name: string) => void
   values: KeyObject
@@ -181,7 +183,7 @@ export const useForm = ({
   }
 
   // User-facing method
-  const reset = (resetModifiedAndExposed = true) => {
+  const resetFields = (resetModifiedAndExposed = true) => {
     if (resetModifiedAndExposed) setExposed(false)
 
     setFieldsAndUpdateValues(new Map(
@@ -196,7 +198,11 @@ export const useForm = ({
   }
 
   // User-facing method
-  const setField: SetFieldState = (name, { value, modified = true, validate: validateProp }) => {
+  const setField: SetFieldState = (
+    name,
+    { value, modified = true, validate: validateProp },
+    triggerUpdate = true
+  ) => {
     const validate = validateProp ?? (fields.get(name) ?? {}).validate ?? (() => true)
 
     fields.set(name, {
@@ -206,7 +212,8 @@ export const useForm = ({
       error: !validate(value),
     })
 
-    setFieldsAndUpdateValues(new Map(fields))
+    if (triggerUpdate)
+      setFieldsAndUpdateValues(new Map(fields))
   }
 
   // User-facing method
@@ -249,8 +256,8 @@ export const useForm = ({
   const context: FormState = {
     disabled, setDisabled,
     exposed, setExposed,
-    fields, setFields: setFieldsAndUpdateValues,
-    reset, setField, removeField,
+    fields, setFields: setFieldsAndUpdateValues, resetFields,
+    setField, removeField,
     values, isValid,
     hasChanges, pushChanges,
     onSubmit, successCount,
