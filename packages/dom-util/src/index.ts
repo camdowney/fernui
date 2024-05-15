@@ -1,11 +1,24 @@
 import { KeyObject, objectToUri, stringify, uriToObject } from '@fernui/util'
 
-export const st = (selector: string, smooth = false, alignY: 'start' | 'center' | 'end' = 'start') =>
-  (document.querySelector(selector) ?? document.body)
-    .scrollIntoView({
-      behavior: smooth ? 'smooth' : 'auto',
-      block: alignY,
-    })
+export const scrollTo = (selector?: string) => {
+  if (!selector) return
+
+  const element = document.querySelector(selector)
+
+  if (!element) return
+
+  const rect = element.getBoundingClientRect()
+
+  const elementCenterY = rect.top + rect.height / 2
+  const scrollTop = elementCenterY - window.innerHeight / 2
+  const browserOverlayHeight = window.innerHeight - document.documentElement.clientHeight
+  const adjustedScrollTop = scrollTop - browserOverlayHeight
+
+  window.scrollTo({
+    top: adjustedScrollTop,
+    behavior: 'smooth',
+  })
+}
 
 export const downloadFile = ({
   name,
@@ -73,6 +86,25 @@ export const onIntersect = ({
   })
 }
 
+export const initWindowResizeAnnouncer = () => {
+  window.addEventListener('resize', () => {
+    window.dispatchEvent(new Event('windowresize', {
+      bubbles: false,
+      cancelable: false,
+    }))
+  })
+}
+
+export const initScrollTo = () => {
+  document.querySelectorAll('[data-scroll-to]').forEach(element => {
+    const button = element as HTMLButtonElement
+
+    button.addEventListener('click', () => {
+      scrollTo(button.dataset.scrollTo)
+    })
+  })
+}
+
 export const initScrollView = (offset = '999999px 0px -25% 0px') => {
   onIntersect({
     selector: '.scroll-view',
@@ -80,15 +112,6 @@ export const initScrollView = (offset = '999999px 0px -25% 0px') => {
       element.classList.add('scroll-view-active')
     },
     offset,
-  })
-}
-
-export const initWindowResizeAnnouncer = () => {
-  window.addEventListener('resize', () => {
-    window.dispatchEvent(new Event('windowresize', {
-      bubbles: false,
-      cancelable: false,
-    }))
   })
 }
 
@@ -126,17 +149,10 @@ export const createTimelineEvent = (
 export const animDelay = (selector: string, step: number) =>
   createTimelineEvent((time, root) => {
     root.querySelectorAll(selector).forEach((element: any) => {
-      const hasListeners = element.querySelectorAll('[data-has-listener],[data-lazy-src],[data-lazy-bg]').length > 0
-
-      // Replacing leads to better animation timing, but destroys listeners
-      if (!hasListeners) {
-        const newElement = element.cloneNode(true)
-        newElement.style.animationDelay = `${time.value}ms`
-        element.replaceWith(newElement)
-      }
-      else {
-        element.style.animationDelay = `${time.value}ms`
-      }
+      element.style.animation = 'none'
+      element.offsetHeight
+      element.style.animation = '' 
+      element.style.animationDelay = `${time.value}ms`
     
       time.value += step
     })
