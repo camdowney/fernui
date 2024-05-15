@@ -4,7 +4,7 @@ import Icon, { IconProps } from './Icon'
 export interface ButtonProps {
   domRef?: any
   as?: any
-  link?: string
+  href?: string
   children?: any
   text?: any
   before?: any
@@ -19,7 +19,7 @@ export interface ButtonProps {
 export default function Button({
   domRef,
   as,
-  link,
+  href,
   children,
   text,
   before,
@@ -30,12 +30,12 @@ export default function Button({
   label,
   ...props
 }: ButtonProps) {
-  const Shell = as || (link ? 'a' : 'button')
+  const Shell = as || (href ? 'a' : 'button')
 
   return (
     <Shell
       ref={domRef}
-      href={link}
+      href={href}
       {...blank && {
         target: '_blank',
         rel: 'noopener noreferrer',
