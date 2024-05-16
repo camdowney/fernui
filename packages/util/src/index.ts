@@ -171,9 +171,10 @@ export const uriToObject = (uri: string) =>
     )
   )
 
-export const objectToUri = (object: {}) =>
+export const objectToUri = (object: {}, excludeEmptyValues = true) =>
   Object.entries(object)
-    .map(([key, value]: any) => `${encodeURIComponent(key)}=${encodeURIComponent(stringify(value))}`)
+    .filter(([_, value]) => !excludeEmptyValues || (value !== null && value !== undefined && value !== ''))
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(stringify(value))}`)
     .sort()
     .join('&')
 

@@ -122,6 +122,7 @@ export interface FormOptions {
   defaultValues?: KeyObject
   defaultDisabled?: boolean
   defaultExposed?: boolean
+  promptBeforeUnload?: boolean
   onChange?: (newState: FormOnChangeProps) => any
   onSubmit?: () => any
   onError?: (error: any) => any
@@ -131,6 +132,7 @@ export const useForm = ({
   defaultValues = {},
   defaultDisabled,
   defaultExposed,
+  promptBeforeUnload,
   onChange,
   onSubmit: onSubmitProp,
   onError,
@@ -158,6 +160,7 @@ export const useForm = ({
         .map(([name, state]) => [name, state.value])
         .filter(([name]) => !name.startsWith('__config'))
     ))
+
     const newHasChanges = Array.from(newFields).some(([_, state]) => state.modified)
       && objectToUri(newValues) !== savedValuesString.current
 
@@ -252,6 +255,13 @@ export const useForm = ({
       if (onError) onError(error)
     }
   }
+
+  useListener('beforeunload', (e: any) => {
+    if (promptBeforeUnload && hasChanges) {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+  })
 
   const context: FormState = {
     disabled, setDisabled,

@@ -88,7 +88,7 @@ export default function Modal({
           className
         )}
         aria-hidden={!active}
-        style={oc(styles.modal(active), style)}
+        style={oc(style)}
         {...props}
       >
         {children}
@@ -98,9 +98,6 @@ export default function Modal({
 }
 
 const styles = {
-  modal: (active: boolean | null) => ({
-    ...active === null && { visibility : 'hidden !important' },
-  }),
   bg: {
     position: 'fixed',
     top: '-50%',
