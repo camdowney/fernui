@@ -110,7 +110,7 @@ export interface FormState {
   removeField: (name: string) => void
   values: KeyObject
   isValid: boolean
-  hasChanges: boolean
+  hasChanges: { current: boolean }
   pushChanges: (newValues?: KeyObject) => void
   onSubmit: ((e: any) => Promise<void>) | null
   successCount: number
@@ -149,7 +149,7 @@ export const useForm = ({
   const savedValuesString = useRef(objectToUri(defaultValues))
   
   const [isValid, setValid] = useState(false)
-  const [hasChanges, setHasChanges] = useState(false)
+  const hasChanges = useRef(false)
   const [successCount, setSuccessCount] = useState(0)
 
   // User-facing method
@@ -167,7 +167,7 @@ export const useForm = ({
     setFields(newFields)
     setValid(newValid)
     setValues(newValues)
-    setHasChanges(newHasChanges)
+    hasChanges.current = newHasChanges
 
     // Subscription callbacks are more efficient than useEffect
     if (onChange && (newHasChanges || forceChange))
@@ -182,7 +182,7 @@ export const useForm = ({
   // User-facing method
   const pushChanges = (newValues?: KeyObject) => {
     savedValuesString.current = objectToUri(newValues ?? values)
-    setHasChanges(false)
+    hasChanges.current = false
   }
 
   // User-facing method
@@ -257,7 +257,7 @@ export const useForm = ({
   }
 
   useListener('beforeunload', (e: any) => {
-    if (promptBeforeUnload && hasChanges) {
+    if (promptBeforeUnload && hasChanges.current) {
       e.preventDefault()
       e.returnValue = ''
     }
