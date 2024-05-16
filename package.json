@@ -1,7 +1,7 @@
 {
   "name": "fernui",
   "scripts": {
-    "build": "cd ./packages/react && tsc && cd ../../ && rollup -c"
+    "build": "cd ./packages/dom-util && tsc && cd ../../ && rollup -c"
   },
   "dependencies": {
     "react": "^18.2.0",

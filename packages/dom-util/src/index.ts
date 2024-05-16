@@ -1,6 +1,6 @@
 import { KeyObject, objectToUri, stringify, uriToObject } from '@fernui/util'
 
-export const scrollTo = (selector?: string) => {
+export const scrollTo = (selector?: string, behavior: 'smooth' | 'auto' = 'smooth') => {
   if (!selector) return
 
   const element = document.querySelector(selector)
@@ -10,13 +10,13 @@ export const scrollTo = (selector?: string) => {
   const rect = element.getBoundingClientRect()
 
   const elementCenterY = rect.top + rect.height / 2
-  const scrollTop = elementCenterY - window.innerHeight / 2
+  const scrollTop = elementCenterY + window.scrollY - window.innerHeight / 2
   const browserOverlayHeight = window.innerHeight - document.documentElement.clientHeight
   const adjustedScrollTop = scrollTop - browserOverlayHeight
 
   window.scrollTo({
     top: adjustedScrollTop,
-    behavior: 'smooth',
+    behavior,
   })
 }
 
@@ -96,6 +96,12 @@ export const initWindowResizeAnnouncer = () => {
 }
 
 export const initScrollTo = () => {
+  const searchParams = new URLSearchParams(window.location.search)
+  const paramsScrollTo = searchParams.get('scroll-to')
+
+  if (paramsScrollTo)
+    scrollTo(paramsScrollTo, 'auto')
+
   document.querySelectorAll('[data-scroll-to]').forEach(element => {
     const button = element as HTMLButtonElement
 
