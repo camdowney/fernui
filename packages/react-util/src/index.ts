@@ -146,7 +146,7 @@ export const useForm = ({
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
   ))
   const [values, setValues] = useState<KeyObject>(defaultValues)
-  const savedValuesString = useRef(objectToUri(defaultValues))
+  const savedValues = useRef({ ...defaultValues })
   
   const [isValid, setValid] = useState(false)
   const hasChanges = useRef(false)
@@ -162,7 +162,7 @@ export const useForm = ({
     ))
 
     const newHasChanges = Array.from(newFields).some(([_, state]) => state.modified)
-      && objectToUri(newValues) !== savedValuesString.current
+      && objectToUri(newValues) !== objectToUri(savedValues.current)
 
     setFields(newFields)
     setValid(newValid)
@@ -181,7 +181,7 @@ export const useForm = ({
 
   // User-facing method
   const pushChanges = (newValues?: KeyObject) => {
-    savedValuesString.current = objectToUri(newValues ?? values)
+    savedValues.current = { ...(newValues ?? values) }
     hasChanges.current = false
   }
 
@@ -214,6 +214,9 @@ export const useForm = ({
       validate,
       error: !validate(value),
     })
+
+    if (!modified)
+      savedValues.current = { ...savedValues.current, [name]: value }
 
     if (triggerUpdate)
       setFieldsAndUpdateValues(new Map(fields))

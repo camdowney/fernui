@@ -12,7 +12,7 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(@fernui/util@4.0.4)
       '@fernui/util':
-        specifier: ^4.0.3
+        specifier: ^4.0.4
         version: 4.0.4
       react:
         specifier: ^18.3.1
