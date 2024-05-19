@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
-import { checkmarkIcon } from '@fernui/icons'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-util'
+import { checkIcon } from './_icons'
 import { FieldProps } from './_types'
 import Error from './Error'
-import Icon from './Icon'
+import Svg from './Svg'
 
 export interface CheckboxProps extends FieldProps<string> {}
 
@@ -54,7 +54,11 @@ export default function Checkbox({
           {...props}
         />
         <div className='fui-check-box' style={styles.iconOuter}>
-          <Icon data={checkmarkIcon} className='fui-check-icon' style={styles.icon} />
+          <Svg
+            src={checkIcon}
+            className='fui-check-icon'
+            style={styles.icon}
+          />
         </div>
         {label &&
           <div className={cn('fui-field-label', labelClass)}>

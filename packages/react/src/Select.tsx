@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
-import { angleIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-util'
+import { chevronIcon } from './_icons'
 import { FieldProps } from './_types'
 import Error from './Error'
-import Icon from './Icon'
+import Svg from './Svg'
 import Modal from './Modal'
 
 export interface Option { label: string, value?: string }
@@ -83,8 +83,8 @@ export default function Select({
       >
         {placeholderOrValue}
         {icon ?? (
-          <Icon
-            data={angleIcon}
+          <Svg
+            src={chevronIcon}
             className={cn('fui-select-icon', iconClass)}
             style={styles.icon}
           />

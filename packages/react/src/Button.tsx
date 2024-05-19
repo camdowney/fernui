@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon, { IconProps } from './Icon'
+import Svg, { SvgProps } from './Svg'
 
 export interface ButtonProps {
   domRef?: any
@@ -8,9 +8,9 @@ export interface ButtonProps {
   children?: any
   text?: any
   before?: any
-  iconBefore?: IconProps
+  iconBefore?: SvgProps
   after?: any
-  iconAfter?: IconProps
+  iconAfter?: SvgProps
   blank?: boolean
   label?: string
   [props: string]: any
@@ -44,11 +44,11 @@ export default function Button({
       {...props}
     >
       {before}
-      {iconBefore && <Icon {...iconBefore} />}
+      {iconBefore && <Svg {...iconBefore} />}
       {children}
       {text && <span>{text}</span>}
       {after}
-      {iconAfter && <Icon {...iconAfter} />}
+      {iconAfter && <Svg {...iconAfter} />}
     </Shell>
   )
 }

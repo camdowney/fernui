@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '@fernui/util'
-import { warningIcon } from '@fernui/icons'
-import Icon from './Icon'
+import { warningIcon } from './_icons'
+import Svg from './Svg'
 
 export interface ErrorProps {
   text: string
@@ -14,7 +14,10 @@ export default function Error({
 }: ErrorProps) {
   return (
     <p className='fui-field-error'>
-      <Icon data={warningIcon} className={cn('fui-field-error-icon', className)} />
+      <Svg
+        src={warningIcon}
+        className={cn('fui-field-error-icon', className)}
+      />
       <span>{text}</span>
     </p>
   )
