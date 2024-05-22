@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
+import { chevronIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-util'
-import { chevronIcon } from './_icons'
 import { FieldProps } from './_types'
 import Error from './Error'
 import Svg from './Svg'
