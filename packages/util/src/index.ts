@@ -327,6 +327,32 @@ export const throttle = (callback: () => any, delayMilliseconds: number) => {
   }
 }
 
+let timeoutIds: { [key: string]: any } = {}
+let skippedDebounces: { [key: string]: boolean } = {}
+
+export const debounce = <T extends unknown[]>({
+  key,
+  callback,
+  debounceMilliseconds,
+  skipFirstDebounce,
+}: {
+  key: string
+  callback: (...args: T) => any
+  debounceMilliseconds: number
+  skipFirstDebounce?: boolean
+}) => {
+  return (...args: T) => {
+    if (skipFirstDebounce && !skippedDebounces[key]) {
+      skippedDebounces[key] = true
+      callback(...args)
+    }
+
+    clearTimeout(timeoutIds[key])
+
+    timeoutIds[key] = setTimeout(() => callback(...args), debounceMilliseconds)
+  }
+}
+
 export const res = (
   status: number,
   {
