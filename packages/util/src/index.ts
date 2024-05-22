@@ -305,7 +305,6 @@ export const createStopwatch = () => {
   return { start, reset, pause, time, isActive }
 }
 
-
 export const throttle = (callback: () => any, delayMilliseconds: number) => {
   let lastRanTimestamp = 0
   let timeoutId: any
