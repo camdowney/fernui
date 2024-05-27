@@ -5,7 +5,7 @@ import { useField } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 import Svg from './Svg'
-import Modal from './Modal'
+import Dialog from './Dialog'
 
 export interface Option { label: string, value?: string }
 
@@ -13,7 +13,8 @@ export interface SelectProps extends FieldProps<string> {
   options: Option[]
   icon?: any
   iconClass?: string
-  modalClass?: string
+  dialogPopover?: boolean
+  dialogClass?: string
   optionClass?: string
 }
 
@@ -38,7 +39,8 @@ export default function Select({
   options,
   icon,
   iconClass,
-  modalClass,
+  dialogPopover = true,
+  dialogClass,
   optionClass,
   ...props
 }: SelectProps) {
@@ -92,11 +94,12 @@ export default function Select({
       </button>
 
       {/* Options */}
-      <Modal
+      <Dialog
+        popover={dialogPopover}
         active={active}
         setActive={setActive}
-        outerClass='fui-select-modal-outer'
-        className={cn('fui-select-modal', modalClass)}
+        outerClass='fui-select-dialog-outer'
+        className={cn('fui-select-dialog', dialogClass)}
         style={{ top: 0 }}
       >
         {placeholderAndOptions.map(option => 
@@ -112,7 +115,7 @@ export default function Select({
             {option.label}
           </button>
         )}
-      </Modal>
+      </Dialog>
 
       {/* Error */}
       {(error && showError) && (

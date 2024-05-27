@@ -320,7 +320,7 @@ export const useField = <T>({
   return { name, value: valueClean, setValue, disabled: disabledClean, showError }
 }
 
-export const useModal = (
+export const useDialog = (
   active: boolean,
   setActive: SetState<boolean>,
   {
@@ -370,8 +370,10 @@ export const useModal = (
       setActive(false)
   })
 
+  // Should close even when the click is inside another dialog. Otherwise, for example,
+  // a popover inside a modal will not close when you click outside it.
   useListener('mouseup', (e: any) => {
-    if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
+    if (active && exitOnOutsideClick && !ref.current.contains(e.target))
       setTimeout(() => setActive(false), 0)
   })
 

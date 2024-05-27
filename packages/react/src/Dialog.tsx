@@ -1,9 +1,10 @@
 import React from 'react'
 import { cn, oc } from '@fernui/util'
-import { useModal, type SetState } from '@fernui/react-util'
+import { useDialog, type SetState } from '@fernui/react-util'
 
-export interface ModalProps {
+export interface DialogProps {
   domRef?: any
+  popover?: boolean
   active: boolean
   setActive: SetState<boolean>
   outerClass?: string
@@ -23,12 +24,12 @@ export interface ModalProps {
   exitOnOutsideClick?: boolean
   exitOnEscape?: boolean
   preventScroll?: boolean
-  focus?: boolean
   [props: string]: any
 }
 
-export default function Modal({
+export default function Dialog({
   domRef,
+  popover = false,
   active,
   setActive,
   outerClass,
@@ -49,8 +50,8 @@ export default function Modal({
   exitOnEscape = true,
   preventScroll,
   ...props
-}: ModalProps) {
-  const { ref } = useModal(active, setActive, {
+}: DialogProps) {
+  const { ref } = useDialog(active, setActive, {
     ref: domRef,
     openDelayMilliseconds,
     closeDelayMilliseconds,
@@ -62,14 +63,20 @@ export default function Modal({
   return (
     <span
       ref={ref}
-      className={cn('fui-modal-outer', outerClass)}
-      style={outerStyle}
+      className={cn(
+        'fui-dialog-outer',
+        popover && 'fui-popover-outer',
+        outerClass,
+      )}
+      style={oc(styles.outer(popover), outerStyle)}
     >
       {/* Background */}
       <div
         className={cn(
-          'fui-modal-bg',
-          `fui-modal-bg-${active ? '' : 'in'}active`,
+          'fui-dialog-bg',
+          popover && 'fui-popover-bg',
+          `fui-dialog-bg-${active ? '' : 'in'}active`,
+          popover && `fui-popover-bg-${active ? '' : 'in'}active`,
           active ? bgActiveClass : bgInactiveClass,
           bgClass
         )}
@@ -81,16 +88,18 @@ export default function Modal({
         style={oc(styles.bg, bgStyle)}
       />
 
-      {/* Modal */}
+      {/* Dialog */}
       <div
         className={cn(
-          'fui-modal', 
-          `fui-modal-${active ? '' : 'in'}active`,
+          'fui-dialog',
+          popover && 'fui-popover',
+          `fui-dialog-${active ? '' : 'in'}active`,
+          popover && `fui-popover-${active ? '' : 'in'}active`,
           active ? activeClass : inactiveClass,
-          className
+          className,
         )}
         aria-hidden={!active}
-        style={oc(style)}
+        style={oc(styles.dialog(popover), style)}
         {...props}
       >
         {children}
@@ -100,6 +109,10 @@ export default function Modal({
 }
 
 const styles = {
+  outer: (popover: boolean) => ({
+    position: popover ? 'relative' : 'initial',
+    display: popover ? 'block' : 'initial',
+  }),
   bg: {
     position: 'fixed',
     top: '-1000rem',
@@ -107,4 +120,7 @@ const styles = {
     left: '-1000rem',
     right: '-1000rem',
   },
+  dialog: (popover: boolean) => ({
+    position: popover ? 'absolute' : 'fixed',
+  }),
 }

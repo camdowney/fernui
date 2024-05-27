@@ -2,9 +2,9 @@ import React from 'react'
 import { cn } from '@fernui/util'
 import { LightboxControl } from '@fernui/react-util'
 import { useListener } from '@fernui/react-util'
-import Modal, { ModalProps } from './Modal'
+import Dialog, { DialogProps } from './Dialog'
 
-export interface LightboxProps extends Omit<ModalProps, 'active' | 'setActive'>{
+export interface LightboxProps extends Omit<DialogProps, 'active' | 'setActive'>{
   control: LightboxControl
   items: any[]
   children: ({ item, index, active }: { item: any, index: number, active: boolean }) => any
@@ -35,7 +35,7 @@ export default function Lightbox({
   })
 
   return (
-    <Modal
+    <Dialog
       className={cn('fui-lightbox', className)}
       {...{ ...props, active, setActive }}
     >
@@ -45,6 +45,6 @@ export default function Lightbox({
       <span>
         {overlay}
       </span>
-    </Modal>
+    </Dialog>
   )
 }

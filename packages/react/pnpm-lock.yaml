@@ -15,8 +15,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1
       '@fernui/react-util':
-        specifier: ^3.6.7
-        version: 3.6.8(@fernui/dom-util@2.4.1(@fernui/util@4.1.0))(@fernui/util@4.1.0)(react@18.3.1)
+        specifier: ^3.7.0
+        version: 3.7.0(@fernui/dom-util@2.4.1(@fernui/util@4.1.0))(@fernui/util@4.1.0)(react@18.3.1)
       '@fernui/util':
         specifier: ^4.1.0
         version: 4.1.0
@@ -44,8 +44,8 @@ packages:
   '@fernui/icons@5.0.1':
     resolution: {integrity: sha512-VyJSTaIXIdSSyAoS1Em8H0+UBgaPmv9a1kfkJwBV117iRHgbj6djwPRSXuHMnYBc9ia+jp/4T5lZF4sxOW5EGQ==}
 
-  '@fernui/react-util@3.6.8':
-    resolution: {integrity: sha512-PaNs1tZXtejC994prhJ/NmqZkEBQiPVzYNAXzP0jseZFvXbMge2FhhTKomlBEK93wkiHd3umb/8dWRzqkqqbjQ==}
+  '@fernui/react-util@3.7.0':
+    resolution: {integrity: sha512-AofkUSZiZWpdlqMy704AuP2mBwlVbhZE4myofbeuWFgQfQvuF3ciPkzQohl+ww0qk0pY5v3NXZbfeW7i+p+NGw==}
     peerDependencies:
       '@fernui/dom-util': ^2.4.1
       '@fernui/util': ^4.1.0
@@ -93,7 +93,7 @@ snapshots:
 
   '@fernui/icons@5.0.1': {}
 
-  '@fernui/react-util@3.6.8(@fernui/dom-util@2.4.1(@fernui/util@4.1.0))(@fernui/util@4.1.0)(react@18.3.1)':
+  '@fernui/react-util@3.7.0(@fernui/dom-util@2.4.1(@fernui/util@4.1.0))(@fernui/util@4.1.0)(react@18.3.1)':
     dependencies:
       '@fernui/dom-util': 2.4.1(@fernui/util@4.1.0)
       '@fernui/util': 4.1.0
