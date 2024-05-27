@@ -371,7 +371,7 @@ export const useModal = (
   })
 
   useListener('mouseup', (e: any) => {
-    if (active && exitOnOutsideClick && !e.target.closest('.fui-modal-outer') && !ref.current.contains(e.target))
+    if (active && exitOnOutsideClick && !ref.current.contains(e.target))
       setTimeout(() => setActive(false), 0)
   })
 

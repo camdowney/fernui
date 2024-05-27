@@ -33,33 +33,19 @@ const reactConfig = (path, format) => ({
   ]
 })
 
-const svelteConfig = (path, format) => ({
-  ...baseConfig(path, format),
-  external: ['svelte'],
-  plugins: [
-    babel({
-      babelHelpers: 'bundled',
-      presets: ['@babel/preset-svelte'],
-    }),
-    terser(),
-    typescript(),
-  ]
-})
-
 const config = (path, { flavor, format }) => [
   typeConfig(path, format),
   flavor === 'react' ? reactConfig(path, format)
-    : flavor === 'svelte' ? svelteConfig(path, format)
     : vanillaConfig(path, format),
 ]
 
 export default [
-  ...config('icons', { flavor: 'vanilla' }),
+  // ...config('icons', { flavor: 'vanilla' }),
   // ...config('util', { flavor: 'vanilla' }),
   // ...config('dom-util', { flavor: 'vanilla' }),
   // ...config('image-core', { flavor: 'vanilla' }),
   // ...config('react-util', { flavor: 'vanilla' }),
-  // ...config('react', { flavor: 'react' }),
+  ...config('react', { flavor: 'react' }),
   // ...config('react-image', { flavor: 'react' }),
   // ...config('react-openlayers', { flavor: 'react', format: 'es' }),
 ]

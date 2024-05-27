@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { cn } from '@fernui/util'
-import { useField } from '@fernui/react-util'
+import { useField, useListener } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 
@@ -45,6 +45,10 @@ export default function TextArea({
   useEffect(() => {
     if (defaultValue && autoResize) adjustHeight(ref.current)
   }, [])
+
+  useListener('windowresize', () => {
+    if (autoResize) adjustHeight(ref.current)
+  })
 
   return (
     <label className={cn('fui-field', showError && 'fui-field-invalid', className)}>

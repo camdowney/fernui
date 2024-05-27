@@ -1,15 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useId } from 'react'
 import { chevronIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
 import { useField } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 import Svg from './Svg'
-import Modal from './Modal'
+import Modal, { type ModalAlign } from './Modal'
 
 export interface Option { label: string, value?: string }
 
 export interface SelectProps extends FieldProps<string> {
+  id?: string
+  alignX?: ModalAlign
+  alignY?: ModalAlign
   options: Option[]
   icon?: any
   iconClass?: string
@@ -35,6 +38,9 @@ export default function Select({
   errorClass,
   info,
   infoClass,
+  id: idProp,
+  alignX = 'stretch',
+  alignY = 'start-end',
   options,
   icon,
   iconClass,
@@ -43,6 +49,8 @@ export default function Select({
   ...props
 }: SelectProps) {
   const ref = domRef || useRef()
+  const id = idProp || useId()
+  const [active, setActive] = useState(false)
 
   const { value, setValue, disabled, showError } = useField({
     context,
@@ -56,10 +64,9 @@ export default function Select({
   const placeholderOrValue = (options.find(o => o.value === value) ?? {}).label || value || placeholder
   const placeholderAndOptions = [...placeholder ? [{ label: placeholder, value: '' }] : [], ...options]
 
-  const [active, setActive] = useState(false)
-
-  return (
+  return <>
     <label
+      id={id}
       className={cn('fui-field', showError && 'fui-field-invalid', className)}
       style={{ position: 'relative' }}
     >
@@ -91,29 +98,6 @@ export default function Select({
         )}
       </button>
 
-      {/* Options */}
-      <Modal
-        active={active}
-        setActive={setActive}
-        outerClass='fui-select-modal-outer'
-        className={cn('fui-select-modal', modalClass)}
-        style={{ top: 0 }}
-      >
-        {placeholderAndOptions.map(option => 
-          <button
-            type='button'
-            onClick={() => {
-              setValue(option.value ?? option.label)
-              setActive(false)
-            }}
-            className={cn('fui-select-option', optionClass)}
-            key={option.label}
-          >
-            {option.label}
-          </button>
-        )}
-      </Modal>
-
       {/* Error */}
       {(error && showError) && (
         <Error text={error} className={errorClass} />
@@ -126,7 +110,32 @@ export default function Select({
         </p>
       )}
     </label>
-  )
+
+    {/* Options */}
+    <Modal
+      rootSelector={`#${CSS.escape(id)}`}
+      alignX={alignX}
+      alignY={alignY}
+      active={active}
+      setActive={setActive}
+      outerClass='fui-select-modal-outer'
+      className={cn('fui-select-modal', modalClass)}
+    >
+      {placeholderAndOptions.map(option => 
+        <button
+          type='button'
+          onClick={() => {
+            setValue(option.value ?? option.label)
+            setActive(false)
+          }}
+          className={cn('fui-select-option', optionClass)}
+          key={option.label}
+        >
+          {option.label}
+        </button>
+      )}
+    </Modal>
+  </>
 }
 
 const styles = {
