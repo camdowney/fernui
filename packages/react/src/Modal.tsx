@@ -3,14 +3,14 @@ import { createPortal } from 'react-dom'
 import { cn, oc } from '@fernui/util'
 import { type SetState, useModal, useListener } from '@fernui/react-util'
 
-const isFixed = (element: Element | Document) => {
-  if (element instanceof Document)
+const isFixed = (element: Element | Document | null): boolean => {
+  if (!element || element instanceof Document)
     return false
 
   if (window.getComputedStyle(element).position === 'fixed')
     return true
 
-  return (element.parentElement)
+  return isFixed(element.parentElement)
 }
 
 const getZIndex = (element: Element) =>
@@ -85,18 +85,25 @@ export default function Modal({
   })
 
   const setModalPosition = () => {
-    if (!active || !rootSelector || !modalRef.current) return
+    if (!rootSelector || !modalRef.current) return
 
     const root = document.querySelector(rootSelector)
 
     if (!root) return
   
+    const rootIsFixed = isFixed(root)
     const rootRect = root.getBoundingClientRect()
     const modalWidth = modalRef.current.offsetWidth
     const modalHeight = modalRef.current.offsetHeight
 
-    let newLeft = rootRect.left
-    let newTop = rootRect.top
+    if (modalRef.current.style.position !== 'fixed' && rootIsFixed) {
+      modalRef.current.style.position = 'fixed'
+      modalRef.current.style.zIndex = getZIndex(modalRef.current) + 10
+      bgRef.current.style.zIndex = getZIndex(bgRef.current) + 10
+    }
+
+    let newLeft = rootRect.left + (rootIsFixed ? 0 : window.scrollX)
+    let newTop = rootRect.top + (rootIsFixed ? 0 : window.scrollY)
 
     if (alignX === 'end-start')
       newLeft = newLeft - modalWidth
@@ -130,18 +137,17 @@ export default function Modal({
       } ${
         alignY.startsWith('start') ? 'top' : alignY.startsWith('end') ? 'bottom' : 'center'
       }`
-
-
-    if (modalRef.current.style.position !== 'fixed' && isFixed(root)) {
-      modalRef.current.style.position = 'fixed'
-      modalRef.current.style.zIndex = getZIndex(modalRef.current) + 10
-      bgRef.current.style.zIndex = getZIndex(bgRef.current) + 10
-    }
   }
 
   useEffect(() => setClient(true), [])
+
+  useEffect(setModalPosition, [isClient])
   useEffect(setModalPosition, [active])
-  useListener('windowresize', setModalPosition)
+
+  useListener('windowresize', () => {
+    if (!active) return
+    setModalPosition()
+  })
 
   if (!isClient) return <></>
 

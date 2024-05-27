@@ -113,7 +113,7 @@ export default function Select({
 
     {/* Options */}
     <Modal
-      rootSelector={`#${CSS.escape(id)}`}
+      rootSelector={`#${id.replace(/:/g, '\\:')}`}
       alignX={alignX}
       alignY={alignY}
       active={active}
