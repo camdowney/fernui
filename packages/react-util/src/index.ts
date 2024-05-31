@@ -18,22 +18,30 @@ export const useDebounce = ({
   const skipFirstDebounce = useRef(skipFirstDebounceProp ?? false)
   const [isLoading, setLoading] = useState(true)
 
+  const tryCallback = async () => {
+    try {
+      await callback()
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     let timeoutId: any
 
     (async () => {
       if (skipFirstDebounce.current) {
         skipFirstDebounce.current = false
-        await callback()
-        return setLoading(false)
+        return tryCallback()
       }
   
       setLoading(true)
   
-      timeoutId = setTimeout(async () => {
-        await callback()
-        setLoading(false)
-      }, delayMilliseconds)
+      timeoutId = setTimeout(tryCallback, delayMilliseconds)
     })()
 
     return () => clearTimeout(timeoutId)
