@@ -55,7 +55,7 @@ export default function Select({
     onChange,
   })
 
-  const placeholderOrValue = (options.find(o => o.value === value) ?? {}).label || value || placeholder
+  const selectedLabel = (options.find(o => o.value === value) ?? {}).label || value || placeholder
   const placeholderAndOptions = [...placeholder ? [{ label: placeholder, value: '' }] : [], ...options]
 
   const [active, setActive] = useState(false)
@@ -83,7 +83,7 @@ export default function Select({
         style={oc(styles.field, style)}
         {...props}
       >
-        {placeholderOrValue}
+        {selectedLabel}
         {icon ?? (
           <Svg
             src={chevronIcon}
