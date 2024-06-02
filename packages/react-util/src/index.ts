@@ -89,10 +89,10 @@ export const useThrottle = ({
   return isLoading
 }
 
-export type FieldState = {
-  value: any
+export type FieldState<T> = {
+  value: T
   modified: boolean
-  validate: (newValue: any) => boolean
+  validate: (newValue: T) => boolean
   error: boolean
 }
 
@@ -104,7 +104,7 @@ export type NewFieldState<T> = {
 
 export type SetFieldState = <T>(name: string, state: NewFieldState<T>, triggerUpdate?: boolean) => void
 
-export type FieldsMap = Map<string, FieldState>
+export type FieldsMap = Map<string, FieldState<any>>
 
 export interface FormState {
   disabled: boolean
@@ -204,7 +204,9 @@ export const useForm = ({
     setFieldsAndUpdateValues(new Map(
       Array.from(fields)
         .map(([name, state]) => [name, {
-          value: '',
+          value: Array.isArray(state.value) ? []
+            : typeof state.value === 'number' ? 0
+            : '',
           modified: !resetModifiedAndExposed,
           validate: state.validate,
           error: !state.validate(''),
