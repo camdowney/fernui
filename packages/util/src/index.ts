@@ -408,9 +408,9 @@ export interface FetchRequest extends Omit<RequestInit, 'body'>{
   body?: any
 }
 
-export const createFetch = {
-  post: (url: string, request?: FetchRequest) => {
-    const { body, headers, ...rest } = request ?? {}
+export const createFetchRequest = {
+  post: (url: string, request: FetchRequest) => {
+    const { body, headers, ...rest } = request
 
     return handleFetch(async () =>
       fetch(url, {
@@ -432,4 +432,26 @@ export const createFetch = {
       })
     )
   },
+}
+
+export const generateUrlSafeId = (length: number) => {
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+  let id = ''
+
+  for (let i = 0; i < length; i++) {
+    id += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+
+  return id
+}
+
+export const generateNumberId = (length: number) => {
+  const characters = '0123456789'
+  let id = ''
+
+  for (let i = 0; i < length; i++) {
+    id += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+
+  return id
 }
