@@ -1,7 +1,7 @@
 {
   "name": "@fernui/react-util",
   "author": "@camdowney",
-  "version": "3.7.1",
+  "version": "3.8.1",
   "description": "A library of general-purpose utility functions for React.",
   "keywords": [
     "ui",
@@ -12,7 +12,7 @@
   "main": "./dist/index.js",
   "peerDependencies": {
     "@fernui/dom-util": "^2.4.1",
-    "@fernui/util": "^4.1.0",
+    "@fernui/util": "^4.1.1",
     "react": "^18.3.1"
   },
   "devDependencies": {

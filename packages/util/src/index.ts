@@ -21,12 +21,17 @@ export const isEmail = (stringValue: string) =>
 	/^\S+@\S+\.\S+$/.test(stringValue || '')
 
 // Courtesy of https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
-export const slugify = (stringValue: string) => {
-  const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìıİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
-  const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
+export const slugify = (stringValue: string, allowUpperCase = false) => {
+  const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìİłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźżÀÁÂÄÆÃÅĀĂĄÇĆČĐĎÈÉÊËĒĖĘĚĞǴḦÎÏÍĪĮÌIİŁḾÑŃǸŇÔÖÒÓŒØŌÕŐṔŔŘßŚŠŞȘŤȚÛÜÙÚŪǗŮŰŲẂẌŸÝŽŹŻ·/_,:;'
+  const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzzAAAAAAAAAACCCDDEEEEEEEEGGHIIIIIIIILMNNNNOOOOOOOOOPRRSSSSSTTUUUUUUUUUWXYYZZZ------'
   const p = new RegExp(a.split('').join('|'), 'g')
   
-  return stringValue.toString().toLowerCase()
+  let slug = stringValue.toString()
+
+  if (!allowUpperCase)
+    slug = slug.toLowerCase()
+
+  return slug
     .replace(/\s+/g, '-') // Replace spaces with -
     .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
     .replace(/&/g, '-and-') // Replace & with 'and'

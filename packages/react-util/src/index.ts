@@ -89,10 +89,10 @@ export const useThrottle = ({
   return isLoading
 }
 
-export type FieldState = {
-  value: any
+export type FieldState<T> = {
+  value: T
   modified: boolean
-  validate: (newValue: any) => boolean
+  validate: (newValue: T) => boolean
   error: boolean
 }
 
@@ -104,7 +104,7 @@ export type NewFieldState<T> = {
 
 export type SetFieldState = <T>(name: string, state: NewFieldState<T>, triggerUpdate?: boolean) => void
 
-export type FieldsMap = Map<string, FieldState>
+export type FieldsMap = Map<string, FieldState<any>>
 
 export interface FormState {
   disabled: boolean
@@ -116,6 +116,7 @@ export interface FormState {
   resetFields: (resetModifiedAndExposed?: boolean) => void
   setField: SetFieldState
   removeField: (name: string) => void
+  setError: (name: string, error: boolean) => void
   values: KeyObject
   isValid: boolean
   hasChanges: { current: boolean }
@@ -160,9 +161,12 @@ export const useForm = ({
   const hasChanges = useRef(false)
   const [successCount, setSuccessCount] = useState(0)
 
+  const calculateValid = (newFields: FieldsMap) =>
+    Array.from(newFields).every(([_, state]) => !state.error)
+
   // User-facing method
   const setFieldsAndUpdateValues = (newFields: FieldsMap, forceChange = false) => {
-    const newValid = Array.from(newFields).every(([_, state]) => !state.error)
+    const newValid = calculateValid(newFields)
     const newValues = toDeepObject(Object.fromEntries(
       Array.from(newFields)
         .map(([name, state]) => [name, state.value])
@@ -200,7 +204,9 @@ export const useForm = ({
     setFieldsAndUpdateValues(new Map(
       Array.from(fields)
         .map(([name, state]) => [name, {
-          value: '',
+          value: Array.isArray(state.value) ? []
+            : typeof state.value === 'number' ? 0
+            : '',
           modified: !resetModifiedAndExposed,
           validate: state.validate,
           error: !state.validate(''),
@@ -248,6 +254,21 @@ export const useForm = ({
     setFieldsAndUpdateValues(new Map(fields))
   }
 
+  // User-facing method
+  const setError = (name: string, error: boolean) => {
+    fields.set(`__config-error-${name}`, {
+      value: '',
+      modified: false,
+      validate: () => error,
+      error,
+    })
+
+    const newFields = new Map(fields)
+
+    setFields(newFields)
+    setValid(calculateValid(newFields))
+  }
+
   // Automatically passed to Form
   const onSubmit = !onSubmitProp ? null : async (e: any) => {
     if (e.preventDefault) e.preventDefault()
@@ -278,7 +299,7 @@ export const useForm = ({
     disabled, setDisabled,
     exposed, setExposed,
     fields, setFields: setFieldsAndUpdateValues, resetFields,
-    setField, removeField,
+    setField, removeField, setError,
     values, isValid,
     hasChanges, pushChanges,
     onSubmit, successCount,
