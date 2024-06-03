@@ -353,7 +353,7 @@ export const debounce = <T extends unknown[]>({
   }
 }
 
-export const res = (
+export const createResponse = (
   status: number,
   {
     body,
@@ -370,40 +370,45 @@ export const res = (
     { status, headers, ...init }
   )
 
-export const handlePingRequest = async (fetchCallback: () => Promise<Response>) => {
+export const handleFetch = async (fetchCallback: () => Promise<Response>) => {
   try {
     const response = await fetchCallback()
     const text = await response.text()
 
-    let data: any = {}
+    let data: KeyObject = {}
 
     try {
       data = JSON.parse(text)
     }
     catch (error) {
-      data = text ? { text } : null
+      data = { text }
     }
 
-    return { response, data }
+    return {
+      response,
+      data,
+      status: response.status,
+    }
   }
   catch (error) {
     return {
-      response: new Response(null, { status: 400 }),
+      response: new Response(),
       data: { error },
+      status: -1,
     }
   }
 }
 
-export interface PingRequest extends Omit<RequestInit, 'body'>{
+export interface FetchRequest extends Omit<RequestInit, 'body'>{
   body?: any
 }
 
-export const ping = {
-  post: async (url: string, request?: PingRequest) => {
+export const createFetch = {
+  post: (url: string, request?: FetchRequest) => {
     const { body, headers, ...rest } = request ?? {}
 
-    return await handlePingRequest(async () =>
-      await fetch(url, {
+    return handleFetch(async () =>
+      fetch(url, {
         method: 'POST',
         body: stringify(body),
         ...rest,
@@ -414,9 +419,9 @@ export const ping = {
       })
     )
   },
-  get: async (url: string, request?: PingRequest) => {
-    return await handlePingRequest(async () =>
-      await fetch(url, {
+  get: (url: string, request?: FetchRequest) => {
+    return handleFetch(async () =>
+      fetch(url, {
         method: 'GET',
         ...request,
       })
