@@ -1,6 +1,6 @@
 import React from 'react'
 import { userIcon } from '@fernui/icons'
-import { cn, oc } from '@fernui/util'
+import { KeyObject, cn, oc } from '@fernui/util'
 import Svg from './Svg'
 import { coverStyle } from './_styles'
 
@@ -13,12 +13,15 @@ export interface AvatarProps {
   title?: string | null | false
   colors?: ColorMap
   className?: string
-  style?: Object
-  imageProps?: Object
-  letterProps?: Object
-  iconProps?: Object
+  style?: KeyObject
+  imageClass?: string
+  imageProps?: KeyObject
+  letterClass?: string
+  letterProps?: KeyObject
+  iconClass?: string
+  iconProps?: KeyObject
   placeholderClass?: string
-  placeholderStyle?: Object
+  placeholderStyle?: KeyObject
   [props: string]: any
 }
 
@@ -29,9 +32,12 @@ export default function Avatar({
   colors = defaultColors,
   className,
   style,
-  imageProps,
-  letterProps,
-  iconProps,
+  imageClass,
+  imageProps = {},
+  letterClass,
+  letterProps = {},
+  iconClass,
+  iconProps = {},
   placeholderClass,
   placeholderStyle,
   ...props
@@ -53,32 +59,32 @@ export default function Avatar({
         <div
           aria-label={title || letter}
           {...imageProps}
+          className={cn(imageProps.className, imageClass)}
           style={oc(
             coverStyle,
             styles.image,
             { backgroundImage: `url(${src})` },
-            (imageProps ?? {} as any).style
+            imageProps.style,
           )}
         />
       </> : letter ? <>
         <div
           {...letterProps}
+          className={cn(letterProps.className, letterClass)}
           style={oc(
             coverStyle,
             styles.letter(letter, colors),
-            (letterProps ?? {} as any).style)
-          }
+            letterProps.style,
+          )}
         >
           {letter}
         </div>
       </> : <>
         <Svg
-          {...iconProps}
           src={userIcon}
-          style={oc(
-            coverStyle,
-            (letterProps ?? {} as any).style)
-          }
+          {...iconProps}
+          className={cn(iconProps.className, iconClass)}
+          style={oc(coverStyle, letterProps.style)}
         />
       </>}
     </div>

@@ -1,10 +1,10 @@
 import React from 'react'
-import { cn, oc } from '@fernui/util'
+import { KeyObject, cn, oc } from '@fernui/util'
 
 export interface SvgProps {
   src: string
   className?: string
-  style?: Object
+  style?: KeyObject
   [props: string]: any
 }
 

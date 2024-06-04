@@ -1,3 +1,4 @@
+import { KeyObject } from '@fernui/util'
 import { FormState } from '@fernui/react-util'
 
 export interface FieldProps<T> {
@@ -13,7 +14,7 @@ export interface FieldProps<T> {
   label?: string
   labelClass?: string
   fieldClass?: string
-  style?: Object
+  style?: KeyObject
   error?: string
   errorClass?: string
   info?: any

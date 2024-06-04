@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { cn, oc } from '@fernui/util'
+import { KeyObject, cn, oc } from '@fernui/util'
 import { type LazyResizeDomFactoryProps, getLazyResizeDomUtils as _getLazyResizeDomUtils } from '@fernui/image-core'
 
 export interface PlaceholderProps {
   src?: string
   lazy?: boolean
   className?: string
-  style?: Object
+  style?: KeyObject
   [props: string]: any
 }
 
@@ -18,13 +18,13 @@ export interface ImageProps {
   cover?: boolean
   placeholderSrc?: string
   placeholderClass?: string
-  placeholderStyle?: Object
+  placeholderStyle?: KeyObject
   className?: string
-  style?: Object
+  style?: KeyObject
   ratioClass?: string
   innerClass?: string
   imageClass?: string
-  imageProps?: Object
+  imageProps?: KeyObject
   children?: any
   [props: string]: any
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn, oc } from '@fernui/util'
+import { KeyObject, cn, oc } from '@fernui/util'
 import { useDialog, type SetState } from '@fernui/react-util'
 
 export interface DialogProps {
@@ -8,16 +8,16 @@ export interface DialogProps {
   active: boolean
   setActive: SetState<boolean>
   outerClass?: string
-  outerStyle?: Object
+  outerStyle?: KeyObject
   children?: any
   className?: string
   activeClass?: string
   inactiveClass?: string
-  style?: Object
+  style?: KeyObject
   bgClass?: string
   bgActiveClass?: string
   bgInactiveClass?: string
-  bgStyle?: Object
+  bgStyle?: KeyObject
   openDelayMilliseconds?: number
   closeDelayMilliseconds?: number
   exitOnBgClick?: boolean
