@@ -1,5 +1,7 @@
 import React from 'react'
+import { userIcon } from '@fernui/icons'
 import { cn, oc } from '@fernui/util'
+import Svg from './Svg'
 import { coverStyle } from './_styles'
 
 export type Color = string
@@ -7,13 +9,14 @@ export type ColorMap = (letter: string) => Color
 
 export interface AvatarProps {
   domRef?: any
-  src?: string
+  src?: string | null | false
   title?: string | null | false
   colors?: ColorMap
   className?: string
   style?: Object
-  letterProps?: Object
   imageProps?: Object
+  letterProps?: Object
+  iconProps?: Object
   placeholderClass?: string
   placeholderStyle?: Object
   [props: string]: any
@@ -26,13 +29,14 @@ export default function Avatar({
   colors = defaultColors,
   className,
   style,
-  letterProps,
   imageProps,
+  letterProps,
+  iconProps,
   placeholderClass,
   placeholderStyle,
   ...props
 }: AvatarProps) {
-  const letter = title ? title.substring(0, 1).toUpperCase() : '?'
+  const letter = title ? title.substring(0, 1).toUpperCase() : undefined
 
   return (
     <div
@@ -41,14 +45,11 @@ export default function Avatar({
       style={oc(styles.outer, style)}
       {...props}
     >
-      {/* Placeholder */}
-      <div
-        className={cn('fui-avatar-placeholder', placeholderClass)}
-        style={oc(coverStyle, placeholderStyle)}
-      />
-
-      {/* Image / letter */}
-      {src ? (
+      {src ? <>
+        <div
+          className={cn('fui-avatar-placeholder', placeholderClass)}
+          style={oc(coverStyle, placeholderStyle)}
+        />
         <div
           aria-label={title || letter}
           {...imageProps}
@@ -59,7 +60,7 @@ export default function Avatar({
             (imageProps ?? {} as any).style
           )}
         />
-      ) : (
+      </> : letter ? <>
         <div
           {...letterProps}
           style={oc(
@@ -70,7 +71,16 @@ export default function Avatar({
         >
           {letter}
         </div>
-      )}
+      </> : <>
+        <Svg
+          {...iconProps}
+          src={userIcon}
+          style={oc(
+            coverStyle,
+            (letterProps ?? {} as any).style)
+          }
+        />
+      </>}
     </div>
   )
 }
