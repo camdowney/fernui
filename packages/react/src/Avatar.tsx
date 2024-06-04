@@ -84,7 +84,7 @@ export default function Avatar({
           src={userIcon}
           {...iconProps}
           className={cn(iconProps.className, iconClass)}
-          style={oc(coverStyle, letterProps.style)}
+          style={oc(coverStyle, iconProps.style)}
         />
       </>}
     </div>
