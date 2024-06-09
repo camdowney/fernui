@@ -107,9 +107,8 @@ export type SetFieldState = <T>(name: string, state: NewFieldState<T>, triggerUp
 export type FieldsMap = Map<string, FieldState<any>>
 
 export interface FormState {
-  disabled: boolean
-  setDisabled: SetState<boolean>
-  exposed: boolean
+  isSubmitting: boolean
+  isExposed: boolean
   setExposed: SetState<boolean>
   fields: FieldsMap
   setFields: (newValue: FieldsMap) => void
@@ -129,7 +128,6 @@ export type FormOnChangeProps = Pick<FormState, 'fields' | 'values' | 'isValid' 
 
 export interface FormOptions {
   defaultValues?: KeyObject
-  defaultDisabled?: boolean
   defaultExposed?: boolean
   promptBeforeUnload?: boolean
   onChange?: (newState: FormOnChangeProps) => any
@@ -139,7 +137,6 @@ export interface FormOptions {
 
 export const useForm = ({
   defaultValues = {},
-  defaultDisabled,
   defaultExposed,
   promptBeforeUnload,
   onChange,
@@ -148,8 +145,8 @@ export const useForm = ({
 }: FormOptions = {}) => {
   const defaultFieldState = { modified: false, validate: () => true, error: false }
 
-  const [disabled, setDisabled] = useState(defaultDisabled ?? false)
-  const [exposed, setExposed] = useState(defaultExposed ?? false)
+  const [isSubmitting, setSubmitting] = useState(false)
+  const [isExposed, setExposed] = useState(defaultExposed ?? false)
   
   const [fields, setFields] = useState<FieldsMap>(new Map(
     Object.entries(defaultValues).map(([name, value]) => [name, { ...defaultFieldState, value }])
@@ -272,8 +269,9 @@ export const useForm = ({
   // Automatically passed to Form
   const onSubmit = !onSubmitProp ? null : async (e: any) => {
     if (e.preventDefault) e.preventDefault()
-    if (disabled) return
+    if (isSubmitting) return
 
+    setSubmitting(true)
     setExposed(true)
   
     try {
@@ -286,6 +284,9 @@ export const useForm = ({
     catch (error: any) {
       if (onError) onError(error)
     }
+    finally {
+      setSubmitting(false)
+    }
   }
 
   useListener('beforeunload', (e: any) => {
@@ -296,8 +297,8 @@ export const useForm = ({
   })
 
   const context: FormState = {
-    disabled, setDisabled,
-    exposed, setExposed,
+    isSubmitting,
+    isExposed, setExposed,
     fields, setFields: setFieldsAndUpdateValues, resetFields,
     setField, removeField, setError,
     values, isValid,
@@ -327,12 +328,12 @@ export const useField = <T>({
   validate?: (newValue: T) => boolean
   onChange?: (newValue: T) => any
 }) => {
-  const { disabled: formDisabled, exposed: formExposed, fields, setField, removeField } = context ?? useFormContext()
+  const { isSubmitting, isExposed, fields, setField, removeField } = context ?? useFormContext()
 
   const field = fields.get(name) ?? { value: defaultValue, modified: false, error: false }
   const valueClean = field.value as T
-  const disabledClean = disabledProp ?? formDisabled
-  const showError = field.error && (field.modified || formExposed)
+  const disabledClean = disabledProp ?? isSubmitting
+  const showError = field.error && (field.modified || isExposed)
 
   // User-facing method; should be used by component
   const setValue = (newValue: T, newModified = true) => {
@@ -455,45 +456,92 @@ export const useRepeater = <T>(defaultItems: T[] = []) => {
   return { items, insert, remove, update, reset }
 }
 
+export const useCarousel = (defaultItemsLength: number, defaultSelectedIndex = 0) => {
+  const [itemsLength, setItemsLength] = useState(defaultItemsLength)
+  const [selectedIndex, selectIndex] = useState(defaultSelectedIndex)
+
+  const selectPrevious = () =>
+    selectIndex(cycle(itemsLength, selectedIndex, -1))
+
+  const selectNext = () =>
+    selectIndex(cycle(itemsLength, selectedIndex, 1))
+
+  const setItemsLengthAndUpdateIndex = (newItemsLength: number) => {
+    setItemsLength(newItemsLength)
+
+    if (selectedIndex >= newItemsLength)
+      selectIndex(Math.max(0, newItemsLength - 1))
+  }
+
+  useListener('keydown', (e: any) => {
+    if (e.repeat || itemsLength < 2)
+      return
+
+    const key = e.key.toLowerCase()
+
+    if (key === 'arrowleft' || key === 'a')
+      selectPrevious()
+    else if (key === 'arrowright' || key === 'd')
+      selectNext()
+  })
+
+  return {
+    selectedIndex,
+    selectIndex,
+    selectPrevious,
+    selectNext,
+    itemsLength,
+    setItemsLength: setItemsLengthAndUpdateIndex,
+  }
+}
+
 export interface LightboxControl {
   index: number
   setIndex: SetState<number>
   active: boolean
   setActive: SetState<boolean>
-  open: (newIndex: number) => void
-  previous: () => void
-  next: () => void
+  showIndex: (newIndex: number) => void
+  showPrevious: () => void
+  showNext: () => void
 }
 
 export const useLightbox = (
-  numItems: number,
+  itemsLength: number,
   {
-    index: indexProp,
-    active: activeProp
+    defaultSelectedIndex,
+    defaultActive,
   }: {
-    index?: number
-    active?: boolean
+    defaultSelectedIndex?: number
+    defaultActive?: boolean
   } = {}
 ) => {
-  const [index, setIndex] = useState(indexProp ?? 0)
-  const [active, setActive] = useState(activeProp ?? false)
+  const lightboxCarousel = useCarousel(itemsLength, defaultSelectedIndex)
+  const [active, setActive] = useState(defaultActive ?? false)
 
-  const open = (newIndex: number) => {
-    setIndex(newIndex)
+  const showIndex = (newIndex: number) => {
+    lightboxCarousel.selectIndex(newIndex)
     setActive(true)
   }
 
-  const previous = () => {
-    setIndex(cycle(numItems, index, -1))
+  const showPrevious = () => {
+    lightboxCarousel.selectPrevious()
     setActive(true)
   }
 
-  const next = () => {
-    setIndex(cycle(numItems, index, 1))
+  const showNext = () => {
+    lightboxCarousel.selectNext()
     setActive(true)
   }
 
-  const control: LightboxControl = { index, setIndex, active, setActive, open, previous, next }
+  const control: LightboxControl = {
+    index: lightboxCarousel.selectedIndex,
+    setIndex: lightboxCarousel.selectIndex,
+    active,
+    setActive,
+    showIndex,
+    showPrevious,
+    showNext,
+  }
 
   return { control, ...control }
 }
@@ -736,26 +784,26 @@ export const getButtonRoleProps = ({
 
 export type FormValue = [name: string, value: any]
 
-export interface UploadFile {
+export interface Base64File {
   name: string
   data: string
 }
 
 export const splitFormValuesAndFiles = async (values: KeyObject, uploadURL: string) => {
-  const valuesArray: FormValue[] = Object.entries(structuredClone(values))
-  const files: UploadFile[] = []
+  const valuesWithFileNames = structuredClone(values)
+  const files: Base64File[] = []
 
   await Promise.all(
-    valuesArray.map(([_, value], i) =>
+    Object.entries(valuesWithFileNames).map(([key, value], i) =>
       toArray(value)
-        .filter(v => v instanceof File)
+        .filter(value => value instanceof File)
         .map(async (file, j) => {
           const name = getUniqueFileName(file.name, j)
-          valuesArray[i][1][j] = uploadURL + name
+          valuesWithFileNames[key][j] = `${uploadURL}/${name}`
           files.push({ name, data: await fileToBase64(file) })
         })
     ).flat()
   )
 
-  return [valuesArray, files] as const
+  return [valuesWithFileNames, files] as const
 }

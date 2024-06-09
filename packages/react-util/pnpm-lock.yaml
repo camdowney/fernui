@@ -10,10 +10,10 @@ importers:
     dependencies:
       '@fernui/dom-util':
         specifier: ^2.4.1
-        version: 2.4.1(@fernui/util@4.1.1)
+        version: 2.4.1(@fernui/util@4.2.0)
       '@fernui/util':
-        specifier: ^4.1.0
-        version: 4.1.1
+        specifier: ^4.1.1
+        version: 4.2.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -29,8 +29,8 @@ packages:
     peerDependencies:
       '@fernui/util': ^4.0.2
 
-  '@fernui/util@4.1.1':
-    resolution: {integrity: sha512-Lsydt0RgqoJPEs1afHRVLAzepmWsCcF6TXfXxrhBZvj7eVcPlGAVTDwN8ckGFb4ZXS5yq0Jy1J3HlFYy8SBzSQ==}
+  '@fernui/util@4.2.0':
+    resolution: {integrity: sha512-gDeF3Ap3meAClOfx7G4xFDbElafMO7+JW9YqVLrecDEoB4ERk/qlLqvBgXVy2VdkUtCI5hKeQpVgzPV2jqYUcg==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -54,11 +54,11 @@ packages:
 
 snapshots:
 
-  '@fernui/dom-util@2.4.1(@fernui/util@4.1.1)':
+  '@fernui/dom-util@2.4.1(@fernui/util@4.2.0)':
     dependencies:
-      '@fernui/util': 4.1.1
+      '@fernui/util': 4.2.0
 
-  '@fernui/util@4.1.1': {}
+  '@fernui/util@4.2.0': {}
 
   '@types/prop-types@15.7.12': {}
 

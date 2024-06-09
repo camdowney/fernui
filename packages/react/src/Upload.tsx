@@ -1,16 +1,17 @@
-import React, { Fragment, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { cn } from '@fernui/util'
 import { useField } from '@fernui/react-util'
 import { getButtonRoleProps } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 
-const BYTES_PER_MB = 1_000_000
+const BYTES_PER_MEGABYTE = 1_000_000
 
 export interface UploadProps extends FieldProps<File[]> {
+  onAdd?: (newFiles: File[]) => any
   acceptedFormats?: string
-  maxFileSizeMB?: number
-  maxTotalSizeMB?: number
+  maxFileSizeMegabytes?: number
+  maxTotalSizeMegabytes?: number
   minFileCount?: number
   maxFileCount?: number
 }
@@ -21,6 +22,7 @@ export default function Upload({
   name: nameProp,
   defaultValue = [],
   onChange,
+  onAdd,
   placeholder = 'Select or drop file(s)',
   disabled: disabledProp,
   className,
@@ -32,8 +34,8 @@ export default function Upload({
   info,
   infoClass,
   acceptedFormats,
-  maxFileSizeMB = Infinity,
-  maxTotalSizeMB = Infinity,
+  maxFileSizeMegabytes = Infinity,
+  maxTotalSizeMegabytes = Infinity,
   minFileCount = 0,
   maxFileCount = Infinity,
   ...props
@@ -44,8 +46,8 @@ export default function Upload({
     files.length >= minFileCount
     && files.length <= maxFileCount
     && files.every(file => file.type.match(acceptedFormats ?? '*'))
-    && files.every(file => file.size <= maxFileSizeMB * BYTES_PER_MB)
-    && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMB * BYTES_PER_MB
+    && files.every(file => file.size <= maxFileSizeMegabytes * BYTES_PER_MEGABYTE)
+    && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMegabytes * BYTES_PER_MEGABYTE
 
   const { value, setValue, disabled, showError } = useField({
     context,
@@ -90,7 +92,12 @@ export default function Upload({
   const handleFiles = async (files: any) => {
     if (!files || files.length < 1) return
 
-    setValue([...value, ...Array.from(files as File[])])
+    const newFiles = Array.from(files as File[])
+
+    if (onAdd)
+      onAdd(newFiles)
+
+    setValue([...value, ...newFiles])
   }
 
   const removeFile = (index: number) => {
@@ -127,31 +134,30 @@ export default function Upload({
         {...props}
       >
         {value.map((file, i) => 
-          <Fragment key={i}>
-            <span>
+          <div
+            className='fui-upload-file'
+            style={styles.placeholder}
+            key={i}
+          >
+            <div className='fui-upload-file-name'>
               {file.name}
-            </span>
-            {!disabled && <>
-              {' | '}
-              <span
-                onClick={e => {
-                  e.stopPropagation()
-                  removeFile(i)
-                }}
-                {...getButtonRoleProps({ label: 'Remove upload', disabled })}
-                className='fui-upload-remove'
-              >
-                Remove
-              </span>
-            </>}
-            <br/>
-          </Fragment>
+            </div>
+            <div
+              onClick={e => {
+                e.stopPropagation()
+                removeFile(i)
+              }}
+              {...getButtonRoleProps({ label: 'Remove upload', disabled })}
+              className='fui-upload-file-remove'
+            >
+              Remove
+            </div>
+          </div>
         )}
-        {!(disabled && value.length > 0) && (
-          <span>
-            {placeholder}
-          </span>
-        )}
+
+        <div className='fui-upload-placeholder'>
+          {placeholder}
+        </div>
       </div>
 
       {/* Error */}
@@ -172,8 +178,8 @@ export default function Upload({
                   minFileCount > 0 && `${minFileCount} file${minFileCount !== 1 ? 's' : ''} min`,
                   maxFileCount < Infinity && `${maxFileCount} file${maxFileCount !== 1 ? 's' : ''} max`,
                 ],
-                maxFileSizeMB < Infinity && `${maxFileSizeMB}&nbsp;MB&nbsp;per&nbsp;file`,
-                maxTotalSizeMB < Infinity && `${maxTotalSizeMB}&nbsp;MB&nbsp;total`,
+                maxFileSizeMegabytes < Infinity && `${maxFileSizeMegabytes}&nbsp;MB&nbsp;per&nbsp;file`,
+                maxTotalSizeMegabytes < Infinity && `${maxTotalSizeMegabytes}&nbsp;MB&nbsp;total`,
               ].filter(Boolean).join('; ')
             }} />
           </>}
@@ -181,4 +187,12 @@ export default function Upload({
       )}
     </label>
   )
+}
+
+const styles = {
+  placeholder: {
+    display: 'flex',
+    justifyContent: 'between',
+    alignItems: 'center',
+  },
 }

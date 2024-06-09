@@ -1,7 +1,6 @@
 import React from 'react'
 import { cn } from '@fernui/util'
 import { LightboxControl } from '@fernui/react-util'
-import { useListener } from '@fernui/react-util'
 import Dialog, { DialogProps } from './Dialog'
 
 export interface LightboxProps extends Omit<DialogProps, 'active' | 'setActive'>{
@@ -20,19 +19,7 @@ export default function Lightbox({
   overlay,
   ...props
 }: LightboxProps) {
-  const { index, active, setActive, previous, next } = control
-
-  useListener('keydown', (e: any) => {
-    if (e.repeat || !active || items.length < 2)
-      return
-
-    const key = e.key.toLowerCase()
-
-    if (key === 'arrowleft' || key === 'a')
-      previous()
-    else if (key === 'arrowright' || key === 'd')
-      next()
-  })
+  const { index, active, setActive } = control
 
   return (
     <Dialog
