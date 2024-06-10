@@ -8,12 +8,13 @@ import Error from './Error'
 const BYTES_PER_MEGABYTE = 1_000_000
 
 export interface UploadProps extends FieldProps<File[]> {
+  trackValue?: boolean
   onAdd?: (newFiles: File[]) => any
   acceptedFormats?: string
   maxFileSizeMegabytes?: number
   maxTotalSizeMegabytes?: number
-  minFileCount?: number
-  maxFileCount?: number
+  minFiles?: number
+  maxFiles?: number
 }
 
 export default function Upload({
@@ -22,6 +23,7 @@ export default function Upload({
   name: nameProp,
   defaultValue = [],
   onChange,
+  trackValue = true,
   onAdd,
   placeholder = 'Select or drop file(s)',
   disabled: disabledProp,
@@ -36,15 +38,15 @@ export default function Upload({
   acceptedFormats,
   maxFileSizeMegabytes = Infinity,
   maxTotalSizeMegabytes = Infinity,
-  minFileCount = 0,
-  maxFileCount = Infinity,
+  minFiles = 0,
+  maxFiles = Infinity,
   ...props
 }: UploadProps) {
   const ref = domRef || useRef()
 
   const validate = (files: File[]) =>
-    files.length >= minFileCount
-    && files.length <= maxFileCount
+    files.length >= minFiles
+    && files.length <= maxFiles
     && files.every(file => file.type.match(acceptedFormats ?? '*'))
     && files.every(file => file.size <= maxFileSizeMegabytes * BYTES_PER_MEGABYTE)
     && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMegabytes * BYTES_PER_MEGABYTE
@@ -66,7 +68,7 @@ export default function Upload({
 
     const picker = document.createElement('input')
     picker.type = 'file'
-    picker.setAttribute('multiple', maxFileCount > 1 ? 'true' : 'false')
+    picker.setAttribute('multiple', maxFiles > 1 ? 'true' : 'false')
     picker.setAttribute('accept', acceptedFormats ?? '*')
     
     picker.onchange = (e: any) => handleFiles(e.target.files)
@@ -94,17 +96,15 @@ export default function Upload({
 
     const newFiles = Array.from(files as File[])
 
-    if (onAdd)
-      onAdd(newFiles)
-
-    setValue([...value, ...newFiles])
+    if (onAdd) onAdd(newFiles)
+    if (trackValue) setValue([...value, ...newFiles])
   }
 
   const removeFile = (index: number) => {
     if (disabled) return
 
     value.splice(index, 1)
-    setValue([...value])
+    if (trackValue) setValue([...value])
   }
 
   return (
@@ -172,11 +172,11 @@ export default function Upload({
             Accepts: <span dangerouslySetInnerHTML={{
               __html: [
                 acceptedFormats,
-                ...(minFileCount > 0 && maxFileCount < Infinity) ? [
-                  `${minFileCount} to ${maxFileCount} file${maxFileCount !== 1 ? 's' : ''}`,
+                ...(minFiles > 0 && maxFiles < Infinity) ? [
+                  `${minFiles} to ${maxFiles} file${maxFiles !== 1 ? 's' : ''}`,
                 ] : [
-                  minFileCount > 0 && `${minFileCount} file${minFileCount !== 1 ? 's' : ''} min`,
-                  maxFileCount < Infinity && `${maxFileCount} file${maxFileCount !== 1 ? 's' : ''} max`,
+                  minFiles > 0 && `${minFiles} file${minFiles !== 1 ? 's' : ''} min`,
+                  maxFiles < Infinity && `${maxFiles} file${maxFiles !== 1 ? 's' : ''} max`,
                 ],
                 maxFileSizeMegabytes < Infinity && `${maxFileSizeMegabytes}&nbsp;MB&nbsp;per&nbsp;file`,
                 maxTotalSizeMegabytes < Infinity && `${maxTotalSizeMegabytes}&nbsp;MB&nbsp;total`,

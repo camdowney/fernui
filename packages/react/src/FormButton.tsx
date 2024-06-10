@@ -16,7 +16,7 @@ export default function FormButton({
   type = 'button',
   ...props
 }: FormButtonProps) {
-  const { disabled } = context ?? useFormContext()
+  const { isSubmitting } = context ?? useFormContext()
   const ref = domRef || useRef()
 
   useListener('mousedown', (e: any) => {
@@ -28,7 +28,7 @@ export default function FormButton({
     <Button
       domRef={ref}
       type={type}
-      disabled={disabled}
+      disabled={isSubmitting}
       {...props}
     />
   )
