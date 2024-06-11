@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { cn } from '@fernui/util'
-import { useField } from '@fernui/react-util'
-import { getButtonRoleProps } from '@fernui/react-util'
+import { openFilePicker } from '@fernui/dom-util'
+import { useField, getButtonRoleProps } from '@fernui/react-util'
 import { FieldProps } from './_types'
 import Error from './Error'
 
@@ -10,7 +10,7 @@ const BYTES_PER_MEGABYTE = 1_000_000
 export interface UploadProps extends FieldProps<File[]> {
   trackValue?: boolean
   onAdd?: (newFiles: File[]) => any
-  acceptedFormats?: string
+  acceptFormats?: string
   maxFileSizeMegabytes?: number
   maxTotalSizeMegabytes?: number
   minFiles?: number
@@ -35,7 +35,7 @@ export default function Upload({
   errorClass,
   info,
   infoClass,
-  acceptedFormats,
+  acceptFormats,
   maxFileSizeMegabytes = Infinity,
   maxTotalSizeMegabytes = Infinity,
   minFiles = 0,
@@ -47,7 +47,7 @@ export default function Upload({
   const validate = (files: File[]) =>
     files.length >= minFiles
     && files.length <= maxFiles
-    && files.every(file => file.type.match(acceptedFormats ?? '*'))
+    && files.every(file => file.type.match(acceptFormats ?? '*'))
     && files.every(file => file.size <= maxFileSizeMegabytes * BYTES_PER_MEGABYTE)
     && files.reduce((totalSize, file) => totalSize + file.size, 0) <= maxTotalSizeMegabytes * BYTES_PER_MEGABYTE
 
@@ -66,13 +66,11 @@ export default function Upload({
   const onClick = () => {
     if (disabled) return
 
-    const picker = document.createElement('input')
-    picker.type = 'file'
-    picker.setAttribute('multiple', maxFiles > 1 ? 'true' : 'false')
-    picker.setAttribute('accept', acceptedFormats ?? '*')
-    
-    picker.onchange = (e: any) => handleFiles(e.target.files)
-    picker.click()
+    openFilePicker({
+      callback: handleFiles,
+      acceptFormats,
+      acceptMultiple: maxFiles > 1,
+    })
   }
 
   const onDragOver = (e: any) => {
@@ -171,7 +169,7 @@ export default function Upload({
           {info ?? <>
             Accepts: <span dangerouslySetInnerHTML={{
               __html: [
-                acceptedFormats,
+                acceptFormats,
                 ...(minFiles > 0 && maxFiles < Infinity) ? [
                   `${minFiles} to ${maxFiles} file${maxFiles !== 1 ? 's' : ''}`,
                 ] : [

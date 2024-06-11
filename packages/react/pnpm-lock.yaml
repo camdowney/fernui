@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@fernui/dom-util':
-        specifier: ^2.4.1
-        version: 2.4.1(@fernui/util@4.2.0)
+        specifier: ^2.5.1
+        version: 2.5.2(@fernui/util@4.2.0)
       '@fernui/icons':
         specifier: ^5.1.0
         version: 5.1.0
       '@fernui/react-util':
-        specifier: ^3.9.0
-        version: 3.10.0(@fernui/dom-util@2.4.1(@fernui/util@4.2.0))(@fernui/util@4.2.0)(react@18.3.1)
+        specifier: ^3.10.0
+        version: 3.10.0(@fernui/dom-util@2.5.2(@fernui/util@4.2.0))(@fernui/util@4.2.0)(react@18.3.1)
       '@fernui/util':
         specifier: ^4.2.0
         version: 4.2.0
@@ -36,10 +36,10 @@ importers:
 
 packages:
 
-  '@fernui/dom-util@2.4.1':
-    resolution: {integrity: sha512-VuC7IylSyKa0TJUHVXDxHAjsy8gz7P4V8o3kEowiE6sRfYqvFeX/f5K66S9h/vSDRtbk1fqhgXR69f861jYEAg==}
+  '@fernui/dom-util@2.5.2':
+    resolution: {integrity: sha512-tSoxCBMJqAPVlnxIBcq7HMCIMUG5lkjmPdMl2kCFsgJQa+Gs5XQaTdrN4kf8XS0mCIeKLZHNXSbGogOL0XN3xw==}
     peerDependencies:
-      '@fernui/util': ^4.0.2
+      '@fernui/util': ^4.2.0
 
   '@fernui/icons@5.1.0':
     resolution: {integrity: sha512-/5popqd3sFq6NoWXI2gnkVFbHAY8RO2vAML1QVOuWdYLHcnHv6XEsEY3vW2PbH0j9MVYVmeq8qdWHpBgwHmafw==}
@@ -87,15 +87,15 @@ packages:
 
 snapshots:
 
-  '@fernui/dom-util@2.4.1(@fernui/util@4.2.0)':
+  '@fernui/dom-util@2.5.2(@fernui/util@4.2.0)':
     dependencies:
       '@fernui/util': 4.2.0
 
   '@fernui/icons@5.1.0': {}
 
-  '@fernui/react-util@3.10.0(@fernui/dom-util@2.4.1(@fernui/util@4.2.0))(@fernui/util@4.2.0)(react@18.3.1)':
+  '@fernui/react-util@3.10.0(@fernui/dom-util@2.5.2(@fernui/util@4.2.0))(@fernui/util@4.2.0)(react@18.3.1)':
     dependencies:
-      '@fernui/dom-util': 2.4.1(@fernui/util@4.2.0)
+      '@fernui/dom-util': 2.5.2(@fernui/util@4.2.0)
       '@fernui/util': 4.2.0
       react: 18.3.1
 

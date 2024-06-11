@@ -60,6 +60,25 @@ export const fileToBase64 = async (file: File): Promise<string> =>
     reader.onerror = () => reject('')
   })
 
+export const openFilePicker = ({
+  callback,
+  acceptFormats = '*',
+  acceptMultiple,
+}: {
+  callback: (files: File[]) => any,
+  acceptFormats?: string
+  acceptMultiple?: boolean
+}) => {
+  const filePicker = document.createElement('input')
+  filePicker.type = 'file'
+  
+  filePicker.setAttribute('accept', acceptFormats)
+  if (acceptMultiple) filePicker.setAttribute('multiple', 'true')
+
+  filePicker.onchange = (e: any) => callback(Array.from(e.target.files) as File[])
+  filePicker.click()
+}
+
 export const onIntersect = ({
   selector,
   elements,
