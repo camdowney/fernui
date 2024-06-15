@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@fernui/dom-util':
-        specifier: ^2.5.1
+        specifier: ^2.5.2
         version: 2.5.2(@fernui/util@4.2.0)
       '@fernui/icons':
         specifier: ^5.1.0

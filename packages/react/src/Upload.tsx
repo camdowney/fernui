@@ -11,6 +11,7 @@ export interface UploadProps extends FieldProps<File[]> {
   trackValue?: boolean
   onAdd?: (newFiles: File[]) => any
   acceptFormats?: string
+  acceptMultiple?: boolean
   maxFileSizeMegabytes?: number
   maxTotalSizeMegabytes?: number
   minFiles?: number
@@ -36,6 +37,7 @@ export default function Upload({
   info,
   infoClass,
   acceptFormats,
+  acceptMultiple,
   maxFileSizeMegabytes = Infinity,
   maxTotalSizeMegabytes = Infinity,
   minFiles = 0,
@@ -69,7 +71,7 @@ export default function Upload({
     openFilePicker({
       callback: handleFiles,
       acceptFormats,
-      acceptMultiple: maxFiles > 1,
+      acceptMultiple: acceptMultiple ?? maxFiles > 1,
     })
   }
 
