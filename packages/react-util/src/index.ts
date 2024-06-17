@@ -456,7 +456,15 @@ export const useRepeater = <T>(defaultItems: T[] = []) => {
   return { items, insert, remove, update, reset }
 }
 
-export const useCarousel = (defaultItemsLength: number, defaultSelectedIndex = 0) => {
+export const useCarousel = (
+  defaultItemsLength: number,
+  {
+    defaultSelectedIndex = 0,
+    selectOnKeyDown = true,
+  }: {
+    defaultSelectedIndex?: number
+    selectOnKeyDown?: boolean
+  } = {}) => {
   const [itemsLength, setItemsLength] = useState(defaultItemsLength)
   const [selectedIndex, selectIndex] = useState(defaultSelectedIndex)
 
@@ -474,8 +482,7 @@ export const useCarousel = (defaultItemsLength: number, defaultSelectedIndex = 0
   }
 
   useListener('keydown', (e: any) => {
-    if (e.repeat || itemsLength < 2)
-      return
+    if (!selectOnKeyDown || e.repeat || itemsLength < 2) return
 
     const key = e.key.toLowerCase()
 
@@ -515,7 +522,7 @@ export const useLightbox = (
     defaultActive?: boolean
   } = {}
 ) => {
-  const lightboxCarousel = useCarousel(itemsLength, defaultSelectedIndex)
+  const lightboxCarousel = useCarousel(itemsLength, { defaultSelectedIndex })
   const [active, setActive] = useState(defaultActive ?? false)
 
   const showIndex = (newIndex: number) => {
