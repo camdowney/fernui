@@ -76,7 +76,7 @@ export const removeHtml = (stringValue: string) =>
 
 export const getExcerpt = (
   stringValue: string,
-  charLimit: number,
+  maxCharacters: number,
   {
     ellipsis,
     breakWords = true,
@@ -86,12 +86,18 @@ export const getExcerpt = (
   } = {}
 ) => {
   if (!stringValue) return ''
-  if (!charLimit || stringValue.length <= charLimit) return stringValue
 
-  let newValue = stringValue.trim().substring(0, charLimit).trim()
-  
-  if (!breakWords && newValue.length > charLimit)
-    newValue = newValue.split(' ').slice(0, -1).join(' ')
+  let newValue = stringValue.trim()
+
+  if (!maxCharacters || newValue.length <= maxCharacters) return newValue
+
+  newValue = newValue.substring(0, maxCharacters).trim()
+
+  if (!breakWords)
+    newValue = newValue.substring(0, Math.min(newValue.length, newValue.lastIndexOf(' '))).trim()
+
+  if (!breakWords && (stringValue.trim().indexOf(' ') > newValue.length + 1))
+    newValue = ''
 
   if (ellipsis)
     newValue += '...'
