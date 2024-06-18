@@ -96,7 +96,7 @@ export const getExcerpt = (
   if (!breakWords)
     newValue = newValue.substring(0, Math.min(newValue.length, newValue.lastIndexOf(' '))).trim()
 
-  if (!breakWords && (stringValue.trim().indexOf(' ') > newValue.length + 1))
+  if (!breakWords && (stringValue.trim().split(' ')[0].length > newValue.length))
     newValue = ''
 
   if (ellipsis)
