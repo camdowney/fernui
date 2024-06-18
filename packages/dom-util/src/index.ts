@@ -130,11 +130,11 @@ export const initScrollTo = () => {
   })
 }
 
-export const initScrollView = (offset = '999999px 0px -25% 0px') => {
+export const initInView = (offset = '999999px 0px -25% 0px') => {
   onIntersect({
-    selector: '.scroll-view',
+    selector: '[data-in-view]',
     callback: (element: HTMLElement) => {
-      element.classList.add('scroll-view-active')
+      element.dataset.inView = 'true'
     },
     offset,
   })
